@@ -11,7 +11,6 @@ export default function RootLayout({ children }) {
         <header className="bg-white shadow">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <div className="flex items-center">
-              <img src="/globe.svg" alt="B2R Logo" className="h-6 w-6 mr-2" />
               <span className="text-xl font-bold text-indigo-700">B2R</span>
             </div>
             <nav className="space-x-4">

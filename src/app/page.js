@@ -109,104 +109,126 @@ export default function Home() {
 
   // ---------- WRAPPED & STYLED CONTENT ----------
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900">
-      {/* wrapper = centered column with padding & spacing */}
-      <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
-        <header>
-          <h1>Prom Party Bus Rental – Chester, SC</h1>
-          <p ref={countdownRef} className="muted mt-2" />
-        </header>
-
-        {/* Quick Estimate */}
-        <section className="card">
-          <h2 className="mb-4">Quick Estimate</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <input id="hours" type="number" placeholder="Hours" className="input" />
-            <input id="group" type="number" placeholder="Group size" className="input" />
+    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-indigo-50 to-white">
+      <div className="flex flex-col items-center w-full max-w-2xl px-4 py-8">
+        {/* Hero Section */}
+        <section className="w-full bg-white shadow rounded-xl mb-6 p-8 text-center">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-indigo-700 mb-2">Prom Party Bus Rental – Chester, SC</h1>
+          <p ref={countdownRef} className="text-gray-500 mb-2" />
+          <p className="text-lg text-gray-700 mb-4">
+            Welcome! This page provides a suite of interactive tools to help you plan, estimate, and reserve the perfect party bus for your event. Whether you're looking for quick price estimates, bus recommendations, or ways to split the bill, everything you need is below.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 mb-2">
+            <span className="inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">Instant Estimates</span>
+            <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Smart Quotes</span>
+            <span className="inline-block bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-xs font-semibold">Theme Planner</span>
+            <span className="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">Bill Splitter</span>
           </div>
-          <button onClick={estimateCost} className="btn mt-4">Estimate</button>
-          <p id="estimate-result" className="mt-2 text-sm text-gray-700" />
+          <a href="#tools" className="btn mt-4">Jump to Tools</a>
         </section>
 
-        {/* Bus Recommendation */}
-        <section className="card">
-          <h2 className="mb-4">Bus Recommendation</h2>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <input id="group-size" type="number" placeholder="Group size" className="input sm:max-w-xs" />
-            <button onClick={recommendBus} className="btn">Recommend</button>
+        {/* Tools Section */}
+        <section id="tools" className="w-full space-y-8 mb-12">
+          {/* Quick Estimate */}
+          <div className="card">
+            <h2 className="mb-2">Quick Estimate</h2>
+            <p className="text-sm text-gray-500 mb-2">Get a fast price range for your group and hours.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input id="hours" type="number" placeholder="Hours" className="input" />
+              <input id="group" type="number" placeholder="Group size" className="input" />
+            </div>
+            <button onClick={estimateCost} className="btn mt-4 w-full">Estimate</button>
+            <p id="estimate-result" className="mt-2 text-sm text-gray-700" />
           </div>
-          <p id="bus-recommendation" className="mt-2 text-sm text-gray-700" />
-        </section>
 
-        {/* Smart Quote */}
-        <section className="card">
-          <h2 className="mb-4">Smart Quote</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <input id="capacity" type="number" placeholder="Capacity" className="input" />
-            <input id="city" type="text" placeholder="City" defaultValue="Chester, SC" className="input" />
-            <input id="smart-hours" type="number" placeholder="Hours" className="input" />
-            <select id="event-type" className="input">
-              <option value="prom">Prom</option>
-              <option value="wedding">Wedding</option>
-              <option value="birthday">Birthday</option>
-            </select>
-            <input id="date" type="date" className="input sm:col-span-2" />
+          {/* Bus Recommendation */}
+          <div className="card">
+            <h2 className="mb-2">Bus Recommendation</h2>
+            <p className="text-sm text-gray-500 mb-2">Find the right bus size for your group.</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input id="group-size" type="number" placeholder="Group size" className="input sm:max-w-xs" />
+              <button onClick={recommendBus} className="btn">Recommend</button>
+            </div>
+            <p id="bus-recommendation" className="mt-2 text-sm text-gray-700" />
           </div>
-          <button onClick={smartQuote} className="btn mt-4">Get Quote</button>
-          <p id="smart-quote-result" className="mt-2 text-sm text-gray-700" />
-        </section>
 
-        {/* Availability */}
-        <section className="card">
-          <h2 className="mb-4">Availability</h2>
-          <div className="flex flex-wrap gap-3">
-            <input id="avail-date" type="date" className="input sm:max-w-xs" />
-            <input id="avail-time" type="time" className="input sm:max-w-xs" />
-            <button onClick={checkAvailability} className="btn">Check</button>
+          {/* Smart Quote */}
+          <div className="card">
+            <h2 className="mb-2">Smart Quote</h2>
+            <p className="text-sm text-gray-500 mb-2">Get a detailed quote based on your event and preferences.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input id="capacity" type="number" placeholder="Capacity" className="input" />
+              <input id="city" type="text" placeholder="City" defaultValue="Chester, SC" className="input" />
+              <input id="smart-hours" type="number" placeholder="Hours" className="input" />
+              <select id="event-type" className="input">
+                <option value="prom">Prom</option>
+                <option value="wedding">Wedding</option>
+                <option value="birthday">Birthday</option>
+              </select>
+              <input id="date" type="date" className="input sm:col-span-2" />
+            </div>
+            <button onClick={smartQuote} className="btn mt-4 w-full">Get Quote</button>
+            <p id="smart-quote-result" className="mt-2 text-sm text-gray-700" />
           </div>
-          <p id="avail-result" className="mt-2 text-sm text-gray-700" />
-        </section>
 
-        {/* Theme Planner */}
-        <section className="card">
-          <h2 className="mb-4">Theme Planner</h2>
-          <div className="flex flex-wrap gap-3">
-            <select id="vibe" defaultValue="" className="input sm:max-w-xs">
-              <option value="" disabled>Select a vibe…</option>
-              <option value="glam">Glam</option>
-              <option value="bachelor">Bachelor</option>
-              <option value="club">Club</option>
-              <option value="teen">Teen</option>
-            </select>
-            <button onClick={planTheme} className="btn">Plan</button>
+          {/* Availability */}
+          <div className="card">
+            <h2 className="mb-2">Availability</h2>
+            <p className="text-sm text-gray-500 mb-2">Check if your date and time are available.</p>
+            <div className="flex flex-wrap gap-3">
+              <input id="avail-date" type="date" className="input sm:max-w-xs" />
+              <input id="avail-time" type="time" className="input sm:max-w-xs" />
+              <button onClick={checkAvailability} className="btn">Check</button>
+            </div>
+            <p id="avail-result" className="mt-2 text-sm text-gray-700" />
           </div>
-          <p id="theme-result" className="mt-2 text-sm text-gray-700" />
-        </section>
 
-        {/* Split the Bill */}
-        <section className="card">
-          <h2 className="mb-4">Split the Bill</h2>
-          <div className="flex flex-wrap items-center gap-3">
-            <input id="total-cost" type="number" placeholder="Total ($)" className="input sm:max-w-xs" />
-            <input id="num-people" type="number" placeholder="# People" defaultValue={1} className="input sm:max-w-xs" />
-            <button onClick={generateSplitLinks} className="btn">Generate</button>
+          {/* Theme Planner */}
+          <div className="card">
+            <h2 className="mb-2">Theme Planner</h2>
+            <p className="text-sm text-gray-500 mb-2">Pick a vibe and get a custom party plan.</p>
+            <div className="flex flex-wrap gap-3">
+              <select id="vibe" defaultValue="" className="input sm:max-w-xs">
+                <option value="" disabled>Select a vibe…</option>
+                <option value="glam">Glam</option>
+                <option value="bachelor">Bachelor</option>
+                <option value="club">Club</option>
+                <option value="teen">Teen</option>
+              </select>
+              <button onClick={planTheme} className="btn">Plan</button>
+            </div>
+            <p id="theme-result" className="mt-2 text-sm text-gray-700" />
           </div>
-          <p id="split-result" className="mt-2 text-sm text-gray-700" />
-        </section>
 
-        {/* Export + Poll */}
-        <section className="card">
-          <h2 className="mb-4">Export Quote</h2>
-          <button onClick={exportQuote} className="btn">Export</button>
-          <p id="export-result" className="mt-2 text-sm text-gray-700" />
-        </section>
+          {/* Split the Bill */}
+          <div className="card">
+            <h2 className="mb-2">Split the Bill</h2>
+            <p className="text-sm text-gray-500 mb-2">Easily split the cost among your group.</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <input id="total-cost" type="number" placeholder="Total ($)" className="input sm:max-w-xs" />
+              <input id="num-people" type="number" placeholder="# People" defaultValue={1} className="input sm:max-w-xs" />
+              <button onClick={generateSplitLinks} className="btn">Generate</button>
+            </div>
+            <p id="split-result" className="mt-2 text-sm text-gray-700" />
+          </div>
 
-        <section className="card">
-          <h2 className="mb-4">Poll</h2>
-          <button onClick={() => vote('live-band')} className="btn">Vote “Live Band”</button>
+          {/* Export + Poll */}
+          <div className="card flex flex-col gap-4">
+            <div>
+              <h2 className="mb-2">Export Quote</h2>
+              <p className="text-sm text-gray-500 mb-2">Save or share your custom quote.</p>
+              <button onClick={exportQuote} className="btn w-full">Export</button>
+              <p id="export-result" className="mt-2 text-sm text-gray-700" />
+            </div>
+            <div>
+              <h2 className="mb-2">Poll</h2>
+              <p className="text-sm text-gray-500 mb-2">Vote for your favorite party feature!</p>
+              <button onClick={() => vote('live-band')} className="btn w-full">Vote “Live Band”</button>
+            </div>
+          </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }
 
