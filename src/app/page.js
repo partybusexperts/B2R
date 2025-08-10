@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 export default function Home() {
   const countdownRef = useRef(null);
 
-  // --- helpers ---
+  // ---------- helpers (same logic you had) ----------
   const estimateCost = () => {
     const hours = parseInt(document.getElementById('hours')?.value || '0', 10);
     const group = parseInt(document.getElementById('group')?.value || '0', 10);
@@ -17,12 +17,10 @@ export default function Home() {
     const baseLow = 150, baseHigh = 250;
     const perHourLow = 80, perHourHigh = 120;
     const perPersonLow = 5, perPersonHigh = 15;
-
     const low = baseLow + hours * perHourLow + group * perPersonLow;
     const high = baseHigh + hours * perHourHigh + group * perPersonHigh;
-
     document.getElementById('estimate-result').innerText =
-      `Estimated bus rental cost: $${low} - $${high} (contact for exact quote)`;
+      `Estimated bus rental cost: $${low} – $${high} (contact for exact quote)`;
   };
 
   const recommendBus = () => {
@@ -51,7 +49,7 @@ export default function Home() {
     }
     let base = 200;
     if (eventType === 'prom') base += 100;
-    if (date.getDay() === 6) base += 50;           // Saturday
+    if (date.getDay() === 6) base += 50;          // Saturday
     if (hours < 4 && date.getDay() === 6) hours = 4;
 
     const estimate = base + hours * 100 + capacity * 10;
@@ -109,80 +107,106 @@ export default function Home() {
     return () => clearInterval(t);
   }, []);
 
+  // ---------- WRAPPED & STYLED CONTENT ----------
   return (
-    <main style={{ padding: 24, maxWidth: 900, margin: '0 auto' }}>
-      <h1>Prom Party Bus Rental – Chester, SC</h1>
-      <p ref={countdownRef} />
+    <main className="min-h-screen bg-gray-50 text-gray-900">
+      {/* wrapper = centered column with padding & spacing */}
+      <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
+        <header>
+          <h1>Prom Party Bus Rental – Chester, SC</h1>
+          <p ref={countdownRef} className="muted mt-2" />
+        </header>
 
-      <section>
-        <h2>Quick Estimate</h2>
-        <input id="hours" type="number" placeholder="Hours" />
-        <input id="group" type="number" placeholder="Group size" />
-        <button onClick={estimateCost}>Estimate</button>
-        <p id="estimate-result" />
-      </section>
+        {/* Quick Estimate */}
+        <section className="card">
+          <h2 className="mb-4">Quick Estimate</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input id="hours" type="number" placeholder="Hours" className="input" />
+            <input id="group" type="number" placeholder="Group size" className="input" />
+          </div>
+          <button onClick={estimateCost} className="btn mt-4">Estimate</button>
+          <p id="estimate-result" className="mt-2 text-sm text-gray-700" />
+        </section>
 
-      <section>
-        <h2>Bus Recommendation</h2>
-        <input id="group-size" type="number" placeholder="Group size" />
-        <button onClick={recommendBus}>Recommend</button>
-        <p id="bus-recommendation" />
-      </section>
+        {/* Bus Recommendation */}
+        <section className="card">
+          <h2 className="mb-4">Bus Recommendation</h2>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input id="group-size" type="number" placeholder="Group size" className="input sm:max-w-xs" />
+            <button onClick={recommendBus} className="btn">Recommend</button>
+          </div>
+          <p id="bus-recommendation" className="mt-2 text-sm text-gray-700" />
+        </section>
 
-      <section>
-        <h2>Smart Quote</h2>
-        <input id="capacity" type="number" placeholder="Capacity" />
-        <input id="city" type="text" placeholder="City" defaultValue="Chester, SC" />
-        <input id="smart-hours" type="number" placeholder="Hours" />
-        <select id="event-type">
-          <option value="prom">Prom</option>
-          <option value="wedding">Wedding</option>
-          <option value="birthday">Birthday</option>
-        </select>
-        <input id="date" type="date" />
-        <button onClick={smartQuote}>Get Quote</button>
-        <p id="smart-quote-result" />
-      </section>
+        {/* Smart Quote */}
+        <section className="card">
+          <h2 className="mb-4">Smart Quote</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input id="capacity" type="number" placeholder="Capacity" className="input" />
+            <input id="city" type="text" placeholder="City" defaultValue="Chester, SC" className="input" />
+            <input id="smart-hours" type="number" placeholder="Hours" className="input" />
+            <select id="event-type" className="input">
+              <option value="prom">Prom</option>
+              <option value="wedding">Wedding</option>
+              <option value="birthday">Birthday</option>
+            </select>
+            <input id="date" type="date" className="input sm:col-span-2" />
+          </div>
+          <button onClick={smartQuote} className="btn mt-4">Get Quote</button>
+          <p id="smart-quote-result" className="mt-2 text-sm text-gray-700" />
+        </section>
 
-      <section>
-        <h2>Availability</h2>
-        <input id="avail-date" type="date" />
-        <input id="avail-time" type="time" />
-        <button onClick={checkAvailability}>Check</button>
-        <p id="avail-result" />
-      </section>
+        {/* Availability */}
+        <section className="card">
+          <h2 className="mb-4">Availability</h2>
+          <div className="flex flex-wrap gap-3">
+            <input id="avail-date" type="date" className="input sm:max-w-xs" />
+            <input id="avail-time" type="time" className="input sm:max-w-xs" />
+            <button onClick={checkAvailability} className="btn">Check</button>
+          </div>
+          <p id="avail-result" className="mt-2 text-sm text-gray-700" />
+        </section>
 
-      <section>
-        <h2>Theme Planner</h2>
-        <select id="vibe" defaultValue="">
-          <option value="" disabled>Select a vibe…</option>
-          <option value="glam">Glam</option>
-          <option value="bachelor">Bachelor</option>
-          <option value="club">Club</option>
-          <option value="teen">Teen</option>
-        </select>
-        <button onClick={planTheme}>Plan</button>
-        <p id="theme-result" />
-      </section>
+        {/* Theme Planner */}
+        <section className="card">
+          <h2 className="mb-4">Theme Planner</h2>
+          <div className="flex flex-wrap gap-3">
+            <select id="vibe" defaultValue="" className="input sm:max-w-xs">
+              <option value="" disabled>Select a vibe…</option>
+              <option value="glam">Glam</option>
+              <option value="bachelor">Bachelor</option>
+              <option value="club">Club</option>
+              <option value="teen">Teen</option>
+            </select>
+            <button onClick={planTheme} className="btn">Plan</button>
+          </div>
+          <p id="theme-result" className="mt-2 text-sm text-gray-700" />
+        </section>
 
-      <section>
-        <h2>Split the Bill</h2>
-        <input id="total-cost" type="number" placeholder="Total ($)" />
-        <input id="num-people" type="number" placeholder="# People" defaultValue={1} />
-        <button onClick={generateSplitLinks}>Generate</button>
-        <p id="split-result" />
-      </section>
+        {/* Split the Bill */}
+        <section className="card">
+          <h2 className="mb-4">Split the Bill</h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <input id="total-cost" type="number" placeholder="Total ($)" className="input sm:max-w-xs" />
+            <input id="num-people" type="number" placeholder="# People" defaultValue={1} className="input sm:max-w-xs" />
+            <button onClick={generateSplitLinks} className="btn">Generate</button>
+          </div>
+          <p id="split-result" className="mt-2 text-sm text-gray-700" />
+        </section>
 
-      <section>
-        <h2>Export Quote</h2>
-        <button onClick={exportQuote}>Export</button>
-        <p id="export-result" />
-      </section>
+        {/* Export + Poll */}
+        <section className="card">
+          <h2 className="mb-4">Export Quote</h2>
+          <button onClick={exportQuote} className="btn">Export</button>
+          <p id="export-result" className="mt-2 text-sm text-gray-700" />
+        </section>
 
-      <section>
-        <h2>Poll</h2>
-        <button onClick={() => vote('live-band')}>Vote “Live Band”</button>
-      </section>
+        <section className="card">
+          <h2 className="mb-4">Poll</h2>
+          <button onClick={() => vote('live-band')} className="btn">Vote “Live Band”</button>
+        </section>
+      </div>
     </main>
   );
 }
+

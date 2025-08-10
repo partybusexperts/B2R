@@ -3,3 +3,4 @@ export default {
     "@tailwindcss/postcss": {},
   },
 };
+export const config = {
