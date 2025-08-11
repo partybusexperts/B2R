@@ -1,22 +1,23 @@
-// src/app/layout.tsx
-import type { Metadata } from 'next';
-import './globals.css';
+// src/app/page.tsx
+import Navigation from '../components/Navigation';
+import Header from '../components/Header';
+import MainContent from '../components/MainContent';
+import ContactForm from '../components/ContactForm';
 
-export const metadata: Metadata = {
-  title: 'Bus2Ride | Party Bus, Limo & Coach Rentals',
-  description: 'Luxury party bus, limo and coach rentals for any occasion.',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Home() {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen bg-white antialiased">
-        {children}
-      </body>
-    </html>
+    <>
+      {/* Navigation */}
+      <Navigation />
+
+      {/* Hero */}
+      <Header />
+
+      {/* Main content + form */}
+      <section className="mx-auto my-5 max-w-[1200px] flex">
+        <MainContent />
+        <ContactForm />
+      </section>
+    </>
   );
 }
