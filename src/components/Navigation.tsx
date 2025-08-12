@@ -10,7 +10,7 @@ export default function Navigation() {
         <ul className="flex gap-6 text-sm md:text-base font-medium">
           <li><Link href="/" className="hover:text-blue-200 transition">Home</Link></li>
           <li><Link href="/fleet" className="hover:text-blue-200 transition">Fleet</Link></li>
-          <li><Link href="/event-ideas" className="hover:text-blue-200 transition">Event Ideas</Link></li>
+          <li><Link href="/events" className="hover:text-blue-200 transition">Events</Link></li>
           <li><Link href="/pricing" className="hover:text-blue-200 transition">Pricing</Link></li>
           <li><Link href="/locations" className="hover:text-blue-200 transition">Locations</Link></li>
           <li><Link href="/polls" className="hover:text-blue-200 transition">Polls and Data</Link></li>
