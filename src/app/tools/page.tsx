@@ -532,54 +532,33 @@ const tools = [
   },
 ];
 
-import { FaTools, FaCalculator, FaBus, FaRegLightbulb, FaRegClock, FaDollarSign, FaUserFriends, FaCheckCircle } from 'react-icons/fa';
-
-const toolIcons = [
-  FaCalculator, FaBus, FaRegLightbulb, FaRegClock, FaDollarSign, FaUserFriends, FaCheckCircle, FaTools
-];
-
 export default function LimoToolsPage() {
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen">
-      <h1 className="text-5xl font-extrabold mb-8 text-blue-800 text-center drop-shadow-lg tracking-tight flex items-center justify-center gap-4">
-        <FaTools className="inline-block text-blue-400 text-4xl mb-1" />
-        Limo & Party Bus Tools
-      </h1>
-      <p className="mb-14 text-center text-lg text-gray-700 max-w-2xl mx-auto font-medium">
-        Instantly calculate, plan, and optimize your group travel with our suite of interactive tools for every occasion.
-      </p>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {tools.map((tool, idx) => {
-          const Icon = toolIcons[idx % toolIcons.length];
-          return (
-            <div
-              key={tool.title}
-              className="relative group bg-white/90 rounded-2xl shadow-xl p-7 flex flex-col border border-blue-100 hover:scale-[1.025] hover:shadow-2xl transition-all duration-200 overflow-hidden min-h-[340px]"
-            >
-              <div className="absolute -top-4 -right-4 opacity-10 text-[7rem] pointer-events-none select-none">
-                <Icon />
-              </div>
-              <div className="flex items-center gap-3 mb-4">
-                <Icon className="text-blue-400 text-2xl" />
-                <h2 className="text-xl font-bold text-blue-700 tracking-wide">{tool.title}</h2>
-              </div>
-              <p className="text-gray-700 mb-5 font-medium flex-1">{tool.desc}</p>
-              <form className="flex flex-col gap-2 mb-3">
-                {tool.inputs.map((input, i) => (
-                  <input
-                    key={i}
-                    type="text"
-                    placeholder={input.placeholder}
-                    className="w-full p-2 border border-blue-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
-                  />
-                ))}
-                <button type="button" className="w-full bg-blue-600 text-white p-2 rounded font-semibold shadow hover:bg-blue-700 transition">{tool.button}</button>
-              </form>
-              <div className="text-blue-700 italic text-sm bg-blue-50 rounded px-3 py-2 shadow-inner">{tool.response}</div>
-            </div>
-          );
-        })}
-      </div>
+    <div className="max-w-5xl mx-auto py-10 px-4">
+      <h1 className="text-3xl font-bold mb-8 text-blue-700 text-center">Limo & Party Bus Tools</h1>
+      {tools.map((tool, idx) => (
+        <div
+          key={tool.title}
+          className={`flex flex-col md:flex-row${idx % 2 === 1 ? '-reverse' : ''} bg-white rounded-xl shadow mb-8 p-6 md:items-center`}
+        >
+          <div className={`flex-1 mb-4 md:mb-0 ${idx % 2 === 1 ? 'md:ml-8' : 'md:mr-8'}`}>
+            <h2 className="text-xl font-semibold mb-2">{tool.title}</h2>
+            <p className="text-gray-600">{tool.desc}</p>
+          </div>
+          <div className="flex-1 bg-gray-50 rounded p-4 border">
+            {tool.inputs.map((input, i) => (
+              <input
+                key={i}
+                type="text"
+                placeholder={input.placeholder}
+                className="w-full mb-2 p-2 border rounded"
+              />
+            ))}
+            <button className="w-full bg-blue-600 text-white p-2 rounded font-semibold mb-2">{tool.button}</button>
+            <div className="text-gray-700 italic">{tool.response}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

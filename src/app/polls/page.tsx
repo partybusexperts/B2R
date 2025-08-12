@@ -1,4 +1,5 @@
 
+import Link from 'next/link';
 import { FaLink } from 'react-icons/fa';
 
 const pollCategories = [
@@ -129,6 +130,7 @@ const pollCategories = [
     ],
   },
   {
+    title: 'Wine & Brewery Tour Polls',
     parent: 'Event-Based Transportation',
     polls: [
       'Would you book a party bus for a wine tour? (Yes/No)',
@@ -137,6 +139,7 @@ const pollCategories = [
     ],
   },
   {
+    title: 'New Year’s Eve / Holiday Event Polls',
     parent: 'Event-Based Transportation',
     polls: [
       'Would you book a party bus for New Year’s Eve? (Yes/No)',
@@ -218,6 +221,9 @@ const pollCategories = [
   },
 ];
 
+function getFirstFive(arr: any[]) {
+  return arr.slice(0, 5);
+}
 
 const answerOptions = [
   ['Yes', 'No'],
