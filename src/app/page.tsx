@@ -45,8 +45,8 @@ export default function Home() {
               <div className="w-full h-96 md:h-[420px] bg-gray-200 rounded-2xl mb-6 flex items-center justify-center text-3xl text-gray-400">[Party Bus Image]</div>
               <h4 className="text-xl font-bold mb-2">Party Bus {n}</h4>
               <div className="flex flex-col gap-2 w-full">
-                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition">Call (123) 456-7890</a>
-                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition">Instant Live Quote</a>
+                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center">Call (123) 456-7890</a>
+                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition text-center">Instant Live Quote</a>
               </div>
             </div>
           ))}
@@ -58,13 +58,13 @@ export default function Home() {
         <h2 className="text-4xl font-extrabold text-blue-900 text-center mb-4">Limos</h2>
         <div className="max-w-3xl mx-auto mb-10">
           <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
-            <li>🛋️ Plush leather seating</li>
-            <li>🍾 Wet bar with glassware</li>
-            <li>🎶 Premium sound system</li>
-            <li>🌟 Fiber optic & LED lighting</li>
-            <li>🧑‍✈️ Professional chauffeur</li>
-            <li>🕶️ Privacy divider</li>
-            <li>📺 Flat screen TVs (select models)</li>
+            <li><a href="/features/plush-leather-seating" className="hover:underline">🛋️ Plush leather seating</a></li>
+            <li><a href="/features/wet-bar-glassware" className="hover:underline">🍾 Wet bar with glassware</a></li>
+            <li><a href="/features/premium-sound-system" className="hover:underline">🎶 Premium sound system</a></li>
+            <li><a href="/features/fiber-optic-led-lighting" className="hover:underline">🌟 Fiber optic & LED lighting</a></li>
+            <li><a href="/features/professional-chauffeur" className="hover:underline">🧑‍✈️ Professional chauffeur</a></li>
+            <li><a href="/features/privacy-divider" className="hover:underline">🕶️ Privacy divider</a></li>
+            <li><a href="/features/flat-screen-tvs" className="hover:underline">📺 Flat screen TVs (select models)</a></li>
           </ul>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
@@ -73,8 +73,8 @@ export default function Home() {
               <div className="w-full h-96 md:h-[420px] bg-gray-200 rounded-2xl mb-6 flex items-center justify-center text-3xl text-gray-400">[Limo Image]</div>
               <h4 className="text-xl font-bold mb-2">Limo {n}</h4>
               <div className="flex flex-col gap-2 w-full">
-                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition">Call (123) 456-7890</a>
-                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition">Instant Live Quote</a>
+                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center">Call (123) 456-7890</a>
+                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition text-center">Instant Live Quote</a>
               </div>
             </div>
           ))}
@@ -86,13 +86,13 @@ export default function Home() {
         <h2 className="text-4xl font-extrabold text-blue-900 text-center mb-4">Coach Buses</h2>
         <div className="max-w-3xl mx-auto mb-10">
           <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
-            <li>🪑 Reclining seats & footrests</li>
-            <li>🧳 Underbody luggage bays</li>
-            <li>📺 Flat screen TVs & DVD</li>
-            <li>🔊 PA & sound system</li>
-            <li>🚻 Restroom (select models)</li>
-            <li>❄️ Climate control</li>
-            <li>🧑‍✈️ Pro driver included</li>
+            <li><a href="/features/reclining-seats-footrests" className="hover:underline">🪑 Reclining seats & footrests</a></li>
+            <li><a href="/features/underbody-luggage-bays" className="hover:underline">🧳 Underbody luggage bays</a></li>
+            <li><a href="/features/flat-screen-tvs-dvd" className="hover:underline">📺 Flat screen TVs & DVD</a></li>
+            <li><a href="/features/pa-sound-system" className="hover:underline">🔊 PA & sound system</a></li>
+            <li><a href="/features/restroom" className="hover:underline">🚻 Restroom (select models)</a></li>
+            <li><a href="/features/climate-control" className="hover:underline">❄️ Climate control</a></li>
+            <li><a href="/features/coach-pro-driver" className="hover:underline">🧑‍✈️ Pro driver included</a></li>
           </ul>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
@@ -101,8 +101,8 @@ export default function Home() {
               <div className="w-full h-96 md:h-[420px] bg-gray-200 rounded-2xl mb-6 flex items-center justify-center text-3xl text-gray-400">[Coach Bus Image]</div>
               <h4 className="text-xl font-bold mb-2">Coach Bus {n}</h4>
               <div className="flex flex-col gap-2 w-full">
-                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition">Call (123) 456-7890</a>
-                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition">Instant Live Quote</a>
+                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center">Call (123) 456-7890</a>
+                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition text-center">Instant Live Quote</a>
               </div>
             </div>
           ))}
