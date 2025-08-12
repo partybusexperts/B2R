@@ -27,7 +27,7 @@ export default function ContactPage() {
       form.reset();
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 3000);
-    } catch (_err) {
+    } catch {
       alert('Sorry, something went wrong sending your message.');
     } finally {
       setLoading(false);

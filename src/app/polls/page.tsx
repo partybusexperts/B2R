@@ -1,5 +1,4 @@
 
-import Link from 'next/link';
 import { FaLink } from 'react-icons/fa';
 
 const pollCategories = [
@@ -136,6 +135,8 @@ const pollCategories = [
       'What’s your favorite tour ride? (A: Limo, B: Party Bus, C: Shuttle, D: SUV)',
       'True or False: Wine tours are best with a group.',
     ],
+  },
+  {
     parent: 'Event-Based Transportation',
     polls: [
       'Would you book a party bus for New Year’s Eve? (Yes/No)',
