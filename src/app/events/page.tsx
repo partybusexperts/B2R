@@ -5,7 +5,7 @@ import Image from 'next/image';
 const phone = '1-800-123-4567';
 const sms = '1-800-123-4567';
 const ctaIndices = [3, 8, 13, 18, 23, 27];
-const placeholderImg = '/globe.svg';
+const placeholderImg = '/images/globe.svg';
 
 export default function EventsPage() {
   return (

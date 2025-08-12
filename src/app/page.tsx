@@ -1,22 +1,11 @@
-"use client";
+
+import HeroSlideshow from "@/components/Hero";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 pb-16">
-      {/* Hero Section */}
-      <section className="bg-blue-900 text-white py-16 shadow-lg">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-extrabold mb-4 drop-shadow-lg">America&apos;s Largest Limo, Party Bus & Charter Bus Rental Company</h1>
-          <p className="text-lg md:text-xl mb-6 font-medium">Party Buses, Limos & Charter Buses for Every Occasion</p>
-          <div className="flex flex-wrap justify-center gap-6 mb-6">
-            <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">Founded 2011</div>
-            <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">3,000+ 5-Star Reviews</div>
-            <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">50,000+ Trips Booked</div>
-            <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">12,000+ Vehicles</div>
-          </div>
-          <a href="/contact" className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-lg shadow transition">Get a Quote</a>
-        </div>
-      </section>
+  {/* Hero Section */}
+  <HeroSlideshow />
 
       {/* Why Rent With Us */}
       <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">

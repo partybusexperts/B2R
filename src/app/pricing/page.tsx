@@ -6,63 +6,63 @@ const pricingFaq = [
   {
     title: "How Much Is A Luxury Party Bus Rental?",
     answer: "Our party bus rentals range from $500 to $5,000 per day depending on location, bus size, amenities, and rental length. We offer competitive pricing and top-notch service for any event.",
-    image: "/globe.svg"
+  image: "/images/globe.svg"
   },
   {
     title: "Why Does It Cost More On Prom?",
     answer: "Prom season means higher demand, longer hours, and premium amenities. This, plus seasonal costs, can increase rates. Booking early helps secure the best price!",
-    image: "/vercel.svg"
+  image: "/images/vercel.svg"
   },
   {
     title: "Why Does Bus2Ride Have A Minimum Hour Rental?",
     answer: "A minimum rental period helps us cover overhead and ensures you get the most value. Most rentals require at least four hours, but we offer flexibility for off-peak or short trips.",
-    image: "/window.svg"
+  image: "/images/window.svg"
   },
   {
     title: "How Much Does A Limousine Rental Cost?",
     answer: "Limousine rentals typically range from $100 to $400 per hour, with a 3-4 hour minimum. Pricing depends on location, vehicle type, and amenities. Contact us for a custom quote!",
-    image: "/next.svg"
+  image: "/images/next.svg"
   },
   {
     title: "How Do I Get Pricing For Multi-State Trips?",
     answer: "Multi-state trips are quoted based on distance, group size, and duration. Contact our team for a custom travel plan and competitive quote for your adventure.",
-    image: "/globe.svg"
+  image: "/images/globe.svg"
   },
   {
     title: "What Does It Cost For A Quinceañera?",
     answer: "Quinceañera bus rentals range from $500 to $5,000, with a four-hour minimum. We offer exceptions for shorter rentals ending before 4pm on Saturdays. Get in touch for details!",
-    image: "/vercel.svg"
+  image: "/images/vercel.svg"
   },
   // Custom FAQ rows below
   {
     title: "Are There Extra Fees for Additional Stops?",
     answer: "Additional stops may incur a small fee depending on distance and time. Let us know your itinerary for an exact quote—transparency is our priority!",
-    image: "/window.svg"
+  image: "/images/window.svg"
   },
   {
     title: "Do Prices Change for Holidays or Special Events?",
     answer: "Yes, peak dates like holidays and major events may have higher rates due to demand. Book early to lock in the best price!",
-    image: "/next.svg"
+  image: "/images/next.svg"
   },
   {
     title: "Is Gratuity Included in the Price?",
     answer: "Gratuity is not always included. We recommend 15-20% for excellent service. Your quote will specify if gratuity is added.",
-    image: "/globe.svg"
+  image: "/images/globe.svg"
   },
   {
     title: "Can I Get a Discount for Large Groups?",
     answer: "We offer special rates and discounts for large groups and multi-vehicle bookings. Ask our team for current promotions!",
-    image: "/vercel.svg"
+  image: "/images/vercel.svg"
   },
   {
     title: "What Payment Methods Are Accepted?",
     answer: "We accept all major credit cards, ACH, and select digital wallets. Payment details will be provided with your quote.",
-    image: "/window.svg"
+  image: "/images/window.svg"
   },
   {
     title: "Is a Deposit Required to Reserve?",
     answer: "A deposit is typically required to secure your booking. The amount and terms will be outlined in your quote and agreement.",
-    image: "/next.svg"
+  image: "/images/next.svg"
   },
 ];
 
