@@ -1,4 +1,5 @@
 import HeroSlideshow from "@/components/Hero";
+import { useMemo } from "react";
 import Link from "next/link";
 
 // List of images for each vehicle type
@@ -54,6 +55,31 @@ function getRandomImages(arr: string[], count: number) {
 }
 
 export default function Home() {
+  // For demo: assign a random party bus image to each event card
+  const partyBusImagesList = [
+    "/images/18 Passenger White Party Bus Exterior.png",
+    "/images/18 Passenger White Party Bus Interior.png",
+    "/images/20 Passenger White Party Bus Exterior.png",
+    "/images/36 Passenger Party Bus Exterior 4.png",
+    "/images/Bus-1.png",
+    "/images/Bus-2.png",
+    "/images/Bus-3.png",
+    "/images/Bus-4.png",
+    "/images/Bus-5.png",
+    "/images/17 Passenger Black Party Bus Exterior.png",
+  ];
+  const eventNames = [
+    "Haunted House Tours", "Thanksgiving Parties", "Christmas Parties", "Ski Resort Tours", "New Year’s Eve",
+    "Sporting Events", "Weddings", "Prom", "Graduation Celebration", "Concerts / Events",
+    "Bachelor Parties", "Bachelorette Parties", "Brewery Tours", "Red Rocks Concerts", "Girl’s Night Out",
+    "Guys Night Out", "Retirement Celebrations", "Blackhawk Casinos", "Corporate Parties", "Birthday Parties",
+    "Kid’s Parties", "Entertainment Tours", "Charter Services", "Airport Shuttle", "Quinceanera Parties",
+    "Anniversary Celebrations", "Special Dinners Out"
+  ];
+  const eventImages = useMemo(() => {
+    // Assign a random party bus image to each event
+    return eventNames.map((_, i) => partyBusImagesList[i % partyBusImagesList.length]);
+  }, []);
   return (
     <>
       {/* Hero Slideshow (assuming it’s imported) */}
@@ -80,6 +106,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* CTA after Blog & Resources */}
+
+
       {/* Party Buses Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
         <h2 className="text-5xl md:text-6xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
@@ -89,37 +118,58 @@ export default function Home() {
           <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
             <li>
               <a href="/features/lots-of-space" className="hover:underline">
-                🕺 Lots of space to move & socialize
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
+                  🕺 Lots of space to move & socialize
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+                </span>
               </a>
             </li>
             <li>
               <a href="/features/dance-onboard" className="hover:underline">
-                💃 Ability to dance onboard
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
+                  💃 Ability to dance onboard
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+                </span>
               </a>
             </li>
             <li>
               <a href="/features/removable-dance-pole" className="hover:underline">
-                🪩 Removable dance pole
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
+                  🪩 Removable dance pole
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+                </span>
               </a>
             </li>
             <li>
               <a href="/features/wet-bars" className="hover:underline">
-                🍾 Wet bars with ice & bottled water
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
+                  🍾 Wet bars with ice & bottled water
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+                </span>
               </a>
             </li>
             <li>
               <a href="/features/wrap-around-leather-seating" className="hover:underline">
-                🛋️ Wrap-around leather seating
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
+                  🛋️ Wrap-around leather seating
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+                </span>
               </a>
             </li>
             <li>
               <a href="/features/premium-sound-lighting" className="hover:underline">
-                🎵 Premium sound & LED lighting
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
+                  🎵 Premium sound & LED lighting
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+                </span>
               </a>
             </li>
             <li>
               <a href="/features/pro-driver" className="hover:underline">
-                🧑‍✈️ Pro driver included
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
+                  🧑‍✈️ Pro driver included
+                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+                </span>
               </a>
             </li>
           </ul>
@@ -138,10 +188,16 @@ export default function Home() {
               <h4 className="text-xl font-bold mb-2">Party Bus {idx + 1}</h4>
               <div className="flex flex-col gap-2 w-full">
                 <a
-                  href="tel:1234567890"
+                  href="tel:8885352566"
                   className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center"
                 >
-                  Call (123) 456-7890
+                  Call 888-535-2566
+                </a>
+                <a
+                  href="mailto:info@bus2ride.com"
+                  className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center"
+                >
+                  Email info@bus2ride.com
                 </a>
                 <a
                   href="/quote"
@@ -213,10 +269,16 @@ export default function Home() {
               <h4 className="text-xl font-bold mb-2">Limo {idx + 1}</h4>
               <div className="flex flex-col gap-2 w-full">
                 <a
-                  href="tel:1234567890"
+                  href="tel:8885352566"
                   className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center"
                 >
-                  Call (123) 456-7890
+                  Call 888-535-2566
+                </a>
+                <a
+                  href="mailto:info@bus2ride.com"
+                  className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center"
+                >
+                  Email info@bus2ride.com
                 </a>
                 <a
                   href="/quote"
@@ -288,10 +350,16 @@ export default function Home() {
               <h4 className="text-xl font-bold mb-2">Coach Bus {idx + 1}</h4>
               <div className="flex flex-col gap-2 w-full">
                 <a
-                  href="tel:1234567890"
+                  href="tel:8885352566"
                   className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center"
                 >
-                  Call (123) 456-7890
+                  Call 888-535-2566
+                </a>
+                <a
+                  href="mailto:info@bus2ride.com"
+                  className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center"
+                >
+                  Email info@bus2ride.com
                 </a>
                 <a
                   href="/quote"
@@ -647,77 +715,246 @@ export default function Home() {
       </div>
 
       {/* Group Transportation Services */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-900">
-          Group Transportation Services
-        </h2>
-        <div className="grid md:grid-cols-4 gap-8">
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">🎂</span>
-            <h4 className="font-semibold mb-1">Birthdays</h4>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">💍</span>
-            <h4 className="font-semibold mb-1">Weddings</h4>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">🏈</span>
-            <h4 className="font-semibold mb-1">Sports</h4>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">🏢</span>
-            <h4 className="font-semibold mb-1">Corporate</h4>
-          </div>
-        </div>
-        <div className="grid md:grid-cols-4 gap-8 mt-8">
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">🎓</span>
-            <h4 className="font-semibold mb-1">Prom & Homecoming</h4>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">🚌</span>
-            <h4 className="font-semibold mb-1">Field Trips</h4>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">🎤</span>
-            <h4 className="font-semibold mb-1">Conventions</h4>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <span className="text-3xl mb-2">🕊️</span>
-            <h4 className="font-semibold mb-1">Funerals</h4>
-          </div>
-        </div>
+      <section className="max-w-7xl mx-auto px-4 py-12">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight">Events & Occasions</h2>
+        {/* Render events in rows of 5, only once */}
+        {Array.from({ length: Math.ceil(eventNames.length / 5) }).map((_, rowIdx) => (
+          <>
+            <div key={rowIdx} className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
+              {eventNames.slice(rowIdx * 5, rowIdx * 5 + 5).map((event, i) => (
+                <div key={event} className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+                  <img src={eventImages[rowIdx * 5 + i]} alt="Party Bus" className="w-full h-32 object-cover rounded-lg mb-4" />
+                  <h4 className="font-semibold mb-2 text-center">{event}</h4>
+                  <a href="#" className="text-blue-700 font-bold hover:underline mb-2">Learn More</a>
+                  <a href="tel:8885352566" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center mb-1">Call 888-535-2566</a>
+                  <a href="mailto:info@bus2ride.com" className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center">Email info@bus2ride.com</a>
+                </div>
+              ))}
+            </div>
+            {(rowIdx + 1) % 2 === 0 && rowIdx !== Array.from({ length: Math.ceil(eventNames.length / 5) }).length - 1 && (
+              <div className="flex justify-center mb-8">
+                <div className="bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-2xl shadow-xl px-10 py-8 flex flex-col items-center w-full max-w-3xl border-2 border-blue-400">
+                  <div className="text-2xl md:text-3xl font-extrabold mb-2 tracking-tight">Ready to Book or Have Questions?</div>
+                  <div className="mb-4 text-lg">Call <a href="tel:8885352566" className="underline font-bold">888-535-2566</a> or email <a href="mailto:info@bus2ride.com" className="underline font-bold">info@bus2ride.com</a></div>
+                  <a href="/quote" className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Get a Free Quote</a>
+                </div>
+              </div>
+            )}
+          </>
+        ))}
       </section>
 
       {/* Blog & Resources */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-900">
-          Blog & Resources
-        </h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col">
-            <div className="w-full h-32 bg-gray-200 rounded mb-3 flex items-center justify-center text-gray-400">
-              [Blog Image]
+      {/* Blog & Resources (Simple Blocks) */}
+      <section className="max-w-6xl mx-auto px-4 py-16 space-y-14">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight drop-shadow-lg">Blog & Resources</h2>
+        {/* Tools (Staggered, Large Blocks) */}
+  <div className="space-y-12">
+          {/* Capacity Finder */}
+          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
+            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 order-2 md:order-1">
+              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Capacity Finder</h3>
+              <p className="text-lg text-blue-900 mb-4">Enter your group size to see recommended vehicles and get a quote instantly.</p>
+              <a href="/quote" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Try It</a>
             </div>
-            <h4 className="font-semibold mb-1">How to Book a Charter Bus</h4>
-            <p className="text-gray-600 text-sm mb-2">
-              A complete guide to booking group transportation.
-            </p>
-            <a href="#" className="text-blue-700 hover:underline">
-              Read More
-            </a>
+            <div className="flex-1 order-1 md:order-2 flex items-center justify-center">
+              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">🚌</div>
+            </div>
           </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col">
-            <div className="w-full h-32 bg-gray-200 rounded mb-3 flex items-center justify-center text-gray-400">
-              [Blog Image]
+          {/* Budget Estimator */}
+          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
+            <div className="flex-1 flex items-center justify-center">
+              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">💸</div>
             </div>
-            <h4 className="font-semibold mb-1">Party Bus Rental Tips</h4>
-            <p className="text-gray-600 text-sm mb-2">
-              Everything you need to know for your next big event.
-            </p>
-            <a href="#" className="text-blue-700 hover:underline">
-              Read More
-            </a>
+            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400">
+              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Budget Estimator</h3>
+              <p className="text-lg text-blue-900 mb-4">Estimate your trip cost by hours, typical rates, and surcharges. Get a ballpark range and book with confidence.</p>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Estimate Now</button>
+            </div>
+          </div>
+          {/* Pickup Timing Planner */}
+          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
+            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 order-2 md:order-1">
+              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Pickup Timing Planner</h3>
+              <p className="text-lg text-blue-900 mb-4">Enter your event start time and venue distance to get optimal pickup and return times, with built-in buffer.</p>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Plan My Pickup</button>
+            </div>
+            <div className="flex-1 order-1 md:order-2 flex items-center justify-center">
+              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">⏰</div>
+            </div>
+          </div>
+          {/* Tailgate Checklist */}
+          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
+            <div className="flex-1 flex items-center justify-center">
+              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">🎉</div>
+            </div>
+            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400">
+              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Tailgate Checklist</h3>
+              <p className="text-lg text-blue-900 mb-4">Cooler, ice, chargers, playlist, permission rules—everything you need for the ultimate tailgate.</p>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">View Checklist</button>
+            </div>
+          </div>
+          {/* Playlist Starter */}
+          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
+            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 order-2 md:order-1">
+              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Playlist Starter</h3>
+              <p className="text-lg text-blue-900 mb-4">One-click Spotify links for Bachelorette, Gameday, and Prom. Get the party started instantly!</p>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Get Playlists</button>
+            </div>
+            <div className="flex-1 order-1 md:order-2 flex items-center justify-center">
+              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">🎵</div>
+            </div>
+          </div>
+          <div className="flex justify-center mt-8">
+            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Tools</button>
+          </div>
+          {/* CTA after Tools */}
+        </div>
+        {/* Polls */}
+        {/* Polls (Grid of 12) */}
+        <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
+          <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Polls</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* Row 1 */}
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start border-l-4 border-blue-400">
+              <div className="font-bold mb-2">Party Bus vs Limo — which would you pick?</div>
+              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Party Bus</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Limo</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">What’s your event?</div>
+              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Prom</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Wedding</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Gameday</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Birthday</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Corporate</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">What matters most?</div>
+              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Price</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Space</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Lighting</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Sound</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Luggage</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">True or False: Party buses are safer than limos.</div>
+              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">True</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">False</button></div>
+            </div>
+            {/* Row 2 */}
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">Would you rent a party bus for a birthday?</div>
+              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Yes</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">No</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">Which party bus feature is most important?</div>
+              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Sound System</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Lighting</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Bar</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">TV Screens</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">Would you rent a limousine for a birthday?</div>
+              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Yes</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">No</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">What’s your favorite limo color?</div>
+              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Black</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">White</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Pink</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Silver</button></div>
+            </div>
+            {/* Row 3 */}
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">True or False: Limousines are best for weddings.</div>
+              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">True</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">False</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">Do you prefer SUVs or sedans for airport transfers?</div>
+              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">SUV</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Sedan</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">Which feature matters most on a coach bus?</div>
+              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">WiFi</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Reclining Seats</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Restroom</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Outlets</button></div>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
+              <div className="font-bold mb-2">Have you ever used a shuttle for a concert?</div>
+              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Yes</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">No</button></div>
+            </div>
+          </div>
+          <div className="text-gray-500 text-base mt-2 text-center">(Your vote is saved instantly. <a href="/polls" className="text-blue-700 hover:underline">See more polls</a>)</div>
+          <div className="flex justify-center mt-8">
+            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Polls</button>
+          </div>
+          {/* CTA after Polls */}
+        </div>
+        {/* Live Weather */}
+        <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200">
+          <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-sky-700 tracking-tight">Live Weather for Your Event</h3>
+          <p className="text-gray-700 text-lg mb-3">Pick your city and date to see a 7-day forecast. (Or check back if out of range.)</p>
+          <ul className="list-disc pl-8 text-lg text-gray-800 space-y-2">
+            <li><b>Heads-Up Tips:</b> Hot day → extra water/ice; rain → covered pickup; cold → coats, blankets.</li>
+            <li><b>CTA:</b> “Add cooler/ice (+$)” or “Add luggage trailer (+$)” if windy/rainy (just a CTA for now).</li>
+          </ul>
+        </div>
+        {/* Did You Know Facts */}
+        {/* Did You Know (Modern Scrollable Cards) */}
+        <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
+          <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
+          <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
+            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
+              <div className="text-4xl mb-2">🛋️</div>
+              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Book by comfort, not max headcount</div>
+              <div className="text-blue-800 text-center text-base">Most buses seat more than their ‘comfortable’ number.</div>
+            </div>
+            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
+              <div className="text-4xl mb-2">🎓</div>
+              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Prom Saturdays sell out first</div>
+              <div className="text-blue-800 text-center text-base">Book 3–6 weeks early (Mar–May) for best selection.</div>
+            </div>
+            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
+              <div className="text-4xl mb-2">🚦</div>
+              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Gameday traffic can double travel time</div>
+              <div className="text-blue-800 text-center text-base">Add a 30–45 min buffer for big events.</div>
+            </div>
+            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
+              <div className="text-4xl mb-2">💡</div>
+              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">LED party lighting uses almost no power</div>
+              <div className="text-blue-800 text-center text-base">Run it the whole trip for max fun.</div>
+            </div>
+            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
+              <div className="text-4xl mb-2">📍</div>
+              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Most venues require a loading zone</div>
+              <div className="text-blue-800 text-center text-base">Ask us for the exact pin to avoid delays.</div>
+            </div>
+          </div>
+          <div className="flex justify-center mt-8">
+            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Facts</button>
+          </div>
+        </div>
+        {/* Blog Topics */}
+        {/* Blog Topics (Cards with Image, Intro, Button) */}
+        <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
+          <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Blog Topics</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
+              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">💍</div>
+              <div className="font-bold text-lg mb-2 text-blue-900">Wedding Shuttle Timeline: Exactly When to Book & How Many Runs</div>
+              <div className="text-blue-800 mb-3">A step-by-step guide to planning your wedding shuttle, including timing and logistics for stress-free transport.</div>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
+              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">🚌</div>
+              <div className="font-bold text-lg mb-2 text-blue-900">Prom Bus Safety & Rules (Parents’ Quick Guide)</div>
+              <div className="text-blue-800 mb-3">Everything parents need to know about prom bus safety, rules, and peace of mind for the big night.</div>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
+              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">🏟️</div>
+              <div className="font-bold text-lg mb-2 text-blue-900">College Gameday Bus: Tailgate Checklist + Stadium Drop-offs (DAL/AUS/HOU/DEN)</div>
+              <div className="text-blue-800 mb-3">Your ultimate checklist for a winning tailgate and smooth stadium drop-off in major cities.</div>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
+              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">💰</div>
+              <div className="font-bold text-lg mb-2 text-blue-900">How Much Does a Party Bus Cost in [City]? (Real Ranges + Examples)</div>
+              <div className="text-blue-800 mb-3">See real price ranges and examples for party bus rentals in your city, so you can budget with confidence.</div>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
+            </div>
+            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
+              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">🤔</div>
+              <div className="font-bold text-lg mb-2 text-blue-900">Charter Bus vs Party Bus vs Limo: What’s Right for Your Group?</div>
+              <div className="text-blue-800 mb-3">Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.</div>
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
+            </div>
+          </div>
+          <div className="flex justify-center mt-8">
+            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Blog Posts</button>
           </div>
         </div>
       </section>
@@ -728,13 +965,10 @@ export default function Home() {
           <h2 className="text-2xl font-bold mb-4">Book Your Bus or Limo Today!</h2>
           <div className="flex flex-wrap justify-center gap-6 mb-6">
             <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
-              Call: (555) 123-4567
+              Call: 888-535-2566
             </div>
             <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
-              Text: (555) 987-6543
-            </div>
-            <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
-              Email: info@example.com
+              Email: info@bus2ride.com
             </div>
           </div>
           <div className="flex justify-center gap-4 mb-4">
@@ -764,47 +998,12 @@ export default function Home() {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
-                  Contact
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Services
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Reviews
-                </a>
+                <a href="#" className="hover:underline">About Us</a>
               </li>
             </ul>
           </div>
-          <div>
-            <h4 className="font-bold mb-2">Fleet</h4>
-            <ul className="space-y-1">
-              <li>
-                <a href="#" className="hover:underline">
-                  Limos
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Party Buses
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Charter Buses
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Sprinter Vans
-                </a>
-              </li>
-            </ul>
-          </div>
+
+      {/* CTA after Blog & Resources */}
           <div>
             <h4 className="font-bold mb-2">Resources</h4>
             <ul className="space-y-1">
@@ -851,10 +1050,23 @@ export default function Home() {
             </ul>
           </div>
         </div>
-        <div className="text-center text-gray-400 mt-8 text-sm">
-          © {new Date().getFullYear()} Bus2Ride. All rights reserved.
+        <div className="flex flex-col items-center gap-2 mt-8 text-sm text-gray-400">
+          <div className="flex gap-4 justify-center mb-1">
+            <a
+              href="https://facebook.com/yourbus2ride" // TODO: Replace with actual FB page
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bus2Ride Facebook"
+              className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-700 hover:bg-blue-800 transition shadow-lg border-2 border-blue-400"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-white">
+                <path d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0" />
+              </svg>
+            </a>
+          </div>
+          <span>© {new Date().getFullYear()} Bus2Ride. All rights reserved.</span>
         </div>
-      </footer>
+  </footer>
     </>
   );
 }
