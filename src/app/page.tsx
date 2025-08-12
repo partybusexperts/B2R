@@ -24,25 +24,88 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Fleet Overview */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold text-center mb-8 text-blue-900">12,000+ Vehicles</h2>
+
+      {/* Party Buses Section */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-4xl font-extrabold text-blue-900 text-center mb-4">Party Buses</h2>
+        <div className="max-w-3xl mx-auto mb-10">
+          <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
+            <li><a href="/features/lots-of-space" className="hover:underline">🕺 Lots of space to move & socialize</a></li>
+            <li><a href="/features/dance-onboard" className="hover:underline">💃 Ability to dance onboard</a></li>
+            <li><a href="/features/removable-dance-pole" className="hover:underline">🪩 Removable dance pole</a></li>
+            <li><a href="/features/wet-bars" className="hover:underline">🍾 Wet bars with ice & bottled water</a></li>
+            <li><a href="/features/wrap-around-leather-seating" className="hover:underline">🛋️ Wrap-around leather seating</a></li>
+            <li><a href="/features/premium-sound-lighting" className="hover:underline">🎵 Premium sound & LED lighting</a></li>
+            <li><a href="/features/pro-driver" className="hover:underline">🧑‍✈️ Pro driver included</a></li>
+          </ul>
+        </div>
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <div className="w-32 h-20 bg-gray-200 rounded mb-3 flex items-center justify-center text-gray-400">[Limo]</div>
-            <h3 className="font-bold text-lg mb-1">Limo Rentals</h3>
-            <a href="/fleet" className="text-blue-700 hover:underline">View Limos</a>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <div className="w-32 h-20 bg-gray-200 rounded mb-3 flex items-center justify-center text-gray-400">[Charter Bus]</div>
-            <h3 className="font-bold text-lg mb-1">Charter Bus Rentals</h3>
-            <a href="/fleet" className="text-blue-700 hover:underline">View Charter Buses</a>
-          </div>
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-            <div className="w-32 h-20 bg-gray-200 rounded mb-3 flex items-center justify-center text-gray-400">[Party Bus]</div>
-            <h3 className="font-bold text-lg mb-1">Party Bus Rentals</h3>
-            <a href="/fleet" className="text-blue-700 hover:underline">View Party Buses</a>
-          </div>
+          {[1,2,3].map((n) => (
+            <div key={n} className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center">
+              <div className="w-full h-96 md:h-[420px] bg-gray-200 rounded-2xl mb-6 flex items-center justify-center text-3xl text-gray-400">[Party Bus Image]</div>
+              <h4 className="text-xl font-bold mb-2">Party Bus {n}</h4>
+              <div className="flex flex-col gap-2 w-full">
+                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition">Call (123) 456-7890</a>
+                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition">Instant Live Quote</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Limos Section */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-4xl font-extrabold text-blue-900 text-center mb-4">Limos</h2>
+        <div className="max-w-3xl mx-auto mb-10">
+          <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
+            <li>🛋️ Plush leather seating</li>
+            <li>🍾 Wet bar with glassware</li>
+            <li>🎶 Premium sound system</li>
+            <li>🌟 Fiber optic & LED lighting</li>
+            <li>🧑‍✈️ Professional chauffeur</li>
+            <li>🕶️ Privacy divider</li>
+            <li>📺 Flat screen TVs (select models)</li>
+          </ul>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {[1,2,3].map((n) => (
+            <div key={n} className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center">
+              <div className="w-full h-96 md:h-[420px] bg-gray-200 rounded-2xl mb-6 flex items-center justify-center text-3xl text-gray-400">[Limo Image]</div>
+              <h4 className="text-xl font-bold mb-2">Limo {n}</h4>
+              <div className="flex flex-col gap-2 w-full">
+                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition">Call (123) 456-7890</a>
+                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition">Instant Live Quote</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Coach Buses Section */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <h2 className="text-4xl font-extrabold text-blue-900 text-center mb-4">Coach Buses</h2>
+        <div className="max-w-3xl mx-auto mb-10">
+          <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
+            <li>🪑 Reclining seats & footrests</li>
+            <li>🧳 Underbody luggage bays</li>
+            <li>📺 Flat screen TVs & DVD</li>
+            <li>🔊 PA & sound system</li>
+            <li>🚻 Restroom (select models)</li>
+            <li>❄️ Climate control</li>
+            <li>🧑‍✈️ Pro driver included</li>
+          </ul>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {[1,2,3].map((n) => (
+            <div key={n} className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center">
+              <div className="w-full h-96 md:h-[420px] bg-gray-200 rounded-2xl mb-6 flex items-center justify-center text-3xl text-gray-400">[Coach Bus Image]</div>
+              <h4 className="text-xl font-bold mb-2">Coach Bus {n}</h4>
+              <div className="flex flex-col gap-2 w-full">
+                <a href="tel:1234567890" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition">Call (123) 456-7890</a>
+                <a href="/quote" className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition">Instant Live Quote</a>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
