@@ -1,19 +1,21 @@
 // src/components/Navigation.tsx
 
+import Link from "next/link";
+
 export default function Navigation() {
   return (
     <nav className="bg-blue-700 text-white py-4 shadow">
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <span className="font-bold text-lg tracking-wide">Bus2Ride</span>
+        <Link href="/" className="font-bold text-lg tracking-wide">Bus2Ride</Link>
         <ul className="flex gap-6 text-sm md:text-base font-medium">
-          <li><a href="#" className="hover:text-blue-200 transition">Home</a></li>
-          <li><a href="#" className="hover:text-blue-200 transition">Fleet</a></li>
-          <li><a href="#" className="hover:text-blue-200 transition">Services</a></li>
-          <li><a href="#" className="hover:text-blue-200 transition">Pricing</a></li>
-          <li><a href="/locations" className="hover:text-blue-200 transition">Locations</a></li>
-          <li><a href="/polls" className="hover:text-blue-200 transition">Polls and Data</a></li>
-          <li><a href="/tools" className="hover:text-blue-200 transition">Tools</a></li>
-          <li><a href="/contact" className="hover:text-blue-200 transition">Contact</a></li>
+          <li><Link href="/" className="hover:text-blue-200 transition">Home</Link></li>
+          <li><Link href="/fleet" className="hover:text-blue-200 transition">Fleet</Link></li>
+          <li><Link href="/event-ideas" className="hover:text-blue-200 transition">Event Ideas</Link></li>
+          <li><Link href="/pricing" className="hover:text-blue-200 transition">Pricing</Link></li>
+          <li><Link href="/locations" className="hover:text-blue-200 transition">Locations</Link></li>
+          <li><Link href="/polls" className="hover:text-blue-200 transition">Polls and Data</Link></li>
+          <li><Link href="/tools" className="hover:text-blue-200 transition">Tools</Link></li>
+          <li><Link href="/contact" className="hover:text-blue-200 transition">Contact</Link></li>
         </ul>
       </div>
     </nav>
