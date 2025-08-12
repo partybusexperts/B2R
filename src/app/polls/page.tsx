@@ -220,9 +220,6 @@ const pollCategories = [
 ];
 
 
-function getFirstFive<T>(arr: T[]): T[] {
-  return arr.slice(0, 5);
-}
 
 const answerOptions = [
   ['Yes', 'No'],

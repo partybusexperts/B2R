@@ -6,7 +6,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="bg-blue-900 text-white py-16 shadow-lg">
         <div className="max-w-5xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-extrabold mb-4 drop-shadow-lg">America's Largest Limo, Party Bus & Charter Bus Rental Company</h1>
+          <h1 className="text-5xl font-extrabold mb-4 drop-shadow-lg">America&apos;s Largest Limo, Party Bus & Charter Bus Rental Company</h1>
           <p className="text-lg md:text-xl mb-6 font-medium">Party Buses, Limos & Charter Buses for Every Occasion</p>
           <div className="flex flex-wrap justify-center gap-6 mb-6">
             <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">Founded 2011</div>
@@ -60,7 +60,7 @@ export default function Home() {
       {/* Trust & Reputation */}
       <section className="bg-blue-50 py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-4 text-blue-900">America's Most Trusted Limo & Bus Rental Company</h2>
+          <h2 className="text-2xl font-bold mb-4 text-blue-900">America&apos;s Most Trusted Limo & Bus Rental Company</h2>
           <p className="text-lg text-gray-700 mb-4">Thousands of happy customers, flexible booking, and a relentless dedication to service.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <div className="bg-white rounded-lg px-6 py-3 font-bold text-blue-700 shadow">Custom Itineraries</div>

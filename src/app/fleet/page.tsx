@@ -62,7 +62,7 @@ export default function FleetPage() {
           Discover the perfect ride for your next event! Our diverse fleet offers something for every group size and occasion. All vehicles are maintained to the highest standards for safety and comfort.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {vehicles.map((vehicle, _idx) => (
+          {vehicles.map((vehicle) => (
             <div key={vehicle.name} className="bg-white rounded-xl shadow-lg flex flex-col items-center p-6 hover:shadow-2xl transition-shadow">
               <div className="w-full h-40 relative mb-4">
                 <Image src={vehicle.image} alt={vehicle.name} fill className="object-contain rounded-lg" />
