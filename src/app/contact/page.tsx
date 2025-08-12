@@ -9,20 +9,25 @@ export default function ContactPage() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form) as any);
+    const fd = new FormData(form);
+    const payload: { name: string; email: string; message: string } = {
+      name: String(fd.get('name') ?? ''),
+      email: String(fd.get('email') ?? ''),
+      message: String(fd.get('message') ?? ''),
+    };
 
     setLoading(true);
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error('Send failed');
       form.reset();
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 3000);
-    } catch (err) {
+    } catch {
       alert('Sorry, something went wrong sending your message.');
     } finally {
       setLoading(false);

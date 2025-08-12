@@ -1,6 +1,5 @@
 
-import Link from 'next/link';
-import { FaLink } from 'react-icons/fa';
+// import { FaLink } from 'react-icons/fa';
 
 const pollCategories = [
   {
@@ -221,7 +220,7 @@ const pollCategories = [
   },
 ];
 
-function getFirstFive(arr: any[]) {
+function getFirstFive<T>(arr: T[]): T[] {
   return arr.slice(0, 5);
 }
 
@@ -265,7 +264,7 @@ export default function Page() {
                 className="relative group bg-white/90 rounded-2xl shadow-xl p-7 flex flex-col min-h-[340px] border border-blue-100 hover:scale-[1.025] hover:shadow-2xl transition-all duration-200 overflow-hidden"
               >
                 <div className="absolute -top-4 -right-4 opacity-10 text-[7rem] pointer-events-none select-none">
-                  <FaLink />
+
                 </div>
                 <h3 className="text-xl font-bold mb-5 text-blue-700 tracking-wide flex items-center gap-2">
                   <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mr-2" />
@@ -279,7 +278,7 @@ export default function Page() {
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-gray-900 font-medium text-base leading-snug">{poll}</span>
-                        <button className="ml-2 text-blue-400 opacity-70 hover:opacity-100 transition" title="Copy link (coming soon)"><FaLink /></button>
+                        {/* <button className="ml-2 text-blue-400 opacity-70 hover:opacity-100 transition" title="Copy link (coming soon)"><FaLink /></button> */}
                       </div>
                       <div className="flex flex-wrap gap-3 mt-1">
                         {getAnswerType(poll).map(opt => (
