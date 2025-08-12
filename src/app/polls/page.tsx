@@ -130,16 +130,12 @@ const pollCategories = [
     ],
   },
   {
-    title: 'Wine & Brewery Tour Polls',
     parent: 'Event-Based Transportation',
     polls: [
       'Would you book a party bus for a wine tour? (Yes/No)',
       'What’s your favorite tour ride? (A: Limo, B: Party Bus, C: Shuttle, D: SUV)',
       'True or False: Wine tours are best with a group.',
     ],
-  },
-  {
-    title: 'New Year’s Eve / Holiday Event Polls',
     parent: 'Event-Based Transportation',
     polls: [
       'Would you book a party bus for New Year’s Eve? (Yes/No)',
@@ -221,9 +217,6 @@ const pollCategories = [
   },
 ];
 
-function getFirstFive(arr: any[]) {
-  return arr.slice(0, 5);
-}
 
 const answerOptions = [
   ['Yes', 'No'],
