@@ -1,6 +1,8 @@
 // src/app/layout.tsx
+
 import type { Metadata } from 'next';
 import './globals.css';
+import Navigation from '../components/Navigation';
 
 export const metadata: Metadata = {
   title: 'Bus2Ride | Party Bus, Limo & Coach Rentals',
@@ -14,7 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white">{children}</body>
+      <body className="min-h-screen bg-white">
+        <Navigation />
+        {children}
+      </body>
     </html>
   );
 }

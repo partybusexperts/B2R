@@ -10,10 +10,10 @@ export default function Navigation() {
           <li><a href="#" className="hover:text-blue-200 transition">Fleet</a></li>
           <li><a href="#" className="hover:text-blue-200 transition">Services</a></li>
           <li><a href="#" className="hover:text-blue-200 transition">Pricing</a></li>
-          <li><a href="#" className="hover:text-blue-200 transition">Locations</a></li>
+          <li><a href="/locations" className="hover:text-blue-200 transition">Locations</a></li>
           <li><a href="#" className="hover:text-blue-200 transition">Polls and Data</a></li>
           <li><a href="/tools" className="hover:text-blue-200 transition">Tools</a></li>
-          <li><a href="#contact" className="hover:text-blue-200 transition">Contact</a></li>
+          <li><a href="/contact" className="hover:text-blue-200 transition">Contact</a></li>
         </ul>
       </div>
     </nav>
