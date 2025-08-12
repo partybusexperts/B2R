@@ -1,5 +1,4 @@
 
-// import { FaLink } from 'react-icons/fa';
 
 const pollCategories = [
   {
@@ -219,6 +218,7 @@ const pollCategories = [
     ],
   },
 ];
+
 
 function getFirstFive<T>(arr: T[]): T[] {
   return arr.slice(0, 5);
