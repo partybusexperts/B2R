@@ -1,6 +1,5 @@
 // src/components/Header.tsx
 'use client';
-
 export default function Header() {
   return (
     <header className="bg-gradient-to-r from-blue-700 to-blue-400 text-white py-16 px-4 text-center rounded-b-3xl shadow-lg">
