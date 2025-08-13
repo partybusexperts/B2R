@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 // All states and cities as a data structure
 const locations = [
+  { state: 'Alaska', cities: ['Anchorage'] },
   { state: 'Alabama', cities: ['Auburn','Birmingham','Decatur','Dothan','Hoover','Huntsville','Madison','Mobile','Montgomery','Tuscaloosa'] },
   { state: 'Arizona', cities: ['Avondale','Buckeye','Casa Grande','Catalina Foothills','Chandler','Flagstaff','Gilbert','Glendale','Goodyear','Lake Havasu City','Maricopa','Mesa','Peoria','Phoenix','Queen Creek','Scottsdale','Surprise','Tempe','Tucson','Yuma'] },
   { state: 'Arkansas', cities: ['Bentonville','Conway','Fayetteville','Fort Smith','Jonesboro','Little Rock','North Little Rock','Rogers','Springdale'] },
@@ -61,23 +62,37 @@ export default function LocationsPage() {
       {/* State quick links grid */}
       <div className="mb-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {locations.map(({ state }) => (
-          <Link key={state} href="#" className="block text-blue-700 font-semibold bg-blue-50 rounded px-3 py-2 text-center hover:bg-blue-100 transition">
-            {state}
-          </Link>
+          state === 'Alaska' ? (
+            <Link key={state} href="#alaska" className="block text-blue-700 font-semibold bg-blue-100 border-2 border-blue-400 rounded px-3 py-2 text-center hover:bg-blue-200 transition">
+              {state}
+            </Link>
+          ) : (
+            <Link key={state} href="#" className="block text-blue-700 font-semibold bg-blue-50 rounded px-3 py-2 text-center hover:bg-blue-100 transition">
+              {state}
+            </Link>
+          )
         ))}
       </div>
       {/* State and city lists */}
       <div className="space-y-10">
         {locations.map(({ state, cities }) => (
-          <div key={state}>
+          <div key={state} id={state === 'Alaska' ? 'alaska' : undefined}>
             <h2 className="text-2xl font-semibold mb-2">
-              <Link href="#" className="text-blue-600 hover:underline">{state}</Link>
+              {state === 'Alaska' ? (
+                <Link href="#alaska" className="text-blue-700 underline font-bold">{state}</Link>
+              ) : (
+                <Link href="#" className="text-blue-600 hover:underline">{state}</Link>
+              )}
             </h2>
             {cities.length > 0 ? (
               <ul className="flex flex-wrap gap-2">
                 {cities.map(city => (
                   <li key={city}>
-                    <Link href="#" className="inline-block text-gray-700 bg-gray-100 rounded px-3 py-1 hover:bg-blue-100 hover:text-blue-700 transition">{city}</Link>
+                    {state === 'Alaska' && city === 'Anchorage' ? (
+                      <Link href="/locations/anchorage-alaska" className="inline-block text-white bg-blue-700 border-2 border-blue-400 rounded px-3 py-1 hover:bg-blue-800 hover:text-white transition font-bold">{city}</Link>
+                    ) : (
+                      <Link href="#" className="inline-block text-gray-700 bg-gray-100 rounded px-3 py-1 hover:bg-blue-100 hover:text-blue-700 transition">{city}</Link>
+                    )}
                   </li>
                 ))}
               </ul>

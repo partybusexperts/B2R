@@ -49,18 +49,29 @@ export default function HeroSlideshow() {
         <h2 className="text-xl md:text-3xl font-semibold text-white text-center mb-8 opacity-90 max-w-2xl">
           The Ultimate in Luxury Vehicle Rentals
         </h2>
-        <div className="flex gap-4 flex-wrap justify-center">
+        <div className="flex flex-col items-center gap-4 w-full">
+          <div className="flex gap-4 flex-wrap justify-center">
+            <a
+              href="/quote"
+              className="rounded-full bg-white text-blue-800 font-bold px-8 py-3 text-lg shadow-lg hover:bg-blue-50 hover:text-blue-900 transition border border-blue-200"
+              style={{ letterSpacing: '0.03em' }}
+            >
+              Get Instant Quote
+            </a>
+            <a
+              href="/fleet"
+              className="rounded-full bg-blue-700 text-white font-bold px-8 py-3 text-lg shadow-lg hover:bg-blue-800 transition border border-blue-800"
+              style={{ letterSpacing: '0.03em' }}
+            >
+              View Fleet
+            </a>
+          </div>
           <a
-            href="/quote"
-            className="rounded-2xl bg-white px-8 py-4 font-semibold text-black text-lg shadow-lg hover:shadow-xl transition"
+            href="tel:8885352566"
+            className="mt-4 inline-block bg-blue-50 text-blue-900 font-semibold px-8 py-3 rounded-full shadow hover:bg-blue-100 transition text-base border border-blue-200"
+            style={{ letterSpacing: '0.03em' }}
           >
-            Get Instant Quote
-          </a>
-          <a
-            href="/fleet"
-            className="rounded-2xl bg-white/10 px-8 py-4 font-semibold text-white text-lg backdrop-blur hover:bg-white/15 transition border border-white/20"
-          >
-            View Fleet
+            � (888) 535-2566
           </a>
         </div>
       </div>

@@ -10,9 +10,29 @@ export default function Header() {
       <p className="text-lg md:text-2xl mb-6 font-light max-w-2xl mx-auto">
         Party bus, limo, and coach rentals for every occasion. Book your unforgettable ride today!
       </p>
-      <a href="#contact" className="inline-block bg-white text-blue-700 font-semibold px-8 py-3 rounded-full shadow hover:bg-blue-50 transition">
-        Get a Free Quote
-      </a>
+      <div className="flex flex-col md:flex-row gap-4 justify-center items-center mt-6">
+        <a
+          href="#contact"
+          className="inline-block bg-yellow-400 text-blue-900 font-extrabold px-8 py-3 rounded-full shadow-xl hover:bg-yellow-500 transition text-lg ring-2 ring-yellow-300 animate-bounce"
+          style={{ letterSpacing: '0.04em' }}
+        >
+          🚀 Get Instant Quote
+        </a>
+        <a
+          href="/fleet"
+          className="inline-block bg-blue-900 text-white font-extrabold px-8 py-3 rounded-full shadow-xl hover:bg-blue-800 transition text-lg ring-2 ring-blue-300 animate-bounce delay-200"
+          style={{ letterSpacing: '0.04em' }}
+        >
+          🚌 View Fleet
+        </a>
+        <a
+          href="tel:8885352566"
+          className="inline-block bg-blue-700 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-800 transition text-lg animate-pulse border-2 border-white"
+          style={{ letterSpacing: '0.04em' }}
+        >
+          📞 Call Now: (888) 535-2566
+        </a>
+      </div>
     </header>
   );
 }
