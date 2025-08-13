@@ -1,4 +1,4 @@
-// src/components/Header.tsx
+```typescript
 'use client';
 export default function Header() {
   return (
@@ -26,7 +26,7 @@ export default function Header() {
         </a>
         <a
           href="tel:8885352566"
-          className="inline-block bg-blue-700 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-800 transition text-lg border-2 border-white"
+          className="inline-block bg-blue-700 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-800 hover:scale-105 transition text-lg border-2 border-white animate-pulse"
           style={{ letterSpacing: '0.04em' }}
         >
           📞 CALL NOW
@@ -35,3 +35,4 @@ export default function Header() {
     </header>
   );
 }
+```
