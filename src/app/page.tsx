@@ -88,307 +88,253 @@ export default function Home() {
   {/* Removed phone button below hero/header */}
 
       {/* Why Rent With Us */}
-      <section className="max-w-6xl mx-auto px-4 py-16 bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
-        <div>
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 tracking-tight font-serif drop-shadow-sm" style={{ letterSpacing: '0.01em' }}>
-            Why Rent With <span className="text-blue-700">Bus2Ride?</span>
-          </h2>
-          <div className="overflow-x-auto">
-            <ul className="flex space-x-4 text-blue-900 text-lg bg-white/60 rounded-xl shadow p-6 min-w-max">
-              {[
-                'Experienced, friendly reservation team',
-                'Easy online quotes & booking',
-                'Huge selection of vehicles for any group size',
-                '1,000,000+ passengers served nationwide',
-                '365-day customer support',
-              ].map((feature, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-center min-w-[260px] bg-white rounded-lg shadow px-4 py-3 cursor-pointer hover:bg-blue-50 transition border border-blue-200"
-                >
-                  <span className="text-blue-500 text-xl mr-2">★</span>
-                  <span className="flex-1">{feature}</span>
-                  <span className="ml-2 text-blue-600 text-lg">→</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="flex justify-center">
-          <img
-            src="/images/18 Passenger White Party Bus Exterior.png"
-            alt="Party Bus Exterior"
-            className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-3xl border-4 border-blue-100 shadow-2xl"
-          />
-        </div>
-      </section>
+    <section className="max-w-6xl mx-auto px-4 py-16 bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
+  <div>
+    <h2
+      className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 tracking-tight font-serif drop-shadow-sm"
+      style={{ letterSpacing: "0.01em" }}
+    >
+      Why Rent With <span className="text-blue-700">Bus2Ride?</span>
+    </h2>
+    <ul className="space-y-4 text-blue-900 text-lg">
+      {[
+        "Experienced, friendly reservation team",
+        "Easy online quotes & booking",
+        "Huge selection of vehicles for any group size",
+        "1,000,000+ passengers served nationwide",
+        "365-day customer support",
+      ].map((feature, idx) => (
+        <li
+          key={idx}
+          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+        >
+          <span className="text-blue-500 text-xl mr-2">★</span>
+          <span className="flex-1">{feature}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <div className="flex justify-center">
+    <img
+      src="/images/18 Passenger White Party Bus Exterior.png"
+      alt="Party Bus Exterior"
+      className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-3xl border-4 border-blue-100 shadow-2xl"
+    />
+  </div>
+</section>
+
 
       {/* CTA after Blog & Resources */}
 
 
       {/* Party Buses Section */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-5xl md:text-6xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-          Party Buses
-        </h2>
-        <div className="max-w-3xl mx-auto mb-10">
-          <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
-            <li>
-              <a href="/features/lots-of-space" className="group cursor-pointer">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
-                  <span className="text-2xl mr-2">🕺</span> Lots of space to move & socialize
-                  <span className="ml-2 text-blue-500">→</span>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="/features/dance-onboard" className="group cursor-pointer">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
-                  <span className="text-2xl mr-2">💃</span> Ability to dance onboard
-                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="/features/removable-dance-pole" className="group cursor-pointer">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
-                  <span className="text-2xl mr-2">🪩</span> Removable dance pole
-                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="/features/wet-bars" className="group cursor-pointer">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
-                  <span className="text-2xl mr-2">🍾</span> Wet bars with ice & bottled water
-                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="/features/wrap-around-leather-seating" className="group cursor-pointer">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
-                  <span className="text-2xl mr-2">🛋️</span> Wrap-around leather seating
-                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="/features/premium-sound-lighting" className="group cursor-pointer">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
-                  <span className="text-2xl mr-2">🎵</span> Premium sound & LED lighting
-                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="/features/pro-driver" className="group cursor-pointer">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
-                  <span className="text-2xl mr-2">🧑‍✈️</span> Pro driver included
-                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {getRandomImages(partyBusImages, 3).map((img, idx) => (
-            <div
-              key={img}
-              className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center"
-            >
-              <img
-                src={img}
-                alt="Party Bus"
-                className="w-full h-96 md:h-[420px] object-cover rounded-2xl mb-6"
-              />
-              <h4 className="text-xl font-bold mb-2">Party Bus {idx + 1}</h4>
-              <div className="flex flex-col gap-2 w-full">
-                <a
-                  href="tel:8885352566"
-                  className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center"
-                >
-                  Call 888-535-2566
-                </a>
-                <a
-                  href="mailto:info@bus2ride.com"
-                  className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center"
-                >
-                  Email info@bus2ride.com
-                </a>
-                <a
-                  href="/quote"
-                  className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition text-center"
-                >
-                  Instant Live Quote
-                </a>
-              </div>
+   <section className="max-w-6xl mx-auto px-4 py-16">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+    Party Buses
+  </h2>
+  <div className="max-w-4xl mx-auto mb-10">
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+      {[
+        { icon: "🕺", text: "Lots of space to move & socialize", href: "/features/lots-of-space" },
+        { icon: "💃", text: "Ability to dance onboard", href: "/features/dance-onboard" },
+        { icon: "🪩", text: "Removable dance pole", href: "/features/removable-dance-pole" },
+        { icon: "🍾", text: "Wet bars with ice & bottled water", href: "/features/wet-bars" },
+        { icon: "🛋️", text: "Wrap-around leather seating", href: "/features/wrap-around-leather-seating" },
+        { icon: "🎵", text: "Premium sound & LED lighting", href: "/features/premium-sound-lighting" },
+        { icon: "🧑‍✈️", text: "Pro driver included", href: "/features/pro-driver" },
+      ].map((feature, idx) => (
+        <li key={idx}>
+          <a
+            href={feature.href}
+            className="flex items-center justify-between bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-lg shadow border border-blue-200 hover:bg-blue-100 hover:shadow-md hover:border-blue-400 transition"
+          >
+            <div className="flex items-center">
+              <span className="text-lg mr-2">{feature.icon}</span>
+              <span>{feature.text}</span>
             </div>
-          ))}
+            <span className="text-blue-500 text-lg">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div className="grid md:grid-cols-3 gap-6">
+    {getRandomImages(partyBusImages, 3).map((img, idx) => (
+      <div
+        key={img}
+        className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+      >
+        <img
+          src={img}
+          alt="Party Bus"
+          className="w-full h-72 object-cover rounded-2xl mb-5"
+        />
+        <h4 className="text-lg font-bold mb-2">Party Bus {idx + 1}</h4>
+        <div className="flex flex-col gap-2 w-full">
+          <a
+            href="tel:8885352566"
+            className="flex justify-between items-center w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
+          >
+            Call 888-535-2566 <span>→</span>
+          </a>
+          <a
+            href="mailto:info@bus2ride.com"
+            className="flex justify-between items-center w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
+          >
+            Email info@bus2ride.com <span>→</span>
+          </a>
+          <a
+            href="/quote"
+            className="flex justify-between items-center w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
+          >
+            Instant Live Quote <span>→</span>
+          </a>
         </div>
-      </section>
+      </div>
+    ))}
+  </div>
+</section>
+
+
 
       {/* Limos Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-5xl md:text-6xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-          Limousines
-        </h2>
-        <div className="max-w-3xl mx-auto mb-10">
-          <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
-            <li>
-              <a href="/features/plush-leather-seating" className="hover:underline">
-                🛋️ Plush leather seating
-              </a>
-            </li>
-            <li>
-              <a href="/features/wet-bar-glassware" className="hover:underline">
-                🍾 Wet bar with glassware
-              </a>
-            </li>
-            <li>
-              <a href="/features/premium-sound-system" className="hover:underline">
-                🎶 Premium sound system
-              </a>
-            </li>
-            <li>
-              <a href="/features/fiber-optic-led-lighting" className="hover:underline">
-                🌟 Fiber optic & LED lighting
-              </a>
-            </li>
-            <li>
-              <a href="/features/professional-chauffeur" className="hover:underline">
-                🧑‍✈️ Professional chauffeur
-              </a>
-            </li>
-            <li>
-              <a href="/features/privacy-divider" className="hover:underline">
-                🕶️ Privacy divider
-              </a>
-            </li>
-            <li>
-              <a href="/features/flat-screen-tvs" className="hover:underline">
-                📺 Flat screen TVs (select models)
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {getRandomImages(limoImages, 3).map((img, idx) => (
-            <div
-              key={img}
-              className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center"
-            >
-              <img
-                src={img}
-                alt="Limousine"
-                className="w-full h-96 md:h-[420px] object-cover rounded-2xl mb-6"
-              />
-              <h4 className="text-xl font-bold mb-2">Limo {idx + 1}</h4>
-              <div className="flex flex-col gap-2 w-full">
-                <a
-                  href="tel:8885352566"
-                  className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center"
-                >
-                  Call 888-535-2566
-                </a>
-                <a
-                  href="mailto:info@bus2ride.com"
-                  className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center"
-                >
-                  Email info@bus2ride.com
-                </a>
-                <a
-                  href="/quote"
-                  className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition text-center"
-                >
-                  Instant Live Quote
-                </a>
-              </div>
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+    Limousines
+  </h2>
+  <div className="max-w-4xl mx-auto mb-10">
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+      {[
+        { icon: "🚖", text: "Luxurious interiors with leather seating", href: "/features/leather-seating" },
+        { icon: "🥂", text: "Complimentary champagne & ice", href: "/features/champagne" },
+        { icon: "🎶", text: "Premium sound system", href: "/features/premium-sound" },
+        { icon: "💡", text: "Mood lighting for any occasion", href: "/features/mood-lighting" },
+        { icon: "🧑‍✈️", text: "Professional chauffeur included", href: "/features/chauffeur" },
+        { icon: "📸", text: "Perfect for weddings, proms & events", href: "/features/weddings-proms" },
+      ].map((feature, idx) => (
+        <li key={idx}>
+          <a
+            href={feature.href}
+            className="flex items-center justify-between bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-lg shadow border border-blue-200 hover:bg-blue-100 hover:shadow-md hover:border-blue-400 transition"
+          >
+            <div className="flex items-center">
+              <span className="text-lg mr-2">{feature.icon}</span>
+              <span>{feature.text}</span>
             </div>
-          ))}
+            <span className="text-blue-500 text-lg">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div className="grid md:grid-cols-3 gap-6">
+    {getRandomImages(limoImages, 3).map((img, idx) => (
+      <div
+        key={img}
+        className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+      >
+        <img
+          src={img}
+          alt="Limousine"
+          className="w-full h-72 object-cover rounded-2xl mb-5"
+        />
+        <h4 className="text-lg font-bold mb-2">Limousine {idx + 1}</h4>
+        <div className="flex flex-col gap-2 w-full">
+          <a
+            href="tel:8885352566"
+            className="flex justify-between items-center w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
+          >
+            Call 888-535-2566 <span>→</span>
+          </a>
+          <a
+            href="mailto:info@bus2ride.com"
+            className="flex justify-between items-center w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
+          >
+            Email info@bus2ride.com <span>→</span>
+          </a>
+          <a
+            href="/quote"
+            className="flex justify-between items-center w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
+          >
+            Instant Live Quote <span>→</span>
+          </a>
         </div>
-      </section>
+      </div>
+    ))}
+  </div>
+</section>
+
 
       {/* Coach Buses Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-5xl md:text-6xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-          Coach Buses
-        </h2>
-        <div className="max-w-3xl mx-auto mb-10">
-          <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
-            <li>
-              <a href="/features/reclining-seats-footrests" className="hover:underline">
-                🪑 Reclining seats & footrests
-              </a>
-            </li>
-            <li>
-              <a href="/features/underbody-luggage-bays" className="hover:underline">
-                🧳 Underbody luggage bays
-              </a>
-            </li>
-            <li>
-              <a href="/features/flat-screen-tvs-dvd" className="hover:underline">
-                📺 Flat screen TVs & DVD
-              </a>
-            </li>
-            <li>
-              <a href="/features/pa-sound-system" className="hover:underline">
-                🔊 PA & sound system
-              </a>
-            </li>
-            <li>
-              <a href="/features/restroom" className="hover:underline">
-                🚻 Restroom (select models)
-              </a>
-            </li>
-            <li>
-              <a href="/features/climate-control" className="hover:underline">
-                ❄️ Climate control
-              </a>
-            </li>
-            <li>
-              <a href="/features/coach-pro-driver" className="hover:underline">
-                🧑‍✈️ Pro driver included
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {getRandomImages(coachBusImages, 3).map((img, idx) => (
-            <div
-              key={img}
-              className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center"
-            >
-              <img
-                src={img}
-                alt="Coach Bus"
-                className="w-full h-96 md:h-[420px] object-cover rounded-2xl mb-6"
-              />
-              <h4 className="text-xl font-bold mb-2">Coach Bus {idx + 1}</h4>
-              <div className="flex flex-col gap-2 w-full">
-                <a
-                  href="tel:8885352566"
-                  className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center"
-                >
-                  Call 888-535-2566
-                </a>
-                <a
-                  href="mailto:info@bus2ride.com"
-                  className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center"
-                >
-                  Email info@bus2ride.com
-                </a>
-                <a
-                  href="/quote"
-                  className="block w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition text-center"
-                >
-                  Instant Live Quote
-                </a>
-              </div>
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+    Coach Buses
+  </h2>
+  <div className="max-w-4xl mx-auto mb-10">
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+      {[
+        { icon: "🪑", text: "Comfortable reclining seats", href: "/features/reclining-seats" },
+        { icon: "🛜", text: "Wi-Fi & charging ports", href: "/features/wifi" },
+        { icon: "🧳", text: "Large luggage compartments", href: "/features/luggage" },
+        { icon: "🚻", text: "Onboard restroom", href: "/features/restroom" },
+        { icon: "🎥", text: "TVs & entertainment system", href: "/features/tvs" },
+        { icon: "🧑‍✈️", text: "Experienced driver included", href: "/features/driver" },
+      ].map((feature, idx) => (
+        <li key={idx}>
+          <a
+            href={feature.href}
+            className="flex items-center justify-between bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-lg shadow border border-blue-200 hover:bg-blue-100 hover:shadow-md hover:border-blue-400 transition"
+          >
+            <div className="flex items-center">
+              <span className="text-lg mr-2">{feature.icon}</span>
+              <span>{feature.text}</span>
             </div>
-          ))}
+            <span className="text-blue-500 text-lg">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div className="grid md:grid-cols-3 gap-6">
+    {getRandomImages(coachBusImages, 3).map((img, idx) => (
+      <div
+        key={img}
+        className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+      >
+        <img
+          src={img}
+          alt="Coach Bus"
+          className="w-full h-72 object-cover rounded-2xl mb-5"
+        />
+        <h4 className="text-lg font-bold mb-2">Coach Bus {idx + 1}</h4>
+        <div className="flex flex-col gap-2 w-full">
+          <a
+            href="tel:8885352566"
+            className="flex justify-between items-center w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
+          >
+            Call 888-535-2566 <span>→</span>
+          </a>
+          <a
+            href="mailto:info@bus2ride.com"
+            className="flex justify-between items-center w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
+          >
+            Email info@bus2ride.com <span>→</span>
+          </a>
+          <a
+            href="/quote"
+            className="flex justify-between items-center w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
+          >
+            Instant Live Quote <span>→</span>
+          </a>
         </div>
-      </section>
+      </div>
+    ))}
+  </div>
+</section>
+
 
       {/* Trust & Reputation */}
       <section className="bg-blue-50 py-12">
