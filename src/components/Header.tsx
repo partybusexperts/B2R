@@ -27,7 +27,7 @@ export default function Header() {
         </a>
         <a
           href="tel:8885352566"
-          className="inline-block bg-blue-700 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-800 transition text-lg animate-pulse border-2 border-white"
+          className="inline-block bg-blue-700 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-800 transition text-lg border-2 border-white"
           style={{ letterSpacing: '0.04em' }}
         >
           📞 Call Now: (888) 535-2566

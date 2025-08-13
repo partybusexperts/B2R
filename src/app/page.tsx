@@ -85,15 +85,7 @@ export default function Home() {
 
   {/* Hero Slideshow (assuming it’s imported) */}
   <HeroSlideshow />
-  <div className="flex flex-col items-center mt-6">
-    <a
-      href="tel:8885352566"
-      className="inline-block bg-blue-700 text-white font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-800 transition text-lg mb-2 animate-pulse"
-      style={{ letterSpacing: '0.04em' }}
-    >
-      📞 Call Now: (888) 535-2566
-    </a>
-  </div>
+  {/* Removed phone button below hero/header */}
 
       {/* Why Rent With Us */}
       <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
