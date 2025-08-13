@@ -88,22 +88,24 @@ export default function Home() {
   {/* Removed phone button below hero/header */}
 
       {/* Why Rent With Us */}
-      <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
+      <section className="max-w-6xl mx-auto px-4 py-16 bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
         <div>
-          <h2 className="text-3xl font-bold mb-4 text-blue-900">Why Rent With Bus2Ride?</h2>
-          <ul className="space-y-3 text-gray-700 text-lg">
-            <li>• Experienced, friendly reservation team</li>
-            <li>• Easy online quotes & booking</li>
-            <li>• Huge selection of vehicles for any group size</li>
-            <li>• 1,000,000+ passengers served nationwide</li>
-            <li>• 365-day customer support</li>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 tracking-tight font-serif drop-shadow-sm" style={{ letterSpacing: '0.01em' }}>
+            Why Rent With <span className="text-blue-700">Bus2Ride?</span>
+          </h2>
+          <ul className="space-y-4 text-blue-900 text-lg pl-4 border-l-4 border-blue-200 bg-white/60 rounded-xl shadow p-6">
+            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> Experienced, friendly reservation team</li>
+            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> Easy online quotes & booking</li>
+            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> Huge selection of vehicles for any group size</li>
+            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> 1,000,000+ passengers served nationwide</li>
+            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> 365-day customer support</li>
           </ul>
         </div>
         <div className="flex justify-center">
           <img
             src="/images/18 Passenger White Party Bus Exterior.png"
             alt="Party Bus Exterior"
-            className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-xl shadow-lg border-2 border-blue-200"
+            className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-3xl border-4 border-blue-100 shadow-2xl"
           />
         </div>
       </section>
@@ -119,58 +121,58 @@ export default function Home() {
         <div className="max-w-3xl mx-auto mb-10">
           <ul className="grid md:grid-cols-3 gap-6 text-lg text-blue-900 font-semibold bg-blue-50 rounded-2xl p-6 shadow">
             <li>
-              <a href="/features/lots-of-space" className="hover:underline">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
-                  🕺 Lots of space to move & socialize
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+              <a href="/features/lots-of-space" className="group cursor-pointer">
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
+                  <span className="text-2xl mr-2">🕺</span> Lots of space to move & socialize
+                  <span className="ml-2 text-blue-500">→</span>
                 </span>
               </a>
             </li>
             <li>
-              <a href="/features/dance-onboard" className="hover:underline">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
-                  💃 Ability to dance onboard
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+              <a href="/features/dance-onboard" className="group cursor-pointer">
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
+                  <span className="text-2xl mr-2">💃</span> Ability to dance onboard
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
                 </span>
               </a>
             </li>
             <li>
-              <a href="/features/removable-dance-pole" className="hover:underline">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
-                  🪩 Removable dance pole
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+              <a href="/features/removable-dance-pole" className="group cursor-pointer">
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
+                  <span className="text-2xl mr-2">🪩</span> Removable dance pole
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
                 </span>
               </a>
             </li>
             <li>
-              <a href="/features/wet-bars" className="hover:underline">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
-                  🍾 Wet bars with ice & bottled water
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+              <a href="/features/wet-bars" className="group cursor-pointer">
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
+                  <span className="text-2xl mr-2">🍾</span> Wet bars with ice & bottled water
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
                 </span>
               </a>
             </li>
             <li>
-              <a href="/features/wrap-around-leather-seating" className="hover:underline">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
-                  🛋️ Wrap-around leather seating
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+              <a href="/features/wrap-around-leather-seating" className="group cursor-pointer">
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
+                  <span className="text-2xl mr-2">🛋️</span> Wrap-around leather seating
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
                 </span>
               </a>
             </li>
             <li>
-              <a href="/features/premium-sound-lighting" className="hover:underline">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
-                  🎵 Premium sound & LED lighting
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+              <a href="/features/premium-sound-lighting" className="group cursor-pointer">
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
+                  <span className="text-2xl mr-2">🎵</span> Premium sound & LED lighting
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
                 </span>
               </a>
             </li>
             <li>
-              <a href="/features/pro-driver" className="hover:underline">
-                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group cursor-pointer hover:shadow-2xl hover:-translate-y-1 hover:border-blue-400 hover:bg-white/80">
-                  🧑‍✈️ Pro driver included
-                  <span className="absolute inset-0 rounded-2xl pointer-events-none group-hover:ring-2 group-hover:ring-blue-400 group-hover:ring-offset-2 transition-all duration-300"></span>
+              <a href="/features/pro-driver" className="group cursor-pointer">
+                <span className="relative flex items-center font-bold text-blue-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-2xl shadow-lg border border-blue-200 transition-all duration-300 group-hover:bg-blue-100 group-hover:text-blue-900 group-hover:shadow-xl group-hover:scale-105 group-hover:border-blue-400">
+                  <span className="text-2xl mr-2">🧑‍✈️</span> Pro driver included
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition text-blue-500">→</span>
                 </span>
               </a>
             </li>

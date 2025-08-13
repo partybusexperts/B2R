@@ -68,10 +68,11 @@ export default function HeroSlideshow() {
           </div>
           <a
             href="tel:8885352566"
-            className="mt-4 inline-block bg-blue-50 text-blue-900 font-semibold px-8 py-3 rounded-full shadow hover:bg-blue-100 transition text-base border border-blue-200"
+            className="mt-4 inline-block bg-white text-blue-800 font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-50 hover:text-blue-900 transition text-lg border-2 border-blue-200 flex items-center gap-2"
             style={{ letterSpacing: '0.03em' }}
           >
-            � (888) 535-2566
+            <span className="text-blue-500 text-xl">📞</span>
+            <span>(888) 535-2566</span>
           </a>
         </div>
       </div>
