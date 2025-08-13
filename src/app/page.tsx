@@ -82,7 +82,7 @@ export default function Home() {
   }, []);
   return (
       <>
-        {/* Hero Slideshow (assuming it’s imported) */}
+        /* Hero Slideshow (assuming it’s imported) */
         <HeroSlideshow />
         {/* Why Rent With Us */}
         <section className="max-w-6xl mx-auto px-4 py-16 bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl flex flex-col md:flex-row gap-10 items-center">
@@ -118,6 +118,28 @@ export default function Home() {
                   href: '/why/365'
                 },
               ].map((feature, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-center bg-white rounded-lg shadow px-4 py-3 border border-blue-200"
+                >
+                  <span className="text-blue-500 text-xl mr-2">{feature.icon}</span>
+                  <Link href={feature.href} className="flex-1 hover:underline text-blue-900">
+                    {feature.label}
+                  </Link>
+                  <span className="ml-2 text-blue-600 text-lg">→</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex-1 flex justify-center items-center h-full min-h-[18rem]">
+            <img
+              src="/images/18 Passenger White Party Bus Exterior.png"
+              alt="18 Passenger White Party Bus Exterior"
+              className="w-full max-w-[420px] h-64 md:w-[480px] md:h-80 object-contain rounded-3xl border-4 border-blue-100 shadow-2xl bg-white"
+              style={{ objectPosition: 'center' }}
+            />
+          </div>
+        </section>
                 <li
                   key={idx}
                   className="flex items-center bg-white rounded-lg shadow px-4 py-3 border border-blue-200"
