@@ -93,13 +93,26 @@ export default function Home() {
           <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 tracking-tight font-serif drop-shadow-sm" style={{ letterSpacing: '0.01em' }}>
             Why Rent With <span className="text-blue-700">Bus2Ride?</span>
           </h2>
-          <ul className="space-y-4 text-blue-900 text-lg pl-4 border-l-4 border-blue-200 bg-white/60 rounded-xl shadow p-6">
-            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> Experienced, friendly reservation team</li>
-            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> Easy online quotes & booking</li>
-            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> Huge selection of vehicles for any group size</li>
-            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> 1,000,000+ passengers served nationwide</li>
-            <li className="flex items-center gap-2"><span className="text-blue-500 text-xl">★</span> 365-day customer support</li>
-          </ul>
+          <div className="overflow-x-auto">
+            <ul className="flex space-x-4 text-blue-900 text-lg bg-white/60 rounded-xl shadow p-6 min-w-max">
+              {[
+                'Experienced, friendly reservation team',
+                'Easy online quotes & booking',
+                'Huge selection of vehicles for any group size',
+                '1,000,000+ passengers served nationwide',
+                '365-day customer support',
+              ].map((feature, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-center min-w-[260px] bg-white rounded-lg shadow px-4 py-3 cursor-pointer hover:bg-blue-50 transition border border-blue-200"
+                >
+                  <span className="text-blue-500 text-xl mr-2">★</span>
+                  <span className="flex-1">{feature}</span>
+                  <span className="ml-2 text-blue-600 text-lg">→</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div className="flex justify-center">
           <img
@@ -822,36 +835,88 @@ export default function Home() {
             {/* Row 1 */}
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start border-l-4 border-blue-400">
               <div className="font-bold mb-2">Party Bus vs Limo — which would you pick?</div>
-              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Party Bus</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Limo</button></div>
+              <div className="flex gap-2">
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  Party Bus <span className="ml-1 text-blue-500">→</span>
+                </button>
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  Limo <span className="ml-1 text-blue-500">→</span>
+                </button>
+              </div>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
               <div className="font-bold mb-2">What’s your event?</div>
-              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Prom</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Wedding</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Gameday</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Birthday</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Corporate</button></div>
+              <div className="flex gap-2 flex-wrap">
+                {['Prom','Wedding','Gameday','Birthday','Corporate'].map((label) => (
+                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
+                    {label} <span className="ml-1 text-blue-500">→</span>
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
               <div className="font-bold mb-2">What matters most?</div>
-              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Price</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Space</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Lighting</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Sound</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Luggage</button></div>
+              <div className="flex gap-2 flex-wrap">
+                {['Price','Space','Lighting','Sound','Luggage'].map((label) => (
+                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
+                    {label} <span className="ml-1 text-blue-500">→</span>
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
               <div className="font-bold mb-2">True or False: Party buses are safer than limos.</div>
-              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">True</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">False</button></div>
+              <div className="flex gap-2">
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  True <span className="ml-1 text-blue-500">→</span>
+                </button>
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  False <span className="ml-1 text-blue-500">→</span>
+                </button>
+              </div>
             </div>
             {/* Row 2 */}
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
               <div className="font-bold mb-2">Would you rent a party bus for a birthday?</div>
-              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Yes</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">No</button></div>
+              <div className="flex gap-2">
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  Yes <span className="ml-1 text-blue-500">→</span>
+                </button>
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  No <span className="ml-1 text-blue-500">→</span>
+                </button>
+              </div>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
               <div className="font-bold mb-2">Which party bus feature is most important?</div>
-              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Sound System</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Lighting</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Bar</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">TV Screens</button></div>
+              <div className="flex gap-2 flex-wrap">
+                {['Sound System','Lighting','Bar','TV Screens'].map((label) => (
+                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
+                    {label} <span className="ml-1 text-blue-500">→</span>
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
               <div className="font-bold mb-2">Would you rent a limousine for a birthday?</div>
-              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Yes</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">No</button></div>
+              <div className="flex gap-2">
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  Yes <span className="ml-1 text-blue-500">→</span>
+                </button>
+                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
+                  No <span className="ml-1 text-blue-500">→</span>
+                </button>
+              </div>
             </div>
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
               <div className="font-bold mb-2">What’s your favorite limo color?</div>
-              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Black</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">White</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Pink</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Silver</button></div>
+              <div className="flex gap-2 flex-wrap">
+                {['Black','White','Pink','Silver'].map((label) => (
+                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
+                    {label} <span className="ml-1 text-blue-500">→</span>
+                  </button>
+                ))}
+              </div>
             </div>
             {/* Row 3 */}
             <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
