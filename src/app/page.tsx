@@ -128,79 +128,80 @@ export default function Home() {
 
 
       {/* Party Buses Section */}
-   <section className="max-w-6xl mx-auto px-4 py-16">
+  <section className="max-w-6xl mx-auto px-4 py-16">
   <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-    Party Buses
+   Party Buses
   </h2>
 
-  {/* 3 Image Boxes (unchanged button style) */}
+  {/* 3 Image Boxes (centered button text, no arrows) */}
   <div className="grid md:grid-cols-3 gap-6 mb-10">
-    {getRandomImages(partyBusImages, 3).map((img, idx) => (
-      <div
-        key={img}
-        className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
-      >
-        <img
-          src={img}
-          alt="Party Bus"
-          className="w-full h-72 object-cover rounded-2xl mb-5"
-        />
-        <h4 className="text-lg font-bold mb-2">Party Bus {idx + 1}</h4>
-        <div className="flex flex-col gap-2 w-full">
-          <a
-            href="tel:8885352566"
-            className="flex justify-between items-center w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
-          >
-            Call 888-535-2566 <span>→</span>
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="flex justify-between items-center w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
-          >
-            Email info@bus2ride.com <span>→</span>
-          </a>
-          <a
-            href="/quote"
-            className="flex justify-between items-center w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
-          >
-            Instant Live Quote <span>→</span>
-          </a>
-        </div>
+   {getRandomImages(partyBusImages, 3).map((img, idx) => (
+    <div
+      key={img}
+      className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+    >
+      <img
+       src={img}
+       alt="Party Bus"
+       className="w-full h-72 object-cover rounded-2xl mb-5"
+      />
+      <h4 className="text-lg font-bold mb-2">Party Bus {idx + 1}</h4>
+      <div className="flex flex-col gap-2 w-full">
+       <a
+        href="tel:8885352566"
+        className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
+       >
+        888-535-2566
+       </a>
+       <a
+        href="mailto:info@bus2ride.com"
+        className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
+       >
+        Email Now
+       </a>
+       <a
+        href="/quote"
+        className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
+       >
+        Instant Live Quote
+       </a>
       </div>
-    ))}
+    </div>
+   ))}
   </div>
 
   {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
   {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
+
   <div className="max-w-6xl mx-auto px-4">
-  <div className="flex flex-col md:flex-row md:items-center gap-6">
-    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
-      Popular Party Bus Features
-    </h2>
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
-      {[
-        { text: "Lots of space to move & socialize", href: "/features/lots-of-space" },
-        { text: "Ability to dance onboard", href: "/features/dance-onboard" },
-        { text: "Removable dance pole", href: "/features/removable-dance-pole" },
-        { text: "Wet bars with ice & bottled water", href: "/features/wet-bars" },
-        { text: "Wrap-around leather seating", href: "/features/wrap-around-leather-seating" },
-        { text: "Premium sound & LED lighting", href: "/features/premium-sound-lighting" },
-        { text: "Pro driver included", href: "/features/pro-driver" },
-      ].map((feature, idx) => (
-        <li
-          key={idx}
-          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
-        >
-          <span className="text-blue-500 text-xl mr-2">★</span>
-          <a href={feature.href} className="flex-1 text-blue-900 text-lg">
-            {feature.text}
-          </a>
-          <span className="text-blue-500 text-lg ml-2">→</span>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+        Popular Party Bus Features
+      </h2>
+      <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
+        {[
+          { text: "Lots of space to move & socialize", href: "/features/lots-of-space" },
+          // { text: "Ability to dance onboard", href: "/features/dance-onboard" }, // removed as requested
+          { text: "Removable dance pole", href: "/features/removable-dance-pole" },
+          { text: "Wet bars with ice & bottled water", href: "/features/wet-bars" },
+          { text: "Wrap-around leather seating", href: "/features/wrap-around-leather-seating" },
+          { text: "Premium sound & LED lighting", href: "/features/premium-sound-lighting" },
+          { text: "Pro driver included", href: "/features/pro-driver" },
+        ].map((feature, idx) => (
+          <li
+            key={idx}
+            className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+          >
+            <span className="text-blue-500 text-xl mr-2">★</span>
+            <a href={feature.href} className="flex-1 text-blue-900 text-lg">
+              {feature.text}
+            </a>
+            <span className="text-blue-500 text-lg ml-2">→</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
-</div>
 </section>
 
 
@@ -228,13 +229,13 @@ export default function Home() {
             href="tel:8885352566"
             className="flex justify-between items-center w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
           >
-            Call 888-535-2566 <span>→</span>
+            888-535-2566 <span>→</span>
           </a>
           <a
             href="mailto:info@bus2ride.com"
             className="flex justify-between items-center w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
           >
-            Email info@bus2ride.com <span>→</span>
+            Email Now <span>→</span>
           </a>
           <a
             href="/quote"
@@ -248,110 +249,112 @@ export default function Home() {
   </div>
 
   {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
+
   <div className="max-w-6xl mx-auto px-4">
-  <div className="flex flex-col md:flex-row md:items-center gap-6">
-    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
-      Popular Limo Features
-    </h2>
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
-      {[
-        { text: "Luxurious interiors with leather seating", href: "/features/leather-seating" },
-        { text: "Complimentary champagne & ice", href: "/features/champagne" },
-        { text: "Premium sound system", href: "/features/premium-sound" },
-        { text: "Mood lighting for any occasion", href: "/features/mood-lighting" },
-        { text: "Professional chauffeur included", href: "/features/chauffeur" },
-        { text: "Perfect for weddings, proms & events", href: "/features/weddings-proms" },
-      ].map((feature, idx) => (
-        <li
-          key={idx}
-          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
-        >
-          <span className="text-blue-500 text-xl mr-2">★</span>
-          <a href={feature.href} className="flex-1 text-blue-900 text-lg">
-            {feature.text}
-          </a>
-          <span className="text-blue-500 text-lg ml-2">→</span>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+        Popular Limo Features
+      </h2>
+      <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
+        {[
+          { text: "Luxurious interiors with leather seating", href: "/features/leather-seating" },
+          { text: "Complimentary champagne & ice", href: "/features/champagne" },
+          { text: "Premium sound system", href: "/features/premium-sound" },
+          { text: "Mood lighting for any occasion", href: "/features/mood-lighting" },
+          { text: "Professional chauffeur included", href: "/features/chauffeur" },
+          { text: "Perfect for weddings, proms & events", href: "/features/weddings-proms" },
+        ].map((feature, idx) => (
+          <li
+            key={idx}
+            className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+          >
+            <span className="text-blue-500 text-xl mr-2">★</span>
+            <a href={feature.href} className="flex-1 text-blue-900 text-lg">
+              {feature.text}
+            </a>
+            <span className="text-blue-500 text-lg ml-2">→</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
-</div>
 </section>
+
 
 
       {/* Coach Buses Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-    Coach Buses
-  </h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+          Coach Buses
+        </h2>
 
-  {/* 3 Image Boxes (unchanged button style) */}
-  <div className="grid md:grid-cols-3 gap-6 mb-10">
-    {getRandomImages(coachBusImages, 3).map((img, idx) => (
-      <div
-        key={img}
-        className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
-      >
-        <img
-          src={img}
-          alt="Coach Bus"
-          className="w-full h-72 object-cover rounded-2xl mb-5"
-        />
-        <h4 className="text-lg font-bold mb-2">Coach Bus {idx + 1}</h4>
-        <div className="flex flex-col gap-2 w-full">
-          <a
-            href="tel:8885352566"
-            className="flex justify-between items-center w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
-          >
-            Call 888-535-2566 <span>→</span>
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="flex justify-between items-center w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
-          >
-            Email info@bus2ride.com <span>→</span>
-          </a>
-          <a
-            href="/quote"
-            className="flex justify-between items-center w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
-          >
-            Instant Live Quote <span>→</span>
-          </a>
+        {/* 3 Image Boxes with centered buttons, no arrows */}
+        <div className="grid md:grid-cols-3 gap-6 mb-10">
+          {getRandomImages(coachBusImages, 3).map((img, idx) => (
+            <div
+              key={img}
+              className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+            >
+              <img
+                src={img}
+                alt="Coach Bus"
+                className="w-full h-72 object-cover rounded-2xl mb-5"
+              />
+              <h4 className="text-lg font-bold mb-2">Coach Bus {idx + 1}</h4>
+              <div className="flex flex-col gap-2 w-full">
+                <a
+                  href="tel:8885352566"
+                  className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
+                >
+                  888-535-2566
+                </a>
+                <a
+                  href="mailto:info@bus2ride.com"
+                  className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
+                >
+                  Email Now
+                </a>
+                <a
+                  href="/quote"
+                  className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
+                >
+                  Instant Live Quote
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    ))}
-  </div>
 
-  {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
-  <div className="max-w-6xl mx-auto px-4">
-  <div className="flex flex-col md:flex-row md:items-center gap-6">
-    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
-      Popular Coach Bus Features
-    </h2>
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
-      {[
-        { text: "Comfortable reclining seats", href: "/features/reclining-seats" },
-        { text: "Wi-Fi & charging ports", href: "/features/wifi" },
-        { text: "Large luggage compartments", href: "/features/luggage" },
-        { text: "Onboard restroom", href: "/features/restroom" },
-        { text: "TVs & entertainment system", href: "/features/tvs" },
-        { text: "Experienced driver included", href: "/features/driver" },
-      ].map((feature, idx) => (
-        <li
-          key={idx}
-          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
-        >
-          <span className="text-blue-500 text-xl mr-2">★</span>
-          <a href={feature.href} className="flex-1 text-blue-900 text-lg">
-            {feature.text}
-          </a>
-          <span className="text-blue-500 text-lg ml-2">→</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-</div>
-</section>
+        {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:items-center gap-6">
+            <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+              Popular Coach Bus Features
+            </h2>
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
+              {[
+                { text: "Comfortable reclining seats", href: "/features/reclining-seats" },
+                { text: "Wi-Fi & charging ports", href: "/features/wifi" },
+                { text: "Large luggage compartments", href: "/features/luggage" },
+                { text: "Onboard restroom", href: "/features/restroom" },
+                { text: "TVs & entertainment system", href: "/features/tvs" },
+                { text: "Experienced driver included", href: "/features/driver" },
+              ].map((feature, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+                >
+                  <span className="text-blue-500 text-xl mr-2">★</span>
+                  <a href={feature.href} className="flex-1 text-blue-900 text-lg">
+                    {feature.text}
+                  </a>
+                  <span className="text-blue-500 text-lg ml-2">→</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
 
 
       {/* Trust & Reputation */}
