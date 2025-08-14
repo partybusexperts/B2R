@@ -81,7 +81,7 @@ export default function Home() {
     return eventNames.map((_, i) => partyBusImagesList[i % partyBusImagesList.length]);
   }, []);
   return (
-    <>
+  <>
 
   {/* Hero Slideshow (assuming it’s imported) */}
   <HeroSlideshow />
@@ -171,8 +171,9 @@ export default function Home() {
   </div>
 
   {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
+  {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
   <div className="max-w-4xl mx-auto">
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900">
       {[
         { text: "Lots of space to move & socialize", href: "/features/lots-of-space" },
         { text: "Ability to dance onboard", href: "/features/dance-onboard" },
@@ -187,16 +188,15 @@ export default function Home() {
           className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
         >
           <span className="text-blue-500 text-xl mr-2">★</span>
-          <a href={feature.href} className="flex-1">
+          <a href={feature.href} className="flex-1 text-blue-900 text-lg">
             {feature.text}
           </a>
-          <span className="text-blue-500 text-lg">→</span>
         </li>
       ))}
     </ul>
+
   </div>
 </section>
-
 
 
 
@@ -688,7 +688,7 @@ export default function Home() {
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight">Events & Occasions</h2>
         {/* Render events in rows of 5, only once */}
         {Array.from({ length: Math.ceil(eventNames.length / 5) }).map((_, rowIdx) => (
-          <>
+        <>
             <div key={rowIdx} className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
               {eventNames.slice(rowIdx * 5, rowIdx * 5 + 5).map((event, i) => (
                 <div key={event} className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
