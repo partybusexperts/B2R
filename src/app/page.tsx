@@ -280,109 +280,195 @@ export default function Home() {
     {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
 
     <div className="max-w-6xl mx-auto px-4">
-    <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="flex flex-col md:flex-row md:items-center gap-6">
       <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
-      Popular Limo Features
+        Popular Limo Features
       </h2>
       <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
-      {[
-        { text: "Luxurious interiors with leather seating", href: "/features/leather-seating" },
-        { text: "Complimentary champagne & ice", href: "/features/champagne" },
-        { text: "Premium sound system", href: "/features/premium-sound" },
-        { text: "Mood lighting for any occasion", href: "/features/mood-lighting" },
-        { text: "Professional chauffeur included", href: "/features/chauffeur" },
-        { text: "Perfect for weddings, proms & events", href: "/features/weddings-proms" },
-      ].map((feature, idx) => (
+        {[
+        {
+          label: "Luxurious interiors with leather seating",
+          modal: {
+          title: "Luxurious Leather Interiors",
+          content:
+            "Our limousines feature plush leather seating and elegant interiors for a truly first-class experience.",
+          },
+        },
+        {
+          label: "Complimentary champagne & ice",
+          modal: {
+          title: "Complimentary Champagne & Ice",
+          content:
+            "Enjoy complimentary champagne (21+) and ice in every limo rental. Celebrate your occasion in style!",
+          },
+        },
+        {
+          label: "Premium sound system",
+          modal: {
+          title: "Premium Sound System",
+          content:
+            "Blast your favorite playlists with high-end sound systems for the ultimate party or relaxing ride.",
+          },
+        },
+        {
+          label: "Mood lighting for any occasion",
+          modal: {
+          title: "Mood Lighting",
+          content:
+            "Set the perfect vibe with customizable mood lighting, from romantic to party-ready.",
+          },
+        },
+        {
+          label: "Professional chauffeur included",
+          modal: {
+          title: "Professional Chauffeur Included",
+          content:
+            "Every limo comes with a licensed, experienced chauffeur for a safe and stress-free experience.",
+          },
+        },
+        {
+          label: "Perfect for weddings, proms & events",
+          modal: {
+          title: "Perfect for Weddings, Proms & Events",
+          content:
+            "Our limos are ideal for weddings, proms, birthdays, and all special occasions—arrive in style!",
+          },
+        },
+        ].map((feature, idx) => (
         <li
-        key={idx}
-        className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+          key={idx}
+          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
         >
-        <span className="text-blue-500 text-xl mr-2">★</span>
-        <a href={feature.href} className="flex-1 text-blue-900 text-lg">
-          {feature.text}
-        </a>
-        <span className="text-blue-500 text-lg ml-2">→</span>
+          <PartyBusFeatureModalButton
+          title={feature.modal.title}
+          content={feature.modal.content}
+          label={feature.label}
+          />
+          <span className="text-blue-500 text-lg ml-2">→</span>
         </li>
-      ))}
+        ))}
       </ul>
+      </div>
     </div>
-    </div>
-  </section>
+    </section>
 
 
 
       {/* Coach Buses Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-          Coach Buses
-        </h2>
+      <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+        Coach Buses
+      </h2>
 
-        {/* 3 Image Boxes with centered buttons, no arrows */}
-        <div className="grid md:grid-cols-3 gap-6 mb-10">
-          {getRandomImages(coachBusImages, 3).map((img, idx) => (
-            <div
-              key={img}
-              className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
-            >
-              <img
-                src={img}
-                alt="Coach Bus"
-                className="w-full h-72 object-cover rounded-2xl mb-5"
-              />
-              <h4 className="text-lg font-bold mb-2">Coach Bus {idx + 1}</h4>
-              <div className="flex flex-col gap-2 w-full">
-                <a
-                  href="tel:8885352566"
-                  className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
-                >
-                  888-535-2566
-                </a>
-                <a
-                  href="mailto:info@bus2ride.com"
-                  className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
-                >
-                  Email Now
-                </a>
-                <a
-                  href="/quote"
-                  className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
-                >
-                  Instant Live Quote
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-center gap-6">
-            <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
-              Popular Coach Bus Features
-            </h2>
-            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
-              {[
-                { text: "Comfortable reclining seats", href: "/features/reclining-seats" },
-                { text: "Wi-Fi & charging ports", href: "/features/wifi" },
-                { text: "Large luggage compartments", href: "/features/luggage" },
-                { text: "Onboard restroom", href: "/features/restroom" },
-                { text: "TVs & entertainment system", href: "/features/tvs" },
-                { text: "Experienced driver included", href: "/features/driver" },
-              ].map((feature, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
-                >
-                  <span className="text-blue-500 text-xl mr-2">★</span>
-                  <a href={feature.href} className="flex-1 text-blue-900 text-lg">
-                    {feature.text}
-                  </a>
-                  <span className="text-blue-500 text-lg ml-2">→</span>
-                </li>
-              ))}
-            </ul>
+      {/* 3 Image Boxes with centered buttons, no arrows */}
+      <div className="grid md:grid-cols-3 gap-6 mb-10">
+        {getRandomImages(coachBusImages, 3).map((img, idx) => (
+        <div
+          key={img}
+          className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+        >
+          <img
+          src={img}
+          alt="Coach Bus"
+          className="w-full h-72 object-cover rounded-2xl mb-5"
+          />
+          <h4 className="text-lg font-bold mb-2">Coach Bus {idx + 1}</h4>
+          <div className="flex flex-col gap-2 w-full">
+          <a
+            href="tel:8885352566"
+            className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
+          >
+            888-535-2566
+          </a>
+          <a
+            href="mailto:info@bus2ride.com"
+            className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
+          >
+            Email Now
+          </a>
+          <a
+            href="/quote"
+            className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
+          >
+            Instant Live Quote
+          </a>
           </div>
         </div>
+        ))}
+      </div>
+
+      {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-6">
+        <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+          Popular Coach Bus Features
+        </h2>
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
+          {[
+          {
+            label: "Comfortable reclining seats",
+            modal: {
+            title: "Comfortable Reclining Seats",
+            content:
+              "Relax on long trips with plush, reclining seats designed for maximum comfort.",
+            },
+          },
+          {
+            label: "Wi-Fi & charging ports",
+            modal: {
+            title: "Wi-Fi & Charging Ports",
+            content:
+              "Stay connected on the road with onboard Wi-Fi and convenient charging ports at every seat.",
+            },
+          },
+          {
+            label: "Large luggage compartments",
+            modal: {
+            title: "Large Luggage Compartments",
+            content:
+              "Bring everything you need—our coach buses have spacious luggage bays for all your gear.",
+            },
+          },
+          {
+            label: "Onboard restroom",
+            modal: {
+            title: "Onboard Restroom",
+            content:
+              "Enjoy the convenience of a clean, private restroom on your coach bus for longer journeys.",
+            },
+          },
+          {
+            label: "TVs & entertainment system",
+            modal: {
+            title: "TVs & Entertainment System",
+            content:
+              "Watch movies or presentations on flat-screen TVs with a premium entertainment system.",
+            },
+          },
+          {
+            label: "Experienced driver included",
+            modal: {
+            title: "Experienced Driver Included",
+            content:
+              "Every coach bus rental comes with a professional, experienced driver for a safe and smooth ride.",
+            },
+          },
+          ].map((feature, idx) => (
+          <li
+            key={idx}
+            className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+          >
+            <PartyBusFeatureModalButton
+            title={feature.modal.title}
+            content={feature.modal.content}
+            label={feature.label}
+            />
+            <span className="text-blue-500 text-lg ml-2">→</span>
+          </li>
+          ))}
+        </ul>
+        </div>
+      </div>
       </section>
 
 
