@@ -549,7 +549,6 @@ export default function Home() {
           </div>
             </>
           }
-          className="font-bold text-blue-900 text-lg mb-2"
         />
         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
@@ -569,7 +568,6 @@ export default function Home() {
           </div>
             </>
           }
-          className="font-bold text-blue-900 text-lg mb-2"
         />
         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
@@ -589,7 +587,6 @@ export default function Home() {
           </div>
             </>
           }
-          className="font-bold text-blue-900 text-lg mb-2"
         />
         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
@@ -609,7 +606,6 @@ export default function Home() {
           </div>
             </>
           }
-          className="font-bold text-blue-900 text-lg mb-2"
         />
         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
@@ -680,13 +676,13 @@ export default function Home() {
           </Link>
         </div>
         {/* CTA between rows */}
-        <div className="text-center my-8">
+        {/* --- DUPLICATED CTA + 2nd row of reviews (above How It Works) --- */}
+        <div className="text-center my-12">
           <h3 className="text-2xl font-bold text-blue-900 mb-2">
             Ready to Ride in Style?
           </h3>
           <p className="text-lg text-gray-700 mb-4">
-            Call 1-800-123-4567 or Text 1-800-123-4567 to Book Your Bus or
-            Limo!
+            Call 1-800-123-4567 or Text 1-800-123-4567 to Book Your Bus or Limo!
           </p>
           <a
             href="/quote"
@@ -695,51 +691,49 @@ export default function Home() {
             Get a Quote
           </a>
         </div>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 max-w-4xl mx-auto">
-          {/* Second row of 4 reviews */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
-            <p className="text-gray-700 italic mb-4 text-lg">
-              “We had the best time ever!! Darrius was our driver and he was so
-              fun and amazing!! It was for our bachelor/bachelorette weekend and
-              he made it so much fun!!! I would recommend them 100%!!!”
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-blue-700">— Rachel L.</span>
-              <span className="text-yellow-400">★★★★★</span>
-            </div>
+        {/* Second row of 4 reviews */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “We had the best time ever!! Darrius was our driver and he was so
+            fun and amazing!! It was for our bachelor/bachelorette weekend and
+            he made it so much fun!!! I would recommend them 100%!!!”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— Rachel L.</span>
+            <span className="text-yellow-400">★★★★★</span>
           </div>
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
-            <p className="text-gray-700 italic mb-4 text-lg">
-              “Sonny can take your event to the next level with his beautiful
-              limos and sedans making you feel like a movie star! Highly
-              recommend his service!”
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-blue-700">— Becky B.</span>
-              <span className="text-yellow-400">★★★★★</span>
-            </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “Sonny can take your event to the next level with his beautiful
+            limos and sedans making you feel like a movie star! Highly
+            recommend his service!”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— Becky B.</span>
+            <span className="text-yellow-400">★★★★★</span>
           </div>
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
-            <p className="text-gray-700 italic mb-4 text-lg">
-              “Top of the line chauffer and limo service.”
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-blue-700">— George S.</span>
-              <span className="text-yellow-400">★★★★★</span>
-            </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “Top of the line chauffer and limo service.”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— George S.</span>
+            <span className="text-yellow-400">★★★★★</span>
           </div>
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
-            <p className="text-gray-700 italic mb-4 text-lg">
-              “What a memorable night for our students at Faith Christian School
-              prom. Rick was an excellent and safe driver, providing top notch
-              customer service, and was prompt with timing. The owner was great
-              to work with and has the best prices and customer service. We will
-              definitely choose them for next year's prom. Amazing experience!”
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-blue-700">— Teresa S.</span>
-              <span className="text-yellow-400">★★★★★</span>
-            </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “What a memorable night for our students at Faith Christian School
+            prom. Rick was an excellent and safe driver, providing top notch
+            customer service, and was prompt with timing. The owner was great
+            to work with and has the best prices and customer service. We will
+            definitely choose them for next year's prom. Amazing experience!”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— Teresa S.</span>
+            <span className="text-yellow-400">★★★★★</span>
           </div>
         </div>
         <div className="flex justify-center mb-12">
@@ -747,7 +741,73 @@ export default function Home() {
             <a className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-lg text-lg">MORE REVIEWS</a>
           </Link>
         </div>
-      </section>
+
+        {/* --- ORIGINAL CTA + 2nd row of reviews (after first 4 reviews) --- */}
+        <div className="text-center my-12">
+          <h3 className="text-2xl font-bold text-blue-900 mb-2">
+            Ready to Ride in Style?
+          </h3>
+          <p className="text-lg text-gray-700 mb-4">
+            Call 1-800-123-4567 or Text 1-800-123-4567 to Book Your Bus or Limo!
+          </p>
+          <a
+            href="/quote"
+            className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-lg shadow transition"
+          >
+            Get a Quote
+          </a>
+        </div>
+        {/* Second row of 4 reviews */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “We had the best time ever!! Darrius was our driver and he was so
+            fun and amazing!! It was for our bachelor/bachelorette weekend and
+            he made it so much fun!!! I would recommend them 100%!!!”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— Rachel L.</span>
+            <span className="text-yellow-400">★★★★★</span>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “Sonny can take your event to the next level with his beautiful
+            limos and sedans making you feel like a movie star! Highly
+            recommend his service!”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— Becky B.</span>
+            <span className="text-yellow-400">★★★★★</span>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “Top of the line chauffer and limo service.”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— George S.</span>
+            <span className="text-yellow-400">★★★★★</span>
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+          <p className="text-gray-700 italic mb-4 text-lg">
+            “What a memorable night for our students at Faith Christian School
+            prom. Rick was an excellent and safe driver, providing top notch
+            customer service, and was prompt with timing. The owner was great
+            to work with and has the best prices and customer service. We will
+            definitely choose them for next year's prom. Amazing experience!”
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-700">— Teresa S.</span>
+            <span className="text-yellow-400">★★★★★</span>
+          </div>
+        </div>
+        <div className="flex justify-center mb-12">
+          <Link href="/reviews" legacyBehavior>
+            <a className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-lg text-lg">MORE REVIEWS</a>
+          </Link>
+        </div>
+            </section>
 
       <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-12">
         {/* Review Submission */}
