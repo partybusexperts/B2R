@@ -172,8 +172,12 @@ export default function Home() {
 
   {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
   {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
-  <div className="max-w-4xl mx-auto">
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900">
+  <div className="max-w-6xl mx-auto px-4">
+  <div className="flex flex-col md:flex-row md:items-center gap-6">
+    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+      Popular Party Bus Features
+    </h2>
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
       {[
         { text: "Lots of space to move & socialize", href: "/features/lots-of-space" },
         { text: "Ability to dance onboard", href: "/features/dance-onboard" },
@@ -191,13 +195,13 @@ export default function Home() {
           <a href={feature.href} className="flex-1 text-blue-900 text-lg">
             {feature.text}
           </a>
+          <span className="text-blue-500 text-lg ml-2">→</span>
         </li>
       ))}
     </ul>
-
   </div>
+</div>
 </section>
-
 
 
       {/* Limos Section */}
@@ -244,8 +248,12 @@ export default function Home() {
   </div>
 
   {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
-  <div className="max-w-4xl mx-auto">
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+  <div className="max-w-6xl mx-auto px-4">
+  <div className="flex flex-col md:flex-row md:items-center gap-6">
+    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+      Popular Limo Features
+    </h2>
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
       {[
         { text: "Luxurious interiors with leather seating", href: "/features/leather-seating" },
         { text: "Complimentary champagne & ice", href: "/features/champagne" },
@@ -259,16 +267,16 @@ export default function Home() {
           className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
         >
           <span className="text-blue-500 text-xl mr-2">★</span>
-          <a href={feature.href} className="flex-1">
+          <a href={feature.href} className="flex-1 text-blue-900 text-lg">
             {feature.text}
           </a>
-          <span className="text-blue-500 text-lg">→</span>
+          <span className="text-blue-500 text-lg ml-2">→</span>
         </li>
       ))}
     </ul>
   </div>
+</div>
 </section>
-
 
 
       {/* Coach Buses Section */}
@@ -315,8 +323,12 @@ export default function Home() {
   </div>
 
   {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
-  <div className="max-w-4xl mx-auto">
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+  <div className="max-w-6xl mx-auto px-4">
+  <div className="flex flex-col md:flex-row md:items-center gap-6">
+    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+      Popular Coach Bus Features
+    </h2>
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
       {[
         { text: "Comfortable reclining seats", href: "/features/reclining-seats" },
         { text: "Wi-Fi & charging ports", href: "/features/wifi" },
@@ -330,16 +342,16 @@ export default function Home() {
           className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
         >
           <span className="text-blue-500 text-xl mr-2">★</span>
-          <a href={feature.href} className="flex-1">
+          <a href={feature.href} className="flex-1 text-blue-900 text-lg">
             {feature.text}
           </a>
-          <span className="text-blue-500 text-lg">→</span>
+          <span className="text-blue-500 text-lg ml-2">→</span>
         </li>
       ))}
     </ul>
   </div>
+</div>
 </section>
-
 
 
       {/* Trust & Reputation */}
