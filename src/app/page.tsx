@@ -132,34 +132,9 @@ export default function Home() {
   <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
     Party Buses
   </h2>
-  <div className="max-w-4xl mx-auto mb-10">
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
-      {[
-        { icon: "🕺", text: "Lots of space to move & socialize", href: "/features/lots-of-space" },
-        { icon: "💃", text: "Ability to dance onboard", href: "/features/dance-onboard" },
-        { icon: "🪩", text: "Removable dance pole", href: "/features/removable-dance-pole" },
-        { icon: "🍾", text: "Wet bars with ice & bottled water", href: "/features/wet-bars" },
-        { icon: "🛋️", text: "Wrap-around leather seating", href: "/features/wrap-around-leather-seating" },
-        { icon: "🎵", text: "Premium sound & LED lighting", href: "/features/premium-sound-lighting" },
-        { icon: "🧑‍✈️", text: "Pro driver included", href: "/features/pro-driver" },
-      ].map((feature, idx) => (
-        <li key={idx}>
-          <a
-            href={feature.href}
-            className="flex items-center justify-between bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-lg shadow border border-blue-200 hover:bg-blue-100 hover:shadow-md hover:border-blue-400 transition"
-          >
-            <div className="flex items-center">
-              <span className="text-lg mr-2">{feature.icon}</span>
-              <span>{feature.text}</span>
-            </div>
-            <span className="text-blue-500 text-lg">→</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
 
-  <div className="grid md:grid-cols-3 gap-6">
+  {/* 3 Image Boxes (unchanged button style) */}
+  <div className="grid md:grid-cols-3 gap-6 mb-10">
     {getRandomImages(partyBusImages, 3).map((img, idx) => (
       <div
         key={img}
@@ -194,7 +169,34 @@ export default function Home() {
       </div>
     ))}
   </div>
+
+  {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
+  <div className="max-w-4xl mx-auto">
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+      {[
+        { text: "Lots of space to move & socialize", href: "/features/lots-of-space" },
+        { text: "Ability to dance onboard", href: "/features/dance-onboard" },
+        { text: "Removable dance pole", href: "/features/removable-dance-pole" },
+        { text: "Wet bars with ice & bottled water", href: "/features/wet-bars" },
+        { text: "Wrap-around leather seating", href: "/features/wrap-around-leather-seating" },
+        { text: "Premium sound & LED lighting", href: "/features/premium-sound-lighting" },
+        { text: "Pro driver included", href: "/features/pro-driver" },
+      ].map((feature, idx) => (
+        <li
+          key={idx}
+          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+        >
+          <span className="text-blue-500 text-xl mr-2">★</span>
+          <a href={feature.href} className="flex-1">
+            {feature.text}
+          </a>
+          <span className="text-blue-500 text-lg">→</span>
+        </li>
+      ))}
+    </ul>
+  </div>
 </section>
+
 
 
 
@@ -203,33 +205,9 @@ export default function Home() {
   <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
     Limousines
   </h2>
-  <div className="max-w-4xl mx-auto mb-10">
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
-      {[
-        { icon: "🚖", text: "Luxurious interiors with leather seating", href: "/features/leather-seating" },
-        { icon: "🥂", text: "Complimentary champagne & ice", href: "/features/champagne" },
-        { icon: "🎶", text: "Premium sound system", href: "/features/premium-sound" },
-        { icon: "💡", text: "Mood lighting for any occasion", href: "/features/mood-lighting" },
-        { icon: "🧑‍✈️", text: "Professional chauffeur included", href: "/features/chauffeur" },
-        { icon: "📸", text: "Perfect for weddings, proms & events", href: "/features/weddings-proms" },
-      ].map((feature, idx) => (
-        <li key={idx}>
-          <a
-            href={feature.href}
-            className="flex items-center justify-between bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-lg shadow border border-blue-200 hover:bg-blue-100 hover:shadow-md hover:border-blue-400 transition"
-          >
-            <div className="flex items-center">
-              <span className="text-lg mr-2">{feature.icon}</span>
-              <span>{feature.text}</span>
-            </div>
-            <span className="text-blue-500 text-lg">→</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
 
-  <div className="grid md:grid-cols-3 gap-6">
+  {/* 3 Image Boxes (unchanged button style) */}
+  <div className="grid md:grid-cols-3 gap-6 mb-10">
     {getRandomImages(limoImages, 3).map((img, idx) => (
       <div
         key={img}
@@ -264,7 +242,33 @@ export default function Home() {
       </div>
     ))}
   </div>
+
+  {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
+  <div className="max-w-4xl mx-auto">
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+      {[
+        { text: "Luxurious interiors with leather seating", href: "/features/leather-seating" },
+        { text: "Complimentary champagne & ice", href: "/features/champagne" },
+        { text: "Premium sound system", href: "/features/premium-sound" },
+        { text: "Mood lighting for any occasion", href: "/features/mood-lighting" },
+        { text: "Professional chauffeur included", href: "/features/chauffeur" },
+        { text: "Perfect for weddings, proms & events", href: "/features/weddings-proms" },
+      ].map((feature, idx) => (
+        <li
+          key={idx}
+          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+        >
+          <span className="text-blue-500 text-xl mr-2">★</span>
+          <a href={feature.href} className="flex-1">
+            {feature.text}
+          </a>
+          <span className="text-blue-500 text-lg">→</span>
+        </li>
+      ))}
+    </ul>
+  </div>
 </section>
+
 
 
       {/* Coach Buses Section */}
@@ -272,33 +276,9 @@ export default function Home() {
   <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
     Coach Buses
   </h2>
-  <div className="max-w-4xl mx-auto mb-10">
-    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
-      {[
-        { icon: "🪑", text: "Comfortable reclining seats", href: "/features/reclining-seats" },
-        { icon: "🛜", text: "Wi-Fi & charging ports", href: "/features/wifi" },
-        { icon: "🧳", text: "Large luggage compartments", href: "/features/luggage" },
-        { icon: "🚻", text: "Onboard restroom", href: "/features/restroom" },
-        { icon: "🎥", text: "TVs & entertainment system", href: "/features/tvs" },
-        { icon: "🧑‍✈️", text: "Experienced driver included", href: "/features/driver" },
-      ].map((feature, idx) => (
-        <li key={idx}>
-          <a
-            href={feature.href}
-            className="flex items-center justify-between bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-lg shadow border border-blue-200 hover:bg-blue-100 hover:shadow-md hover:border-blue-400 transition"
-          >
-            <div className="flex items-center">
-              <span className="text-lg mr-2">{feature.icon}</span>
-              <span>{feature.text}</span>
-            </div>
-            <span className="text-blue-500 text-lg">→</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
 
-  <div className="grid md:grid-cols-3 gap-6">
+  {/* 3 Image Boxes (unchanged button style) */}
+  <div className="grid md:grid-cols-3 gap-6 mb-10">
     {getRandomImages(coachBusImages, 3).map((img, idx) => (
       <div
         key={img}
@@ -333,7 +313,33 @@ export default function Home() {
       </div>
     ))}
   </div>
+
+  {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
+  <div className="max-w-4xl mx-auto">
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-blue-900 font-semibold">
+      {[
+        { text: "Comfortable reclining seats", href: "/features/reclining-seats" },
+        { text: "Wi-Fi & charging ports", href: "/features/wifi" },
+        { text: "Large luggage compartments", href: "/features/luggage" },
+        { text: "Onboard restroom", href: "/features/restroom" },
+        { text: "TVs & entertainment system", href: "/features/tvs" },
+        { text: "Experienced driver included", href: "/features/driver" },
+      ].map((feature, idx) => (
+        <li
+          key={idx}
+          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+        >
+          <span className="text-blue-500 text-xl mr-2">★</span>
+          <a href={feature.href} className="flex-1">
+            {feature.text}
+          </a>
+          <span className="text-blue-500 text-lg">→</span>
+        </li>
+      ))}
+    </ul>
+  </div>
 </section>
+
 
 
       {/* Trust & Reputation */}
