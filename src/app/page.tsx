@@ -476,37 +476,53 @@ export default function Home() {
       <section className="bg-blue-50 py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-blue-900">
-            The Most Trusted Limo & Bus Rental Company
+        The Most Trusted Limo & Bus Rental Company
           </h2>
-          <p className="text-xl text-gray-700 mb-6">
-            Trusted by thousands, booked in minutes, driven by a passion for
-            making every ride unforgettable.
+          <p className="text-xl text-gray-700 mb-10">
+        Trusted by thousands, booked in minutes, driven by a passion for
+        making every ride unforgettable.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a
-              href="/free-instant-estimates"
-              className="bg-white rounded-lg px-6 py-3 font-bold text-blue-700 shadow border-2 border-blue-200 hover:bg-blue-50 transition"
-            >
-              Free Instant Estimates
-            </a>
-            <a
-              href="/massive-luxury-fleet"
-              className="bg-white rounded-lg px-6 py-3 font-bold text-blue-700 shadow border-2 border-blue-200 hover:bg-blue-50 transition"
-            >
-              Massive Luxury Fleet
-            </a>
-            <a
-              href="/low-hourly-minimums"
-              className="bg-white rounded-lg px-6 py-3 font-bold text-blue-700 shadow border-2 border-blue-200 hover:bg-blue-50 transition"
-            >
-              Low Hourly Minimums
-            </a>
-            <a
-              href="/professional-drivers"
-              className="bg-white rounded-lg px-6 py-3 font-bold text-blue-700 shadow border-2 border-blue-200 hover:bg-blue-50 transition"
-            >
-              Profesional Drivers
-            </a>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
+        {[
+          {
+            label: "Free Instant Estimates",
+            title: "Free Instant Estimates",
+            content:
+          "Get a real-time quote for your trip in seconds. No obligation, no hidden fees—just transparent pricing.",
+          },
+          {
+            label: "Massive Luxury Fleet",
+            title: "Massive Luxury Fleet",
+            content:
+          "Choose from the largest selection of party buses, limos, and coach buses in the region. Find the perfect ride for any group size or occasion.",
+          },
+          {
+            label: "Low Hourly Minimums",
+            title: "Low Hourly Minimums",
+            content:
+          "Book for as little as 2-3 hours on most vehicles. Only pay for the time you need—perfect for short trips and special events.",
+          },
+          {
+            label: "Professional Drivers",
+            title: "Professional Drivers",
+            content:
+          "Every ride is chauffeured by a licensed, experienced, and friendly driver. Safety and service are our top priorities.",
+          },
+        ].map((feature) => (
+          <div
+            key={feature.label}
+            className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center border-2 border-blue-100 relative"
+          >
+            <PartyBusFeatureModalButton
+          label={feature.title}
+          title={feature.title}
+          content={feature.content}
+            />
+            <span className="absolute right-6 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">
+          →
+            </span>
+          </div>
+        ))}
           </div>
         </div>
       </section>
@@ -517,44 +533,86 @@ export default function Home() {
           How It Works
         </h2>
         <div className="grid md:grid-cols-4 gap-6 text-center">
-          <a
-            href="/enter-info"
-            className="flex flex-col items-center group hover:bg-blue-100 rounded-xl p-4 transition"
-          >
-            <span className="text-3xl mb-2">📝</span>
-            <h4 className="font-semibold mb-1 group-hover:text-blue-700">
-              1. Enter Info
-            </h4>
-            <p className="text-gray-600 text-sm">Tell us about your trip.</p>
-          </a>
-          <a
-            href="/compare-options"
-            className="flex flex-col items-center group hover:bg-blue-100 rounded-xl p-4 transition"
-          >
-            <span className="text-3xl mb-2">📸</span>
-            <h4 className="font-semibold mb-1 group-hover:text-blue-700">
-              2. Compare Options
-            </h4>
-            <p className="text-gray-600 text-sm">See vehicles & prices.</p>
-          </a>
-          <a
-            href="/book-online"
-            className="flex flex-col items-center group hover:bg-blue-100 rounded-xl p-4 transition"
-          >
-            <span className="text-3xl mb-2">🛒</span>
-            <h4 className="font-semibold mb-1 group-hover:text-blue-700">
-              3. Book Online
-            </h4>
-            <p className="text-gray-600 text-sm">Reserve your ride.</p>
-          </a>
-          <a
-            href="/enjoy"
-            className="flex flex-col items-center group hover:bg-blue-100 rounded-xl p-4 transition"
-          >
-            <span className="text-3xl mb-2">🎉</span>
-            <h4 className="font-semibold mb-1 group-hover:text-blue-700">4. Enjoy</h4>
-            <p className="text-gray-600 text-sm">Have a great trip!</p>
-          </a>
+          {/* Step 1 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">📞</span>
+        <PartyBusFeatureModalButton
+          label="1. Contact Us"
+          title="Contact Us"
+          content={
+            <>
+          <p>
+            Share your date, times, pickup/return locations, group size, and any preferences. We'll help you get started!
+          </p>
+          <div className="text-gray-700 text-base mt-2">
+            Share your trip details and preferences.
+          </div>
+            </>
+          }
+          className="font-bold text-blue-900 text-lg mb-2"
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 2 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">💰</span>
+        <PartyBusFeatureModalButton
+          label="2. Get Your Quote"
+          title="Get Your Quote"
+          content={
+            <>
+          <p>
+            We match vehicles and pricing to your trip details. You'll receive options and transparent pricing—no hidden fees.
+          </p>
+          <div className="text-gray-700 text-base mt-2">
+            Receive options & transparent pricing.
+          </div>
+            </>
+          }
+          className="font-bold text-blue-900 text-lg mb-2"
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 3 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">📝</span>
+        <PartyBusFeatureModalButton
+          label="3. Book & Deposit"
+          title="Book & Deposit"
+          content={
+            <>
+          <p>
+            Reserve online, by phone, text, or email. Pay the deposit to lock in your vehicle and date.
+          </p>
+          <div className="text-gray-700 text-base mt-2">
+            Reserve your vehicle with a deposit.
+          </div>
+            </>
+          }
+          className="font-bold text-blue-900 text-lg mb-2"
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 4 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">🚌</span>
+        <PartyBusFeatureModalButton
+          label="4. Finalize & Ride"
+          title="Finalize & Ride"
+          content={
+            <>
+          <p>
+            Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
+          </p>
+          <div className="text-gray-700 text-base mt-2">
+            Finalize details & enjoy your trip!
+          </div>
+            </>
+          }
+          className="font-bold text-blue-900 text-lg mb-2"
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
         </div>
       </section>
 
