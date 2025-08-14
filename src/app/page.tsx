@@ -54,6 +54,8 @@ function getRandomImages(arr: string[], count: number) {
   return shuffled.slice(0, count);
 }
 
+import WhyRentWithUs from "../components/WhyRentWithUs";
+
 export default function Home() {
   // For demo: assign a random party bus image to each event card
   const partyBusImagesList = [
@@ -89,39 +91,24 @@ export default function Home() {
 
       {/* Why Rent With Us */}
     <section className="max-w-6xl mx-auto px-4 py-16 bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
-  <div>
-    <h2
-      className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 tracking-tight font-serif drop-shadow-sm"
-      style={{ letterSpacing: "0.01em" }}
-    >
-      Why Rent With <span className="text-blue-700">Bus2Ride?</span>
-    </h2>
-    <ul className="space-y-4 text-blue-900 text-lg">
-      {[
-        "Experienced, friendly reservation team",
-        "Easy online quotes & booking",
-        "Huge selection of vehicles for any group size",
-        "1,000,000+ passengers served nationwide",
-        "365-day customer support",
-      ].map((feature, idx) => (
-        <li
-          key={idx}
-          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
-        >
-          <span className="text-blue-500 text-xl mr-2">★</span>
-          <span className="flex-1">{feature}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-  <div className="flex justify-center">
-    <img
-      src="/images/18 Passenger White Party Bus Exterior.png"
-      alt="Party Bus Exterior"
-      className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-3xl border-4 border-blue-100 shadow-2xl"
-    />
-  </div>
-</section>
+      <div>
+      <h2
+        className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 tracking-tight font-serif drop-shadow-sm"
+        style={{ letterSpacing: "0.01em" }}
+      >
+        Why Rent With <span className="text-blue-700">Bus2Ride?</span>
+      </h2>
+  {/* Feature list moved to Client Component */}
+  <WhyRentWithUs />
+      </div>
+      <div className="flex justify-center">
+      <img
+        src="/images/18 Passenger White Party Bus Exterior.png"
+        alt="Party Bus Exterior"
+        className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-3xl border-4 border-blue-100 shadow-2xl"
+      />
+      </div>
+    </section>
 
 
       {/* CTA after Blog & Resources */}
@@ -209,7 +196,7 @@ export default function Home() {
     Limousines
   </h2>
 
-  {/* 3 Image Boxes (centered button text, no arrows, party bus style) */}
+  {/* 3 Image Boxes (unchanged button style) */}
   <div className="grid md:grid-cols-3 gap-6 mb-10">
     {getRandomImages(limoImages, 3).map((img, idx) => (
       <div
@@ -225,21 +212,21 @@ export default function Home() {
         <div className="flex flex-col gap-2 w-full">
           <a
             href="tel:8885352566"
-            className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
+            className="flex justify-between items-center w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
           >
-            888-535-2566
+            888-535-2566 <span>→</span>
           </a>
           <a
             href="mailto:info@bus2ride.com"
-            className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
+            className="flex justify-between items-center w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
           >
-            Email Now
+            Email Now <span>→</span>
           </a>
           <a
             href="/quote"
-            className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
+            className="flex justify-between items-center w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
           >
-            Instant Live Quote
+            Instant Live Quote <span>→</span>
           </a>
         </div>
       </div>
@@ -286,7 +273,7 @@ export default function Home() {
           Coach Buses
         </h2>
 
-        {/* 3 Image Boxes (centered button text, no arrows, party bus style) */}
+        {/* 3 Image Boxes with centered buttons, no arrows */}
         <div className="grid md:grid-cols-3 gap-6 mb-10">
           {getRandomImages(coachBusImages, 3).map((img, idx) => (
             <div
@@ -302,19 +289,19 @@ export default function Home() {
               <div className="flex flex-col gap-2 w-full">
                 <a
                   href="tel:8885352566"
-                  className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
+                  className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
                 >
                   888-535-2566
                 </a>
                 <a
                   href="mailto:info@bus2ride.com"
-                  className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
+                  className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
                 >
                   Email Now
                 </a>
                 <a
                   href="/quote"
-                  className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
+                  className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
                 >
                   Instant Live Quote
                 </a>
