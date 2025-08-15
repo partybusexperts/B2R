@@ -47,16 +47,18 @@ async def submit_review(
     # Save uploaded files
     photo_url = None
     video_url = None
-    if photo:
-        photo_path = os.path.join(MEDIA_DIR, photo.filename)
-        with open(photo_path, "wb") as f:
-            shutil.copyfileobj(photo.file, f)
-        photo_url = f"/{MEDIA_DIR}/{photo.filename}"
-    if video:
-        video_path = os.path.join(MEDIA_DIR, video.filename)
-        with open(video_path, "wb") as f:
-            shutil.copyfileobj(video.file, f)
-        video_url = f"/{MEDIA_DIR}/{video.filename}"
+    if photo and getattr(photo, 'filename', None):
+        if photo.filename:
+            photo_path = os.path.join(MEDIA_DIR, photo.filename)
+            with open(photo_path, "wb") as f:
+                shutil.copyfileobj(photo.file, f)
+            photo_url = f"/{MEDIA_DIR}/{photo.filename}"
+    if video and getattr(video, 'filename', None):
+        if video.filename:
+            video_path = os.path.join(MEDIA_DIR, video.filename)
+            with open(video_path, "wb") as f:
+                shutil.copyfileobj(video.file, f)
+            video_url = f"/{MEDIA_DIR}/{video.filename}"
     # Save review to file
     review_entry = {
         "name": name,
