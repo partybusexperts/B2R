@@ -88,11 +88,11 @@ export default function Home() {
   ];
   const eventNames = [
     "Haunted House Tours", "Thanksgiving Parties", "Christmas Parties", "Ski Resort Tours", "New Year’s Eve",
-    "Sporting Events", "Weddings", "Prom", "Graduation Celebration", "Concerts / Events",
+    "Sporting Events", "Weddings", "Prom", "Graduation", "Concerts / Events",
     "Bachelor Parties", "Bachelorette Parties", "Brewery Tours", "Red Rocks Concerts", "Girl’s Night Out",
-    "Guys Night Out", "Retirement Celebrations", "Blackhawk Casinos", "Corporate Parties", "Birthday Parties",
+    "Guys Night Out", "Retirement", "Casinos", "Corporate Parties", "Birthday Parties",
     "Kid’s Parties", "Entertainment Tours", "Charter Services", "Airport Shuttle", "Quinceanera Parties",
-    "Anniversary Celebrations", "Special Dinners Out"
+    "Anniversaries", "Special Dinners Out"
   ];
   const eventImages = useMemo(() => {
     // Assign a random party bus image to each event
