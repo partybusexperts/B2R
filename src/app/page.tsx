@@ -1,7 +1,11 @@
+"use client";
+import React from "react";
 import HeroSlideshow from "../components/Hero";
 import PartyBusFeatureModalButton from "../components/PartyBusFeatureModalButton";
 import { useMemo } from "react";
 import Link from "next/link";
+import SlideshowMaker from "../components/SlideshowMaker";
+import { ReviewForm } from "../components/ReviewForm";
 
 // List of images for each vehicle type
 const partyBusImages = [
@@ -236,59 +240,57 @@ export default function Home() {
 
       {/* Limos Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-      Limousines
-      </h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+          Limousines
+        </h2>
+        {/* 3 Image Boxes (centered button text, no arrows) */}
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          {getRandomImages(limoImages, 3).map((img, idx) => (
+            <div
+              key={img}
+              className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
+            >
+              <img
+                src={img}
+                alt="Limo"
+                className="w-full h-60 object-cover rounded-2xl mb-4"
+              />
+              <h4 className="text-base font-bold mb-2">Limo {idx + 1}</h4>
+              <div className="flex flex-col gap-2 w-full">
+                <a
+                  href="tel:8885352566"
+                  className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
+                >
+                  888-535-2566
+                </a>
+                <a
+                  href="mailto:info@bus2ride.com"
+                  className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
+                >
+                  Email Now
+                </a>
+                <a
+                  href="/quote"
+                  className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
+                >
+                  Instant Live Quote
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
 
-      {/* 3 Image Boxes (centered button text, no arrows) */}
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
-      {getRandomImages(limoImages, 3).map((img, idx) => (
-      <div
-      key={img}
-      className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
-      >
-      <img
-        src={img}
-        alt="Limousine"
-        className="w-full h-72 object-cover rounded-2xl mb-5"
-      />
-      <h4 className="text-lg font-bold mb-2">Limousine {idx + 1}</h4>
-      <div className="flex flex-col gap-2 w-full">
-        <a
-      href="tel:8885352566"
-      className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
-        >
-      888-535-2566
-        </a>
-        <a
-      href="mailto:info@bus2ride.com"
-      className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
-        >
-      Email Now
-        </a>
-        <a
-      href="/quote"
-      className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
-        >
-      Instant Live Quote
-        </a>
-      </div>
-      </div>
-      ))}
-      </div>
-
-    {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
-
-    <div className="max-w-6xl mx-auto px-4">
-      <div className="flex flex-col md:flex-row md:items-center gap-6">
-      <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
-        Popular Limo Features
-      </h2>
-      <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
-        {[
-        {
-          label: "Luxurious interiors with leather seating",
-          modal: {
+        {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:items-center gap-6">
+            <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+              Popular Limo Features
+            </h2>
+            <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
+              {[
+                {
+                  label: "Luxurious interiors with leather seating",
+                  modal: {
           title: "Luxurious Leather Interiors",
           content:
             "Our limousines feature plush leather seating and elegant interiors for a truly first-class experience.",
@@ -542,7 +544,7 @@ export default function Home() {
           content={
             <>
           <p>
-            Share your date, times, pickup/return locations, group size, and any preferences. We'll help you get started!
+            Share your date, times, pickup/return locations, group size, and any preferences. We&apos;ll help you get started!
           </p>
           <div className="text-gray-700 text-base mt-2">
             Share your trip details and preferences.
@@ -561,7 +563,7 @@ export default function Home() {
           content={
             <>
           <p>
-            We match vehicles and pricing to your trip details. You'll receive options and transparent pricing—no hidden fees.
+            We match vehicles and pricing to your trip details. You&apos;ll receive options and transparent pricing—no hidden fees.
           </p>
           <div className="text-gray-700 text-base mt-2">
             Receive options & transparent pricing.
@@ -626,7 +628,7 @@ export default function Home() {
               office is top notch and on top of everything! The price was very
               good. The driver was so nice and professional. The limo looked
               pristine, inside and out. Use them, you wont regret it!! Used for
-              my son's wedding on August 11.”
+              my son&apos;s wedding on August 11.”
             </p>
             <div className="flex items-center gap-2">
               <span className="font-bold text-blue-700">— Paul P.</span>
@@ -648,7 +650,7 @@ export default function Home() {
               “Definitely lives up to their name! We used them for our
               bachelorette/bachelor parties and our wedding and will be using
               them again. They were absolutely great! Even let me extend an hour
-              when I decided my bachelorette party was too much fun and I wasn't
+              when I decided my bachelorette party was too much fun and I wasn&apos;t
               ready to go yet!! :) I would absolutely recommend them and do to
               everyone!!”
             </p>
@@ -671,11 +673,15 @@ export default function Home() {
         </div>
         {/* MORE REVIEWS button after first 4 reviews */}
         <div className="flex justify-center my-8">
-          <Link href="/reviews" legacyBehavior>
-            <a className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-lg text-lg">MORE REVIEWS</a>
+          <Link
+            href="/reviews"
+            className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-lg text-lg"
+          >
+            MORE REVIEWS
           </Link>
         </div>
       </section>
+      {/* Review Submission & Slideshow Maker (Python backend suggestion) */}
       <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-12">
         {/* Review Submission */}
         <div className="flex-1 min-w-[260px]">
@@ -688,71 +694,16 @@ export default function Home() {
           <p className="text-green-700 font-semibold mb-2">
             Featured reviews may appear on our homepage and social media.
           </p>
-          <form className="flex flex-col gap-4 w-full max-w-md">
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
-              required
-            />
-            <textarea
-              name="review"
-              placeholder="Your Review"
-              rows={3}
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
-              required
-            ></textarea>
-            <input
-              type="text"
-              name="content"
-              placeholder="Add a headline or content for your featured review (optional)"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
-            />
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block text-gray-700 mb-1">Add Photo</label>
-                <input
-                  type="file"
-                  name="photo"
-                  accept="image/*"
-                  className="block w-full text-gray-600"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-gray-700 mb-1">Add Video</label>
-                <input
-                  type="file"
-                  name="video"
-                  accept="video/*"
-                  className="block w-full text-gray-600"
-                />
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-yellow-400 text-xl">★★★★★</span>
-              <input
-                type="number"
-                name="rating"
-                min="1"
-                max="5"
-                defaultValue="5"
-                className="w-16 border border-gray-300 rounded-lg px-2 py-1 text-center"
-                required
-              />
-              <span className="text-gray-500">(1-5)</span>
-            </div>
-            <button
-              type="submit"
-              className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-2 rounded-lg shadow transition"
-            >
-              Submit Review
-            </button>
-            <p className="text-xs text-gray-400 mt-2">
-              By submitting, you agree to let us feature your review, photos, and
-              video on our site and social media.
-            </p>
-          </form>
+          {/* 
+            To make this work in Python:
+            - Use a Python backend (e.g., FastAPI, Django, Flask) with an endpoint to receive form data and file uploads.
+            - Use fetch or axios in React to POST the form data (including files) to your Python API.
+            - Store reviews and media in your backend/database.
+            - For testing, you can use FastAPI's /docs to test uploads, or use Postman.
+            - On submit, prevent default and send data via fetch to your Python endpoint.
+          */}
+          {/* Client component for review form */}
+          <ReviewForm />
         </div>
 
         {/* Slideshow Maker */}
@@ -764,37 +715,15 @@ export default function Home() {
             Upload your favorite party or limo photos and instantly create a fun
             slideshow video to share with friends! (Coming soon)
           </p>
-          <form className="flex flex-col gap-4 w-full max-w-md">
-            <label className="block text-gray-700">Upload Photos</label>
-            <input
-              type="file"
-              name="slideshow-photos"
-              accept="image/*"
-              multiple
-              className="block w-full text-gray-600"
-            />
-            <button
-              type="button"
-              className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-2 rounded-lg shadow transition mt-2"
-              disabled
-            >
-              Make My Slideshow
-            </button>
-          </form>
-          <div className="mt-6 w-full flex flex-col items-center">
-            <span className="text-gray-500 text-sm mb-2">Sample Slideshow Video</span>
-            <div className="w-full max-w-md aspect-video rounded-lg overflow-hidden shadow-lg">
-              <iframe
-                width="100%"
-                height="315"
-                src="https://www.youtube.com/embed/2Vv-BfVoq4g"
-                title="Sample Slideshow"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
+          {/* 
+            For slideshow video generation in Python:
+            - Use a Python backend (e.g., FastAPI) with an endpoint to accept multiple image uploads.
+            - Use a library like moviepy or OpenCV to generate a video from images.
+            - Return the video file or a download link.
+            - In React, POST the images to your Python endpoint and show a download link or preview when ready.
+          */}
+          <SlideshowMaker />
+import SlideshowMaker from "../components/SlideshowMaker";
         </div>
       </div>
 
@@ -803,7 +732,7 @@ export default function Home() {
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight">Events & Occasions</h2>
         {/* Render events in rows of 5, only once */}
         {Array.from({ length: Math.ceil(eventNames.length / 5) }).map((_, rowIdx) => (
-        <>
+  <React.Fragment key={rowIdx}>
             <div key={rowIdx} className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
               {eventNames.slice(rowIdx * 5, rowIdx * 5 + 5).map((event, i) => (
                 <div key={event} className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
@@ -824,7 +753,7 @@ export default function Home() {
                 </div>
               </div>
             )}
-          </>
+          </React.Fragment>
         ))}
       </section>
 
