@@ -69,15 +69,30 @@ export default function SlideshowMaker() {
             src={videoUrl}
             crossOrigin="anonymous"
           ></video>
-          <a
-            href={videoUrl}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
             className="mt-2 bg-green-600 text-white px-4 py-2 rounded shadow"
+            onClick={async () => {
+              if (videoUrl) {
+                try {
+                  const response = await fetch(videoUrl, { mode: 'cors' });
+                  const blob = await response.blob();
+                  const url = window.URL.createObjectURL(blob);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = 'slideshow.mp4';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  window.URL.revokeObjectURL(url);
+                } catch (err) {
+                  alert('Failed to download video.');
+                }
+              }
+            }}
           >
             Download Slideshow
-          </a>
+          </button>
         </div>
       )}
     </form>
