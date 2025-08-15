@@ -44,6 +44,14 @@ export default function SlideshowMaker() {
 
   return (
     <form className="flex flex-col gap-4 w-full max-w-md" onSubmit={handleSubmit}>
+      <a
+        href="#slideshow-tool"
+        className="text-blue-700 underline text-sm mb-1"
+        title="Copy or share this link to jump to the slideshow tool!"
+        style={{ alignSelf: 'flex-start' }}
+      >
+        Link to Slideshow Tool
+      </a>
       <label className="block text-gray-700">Upload Photos</label>
       <input
         type="file"

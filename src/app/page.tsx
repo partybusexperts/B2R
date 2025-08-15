@@ -723,13 +723,7 @@ Show off your ride, your event, or your crew—then share the link anywhere!
             - In React, POST the images to your Python endpoint and show a download link or preview when ready.
           */}
           <div id="slideshow-tool" className="w-full flex flex-col items-center mb-2">
-            <a
-              href="#slideshow-tool"
-              className="text-blue-700 underline text-sm mb-2"
-              title="Copy or share this link to jump to the slideshow tool!"
-            >
-              Link to Slideshow Tool
-            </a>
+            {/* Link to Slideshow Tool removed as requested */}
           </div>
           <SlideshowMaker />
 
