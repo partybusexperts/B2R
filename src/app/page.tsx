@@ -723,7 +723,7 @@ export default function Home() {
             - In React, POST the images to your Python endpoint and show a download link or preview when ready.
           */}
           <SlideshowMaker />
-import SlideshowMaker from "../components/SlideshowMaker";
+
         </div>
       </div>
 
