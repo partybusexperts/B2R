@@ -1,4 +1,11 @@
+
 "use client";
+import TailgateChecklist from '../components/TailgateChecklist';
+import CapacityFinderTool from '../components/CapacityFinderTool';
+
+import BudgetEstimator from '../components/BudgetEstimator';
+import PickupTimingPlanner from '../components/PickupTimingPlanner';
+
 import React from "react";
 import HeroSlideshow from "../components/Hero";
 import PartyBusFeatureModalButton from "../components/PartyBusFeatureModalButton";
@@ -44,6 +51,10 @@ const limoImages = [
   "/images/14 Passenger Sprinter Van Limo Style Exterior Door Open.png",
   "/images/14 Passenger Sprinter Van Limo Style Interior Again.png",
 ];
+
+
+
+
 
 const coachBusImages = [
   "/images/Bus-1.png",
@@ -777,50 +788,16 @@ Show off your ride, your event, or your crew—then share the link anywhere!
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight drop-shadow-lg">Blog & Resources</h2>
         {/* Tools (Staggered, Large Blocks) */}
   <div className="space-y-12">
-          {/* Capacity Finder */}
-          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
-            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 order-2 md:order-1">
-              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Capacity Finder</h3>
-              <p className="text-lg text-blue-900 mb-4">Enter your group size to see recommended vehicles and get a quote instantly.</p>
-              <a href="/quote" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Try It</a>
-            </div>
-            <div className="flex-1 order-1 md:order-2 flex items-center justify-center">
-              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">🚌</div>
-            </div>
-          </div>
-          {/* Budget Estimator */}
-          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
-            <div className="flex-1 flex items-center justify-center">
-              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">💸</div>
-            </div>
-            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400">
-              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Budget Estimator</h3>
-              <p className="text-lg text-blue-900 mb-4">Estimate your trip cost by hours, typical rates, and surcharges. Get a ballpark range and book with confidence.</p>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Estimate Now</button>
-            </div>
-          </div>
-          {/* Pickup Timing Planner */}
-          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
-            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 order-2 md:order-1">
-              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Pickup Timing Planner</h3>
-              <p className="text-lg text-blue-900 mb-4">Enter your event start time and venue distance to get optimal pickup and return times, with built-in buffer.</p>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Plan My Pickup</button>
-            </div>
-            <div className="flex-1 order-1 md:order-2 flex items-center justify-center">
-              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">⏰</div>
-            </div>
-          </div>
-          {/* Tailgate Checklist */}
-          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
-            <div className="flex-1 flex items-center justify-center">
-              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">🎉</div>
-            </div>
-            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400">
-              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Tailgate Checklist</h3>
-              <p className="text-lg text-blue-900 mb-4">Cooler, ice, chargers, playlist, permission rules—everything you need for the ultimate tailgate.</p>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">View Checklist</button>
-            </div>
-          </div>
+            {/* Capacity Finder (Interactive) */}
+            {/* Capacity Finder Tool (Interactive) */}
+            <CapacityFinderTool />
+
+          {/* Budget Estimator (Interactive) */}
+          <BudgetEstimator />
+          {/* Pickup Timing Planner (Interactive) */}
+          <PickupTimingPlanner />
+          {/* Tailgate Checklist (Interactive) */}
+          <TailgateChecklist />
           {/* Playlist Starter */}
           <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
             <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 order-2 md:order-1">
