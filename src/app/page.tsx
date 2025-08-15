@@ -754,7 +754,7 @@ Show off your ride, your event, or your crew—then share the link anywhere!
                   <h4 className="font-semibold mb-2 text-center">{event}</h4>
                   <a href="#" className="text-blue-700 font-bold hover:underline mb-2">Learn More</a>
                   <a href="tel:8885352566" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center mb-1">Call 888-535-2566</a>
-                  <a href="mailto:info@bus2ride.com" className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center">Email info@bus2ride.com</a>
+                  <a href="mailto:info@bus2ride.com" className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center">info@bus2ride.com</a>
                 </div>
               ))}
             </div>
