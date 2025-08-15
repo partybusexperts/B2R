@@ -709,11 +709,11 @@ export default function Home() {
         {/* Slideshow Maker */}
         <div className="flex-1 min-w-[260px] border-l border-gray-200 pl-0 md:pl-8 flex flex-col items-center md:items-start">
           <h3 className="text-xl font-bold text-blue-900 mb-2">
-            Make a Slideshow Video
+            Make & Share Your Slideshow Video
           </h3>
           <p className="text-gray-700 mb-4">
-            Upload your favorite party or limo photos and instantly create a fun
-            slideshow video to share with friends! (Coming soon)
+            Upload your favorite party or limo photos (or anything else you’d like to share) and we’ll instantly turn them into a fun, shareable slideshow video—perfect for posting on Facebook, Instagram, or linking on your blog, website, or email.
+Show off your ride, your event, or your crew—then share the link anywhere!
           </p>
           {/* 
             For slideshow video generation in Python:
@@ -722,6 +722,15 @@ export default function Home() {
             - Return the video file or a download link.
             - In React, POST the images to your Python endpoint and show a download link or preview when ready.
           */}
+          <div id="slideshow-tool" className="w-full flex flex-col items-center mb-2">
+            <a
+              href="#slideshow-tool"
+              className="text-blue-700 underline text-sm mb-2"
+              title="Copy or share this link to jump to the slideshow tool!"
+            >
+              Link to Slideshow Tool
+            </a>
+          </div>
           <SlideshowMaker />
 
         </div>
