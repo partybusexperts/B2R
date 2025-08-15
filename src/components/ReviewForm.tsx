@@ -9,7 +9,7 @@ export function ReviewForm() {
         e.preventDefault();
         const form = e.currentTarget;
         const data = new FormData(form);
-        const res = await fetch("/api/reviews", {
+  const res = await fetch("http://localhost:8000/api/reviews", {
           method: "POST",
           body: data,
         });

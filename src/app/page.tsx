@@ -53,10 +53,21 @@ const coachBusImages = [
   "/images/Bus-5.png",
 ];
 
+import { useEffect, useState } from "react";
+
 function getRandomImages(arr: string[], count: number) {
-  // Shuffle and pick first N
-  const shuffled = arr.slice().sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+  // Deterministic: just take the first N for SSR
+  return arr.slice(0, count);
+}
+
+function useShuffledImages(arr: string[], count: number) {
+  const [shuffled, setShuffled] = useState(() => arr.slice(0, count));
+  useEffect(() => {
+    // Shuffle only on client
+    const shuffledArr = arr.slice().sort(() => 0.5 - Math.random()).slice(0, count);
+    setShuffled(shuffledArr);
+  }, [arr, count]);
+  return shuffled;
 }
 
 import WhyRentWithUs from "../components/WhyRentWithUs";
@@ -127,7 +138,7 @@ export default function Home() {
 
     {/* 3 Image Boxes (centered button text, no arrows) */}
     <div className="grid md:grid-cols-3 gap-6 mb-8">
-      {getRandomImages(partyBusImages, 3).map((img, idx) => (
+      {useShuffledImages(partyBusImages, 3).map((img, idx) => (
         <div
           key={img}
           className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
