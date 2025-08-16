@@ -810,7 +810,9 @@ Show off your ride, your event, or your crew—then share the link anywhere!
             </div>
           </div>
           <div className="flex justify-center mt-8">
-            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Tools</button>
+            <Link href="/tools" passHref legacyBehavior>
+              <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Tools</a>
+            </Link>
           </div>
           {/* CTA after Tools */}
         </div>
