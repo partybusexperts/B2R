@@ -50,44 +50,44 @@ const PlaylistStarter: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 w-full">
-      <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow text-center">Playlist Starter</h3>
-      <p className="text-lg text-blue-900 mb-6 text-center">One-click Spotify playlists for every occasion. Preview, play, or add your own!</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-4 border-2 border-blue-400 w-full text-sm">
+      <h3 className="text-xl font-extrabold mb-2 text-blue-900 tracking-tight drop-shadow text-center">Playlist Starter</h3>
+      <p className="text-blue-900 mb-3 text-center">One-click Spotify playlists for every occasion. Preview, play, or add your own!</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
         {playlists.map((pl, idx) => (
-          <div key={idx} className="bg-white rounded-xl shadow p-6 flex flex-col items-center border border-blue-200">
-            <img src={pl.cover} alt={pl.label} className="w-28 h-28 rounded-lg mb-3 object-cover border-2 border-blue-100" />
-            <div className="font-bold text-lg text-blue-900 mb-1 text-center">{pl.label}</div>
-            <div className="text-blue-800 text-center text-base mb-2">{pl.description}</div>
-            <a href={pl.url} target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition mb-2 w-full text-center">Play on Spotify</a>
+          <div key={idx} className="bg-white rounded-xl shadow p-3 flex flex-col items-center border border-blue-200">
+            <img src={pl.cover} alt={pl.label} className="w-20 h-20 rounded-lg mb-2 object-cover border-2 border-blue-100" />
+            <div className="font-bold text-base text-blue-900 mb-1 text-center">{pl.label}</div>
+            <div className="text-blue-800 text-center text-xs mb-1">{pl.description}</div>
+            <a href={pl.url} target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow transition mb-1 w-full text-center text-xs">Play on Spotify</a>
           </div>
         ))}
       </div>
-      <div className="flex justify-center mb-4">
-        <button onClick={() => setShowForm((v) => !v)} className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2 rounded-lg shadow transition">
+      <div className="flex justify-center mb-2">
+        <button onClick={() => setShowForm((v) => !v)} className="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1 rounded-lg shadow transition text-xs">
           {showForm ? "Cancel" : "Suggest a Playlist"}
         </button>
       </div>
       {showForm && (
-        <form onSubmit={handleAdd} className="bg-white rounded-xl shadow p-6 border border-blue-200 max-w-lg mx-auto flex flex-col gap-3">
+        <form onSubmit={handleAdd} className="bg-white rounded-xl shadow p-3 border border-blue-200 max-w-lg mx-auto flex flex-col gap-2 text-xs">
           <div>
             <label className="font-semibold text-blue-800">Playlist Name</label>
-            <input type="text" className="border rounded px-3 py-2 w-full" value={newPlaylist.label} onChange={e => setNewPlaylist({ ...newPlaylist, label: e.target.value })} required />
+            <input type="text" className="border rounded px-2 py-1 w-full" value={newPlaylist.label} onChange={e => setNewPlaylist({ ...newPlaylist, label: e.target.value })} required />
           </div>
           <div>
             <label className="font-semibold text-blue-800">Spotify Link</label>
-            <input type="url" className="border rounded px-3 py-2 w-full" value={newPlaylist.url} onChange={e => setNewPlaylist({ ...newPlaylist, url: e.target.value })} required />
+            <input type="url" className="border rounded px-2 py-1 w-full" value={newPlaylist.url} onChange={e => setNewPlaylist({ ...newPlaylist, url: e.target.value })} required />
           </div>
           <div>
             <label className="font-semibold text-blue-800">Cover Image URL (optional)</label>
-            <input type="url" className="border rounded px-3 py-2 w-full" value={newPlaylist.cover} onChange={e => setNewPlaylist({ ...newPlaylist, cover: e.target.value })} />
+            <input type="url" className="border rounded px-2 py-1 w-full" value={newPlaylist.cover} onChange={e => setNewPlaylist({ ...newPlaylist, cover: e.target.value })} />
           </div>
           <div>
             <label className="font-semibold text-blue-800">Description (optional)</label>
-            <input type="text" className="border rounded px-3 py-2 w-full" value={newPlaylist.description} onChange={e => setNewPlaylist({ ...newPlaylist, description: e.target.value })} />
+            <input type="text" className="border rounded px-2 py-1 w-full" value={newPlaylist.description} onChange={e => setNewPlaylist({ ...newPlaylist, description: e.target.value })} />
           </div>
-          {error && <div className="text-red-600 text-sm mb-2">{error}</div>}
-          <button type="submit" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition mt-2">Add Playlist</button>
+          {error && <div className="text-red-600 text-xs mb-1">{error}</div>}
+          <button type="submit" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow transition mt-1 text-xs">Add Playlist</button>
         </form>
       )}
     </div>

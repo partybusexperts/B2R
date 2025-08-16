@@ -1,12 +1,8 @@
 "use client";
-import PlaylistStarter from '../components/PlaylistStarter';
-import TailgateChecklist from '../components/TailgateChecklist';
-import CapacityFinderTool from '../components/CapacityFinderTool';
-
-import BudgetEstimator from '../components/BudgetEstimator';
-import VehicleComparisonTool from '../components/VehicleComparisonTool';
+// Removed unused tool imports; only ToolsSlider is needed
 
 import React from "react";
+import ToolsSlider from '../components/ToolsSlider';
 import HeroSlideshow from "../components/Hero";
 import PartyBusFeatureModalButton from "../components/PartyBusFeatureModalButton";
 import { useMemo } from "react";
@@ -786,49 +782,12 @@ Show off your ride, your event, or your crew—then share the link anywhere!
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
           Vehicle Match & Booking Tools
         </h2>
-        {/* Staggered, modern 2-row grid: 3 cards on top, 2 below, centered */}
-                {/* Top row: 3 cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
-                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
-                      <span className="text-2xl">🚌</span> Vehicle Capacity Finder
-                    </h3>
-                    <p className="tool-description text-gray-600 mb-3 text-base">Enter your group size to see the best vehicle options for your trip.</p>
-                    <CapacityFinderTool />
-                  </div>
-                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
-                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
-                      <span className="text-2xl">⚖️</span> Vehicle Comparison Tool
-                    </h3>
-                    <p className="tool-description text-gray-600 mb-3 text-base">Compare vehicle types side by side. Select two to see details.</p>
-                    <VehicleComparisonTool />
-                  </div>
-                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
-                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
-                      <span className="text-2xl">💰</span> Budget Estimator
-                    </h3>
-                    <p className="tool-description text-gray-600 mb-3 text-base">Get an estimate for your trip.</p>
-                    <BudgetEstimator />
-                  </div>
-                </div>
-                {/* Bottom row: 2 cards, centered on desktop using 3 columns with empty divs */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-                  <div className="hidden md:block"></div>
-                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
-                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
-                      <span className="text-2xl">🎶</span> Playlist Starter
-                    </h3>
-                    <p className="tool-description text-gray-600 mb-3 text-base">One-click Spotify playlists for every occasion. Preview, play, or add your own!</p>
-                    <PlaylistStarter />
-                  </div>
-                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
-                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
-                      <span className="text-2xl">🏈</span> Tailgate Checklist
-                    </h3>
-                    <p className="tool-description text-gray-600 mb-3 text-base">Cooler, ice, chargers, playlist, permission rules—everything you need for the ultimate tailgate.</p>
-                    <TailgateChecklist />
-                  </div>
-                </div>
+                {/* Slider/Carousel for tools section */}
+                <ToolsSlider />
+
+// --- ToolsSlider component ---
+
+
         <div className="flex justify-center mt-10">
           <Link href="/tools" passHref legacyBehavior>
             <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-2xl shadow-xl text-lg transition">

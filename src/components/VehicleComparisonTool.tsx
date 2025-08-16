@@ -42,15 +42,15 @@ const VehicleComparisonTool: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 w-full">
-      <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow text-center">Vehicle Comparison Tool</h3>
-      <p className="text-lg text-blue-900 mb-6 text-center">Compare vehicle types side by side. Select two to see details.</p>
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
+    <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-4 border-2 border-blue-400 w-full text-sm">
+      <h3 className="text-xl font-extrabold mb-2 text-blue-900 tracking-tight drop-shadow text-center">Vehicle Comparison Tool</h3>
+      <p className="text-blue-900 mb-3 text-center">Compare vehicle types side by side. Select two to see details.</p>
+      <div className="flex flex-wrap justify-center gap-2 mb-4">
         {vehicles.map((v, idx) => (
           <button
             key={v.name}
             onClick={() => handleSelect(idx)}
-            className={`px-6 py-3 rounded-xl font-bold shadow transition border-2 text-lg ${selected.includes(idx)
+            className={`px-3 py-1 rounded font-bold shadow transition border text-sm ${selected.includes(idx)
               ? "bg-blue-700 text-white border-blue-800"
               : "bg-white text-blue-900 border-blue-300 hover:bg-blue-100"}`}
           >
@@ -59,11 +59,11 @@ const VehicleComparisonTool: React.FC = () => {
         ))}
       </div>
       {selected.length === 2 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {selected.map((idx) => (
-            <div key={vehicles[idx].name} className="bg-white rounded-xl shadow p-6 border border-blue-200">
-              <h4 className="text-2xl font-bold text-blue-900 mb-2 text-center">{vehicles[idx].name}</h4>
-              <ul className="text-blue-800 text-base space-y-1 mb-2">
+            <div key={vehicles[idx].name} className="bg-white rounded-xl shadow p-3 border border-blue-200">
+              <h4 className="text-lg font-bold text-blue-900 mb-1 text-center">{vehicles[idx].name}</h4>
+              <ul className="text-blue-800 text-xs space-y-1 mb-1">
                 <li><b>Capacity:</b> {vehicles[idx].capacity}</li>
                 <li><b>Features:</b> {vehicles[idx].features.join(", ")}</li>
                 <li><b>Price Range:</b> {vehicles[idx].price}</li>
@@ -75,7 +75,7 @@ const VehicleComparisonTool: React.FC = () => {
         </div>
       )}
       {selected.length !== 2 && (
-        <div className="text-blue-700 text-center mt-4">Select two vehicles to compare.</div>
+        <div className="text-blue-700 text-center mt-2">Select two vehicles to compare.</div>
       )}
     </div>
   );
