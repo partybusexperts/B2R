@@ -780,34 +780,60 @@ Show off your ride, your event, or your crew—then share the link anywhere!
             )}
           </React.Fragment>
         ))}
-      </section>
-
       {/* Blog & Resources */}
-      {/* Blog & Resources (Simple Blocks) */}
+      {/* Blog & Resources (Staggered, Modern Blocks) */}
       <section className="max-w-6xl mx-auto px-4 py-16 space-y-14">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight drop-shadow-lg">Vehicle Match & Booking Tools</h2>
-        {/* Tools (Staggered, Large Blocks) */}
-  <div className="space-y-12">
-            {/* Vehicle Capacity Finder (Interactive) */}
-            {/* Vehicle Capacity Finder Tool (Interactive) */}
-            <CapacityFinderTool />
-
-          {/* Budget Estimator (Interactive) */}
-          <BudgetEstimator />
-          {/* Vehicle Comparison Tool (Interactive) */}
-          <VehicleComparisonTool />
-          {/* Tailgate Checklist (Interactive) */}
-          <TailgateChecklist />
-          {/* Playlist Starter (Interactive) */}
-          <PlaylistStarter />
-          <div className="flex justify-center mt-8">
-            <Link href="/tools" passHref legacyBehavior>
-              <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Tools</a>
-            </Link>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight drop-shadow-lg">
+          Vehicle Match & Booking Tools
+        </h2>
+        {/* Staggered Masonry Tools Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-16 md:gap-y-24">
+          {/* Column 1 */}
+          <div className="flex flex-col gap-y-16">
+            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full">
+              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <span className="text-2xl">🚌</span> Vehicle Capacity Finder
+              </h3>
+              <CapacityFinderTool />
+            </div>
+            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full mt-16">
+              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <span className="text-2xl">🎶</span> Playlist Starter
+              </h3>
+              <PlaylistStarter />
+            </div>
           </div>
-          {/* CTA after Tools */}
+          {/* Column 2 (staggered up) */}
+          <div className="flex flex-col gap-y-16 mt-16 md:mt-32">
+            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full">
+              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <span className="text-2xl">⚖️</span> Vehicle Comparison
+              </h3>
+              <VehicleComparisonTool />
+            </div>
+            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full mt-16">
+              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <span className="text-2xl">💰</span> Budget Estimator
+              </h3>
+              <BudgetEstimator />
+            </div>
+            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full mt-16">
+              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <span className="text-2xl">🏈</span> Tailgate Checklist
+              </h3>
+              <TailgateChecklist />
+            </div>
+          </div>
         </div>
-        {/* Polls */}
+        <div className="flex justify-center mt-16">
+          <Link href="/tools" passHref legacyBehavior>
+            <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">
+              More Tools
+            </a>
+          </Link>
+        </div>
+      </section>
+      {/* Polls */}
         {/* Polls (Grid of 12) */}
         <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
           <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Polls</h3>
