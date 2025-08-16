@@ -25,6 +25,11 @@ export default function PollResultsPage() {
   const [results, setResults] = useState<PollResults>({});
   const [loading, setLoading] = useState(true);
 
+  // Find the max number of options across all polls
+  const maxOptions = React.useMemo(() => {
+    return POLL_QUESTIONS.reduce((max, poll) => Math.max(max, poll.options.length), 0);
+  }, []);
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/poll/all")
       .then(r => r.json())
@@ -50,32 +55,45 @@ export default function PollResultsPage() {
       {loading ? (
         <div className="bg-white rounded-xl shadow p-8 text-center text-blue-900 font-semibold">Loading poll results...</div>
       ) : (
-        <div className="space-y-8">
-          {POLL_QUESTIONS.map((poll) => {
-            const pollResults = results[poll.id] || {};
-            const totalVotes = Object.values(pollResults).reduce((a, b) => Number(a) + Number(b), 0);
-            return (
-              <div key={poll.id} className="bg-white rounded-xl shadow p-6 border border-blue-200">
-                <div className="font-bold text-lg text-blue-900 mb-2">{poll.question}</div>
-                {poll.options.map(option => {
-                  const count = Number(pollResults[option] || 0);
-                  const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
-                  return (
-                    <div key={option} className="flex items-center mb-1 w-full">
-                      <span className="w-32 text-blue-900 text-sm font-semibold">{option}</span>
-                      <div className="flex-1 bg-blue-100 rounded h-4 mx-2">
-                        <div className="bg-blue-700 h-4 rounded" style={{ width: totalVotes > 0 ? `${percent}%` : 0 }} />
-                      </div>
-                      <span className="text-blue-900 text-xs font-bold min-w-[32px] text-right">
-                        {count} {totalVotes > 0 ? `(${percent}%)` : ""}
-                      </span>
-                    </div>
-                  );
-                })}
-                <div className="text-xs text-blue-700 mt-2">Total votes: {totalVotes}</div>
-              </div>
-            );
-          })}
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded-xl shadow border border-blue-200">
+            <thead>
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase">Poll Question</th>
+                {Array.from({ length: maxOptions }).map((_, idx) => (
+                  <th key={idx} className="px-4 py-3 text-xs font-bold text-blue-900 uppercase">Option {idx + 1}</th>
+                ))}
+                <th className="px-4 py-3 text-xs font-bold text-blue-900 uppercase">Total Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {POLL_QUESTIONS.map((poll) => {
+                const pollResults = results[poll.id] || {};
+                const totalVotes = Object.values(pollResults).reduce((a, b) => Number(a) + Number(b), 0);
+                return (
+                  <tr key={poll.id} className="border-t border-blue-100 hover:bg-blue-50">
+                    <td className="px-4 py-3 text-blue-900 font-semibold text-sm max-w-xs whitespace-normal">{poll.question}</td>
+                    {Array.from({ length: maxOptions }).map((_, idx) => {
+                      const option = poll.options[idx];
+                      if (option) {
+                        const count = Number(pollResults[option] || 0);
+                        const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+                        return (
+                          <td key={option} className="px-4 py-3 text-blue-900 text-sm text-center">
+                            <div className="font-bold">{option}</div>
+                            <div>{count} {totalVotes > 0 ? <span className="text-xs text-blue-700">({percent}%)</span> : null}</div>
+                          </td>
+                        );
+                      } else {
+                        return <td key={"empty-" + idx} className="px-4 py-3" />;
+                      }
+                    })}
+                    <td className="px-4 py-3 text-blue-900 text-center font-bold">{totalVotes}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
