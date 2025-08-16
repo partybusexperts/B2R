@@ -4,6 +4,12 @@
     "Limo": 1
   },
   "favorite_limo_color": {
-    "Pink": 1
+    "Pink": 2
+  },
+  "shuttle_concert": {
+    "No": 1
+  },
+  "partybus_safer": {
+    "True": 1
   }
 }

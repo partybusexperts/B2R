@@ -2,6 +2,7 @@
 // Removed unused tool imports; only ToolsSlider is needed
 
 import React from "react";
+import LiveWeatherAdvisor from "../components/LiveWeatherAdvisor";
 import ToolsSlider from '../components/ToolsSlider';
 import HeroSlideshow from "../components/Hero";
 import PartyBusFeatureModalButton from "../components/PartyBusFeatureModalButton";
@@ -754,15 +755,8 @@ Show off your ride, your event, or your crew—then share the link anywhere!
       </section>
   {/* Polls */}
   <PollsSection />
-  {/* Live Weather */}
-  <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200">
-    <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-sky-700 tracking-tight">Live Weather for Your Event</h3>
-    <p className="text-gray-700 text-lg mb-3">Pick your city and date to see a 7-day forecast. (Or check back if out of range.)</p>
-    <ul className="list-disc pl-8 text-lg text-gray-800 space-y-2">
-      <li><b>Heads-Up Tips:</b> Hot day → extra water/ice; rain → covered pickup; cold → coats, blankets.</li>
-      <li><b>CTA:</b> “Add cooler/ice (+$)” or “Add luggage trailer (+$)” if windy/rainy (just a CTA for now).</li>
-    </ul>
-  </div>
+  {/* Live Weather & Comfort Advisor */}
+  <LiveWeatherAdvisor />
   {/* Did You Know (Modern Scrollable Cards) */}
         <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
           <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
