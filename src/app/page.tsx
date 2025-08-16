@@ -782,52 +782,56 @@ Show off your ride, your event, or your crew—then share the link anywhere!
         ))}
       {/* Blog & Resources */}
       {/* Blog & Resources (Staggered, Modern Blocks) */}
-      <section className="max-w-6xl mx-auto px-4 py-16 space-y-14">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight drop-shadow-lg">
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
           Vehicle Match & Booking Tools
         </h2>
-        {/* Staggered Masonry Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-16 md:gap-y-24">
-          {/* Column 1 */}
-          <div className="flex flex-col gap-y-16">
-            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full">
-              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
-                <span className="text-2xl">🚌</span> Vehicle Capacity Finder
-              </h3>
-              <CapacityFinderTool />
-            </div>
-            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full mt-16">
-              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
-                <span className="text-2xl">🎶</span> Playlist Starter
-              </h3>
-              <PlaylistStarter />
-            </div>
-          </div>
-          {/* Column 2 (staggered up) */}
-          <div className="flex flex-col gap-y-16 mt-16 md:mt-32">
-            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full">
-              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
-                <span className="text-2xl">⚖️</span> Vehicle Comparison
-              </h3>
-              <VehicleComparisonTool />
-            </div>
-            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full mt-16">
-              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
-                <span className="text-2xl">💰</span> Budget Estimator
-              </h3>
-              <BudgetEstimator />
-            </div>
-            <div className="bg-white rounded-2xl shadow-xl p-7 border border-blue-200 flex flex-col justify-between h-full mt-16">
-              <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
-                <span className="text-2xl">🏈</span> Tailgate Checklist
-              </h3>
-              <TailgateChecklist />
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center mt-16">
+        {/* Staggered, modern 2-row grid: 3 cards on top, 2 below, centered */}
+                {/* Top row: 3 cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
+                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
+                      <span className="text-2xl">🚌</span> Vehicle Capacity Finder
+                    </h3>
+                    <p className="tool-description text-gray-600 mb-3 text-base">Enter your group size to see the best vehicle options for your trip.</p>
+                    <CapacityFinderTool />
+                  </div>
+                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
+                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
+                      <span className="text-2xl">⚖️</span> Vehicle Comparison Tool
+                    </h3>
+                    <p className="tool-description text-gray-600 mb-3 text-base">Compare vehicle types side by side. Select two to see details.</p>
+                    <VehicleComparisonTool />
+                  </div>
+                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
+                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
+                      <span className="text-2xl">💰</span> Budget Estimator
+                    </h3>
+                    <p className="tool-description text-gray-600 mb-3 text-base">Get an estimate for your trip.</p>
+                    <BudgetEstimator />
+                  </div>
+                </div>
+                {/* Bottom row: 2 cards, centered on desktop using 3 columns with empty divs */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                  <div className="hidden md:block"></div>
+                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
+                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
+                      <span className="text-2xl">🎶</span> Playlist Starter
+                    </h3>
+                    <p className="tool-description text-gray-600 mb-3 text-base">One-click Spotify playlists for every occasion. Preview, play, or add your own!</p>
+                    <PlaylistStarter />
+                  </div>
+                  <div className="tool-card bg-gradient-to-br from-[#e0eaff] to-[#c7d7f9] rounded-[18px] p-7 shadow-2xl hover:shadow-blue-300 transition-transform hover:-translate-y-2 flex flex-col h-full border border-blue-200 min-w-[260px] max-w-full">
+                    <h3 className="tool-title text-blue-900 text-xl font-bold mb-2 flex items-center gap-2">
+                      <span className="text-2xl">🏈</span> Tailgate Checklist
+                    </h3>
+                    <p className="tool-description text-gray-600 mb-3 text-base">Cooler, ice, chargers, playlist, permission rules—everything you need for the ultimate tailgate.</p>
+                    <TailgateChecklist />
+                  </div>
+                </div>
+        <div className="flex justify-center mt-10">
           <Link href="/tools" passHref legacyBehavior>
-            <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">
+            <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-2xl shadow-xl text-lg transition">
               More Tools
             </a>
           </Link>
