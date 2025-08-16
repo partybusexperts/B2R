@@ -1,0 +1,60 @@
+import os
+import json
+from fastapi import APIRouter, HTTPException, Request
+import traceback
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from typing import List
+
+POLL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "polls.json")
+
+router = APIRouter()
+
+class PollVote(BaseModel):
+    poll_id: str
+    option: str
+
+@router.post("/api/poll/vote")
+async def vote_poll(vote: PollVote):
+    print(f"[PollAPI] Vote received: poll_id={vote.poll_id}, option={vote.option}")
+    try:
+        # Load poll data
+        if os.path.exists(POLL_FILE):
+            with open(POLL_FILE, "r", encoding="utf-8") as f:
+                polls = json.load(f)
+        else:
+            polls = {}
+        # Ensure poll exists
+        if vote.poll_id not in polls:
+            polls[vote.poll_id] = {}
+        # Increment vote
+        if vote.option not in polls[vote.poll_id]:
+            polls[vote.poll_id][vote.option] = 0
+        polls[vote.poll_id][vote.option] += 1
+        with open(POLL_FILE, "w", encoding="utf-8") as f:
+            json.dump(polls, f, ensure_ascii=False, indent=2)
+        print(f"[PollAPI] Vote saved: {POLL_FILE}")
+        return {"success": True, "poll_id": vote.poll_id, "option": vote.option}
+    except Exception as e:
+        print(f"[PollAPI] Error saving vote: {e}")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Failed to save vote.")
+
+@router.get("/api/poll/results/{poll_id}")
+async def get_poll_results(poll_id: str):
+    if os.path.exists(POLL_FILE):
+        with open(POLL_FILE, "r", encoding="utf-8") as f:
+            polls = json.load(f)
+    else:
+        polls = {}
+    results = polls.get(poll_id, {})
+    return {"poll_id": poll_id, "results": results}
+
+@router.get("/api/poll/all")
+async def get_all_polls():
+    if os.path.exists(POLL_FILE):
+        with open(POLL_FILE, "r", encoding="utf-8") as f:
+            polls = json.load(f)
+    else:
+        polls = {}
+    return polls

@@ -1,7 +1,4 @@
 
-
-
-
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,7 +12,6 @@ import uuid
 import json
 from typing import Optional
 
-
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -24,6 +20,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from poll_api import router as poll_router
+app.include_router(poll_router)
 
 
 STATIC_DIR = "static"

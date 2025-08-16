@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import SlideshowMaker from "../components/SlideshowMaker";
 import { ReviewForm } from "../components/ReviewForm";
+import PollsSection from "../components/PollsSection";
 
 // List of images for each vehicle type
 const partyBusImages = [
@@ -555,79 +556,36 @@ export default function Home() {
         <div className="grid md:grid-cols-4 gap-6 text-center">
           {/* Step 1 */}
           <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-        <span className="text-4xl mb-3">📞</span>
-        <PartyBusFeatureModalButton
-          label="1. Contact Us"
-          title="Contact Us"
-          content={
-            <>
-          <p>
-            Share your date, times, pickup/return locations, group size, and any preferences. We&apos;ll help you get started!
-          </p>
-          <div className="text-gray-700 text-base mt-2">
-            Share your trip details and preferences.
+            <span className="text-4xl mb-3">📞</span>
+            <PartyBusFeatureModalButton
+              label="1. Contact Us"
+              title="Contact Us"
+              content={
+                <>
+                  <p>Call, email, or fill out our quote form to get started. Our team will help you find the perfect vehicle for your event.</p>
+                </>
+              }
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
-            </>
-          }
-        />
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-          </div>
-          {/* Step 2 */}
+          {/* Step 4 (example, more steps can be added similarly) */}
           <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-        <span className="text-4xl mb-3">💰</span>
-        <PartyBusFeatureModalButton
-          label="2. Get Your Quote"
-          title="Get Your Quote"
-          content={
-            <>
-          <p>
-            We match vehicles and pricing to your trip details. You&apos;ll receive options and transparent pricing—no hidden fees.
-          </p>
-          <div className="text-gray-700 text-base mt-2">
-            Receive options & transparent pricing.
-          </div>
-            </>
-          }
-        />
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-          </div>
-          {/* Step 3 */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-        <span className="text-4xl mb-3">📝</span>
-        <PartyBusFeatureModalButton
-          label="3. Book & Deposit"
-          title="Book & Deposit"
-          content={
-            <>
-          <p>
-            Reserve online, by phone, text, or email. Pay the deposit to lock in your vehicle and date.
-          </p>
-          <div className="text-gray-700 text-base mt-2">
-            Reserve your vehicle with a deposit.
-          </div>
-            </>
-          }
-        />
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-          </div>
-          {/* Step 4 */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-        <span className="text-4xl mb-3">🚌</span>
-        <PartyBusFeatureModalButton
-          label="4. Finalize & Ride"
-          title="Finalize & Ride"
-          content={
-            <>
-          <p>
-            Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
-          </p>
-          <div className="text-gray-700 text-base mt-2">
-            Finalize details & enjoy your trip!
-          </div>
-            </>
-          }
-        />
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+            <span className="text-4xl mb-3">🎉</span>
+            <PartyBusFeatureModalButton
+              label="4. Finalize & Ride"
+              title="Finalize & Ride"
+              content={
+                <>
+                  <p>
+                    Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
+                  </p>
+                  <div className="text-gray-700 text-base mt-2">
+                    Finalize details & enjoy your trip!
+                  </div>
+                </>
+              }
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
         </div>
       </section>
@@ -785,8 +743,6 @@ Show off your ride, your event, or your crew—then share the link anywhere!
                 {/* Slider/Carousel for tools section */}
                 <ToolsSlider />
 
-// --- ToolsSlider component ---
-
 
         <div className="flex justify-center mt-10">
           <Link href="/tools" passHref legacyBehavior>
@@ -796,132 +752,18 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           </Link>
         </div>
       </section>
-      {/* Polls */}
-        {/* Polls (Grid of 12) */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
-          <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Polls</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            {/* Row 1 */}
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start border-l-4 border-blue-400">
-              <div className="font-bold mb-2">Party Bus vs Limo — which would you pick?</div>
-              <div className="flex gap-2">
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  Party Bus <span className="ml-1 text-blue-500">→</span>
-                </button>
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  Limo <span className="ml-1 text-blue-500">→</span>
-                </button>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">What’s your event?</div>
-              <div className="flex gap-2 flex-wrap">
-                {['Prom','Wedding','Gameday','Birthday','Corporate'].map((label) => (
-                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
-                    {label} <span className="ml-1 text-blue-500">→</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">What matters most?</div>
-              <div className="flex gap-2 flex-wrap">
-                {['Price','Space','Lighting','Sound','Luggage'].map((label) => (
-                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
-                    {label} <span className="ml-1 text-blue-500">→</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">True or False: Party buses are safer than limos.</div>
-              <div className="flex gap-2">
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  True <span className="ml-1 text-blue-500">→</span>
-                </button>
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  False <span className="ml-1 text-blue-500">→</span>
-                </button>
-              </div>
-            </div>
-            {/* Row 2 */}
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">Would you rent a party bus for a birthday?</div>
-              <div className="flex gap-2">
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  Yes <span className="ml-1 text-blue-500">→</span>
-                </button>
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  No <span className="ml-1 text-blue-500">→</span>
-                </button>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">Which party bus feature is most important?</div>
-              <div className="flex gap-2 flex-wrap">
-                {['Sound System','Lighting','Bar','TV Screens'].map((label) => (
-                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
-                    {label} <span className="ml-1 text-blue-500">→</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">Would you rent a limousine for a birthday?</div>
-              <div className="flex gap-2">
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  Yes <span className="ml-1 text-blue-500">→</span>
-                </button>
-                <button className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center">
-                  No <span className="ml-1 text-blue-500">→</span>
-                </button>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">What’s your favorite limo color?</div>
-              <div className="flex gap-2 flex-wrap">
-                {['Black','White','Pink','Silver'].map((label) => (
-                  <button key={label} className="px-2 py-1 text-sm bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition flex items-center mb-1">
-                    {label} <span className="ml-1 text-blue-500">→</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            {/* Row 3 */}
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">True or False: Limousines are best for weddings.</div>
-              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">True</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">False</button></div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">Do you prefer SUVs or sedans for airport transfers?</div>
-              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">SUV</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Sedan</button></div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">Which feature matters most on a coach bus?</div>
-              <div className="flex gap-2 flex-wrap"><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">WiFi</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Reclining Seats</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Restroom</button><button className="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Outlets</button></div>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start">
-              <div className="font-bold mb-2">Have you ever used a shuttle for a concert?</div>
-              <div className="flex gap-2"><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">Yes</button><button className="px-4 py-1 bg-blue-100 text-blue-800 font-semibold rounded hover:bg-blue-200 transition">No</button></div>
-            </div>
-          </div>
-          <div className="text-gray-500 text-base mt-2 text-center">(Your vote is saved instantly. <a href="/polls" className="text-blue-700 hover:underline">See more polls</a>)</div>
-          <div className="flex justify-center mt-8">
-            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Polls</button>
-          </div>
-          {/* CTA after Polls */}
-        </div>
-        {/* Live Weather */}
-        <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200">
-          <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-sky-700 tracking-tight">Live Weather for Your Event</h3>
-          <p className="text-gray-700 text-lg mb-3">Pick your city and date to see a 7-day forecast. (Or check back if out of range.)</p>
-          <ul className="list-disc pl-8 text-lg text-gray-800 space-y-2">
-            <li><b>Heads-Up Tips:</b> Hot day → extra water/ice; rain → covered pickup; cold → coats, blankets.</li>
-            <li><b>CTA:</b> “Add cooler/ice (+$)” or “Add luggage trailer (+$)” if windy/rainy (just a CTA for now).</li>
-          </ul>
-        </div>
-        {/* Did You Know Facts */}
-        {/* Did You Know (Modern Scrollable Cards) */}
+  {/* Polls */}
+  <PollsSection />
+  {/* Live Weather */}
+  <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200">
+    <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-sky-700 tracking-tight">Live Weather for Your Event</h3>
+    <p className="text-gray-700 text-lg mb-3">Pick your city and date to see a 7-day forecast. (Or check back if out of range.)</p>
+    <ul className="list-disc pl-8 text-lg text-gray-800 space-y-2">
+      <li><b>Heads-Up Tips:</b> Hot day → extra water/ice; rain → covered pickup; cold → coats, blankets.</li>
+      <li><b>CTA:</b> “Add cooler/ice (+$)” or “Add luggage trailer (+$)” if windy/rainy (just a CTA for now).</li>
+    </ul>
+  </div>
+  {/* Did You Know (Modern Scrollable Cards) */}
         <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
           <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
           <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
@@ -1003,108 +845,12 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           <h2 className="text-2xl font-bold mb-4">Book Your Bus or Limo Today!</h2>
           <div className="flex flex-wrap justify-center gap-6 mb-6">
             <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
-              Call: 888-535-2566
-            </div>
-            <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
-              Email: info@bus2ride.com
+              {/* PollsSection replaces all static poll markup */}
+              {/* Footer and other elements should be implemented in a separate layout or Footer component if needed */}
             </div>
           </div>
-          <div className="flex justify-center gap-4 mb-4">
-            <a href="#" className="text-white text-2xl">[FB]</a>
-            <a href="#" className="text-white text-2xl">[IG]</a>
-            <a href="#" className="text-white text-2xl">[X]</a>
-            <a href="#" className="text-white text-2xl">[LI]</a>
-          </div>
-          <a
-            href="/contact"
-            className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-lg shadow transition"
-          >
-            Get a Quote
-          </a>
         </div>
       </section>
-
-      {/* Footer/Links */}
-      <footer className="bg-gray-900 text-gray-200 py-8 mt-8">
-        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-4 gap-8">
-          <div>
-            <h4 className="font-bold mb-2">Company</h4>
-            <ul className="space-y-1">
-              <li>
-                <a href="#" className="hover:underline">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">About Us</a>
-              </li>
-            </ul>
-          </div>
-
-      {/* CTA after Blog & Resources */}
-          <div>
-            <h4 className="font-bold mb-2">Resources</h4>
-            <ul className="space-y-1">
-              <li>
-                <a href="#" className="hover:underline">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Terms
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-2">Locations</h4>
-            <ul className="space-y-1">
-              <li>
-                <a href="#" className="hover:underline">
-                  All Locations
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Popular Cities
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Get a Quote
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="flex flex-col items-center gap-2 mt-8 text-sm text-gray-400">
-          <div className="flex gap-4 justify-center mb-1">
-            <a
-              href="https://facebook.com/yourbus2ride" // TODO: Replace with actual FB page
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Bus2Ride Facebook"
-              className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-700 hover:bg-blue-800 transition shadow-lg border-2 border-blue-400"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-white">
-                <path d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0" />
-              </svg>
-            </a>
-          </div>
-          <span>© {new Date().getFullYear()} Bus2Ride. All rights reserved.</span>
-        </div>
-  </footer>
-  </>
+    </>
   );
 }
