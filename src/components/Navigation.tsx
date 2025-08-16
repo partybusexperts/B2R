@@ -1,5 +1,5 @@
-// src/components/Navigation.tsx
 
+import React from "react";
 import Link from "next/link";
 
 export default function Navigation() {
@@ -13,7 +13,7 @@ export default function Navigation() {
           <li><Link href="/events" className="hover:text-blue-200 transition">Events</Link></li>
           <li><Link href="/pricing" className="hover:text-blue-200 transition">Pricing</Link></li>
           <li><Link href="/locations" className="hover:text-blue-200 transition">Locations</Link></li>
-          <li><Link href="/polls" className="hover:text-blue-200 transition">Polls and Data</Link></li>
+          <li><Link href="/polls" className="hover:text-blue-200 transition">Limo Polls and Surveys</Link></li>
           <li><Link href="/tools" className="hover:text-blue-200 transition">Tools</Link></li>
           <li><Link href="/contact" className="hover:text-blue-200 transition">Contact</Link></li>
         </ul>

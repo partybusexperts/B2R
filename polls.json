@@ -2,5 +2,8 @@
   "partybus_vs_limo": {
     "Party Bus": 1,
     "Limo": 1
+  },
+  "favorite_limo_color": {
+    "Pink": 1
   }
 }

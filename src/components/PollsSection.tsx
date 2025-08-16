@@ -144,17 +144,25 @@ function Poll({ poll }: { poll: PollType }) {
 export default function PollsSection() {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
-      <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Polls</h3>
+      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight" style={{ letterSpacing: '0.01em' }}>
+        Limo Industry Polls
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         {POLL_QUESTIONS.map((poll) => (
           <Poll key={poll.id} poll={poll} />
         ))}
       </div>
       <div className="text-gray-500 text-base mt-2 text-center">
-        (Your vote is saved instantly. <a href="/polls" className="text-blue-700 hover:underline pointer-events-none opacity-60">See more polls (coming soon)</a>)
+        <span className="font-semibold text-blue-900">Click here to see all data from all polls, all-time.</span>
+        <br />
+        <a href="/polls" className="text-blue-700 hover:underline font-bold text-lg" target="_blank" rel="noopener noreferrer">
+          The most complete and comprehensive data on the limo industry in the world
+        </a>
       </div>
       <div className="flex justify-center mt-8">
-        <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition opacity-60 cursor-not-allowed">More Polls (coming soon)</button>
+        <a href="/polls" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">
+          More Limo Polls and even more!
+        </a>
       </div>
     </div>
   );
