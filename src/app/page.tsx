@@ -1,10 +1,10 @@
-
 "use client";
+import PlaylistStarter from '../components/PlaylistStarter';
 import TailgateChecklist from '../components/TailgateChecklist';
 import CapacityFinderTool from '../components/CapacityFinderTool';
 
 import BudgetEstimator from '../components/BudgetEstimator';
-import PickupTimingPlanner from '../components/PickupTimingPlanner';
+import VehicleComparisonTool from '../components/VehicleComparisonTool';
 
 import React from "react";
 import HeroSlideshow from "../components/Hero";
@@ -707,9 +707,9 @@ export default function Home() {
       <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-12">
         {/* Review Submission */}
         <div className="flex-1 min-w-[260px]">
-          <h3 className="text-xl font-bold text-blue-900 mb-2">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 mb-4 tracking-tight drop-shadow text-center">
             Leave a Review & Get Featured Above!
-          </h3>
+          </h2>
           <p className="text-gray-700 mb-4">
             Want to see your review in the main section above? Share your Bus2Ride experience below! Submit your review, add photos, or even upload a video. The best reviews will be featured at the top of this page for everyone to see.
           </p>
@@ -730,9 +730,9 @@ export default function Home() {
 
         {/* Slideshow Maker */}
         <div className="flex-1 min-w-[260px] border-l border-gray-200 pl-0 md:pl-8 flex flex-col items-center md:items-start">
-          <h3 className="text-xl font-bold text-blue-900 mb-2">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 mb-4 tracking-tight drop-shadow text-center">
             Make & Share Your Slideshow Video
-          </h3>
+          </h2>
           <p className="text-gray-700 mb-4">
             Upload your favorite party or limo photos (or anything else you’d like to share) and we’ll instantly turn them into a fun, shareable slideshow video—perfect for posting on Facebook, Instagram, or linking on your blog, website, or email.
 Show off your ride, your event, or your crew—then share the link anywhere!
@@ -785,30 +785,21 @@ Show off your ride, your event, or your crew—then share the link anywhere!
       {/* Blog & Resources */}
       {/* Blog & Resources (Simple Blocks) */}
       <section className="max-w-6xl mx-auto px-4 py-16 space-y-14">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight drop-shadow-lg">Blog & Resources</h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight drop-shadow-lg">Vehicle Match & Booking Tools</h2>
         {/* Tools (Staggered, Large Blocks) */}
   <div className="space-y-12">
-            {/* Capacity Finder (Interactive) */}
-            {/* Capacity Finder Tool (Interactive) */}
+            {/* Vehicle Capacity Finder (Interactive) */}
+            {/* Vehicle Capacity Finder Tool (Interactive) */}
             <CapacityFinderTool />
 
           {/* Budget Estimator (Interactive) */}
           <BudgetEstimator />
-          {/* Pickup Timing Planner (Interactive) */}
-          <PickupTimingPlanner />
+          {/* Vehicle Comparison Tool (Interactive) */}
+          <VehicleComparisonTool />
           {/* Tailgate Checklist (Interactive) */}
           <TailgateChecklist />
-          {/* Playlist Starter */}
-          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8">
-            <div className="flex-1 bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-10 border-2 border-blue-400 order-2 md:order-1">
-              <h3 className="text-3xl font-extrabold mb-3 text-blue-900 tracking-tight drop-shadow">Playlist Starter</h3>
-              <p className="text-lg text-blue-900 mb-4">One-click Spotify links for Bachelorette, Gameday, and Prom. Get the party started instantly!</p>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition">Get Playlists</button>
-            </div>
-            <div className="flex-1 order-1 md:order-2 flex items-center justify-center">
-              <div className="w-40 h-40 bg-blue-100 rounded-full flex items-center justify-center text-5xl text-blue-700 font-extrabold shadow-inner">🎵</div>
-            </div>
-          </div>
+          {/* Playlist Starter (Interactive) */}
+          <PlaylistStarter />
           <div className="flex justify-center mt-8">
             <Link href="/tools" passHref legacyBehavior>
               <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Tools</a>

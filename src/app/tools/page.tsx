@@ -1,11 +1,19 @@
 
+
+import PickupTimingPlanner from '../../components/PickupTimingPlanner';
 import type { Metadata } from 'next';
+
+import React from 'react';
 
 export const metadata: Metadata = {
   title: 'Limo Tools',
   viewport: 'width=device-width, initial-scale=1.0',
 };
 
+// ...existing code...
+
+
+// Existing tools array and other code below
 const tools = [
   {
     title: 'Cost Split Calculator',
@@ -536,6 +544,10 @@ export default function LimoToolsPage() {
   return (
     <div className="max-w-5xl mx-auto py-10 px-4">
       <h1 className="text-3xl font-bold mb-8 text-blue-700 text-center">Limo & Party Bus Tools</h1>
+      {/* Pickup Timing Planner (moved from homepage) */}
+      <div className="mb-16">
+        <PickupTimingPlanner />
+      </div>
       {tools.map((tool, idx) => (
         <div
           key={tool.title}
