@@ -97,7 +97,7 @@ export default function LiveWeatherAdvisor() {
     e.preventDefault();
     setCity(pendingCity);
     setDate(pendingDate);
-    // fetchWeather will be triggered by useEffect below
+    fetchWeather(pendingCity, pendingDate);
   };
 
 
