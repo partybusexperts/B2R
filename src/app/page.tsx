@@ -140,7 +140,7 @@ export default function Home() {
 
 
       {/* Party Buses Section */}
-  <section className="max-w-6xl mx-auto px-4 py-12">
+  <section className="max-w-6xl mx-auto px-4 py-12 mt-16">
     <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 text-center mb-6 tracking-tight">
       Party Buses
     </h2>
@@ -554,39 +554,55 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center mb-6 text-blue-900">
           How It Works
         </h2>
-        <div className="grid md:grid-cols-4 gap-6 text-center">
+        <div className="grid md:grid-cols-5 gap-6 text-center">
           {/* Step 1 */}
           <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-            <span className="text-4xl mb-3">📞</span>
+            <span className="text-4xl mb-3">�</span>
             <PartyBusFeatureModalButton
-              label="1. Contact Us"
-              title="Contact Us"
-              content={
-                <>
-                  <p>Call, email, or fill out our quote form to get started. Our team will help you find the perfect vehicle for your event.</p>
-                </>
-              }
+              label="1. Enter Info"
+              title="Enter Info"
+              content={<p>Tell us about your trip—date, time, group size, and any special requests.</p>}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
-          {/* Step 4 (example, more steps can be added similarly) */}
+          {/* Step 2 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+            <span className="text-4xl mb-3">💬</span>
+            <PartyBusFeatureModalButton
+              label="2. Get Quote"
+              title="Get Quote"
+              content={<p>We’ll send you a personalized quote and help you pick the best vehicle for your event.</p>}
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 3 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+            <span className="text-4xl mb-3">✅</span>
+            <PartyBusFeatureModalButton
+              label="3. Confirm Booking"
+              title="Confirm Booking"
+              content={<p>Review your quote, confirm your details, and lock in your reservation.</p>}
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 4 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+            <span className="text-4xl mb-3">💳</span>
+            <PartyBusFeatureModalButton
+              label="4. Pay Deposit"
+              title="Pay Deposit"
+              content={<p>Secure your booking with a deposit. We’ll send you a confirmation and all trip details.</p>}
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 5 */}
           <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
             <span className="text-4xl mb-3">🎉</span>
             <PartyBusFeatureModalButton
-              label="4. Finalize & Ride"
+              label="5. Finalize & Ride"
               title="Finalize & Ride"
-              content={
-                <>
-                  <p>
-                    Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
-                  </p>
-                  <div className="text-gray-700 text-base mt-2">
-                    Finalize details & enjoy your trip!
-                  </div>
-                </>
-              }
+              content={<><p>Remaining balance is billed 7–14 days before your trip. We manage all service details—just relax and enjoy the ride!</p><div className="text-gray-700 text-base mt-2">Finalize details & enjoy your trip!</div></>}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
         </div>
       </section>

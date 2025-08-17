@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 // You will need to set your API keys here
 const WEATHER_API_KEY = "dbbe74b9443b3403d6bfdbe317d40785";
-const WEATHER_API_URL = "https://api.openweathermap.org/data/3.0";
+const WEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
 const GEOIP_API_URL = "https://ipapi.co/json/";
 
 function getTodayYYYYMMDD() {
@@ -14,6 +14,8 @@ export default function LiveWeatherAdvisor() {
   const [city, setCity] = useState("");
   const [date, setDate] = useState(getTodayYYYYMMDD());
   const [autoCity, setAutoCity] = useState("");
+  const [displayCity, setDisplayCity] = useState("");
+  const [displayState, setDisplayState] = useState("");
   const [forecast, setForecast] = useState(null);
   const [historical, setHistorical] = useState(null);
   const [currentWeather, setCurrentWeather] = useState(null);
@@ -22,6 +24,7 @@ export default function LiveWeatherAdvisor() {
   const [eventType, setEventType] = useState("");
   const [pendingCity, setPendingCity] = useState("");
   const [pendingDate, setPendingDate] = useState("");
+  // Debug state removed for production
 
   // Get city from IP on mount
   useEffect(() => {
@@ -40,6 +43,31 @@ export default function LiveWeatherAdvisor() {
 
   // Fetch weather when city/date changes
   const fetchWeather = (cityToUse, dateToUse) => {
+    // Parse city/state for display
+    let cityPart = cityToUse;
+    let statePart = "";
+    if (cityToUse.includes(",")) {
+      [cityPart, statePart] = cityToUse.split(",").map(s => s.trim());
+    } else if (/\s[A-Z]{2,}$/.test(cityToUse)) {
+      // e.g., 'Mesa AZ' or 'Mesa, AZ'
+      const match = cityToUse.match(/^(.*)\s([A-Z]{2,})$/);
+      if (match) {
+        cityPart = match[1].trim();
+        statePart = match[2].trim();
+      }
+    }
+    setDisplayCity(cityPart);
+    setDisplayState(statePart);
+
+    // List of ambiguous cities that require state
+    const ambiguousCities = [
+      'Wheaton', 'Springfield', 'Columbus', 'Jackson', 'Greenville', 'Madison', 'Clinton', 'Arlington', 'Salem', 'Franklin', 'Auburn', 'Lexington', 'Milford', 'Manchester', 'Newport', 'Cleveland', 'Dayton', 'Dover', 'Georgetown', 'Kingston', 'Lancaster', 'Marion', 'Mount Vernon', 'Richmond', 'Washington', 'Winchester'
+    ];
+    if (ambiguousCities.includes(cityPart) && !statePart) {
+      setError('Please enter both city and state (e.g., "Wheaton, IL") for accurate results.');
+      setLoading(false);
+      return;
+    }
     if (!cityToUse || !dateToUse) return;
     setLoading(true);
     setError("");
@@ -47,43 +75,47 @@ export default function LiveWeatherAdvisor() {
     setHistorical(null);
     setCurrentWeather(null);
 
-    const today = getTodayYYYYMMDD();
-    const diffDays = Math.floor((new Date(dateToUse).getTime() - new Date(today).getTime()) / (1000 * 60 * 60 * 24));
-
-    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityToUse)}&limit=1&appid=${WEATHER_API_KEY}`)
+    // Get lat/lon from city name
+  fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityPart + (statePart ? ',' + statePart : ''))}&limit=1&appid=${WEATHER_API_KEY}`)
       .then(r => r.json())
       .then(geo => {
         if (!geo[0]) throw new Error("City not found");
         const { lat, lon } = geo[0];
-        if (diffDays >= 0 && diffDays <= 7) {
-          // 8-day forecast (One Call 3.0)
-          return fetch(`${WEATHER_API_URL}/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${WEATHER_API_KEY}`)
-            .then(r => r.json())
-            .then(data => {
-              setForecast(data.daily);
-              setCurrentWeather(data.current);
-              setLoading(false);
-            });
-        } else {
-          // Historical: get last 5 years for this date using day_summary endpoint
-          const promises = [];
-          for (let y = 1; y <= 5; y++) {
-            const histDate = new Date(dateToUse);
-            histDate.setFullYear(histDate.getFullYear() - y);
-            const yyyy = histDate.getFullYear();
-            const mm = String(histDate.getMonth() + 1).padStart(2, '0');
-            const dd = String(histDate.getDate()).padStart(2, '0');
-            const dateStr = `${yyyy}-${mm}-${dd}`;
-            promises.push(
-              fetch(`${WEATHER_API_URL}/onecall/day_summary?lat=${lat}&lon=${lon}&date=${dateStr}&units=imperial&appid=${WEATHER_API_KEY}`)
-                .then(r => r.json())
-            );
-          }
-          return Promise.all(promises).then(results => {
-            setHistorical(results);
-            setLoading(false);
+        // Fetch current weather
+        const currentUrl = `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${WEATHER_API_KEY}`;
+        // Fetch 5-day/3-hour forecast
+        const forecastUrl = `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${WEATHER_API_KEY}`;
+        return Promise.all([
+          fetch(currentUrl).then(r => r.json()),
+          fetch(forecastUrl).then(r => r.json())
+        ]).then(([current, forecast]) => {
+          setCurrentWeather(current);
+          // Group forecast by day
+          const days = {};
+          forecast.list.forEach(item => {
+            const date = item.dt_txt.split(' ')[0];
+            if (!days[date]) days[date] = [];
+            days[date].push(item);
           });
-        }
+          // For each day, get min/max temp and main weather
+          const forecastDaily = Object.keys(days).slice(0, 7).map(date => {
+            const items = days[date];
+            const temps = items.map(i => i.main.temp);
+            const min = Math.min(...temps);
+            const max = Math.max(...temps);
+            // Use the weather of the first item for the day
+            return {
+              dt: new Date(date).getTime() / 1000,
+              temp: { min, max },
+              weather: [items[0].weather[0]],
+              wind_speed: items[0].wind.speed,
+              rain: items[0].rain ? items[0].rain['3h'] : undefined,
+              snow: items[0].snow ? items[0].snow['3h'] : undefined,
+            };
+          });
+          setForecast(forecastDaily);
+          setLoading(false);
+        });
       })
       .catch(e => {
         setError(e.message || "Could not fetch weather");
@@ -133,6 +165,11 @@ export default function LiveWeatherAdvisor() {
       <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-sky-700 tracking-tight flex items-center gap-2">
         <span role="img" aria-label="fire">🔥</span> Smart Weather & Comfort Tips
       </h3>
+      {displayCity && (
+        <div className="text-lg font-semibold text-sky-800 mb-2">
+          For: {displayCity}{displayState ? ", " + displayState : ""}
+        </div>
+      )}
       <form className="flex flex-col md:flex-row gap-4 mb-6 items-end" onSubmit={handleSubmit}>
         <div>
           <label className="block text-sm font-bold text-sky-800 mb-1">City</label>
@@ -155,21 +192,33 @@ export default function LiveWeatherAdvisor() {
         <button type="submit" className="btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">Submit</button>
       </form>
       {loading && <div className="text-sky-700 font-semibold">Loading weather...</div>}
-      {error && <div className="text-red-600 font-semibold">{error}</div>}
+
+      {error && (
+        <div className="text-red-600 font-semibold">
+          {error}
+          <details className="mt-2 text-xs text-red-700">
+            <summary>Debug Info</summary>
+            <div><b>City:</b> {city}</div>
+            <div><b>Date:</b> {date}</div>
+            <div><b>API Key:</b> {WEATHER_API_KEY ? 'Set' : 'Missing'}</div>
+            <div><b>API URL:</b> {WEATHER_API_URL}</div>
+            <div><b>Auto City:</b> {autoCity}</div>
+          </details>
+        </div>
+      )}
       {/* Current Weather Details */}
       {currentWeather && (
         <div className="mb-4">
           <h4 className="text-lg font-bold text-sky-800 mb-2">Current Weather</h4>
           <div className="flex flex-wrap gap-6 text-lg text-gray-800">
-            <div><b>Now:</b> {Math.round(currentWeather.temp)}°F, {currentWeather.weather[0]?.description}</div>
-            <div><b>Feels like:</b> {Math.round(currentWeather.feels_like)}°F</div>
-            <div><b>Wind:</b> {currentWeather.wind_speed} mph {currentWeather.wind_deg ? `(from ${currentWeather.wind_deg}°)` : ""}</div>
-            <div><b>Humidity:</b> {currentWeather.humidity}%</div>
-            <div><b>Clouds:</b> {currentWeather.clouds}%</div>
-            <div><b>UV Index:</b> {currentWeather.uvi}</div>
-            {currentWeather.rain && <div><b>Rain:</b> {currentWeather.rain["1h"] || currentWeather.rain} in last hour</div>}
-            {currentWeather.snow && <div><b>Snow:</b> {currentWeather.snow["1h"] || currentWeather.snow} in last hour</div>}
-            <div><b>Visibility:</b> {currentWeather.visibility / 1609.34 > 1 ? (currentWeather.visibility / 1609.34).toFixed(1) + ' mi' : currentWeather.visibility + ' m'}</div>
+            <div><b>Now:</b> {Math.round(currentWeather.main?.temp)}°F, {currentWeather.weather && currentWeather.weather[0]?.description}</div>
+            <div><b>Feels like:</b> {Math.round(currentWeather.main?.feels_like)}°F</div>
+            <div><b>Wind:</b> {currentWeather.wind?.speed} mph {currentWeather.wind?.deg ? `(from ${currentWeather.wind.deg}°)` : ""}</div>
+            <div><b>Humidity:</b> {currentWeather.main?.humidity}%</div>
+            <div><b>Clouds:</b> {currentWeather.clouds?.all}%</div>
+            {currentWeather.rain && <div><b>Rain:</b> {currentWeather.rain["1h"] || currentWeather.rain["3h"] || currentWeather.rain} in last hour</div>}
+            {currentWeather.snow && <div><b>Snow:</b> {currentWeather.snow["1h"] || currentWeather.snow["3h"] || currentWeather.snow} in last hour</div>}
+            <div><b>Visibility:</b> {currentWeather.visibility ? (currentWeather.visibility / 1609.34 > 1 ? (currentWeather.visibility / 1609.34).toFixed(1) + ' mi' : currentWeather.visibility + ' m') : '—'}</div>
           </div>
         </div>
       )}
@@ -216,13 +265,54 @@ export default function LiveWeatherAdvisor() {
         <div>
           <h4 className="text-xl font-bold text-sky-800 mb-2">1. Smart Packing Reminders <span className="text-base font-normal text-sky-600">(Auto-Adjust by Weather)</span></h4>
           <ul className="list-disc pl-6 text-lg text-gray-800 space-y-1">
-            {currentWeather && currentWeather.temp > 85 && <li><b>Hot day:</b> sunscreen, hats, extra water</li>}
-            {currentWeather && currentWeather.temp < 45 && <li><b>Cold day:</b> gloves, scarves, blankets</li>}
-            {currentWeather && currentWeather.rain && <li><b>Rainy day:</b> ponchos, umbrellas, plastic bags for wet shoes</li>}
-            {currentWeather && currentWeather.snow && <li><b>Snowy/icy:</b> boots, hand warmers, salt for walkways</li>}
-            {!currentWeather && <li>Enter a city and date to get custom packing tips!</li>}
+            {eventType === "concert" && <>
+              <li>Bring earplugs for loud shows.</li>
+              <li>Clear bag policy at most venues—check before you go.</li>
+              <li>Portable charger for your phone.</li>
+              <li>Dress for the weather—outdoor venues can get hot or cold fast.</li>
+              <li>Pack a rain poncho if rain is possible.</li>
+            </>}
+            {eventType === "gameday" && <>
+              <li>Wear team colors and bring a hat for sun protection.</li>
+              <li>Clear bag policy at most stadiums.</li>
+              <li>Bring a seat cushion for comfort.</li>
+              <li>Pack snacks and a refillable water bottle.</li>
+              <li>Portable charger for your phone.</li>
+            </>}
+            {eventType === "prom" && <>
+              <li>Bring extra bobby pins, hairspray, and a mini sewing kit.</li>
+              <li>Pack comfy shoes for after the dance.</li>
+              <li>Bring a stain remover pen for emergencies.</li>
+              <li>Keep a phone charger in your bag.</li>
+              <li>Bring a wrap or jacket for chilly nights.</li>
+              <li>Umbrella or rain poncho for photos and arrivals if rain is possible.</li>
+            </>}
+            {eventType === "wedding" && <>
+              <li>Bring extra bobby pins, hairspray, and a mini sewing kit.</li>
+              <li>Pack comfy shoes for dancing.</li>
+              <li>Bring a stain remover pen for emergencies.</li>
+              <li>Keep a phone charger in your bag.</li>
+              <li>Bring a wrap or jacket for chilly nights.</li>
+              <li>Umbrella or rain poncho for photos and arrivals if rain is possible.</li>
+            </>}
+            {eventType === "festival" && <>
+              <li>Portable charger = lifesaver.</li>
+              <li>Bring a reusable water bottle.</li>
+              <li>Pack sunscreen and a hat.</li>
+              <li>Bandana or mask for dust.</li>
+              <li>Lightweight rain poncho.</li>
+            </>}
+            {eventType === "other" && <>
+              <li>Bring essentials for your event and check the weather above.</li>
+            </>}
+            {!eventType && <>
+              {currentWeather && currentWeather.temp > 85 && <li><b>Hot day:</b> sunscreen, hats, extra water</li>}
+              {currentWeather && currentWeather.temp < 45 && <li><b>Cold day:</b> gloves, scarves, blankets</li>}
+              {currentWeather && currentWeather.rain && <li><b>Rainy day:</b> ponchos, umbrellas, plastic bags for wet shoes</li>}
+              {currentWeather && currentWeather.snow && <li><b>Snowy/icy:</b> boots, hand warmers, salt for walkways</li>}
+              {!currentWeather && <li>Enter a city and date to get custom packing tips!</li>}
+            </>}
           </ul>
-          <p className="mt-2 text-sky-700 text-sm">(People will feel like you thought of everything for them.)</p>
         </div>
         <div>
           <h4 className="text-xl font-bold text-sky-800 mb-2">2. Real-Time Comfort Tips</h4>
