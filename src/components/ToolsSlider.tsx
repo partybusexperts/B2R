@@ -1,139 +1,163 @@
-import React, { useRef, useLayoutEffect, useState } from "react";
-import CapacityFinderTool from '../components/CapacityFinderTool';
-import VehicleComparisonTool from '../components/VehicleComparisonTool';
-import BudgetEstimator from '../components/BudgetEstimator';
-import PlaylistStarter from '../components/PlaylistStarter';
-import TailgateChecklist from '../components/TailgateChecklist';
+import React, { useState, Suspense, lazy } from "react";
 
-export default function ToolsSlider() {
-  const [current, setCurrent] = useState(0);
-  const cards = [
-    {
-      title: 'Vehicle Capacity Finder',
-      icon: '🚌',
-      desc: 'Enter your group size to see the best vehicle options for your trip.',
-      component: <CapacityFinderTool />,
-    },
-    {
-      title: 'Vehicle Comparison Tool',
-      icon: '⚖️',
-      desc: 'Compare vehicle types side by side. Select two to see details.',
-      component: <VehicleComparisonTool />,
-    },
-    {
-      title: 'Budget Estimator',
-      icon: '💰',
-      desc: 'Get an estimate for your trip.',
-      component: <BudgetEstimator />,
-    },
-    {
-      title: 'Playlist Starter',
-      icon: '🎶',
-      desc: 'One-click Spotify playlists for every occasion. Preview, play, or add your own!',
-      component: <PlaylistStarter />,
-    },
-    {
-      title: 'Tailgate Checklist',
-      icon: '🏈',
-      desc: 'Cooler, ice, chargers, playlist, permission rules—everything you need for the ultimate tailgate.',
-      component: <TailgateChecklist />,
-    },
-  ];
-  const visible = 1; // Show 1 card at a time (can make 2 or 3 for desktop)
-  const total = cards.length;
+// Lazy-load heavy tools so they don't affect card sizing/layout
+const CapacityFinderTool = lazy(() => import("../components/CapacityFinderTool"));
+const VehicleComparisonTool = lazy(() => import("../components/VehicleComparisonTool"));
+const BudgetEstimator = lazy(() => import("../components/BudgetEstimator"));
+const PlaylistStarter = lazy(() => import("../components/PlaylistStarter"));
+const TailgateChecklist = lazy(() => import("../components/TailgateChecklist"));
 
-  // Infinite wrap-around logic
-  const goPrev = () => setCurrent((c) => (c - 1 + total) % total);
-  const goNext = () => setCurrent((c) => (c + 1) % total);
+type ToolId =
+  | "capacity"
+  | "compare"
+  | "budget"
+  | "playlist"
+  | "tailgate";
 
+const TOOLS: {
+  id: ToolId;
+  title: string;
+  icon: string;
+  desc: string;
+  // pass a component factory so it only renders when opened
+  render: () => JSX.Element;
+}[] = [
+  {
+    id: "capacity",
+    title: "Vehicle Capacity Finder",
+    icon: "🚌",
+    desc: "Enter your group size to see best-fit vehicles.",
+    render: () => <CapacityFinderTool />,
+  },
+  {
+    id: "compare",
+    title: "Vehicle Comparison",
+    icon: "⚖️",
+    desc: "Pick two vehicle types and compare quickly.",
+    render: () => <VehicleComparisonTool />,
+  },
+  {
+    id: "budget",
+    title: "Budget Estimator",
+    icon: "💰",
+    desc: "Get a fast ballpark price for your trip.",
+    render: () => <BudgetEstimator />,
+  },
+  {
+    id: "playlist",
+    title: "Playlist Starter",
+    icon: "🎶",
+    desc: "One-click Spotify vibes for any occasion.",
+    render: () => <PlaylistStarter />,
+  },
+  {
+    id: "tailgate",
+    title: "Tailgate Checklist",
+    icon: "🏈",
+    desc: "Everything you need for game day.",
+    render: () => <TailgateChecklist />,
+  },
+];
+
+export default function ToolsShowcase() {
+  const [openId, setOpenId] = useState<ToolId | null>(null);
+  const current = TOOLS.find(t => t.id === openId);
 
   return (
-    <div className="relative max-w-full mx-auto">
-      <button
-  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 text-blue-700 border border-blue-700 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-blue-800 hover:text-white transition"
-        onClick={goPrev}
-        aria-label="Previous tool"
-        style={{ left: '-2.5rem' }}
-      >
-        &lt;
-      </button>
-      {/* --- Dynamic width logic: all hooks at top level --- */}
-      {(() => {
-        // One ref and width per card
-        const cardRefs = useRef(cards.map(() => React.createRef<HTMLDivElement>()));
-        const [cardWidths, setCardWidths] = useState(cards.map(() => 520));
-        useLayoutEffect(() => {
-          // Only update the current card
-          const idx = current;
-          const ref = cardRefs.current[idx];
-          if (ref && ref.current) {
-            let width = 520;
-            const el = ref.current;
-            for (let i = 0; i < 5; i++) {
-              if (el.scrollHeight > 600 && width < 1000) {
-                width += 120;
-                el.style.width = width + 'px';
-              } else {
-                break;
-              }
-            }
-            setCardWidths(ws => ws.map((w, i) => (i === idx ? width : w)));
-          }
-        }, [current, cards.length]);
-        return (
-          <div className="overflow-visible flex justify-center items-center min-h-[420px]">
-            {cards.map((card, idx) => (
-              <div
-                key={card.title}
-                ref={cardRefs.current[idx]}
-                className={`tool-card rounded-[18px] p-6 shadow-2xl flex flex-col mx-auto items-stretch border border-blue-200 bg-white transition-all duration-500 ease-in-out
-                  ${current === idx ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-90 pointer-events-none absolute'}`}
-                style={{
-                  width: `${cardWidths[idx]}px`,
-                  height: '600px',
-                  minHeight: '420px',
-                  maxWidth: '100vw',
-                  position: current === idx ? 'relative' : 'absolute',
-                  left: 0,
-                  right: 0,
-                  margin: '0 auto',
-                  top: 0,
-                  bottom: 0,
-                  boxShadow: current === idx ? '0 8px 32px 0 rgba(0,0,0,0.12)' : 'none',
-                  overflow: 'hidden',
-                }}
-              >
-                <h3 className="tool-title text-blue-900 text-2xl font-extrabold mb-3 flex items-center gap-3 justify-center">
-                  <span className="text-3xl">{card.icon}</span> {card.title}
-                </h3>
-                <p className="tool-description text-gray-700 mb-4 text-lg text-center">{card.desc}</p>
-                <div>
-                  {card.component}
-                </div>
-              </div>
-            ))}
-          </div>
-        );
-      })()}
-      <button
-  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 text-blue-700 border border-blue-700 rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-blue-800 hover:text-white transition"
-        onClick={goNext}
-        aria-label="Next tool"
-        style={{ right: '-2.5rem' }}
-      >
-        &gt;
-      </button>
-      {/* Dots navigation */}
-      <div className="flex justify-center gap-2 mt-4">
-        {cards.map((_, idx) => (
-          <button
-            key={idx}
-            className={`w-3 h-3 rounded-full border ${current === idx ? 'bg-blue-700 border-blue-700' : 'bg-white border-blue-200'}`}
-            onClick={() => setCurrent(idx)}
-            aria-label={`Go to tool ${idx + 1}`}
-          />
+    <section className="mx-auto max-w-6xl">
+      {/* Mobile: horizontal scroll; Desktop: grid */}
+      <div className="md:hidden -mx-4 px-4 overflow-x-auto no-scrollbar">
+        <div className="flex gap-4">
+          {TOOLS.map(tool => (
+            <ToolCard key={tool.id} tool={tool} onOpen={() => setOpenId(tool.id)} />
+          ))}
+        </div>
+      </div>
+
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
+        {TOOLS.map(tool => (
+          <ToolCard key={tool.id} tool={tool} onOpen={() => setOpenId(tool.id)} />
         ))}
+      </div>
+
+      {/* Modal (simple Tailwind modal; replace with your UI lib if you prefer) */}
+      {current && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setOpenId(null)}
+            aria-hidden
+          />
+          <div className="relative z-10 w-full max-w-3xl rounded-2xl bg-white shadow-xl">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h3 className="text-lg font-semibold">
+                <span className="mr-2">{current.icon}</span>
+                {current.title}
+              </h3>
+              <button
+                className="rounded-md px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200"
+                onClick={() => setOpenId(null)}
+                aria-label="Close"
+              >
+                Close
+              </button>
+            </div>
+            <div className="p-4">
+              <Suspense fallback={<div className="text-sm text-gray-500">Loading…</div>}>
+                {current.render()}
+              </Suspense>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function ToolCard({
+  tool,
+  onOpen,
+}: {
+  tool: {
+    id: string;
+    title: string;
+    icon: string;
+    desc: string;
+  };
+  onOpen: () => void;
+}) {
+  return (
+    <div
+      className="bg-[#eaf0ff] rounded-2xl shadow-sm border border-[#d7e2ff] p-4 flex flex-col justify-between
+                 min-w-[260px] w-[280px] md:w-auto md:min-w-0
+                 h-56"  // equal height cards
+    >
+      <div>
+        <h3 className="text-blue-900 text-lg font-bold mb-1 flex items-center gap-2">
+          <span className="text-2xl">{tool.icon}</span>
+          <span className="line-clamp-1">{tool.title}</span>
+        </h3>
+        <p className="text-gray-600 text-sm leading-snug line-clamp-3">
+          {tool.desc}
+        </p>
+      </div>
+      <div className="pt-3">
+        <button
+          onClick={onOpen}
+          className="w-full rounded-xl bg-blue-700 text-white text-sm font-medium py-2 hover:bg-blue-800 transition"
+        >
+          Open
+        </button>
       </div>
     </div>
   );
 }
+
+/* Optional: hide scrollbars for mobile strip (add to globals.css if needed)
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+*/
