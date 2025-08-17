@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-// You will need to set your API keys here
-const WEATHER_API_KEY = "dbbe74b9443b3403d6bfdbe317d40785";
-const WEATHER_API_URL = "https://api.openweathermap.org/data/3.0";
+// Open-Meteo: no API key needed
+const WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast";
+const GEOCODE_API_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const GEOIP_API_URL = "https://ipapi.co/json/";
 
 function getTodayYYYYMMDD() {
@@ -38,8 +38,8 @@ export default function LiveWeatherAdvisor() {
       });
   }, []);
 
-  // Fetch weather when city/date changes
-  const fetchWeather = (cityToUse, dateToUse) => {
+  // Fetch weather when city/date changes (Open-Meteo)
+  const fetchWeather = async (cityToUse: string, dateToUse: string) => {
     if (!cityToUse || !dateToUse) return;
     setLoading(true);
     setError("");
@@ -47,53 +47,32 @@ export default function LiveWeatherAdvisor() {
     setHistorical(null);
     setCurrentWeather(null);
 
-    const today = getTodayYYYYMMDD();
-    const diffDays = Math.floor((new Date(dateToUse).getTime() - new Date(today).getTime()) / (1000 * 60 * 60 * 24));
+    try {
+      // 1. Geocode city name to lat/lon
+      const geoRes = await fetch(`${GEOCODE_API_URL}?name=${encodeURIComponent(cityToUse)}&count=1&language=en&format=json`);
+      const geoData = await geoRes.json();
+      if (!geoData.results || !geoData.results[0]) throw new Error("City not found");
+      const { latitude: lat, longitude: lon } = geoData.results[0];
 
-    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cityToUse)}&limit=1&appid=${WEATHER_API_KEY}`)
-      .then(r => r.json())
-      .then(geo => {
-        if (!geo[0]) throw new Error("City not found");
-        const { lat, lon } = geo[0];
-        if (diffDays >= 0 && diffDays <= 7) {
-          // 8-day forecast (One Call 3.0)
-          return fetch(`${WEATHER_API_URL}/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${WEATHER_API_KEY}`)
-            .then(r => r.json())
-            .then(data => {
-              setForecast(data.daily);
-              setCurrentWeather(data.current);
-              setLoading(false);
-            });
-        } else {
-          // Historical: get last 5 years for this date using day_summary endpoint
-          const promises = [];
-          for (let y = 1; y <= 5; y++) {
-            const histDate = new Date(dateToUse);
-            histDate.setFullYear(histDate.getFullYear() - y);
-            const yyyy = histDate.getFullYear();
-            const mm = String(histDate.getMonth() + 1).padStart(2, '0');
-            const dd = String(histDate.getDate()).padStart(2, '0');
-            const dateStr = `${yyyy}-${mm}-${dd}`;
-            promises.push(
-              fetch(`${WEATHER_API_URL}/onecall/day_summary?lat=${lat}&lon=${lon}&date=${dateStr}&units=imperial&appid=${WEATHER_API_KEY}`)
-                .then(r => r.json())
-            );
-          }
-          return Promise.all(promises).then(results => {
-            setHistorical(results);
-            setLoading(false);
-          });
-        }
-      })
-      .catch(e => {
-        setError(e.message || "Could not fetch weather");
-        setLoading(false);
-      });
+      // 2. Get forecast for the week (Open-Meteo returns daily/hourly)
+      const forecastRes = await fetch(`${WEATHER_API_URL}?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&current_weather=true&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=auto`);
+      const forecastData = await forecastRes.json();
+      if (!forecastData.daily) throw new Error("No forecast data");
+
+      setForecast(forecastData.daily);
+      setCurrentWeather(forecastData.current_weather);
+      setHistorical(null); // You can add historical fetch here if needed
+      setLoading(false);
+    } catch (e: any) {
+      setError(e.message || "Could not fetch weather");
+      setLoading(false);
+      console.error('Weather fetch error:', e);
+    }
   };
 
 
   // Fetch on submit
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCity(pendingCity);
     setDate(pendingDate);
@@ -105,7 +84,6 @@ export default function LiveWeatherAdvisor() {
   useEffect(() => {
     setPendingCity(city);
     setPendingDate(date);
-    // eslint-disable-next-line
   }, []);
 
   // Fetch weather when city or date changes
@@ -113,21 +91,29 @@ export default function LiveWeatherAdvisor() {
     if (city && date) {
       fetchWeather(city, date);
     }
-    // eslint-disable-next-line
   }, [city, date]);
 
   // Helper: summarize historical rain (using day_summary)
-  function rainAdvice(hist) {
-    if (!hist) return null;
+  // Helper: summarize historical rain (using day_summary)
+  type HistoricalYear = {
+    date?: string;
+    temperature?: { min: number; max: number };
+    precipitation?: { total: number };
+    [key: string]: any;
+  };
+
+  function rainAdvice(hist: HistoricalYear[] | null) {
+    if (!hist || !Array.isArray(hist)) return "No historical data available.";
     let rainCount = 0;
-    hist.forEach(year => {
-      if (year.precipitation && year.precipitation.total && year.precipitation.total > 0) rainCount++;
+    hist.forEach((year: HistoricalYear) => {
+      if (year && year.precipitation && year.precipitation.total > 0) {
+        rainCount++;
+      }
     });
     if (rainCount >= 3) return `It has rained ${rainCount} of the last 5 years on this date — plan for rain!`;
     if (rainCount > 0) return `Rain possible: ${rainCount} of the last 5 years had rain on this date.`;
     return `Low chance of rain based on the last 5 years.`;
   }
-
   return (
     <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200 mt-8">
       <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-sky-700 tracking-tight flex items-center gap-2">
@@ -161,54 +147,33 @@ export default function LiveWeatherAdvisor() {
         <div className="mb-4">
           <h4 className="text-lg font-bold text-sky-800 mb-2">Current Weather</h4>
           <div className="flex flex-wrap gap-6 text-lg text-gray-800">
-            <div><b>Now:</b> {Math.round(currentWeather.temp)}°F, {currentWeather.weather[0]?.description}</div>
-            <div><b>Feels like:</b> {Math.round(currentWeather.feels_like)}°F</div>
-            <div><b>Wind:</b> {currentWeather.wind_speed} mph {currentWeather.wind_deg ? `(from ${currentWeather.wind_deg}°)` : ""}</div>
-            <div><b>Humidity:</b> {currentWeather.humidity}%</div>
-            <div><b>Clouds:</b> {currentWeather.clouds}%</div>
-            <div><b>UV Index:</b> {currentWeather.uvi}</div>
-            {currentWeather.rain && <div><b>Rain:</b> {currentWeather.rain["1h"] || currentWeather.rain} in last hour</div>}
-            {currentWeather.snow && <div><b>Snow:</b> {currentWeather.snow["1h"] || currentWeather.snow} in last hour</div>}
-            <div><b>Visibility:</b> {currentWeather.visibility / 1609.34 > 1 ? (currentWeather.visibility / 1609.34).toFixed(1) + ' mi' : currentWeather.visibility + ' m'}</div>
+            <div><b>Now:</b> {Math.round(currentWeather.temperature)}°F</div>
+            <div><b>Wind:</b> {currentWeather.windspeed} mph</div>
+            <div><b>Weather Code:</b> {currentWeather.weathercode}</div>
           </div>
         </div>
       )}
       {/* Forecast for next 7 days */}
-      {forecast && Array.isArray(forecast) && (
+      {forecast && forecast.time && (
         <div className="mb-4">
           <h4 className="text-lg font-bold text-sky-800 mb-2">7-Day Forecast</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {forecast.map((day, i) => (
+            {forecast.time.map((date, i) => (
               <div key={i} className="bg-white rounded-xl shadow p-3 text-center border border-sky-200">
-                <div className="font-bold text-sky-700">{new Date(day.dt * 1000).toLocaleDateString()}</div>
-                <div className="text-2xl">{day.weather[0]?.main}</div>
-                <div className="text-sm text-gray-700">{Math.round(day.temp.min)}°F - {Math.round(day.temp.max)}°F</div>
-                <div className="text-xs text-gray-500">{day.weather[0]?.description}</div>
-                <div className="text-xs text-gray-700">Rain: {day.rain ? day.rain + 'mm' : '—'} | Snow: {day.snow ? day.snow + 'mm' : '—'}</div>
-                <div className="text-xs text-gray-700">Wind: {day.wind_speed} mph</div>
+                <div className="font-bold text-sky-700">{new Date(date).toLocaleDateString()}</div>
+                <div className="text-2xl">{forecast.weathercode[i]}</div>
+                <div className="text-sm text-gray-700">{Math.round(forecast.temperature_2m_min[i])}°F - {Math.round(forecast.temperature_2m_max[i])}°F</div>
+                <div className="text-xs text-gray-700">Precip: {forecast.precipitation_sum[i]} in</div>
               </div>
             ))}
           </div>
         </div>
       )}
       {/* Historical average for this date */}
-      {historical && Array.isArray(historical) && (
+      {historical === null && error && error.includes('Historical') && (
         <div className="mb-4">
-          <h4 className="text-lg font-bold text-sky-800 mb-2">Historical Weather (last 5 years on this date)</h4>
-          <ul className="list-disc pl-6 text-gray-800">
-            {historical.map((year, i) => (
-              <li key={i}>
-                {year.date ? (
-                  <>
-                    {year.date}: {year.temperature ? `${Math.round(year.temperature.min)}°F - ${Math.round(year.temperature.max)}°F` : 'No temp data'}{year.precipitation && year.precipitation.total > 0 ? `, Rain: ${year.precipitation.total}mm` : ', No rain'}
-                  </>
-                ) : (
-                  <>No data for {i + 1} years ago</>
-                )}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-2 text-sky-700 font-semibold">{rainAdvice(historical)}</div>
+          <h4 className="text-lg font-bold text-sky-800 mb-2">Historical Weather</h4>
+          <div className="text-gray-800">Historical weather data is not available with this API key.</div>
         </div>
       )}
       {/* Smart Packing Reminders, Comfort Tips, etc. (dynamic) */}
