@@ -757,94 +757,106 @@ Show off your ride, your event, or your crew—then share the link anywhere!
   <PollsSection />
   {/* Live Weather & Comfort Advisor */}
   <LiveWeatherAdvisor />
-  {/* Did You Know (Modern Scrollable Cards) */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
-          <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
-          <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
-            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
-              <div className="text-4xl mb-2">🛋️</div>
-              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Book by comfort, not max headcount</div>
-              <div className="text-blue-800 text-center text-base">Most buses seat more than their ‘comfortable’ number.</div>
-            </div>
-            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
-              <div className="text-4xl mb-2">🎓</div>
-              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Prom Saturdays sell out first</div>
-              <div className="text-blue-800 text-center text-base">Book 3–6 weeks early (Mar–May) for best selection.</div>
-            </div>
-            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
-              <div className="text-4xl mb-2">🚦</div>
-              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Gameday traffic can double travel time</div>
-              <div className="text-blue-800 text-center text-base">Add a 30–45 min buffer for big events.</div>
-            </div>
-            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
-              <div className="text-4xl mb-2">💡</div>
-              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">LED party lighting uses almost no power</div>
-              <div className="text-blue-800 text-center text-base">Run it the whole trip for max fun.</div>
-            </div>
-            <div className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
-              <div className="text-4xl mb-2">📍</div>
-              <div className="font-semibold text-lg text-blue-900 mb-1 text-center">Most venues require a loading zone</div>
-              <div className="text-blue-800 text-center text-base">Ask us for the exact pin to avoid delays.</div>
-            </div>
-          </div>
-          <div className="flex justify-center mt-8">
-            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Facts</button>
-          </div>
-        </div>
-        {/* Blog Topics */}
-        {/* Blog Topics (Cards with Image, Intro, Button) */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
-          <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Blog Topics</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
-              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">💍</div>
-              <div className="font-bold text-lg mb-2 text-blue-900">Wedding Shuttle Timeline: Exactly When to Book & How Many Runs</div>
-              <div className="text-blue-800 mb-3">A step-by-step guide to planning your wedding shuttle, including timing and logistics for stress-free transport.</div>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
-              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">🚌</div>
-              <div className="font-bold text-lg mb-2 text-blue-900">Prom Bus Safety & Rules (Parents’ Quick Guide)</div>
-              <div className="text-blue-800 mb-3">Everything parents need to know about prom bus safety, rules, and peace of mind for the big night.</div>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
-              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">🏟️</div>
-              <div className="font-bold text-lg mb-2 text-blue-900">College Gameday Bus: Tailgate Checklist + Stadium Drop-offs (DAL/AUS/HOU/DEN)</div>
-              <div className="text-blue-800 mb-3">Your ultimate checklist for a winning tailgate and smooth stadium drop-off in major cities.</div>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
-              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">💰</div>
-              <div className="font-bold text-lg mb-2 text-blue-900">How Much Does a Party Bus Cost in [City]? (Real Ranges + Examples)</div>
-              <div className="text-blue-800 mb-3">See real price ranges and examples for party bus rentals in your city, so you can budget with confidence.</div>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
-            </div>
-            <div className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
-              <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">🤔</div>
-              <div className="font-bold text-lg mb-2 text-blue-900">Charter Bus vs Party Bus vs Limo: What’s Right for Your Group?</div>
-              <div className="text-blue-800 mb-3">Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.</div>
-              <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
-            </div>
-          </div>
-          <div className="flex justify-center mt-8">
-            <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Blog Posts</button>
-          </div>
-        </div>
-      </section>
 
-      {/* Contact & Booking CTA */}
-      <section className="bg-blue-900 text-white py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-4">Book Your Bus or Limo Today!</h2>
-          <div className="flex flex-wrap justify-center gap-6 mb-6">
-            <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
-              {/* PollsSection replaces all static poll markup */}
-              {/* Footer and other elements should be implemented in a separate layout or Footer component if needed */}
-            </div>
-          </div>
+  {/* Did You Know (Modern Scrollable Cards) */}
+  <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
+    <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
+    <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
+      {[
+        {
+          icon: "🛋️",
+          title: "Book by comfort, not max headcount",
+          desc: "Most buses seat more than their ‘comfortable’ number.",
+        },
+        {
+          icon: "🎓",
+          title: "Prom Saturdays sell out first",
+          desc: "Book 3–6 weeks early (Mar–May) for best selection.",
+        },
+        {
+          icon: "🚦",
+          title: "Gameday traffic can double travel time",
+          desc: "Add a 30–45 min buffer for big events.",
+        },
+        {
+          icon: "💡",
+          title: "LED party lighting uses almost no power",
+          desc: "Run it the whole trip for max fun.",
+        },
+        {
+          icon: "📍",
+          title: "Most venues require a loading zone",
+          desc: "Ask us for the exact pin to avoid delays.",
+        },
+      ].map((fact, idx) => (
+        <div key={idx} className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
+          <div className="text-4xl mb-2">{fact.icon}</div>
+          <div className="font-semibold text-lg text-blue-900 mb-1 text-center">{fact.title}</div>
+          <div className="text-blue-800 text-center text-base">{fact.desc}</div>
         </div>
-      </section>
+      ))}
+    </div>
+    <div className="flex justify-center mt-8">
+      <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Facts</button>
+    </div>
+  </section>
+
+  {/* Blog Topics */}
+  <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
+    <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Blog Topics</h3>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+      {[
+        {
+          icon: "💍",
+          title: "Wedding Shuttle Timeline: Exactly When to Book & How Many Runs",
+          desc: "A step-by-step guide to planning your wedding shuttle, including timing and logistics for stress-free transport.",
+        },
+        {
+          icon: "🚌",
+          title: "Prom Bus Safety & Rules (Parents’ Quick Guide)",
+          desc: "Everything parents need to know about prom bus safety, rules, and peace of mind for the big night.",
+        },
+        {
+          icon: "🏟️",
+          title: "College Gameday Bus: Tailgate Checklist + Stadium Drop-offs (DAL/AUS/HOU/DEN)",
+          desc: "Your ultimate checklist for a winning tailgate and smooth stadium drop-off in major cities.",
+        },
+        {
+          icon: "💰",
+          title: "How Much Does a Party Bus Cost in [City]? (Real Ranges + Examples)",
+          desc: "See real price ranges and examples for party bus rentals in your city, so you can budget with confidence.",
+        },
+        {
+          icon: "🤔",
+          title: "Charter Bus vs Party Bus vs Limo: What’s Right for Your Group?",
+          desc: "Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.",
+        },
+      ].map((blog, idx) => (
+        <div key={idx} className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
+          <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">{blog.icon}</div>
+          <div className="font-bold text-lg mb-2 text-blue-900">{blog.title}</div>
+          <div className="text-blue-800 mb-3">{blog.desc}</div>
+          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
+        </div>
+      ))}
+    </div>
+    <div className="flex justify-center mt-8">
+      <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Blog Posts</button>
+    </div>
+  </section>
+
+  {/* Contact & Booking CTA */}
+  <section className="bg-blue-900 text-white py-12">
+    <div className="max-w-4xl mx-auto px-4 text-center">
+      <h2 className="text-2xl font-bold mb-4">Book Your Bus or Limo Today!</h2>
+      <div className="flex flex-wrap justify-center gap-6 mb-6">
+        <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
+          {/* PollsSection replaces all static poll markup */}
+          {/* Footer and other elements should be implemented in a separate layout or Footer component if needed */}
+        </div>
+      </div>
+    </div>
+  </section>
     </>
   );
 }
