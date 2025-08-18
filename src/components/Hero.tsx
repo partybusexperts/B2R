@@ -1,7 +1,6 @@
 // Hero.tsx
-"use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const images = [
   "/images/Bus-1.png",
@@ -40,10 +39,10 @@ export default function HeroSlideshow() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40 z-10" />
 
       <div className="relative z-20 flex flex-col items-center justify-center h-full w-full px-6 md:px-10 lg:px-16">
-        <h1 className="text-4xl md:text-7xl font-extrabold text-white text-center drop-shadow-lg mb-4">
+        <h1 className="text-4xl md:text-7xl font-extrabold text-center mb-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
           Bus 2 Ride
         </h1>
-        <h2 className="text-xl md:text-3xl font-semibold text-white text-center mb-8 opacity-90 max-w-2xl">
+        <h2 className="text-xl md:text-3xl font-semibold text-center mb-8 opacity-90 max-w-2xl bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
           The Ultimate in Luxury Vehicle Rentals
         </h2>
 

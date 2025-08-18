@@ -112,10 +112,11 @@ export default function Home() {
       <Section className="!p-0 !py-0">
         <HeroSlideshow />
       </Section>
+      <div className="h-10 md:h-16" />
       <Section className="max-w-6xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 items-center bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl">
         <div>
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-10 mt-8 text-blue-900 tracking-tight font-serif drop-shadow-sm" style={{ letterSpacing: "0.01em" }}>
-            Why Rent With <span className="text-blue-700">Bus2Ride?</span>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-10 mt-8 tracking-tight font-serif text-blue-700" style={{ letterSpacing: "0.01em" }}>
+            Why Rent With <span className="text-blue-500 font-extrabold">Bus2Ride?</span>
           </h2>
           <WhyRentWithUs />
         </div>
@@ -125,7 +126,7 @@ export default function Home() {
       </Section>
       {/* Party Buses Section */}
       <Section className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
           Party Buses
         </h2>
 
@@ -200,9 +201,9 @@ export default function Home() {
         {/* Party Bus Features as Modal Buttons (like Why Rent With Us) */}
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
-    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
-          Popular Party Bus Features
-        </h2>
+    <h2 className="text-3xl md:text-4xl font-extrabold mb-6 mt-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg md:w-1/4">
+      Popular Party Bus Features
+    </h2>
     <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
       {[
       {
@@ -274,9 +275,9 @@ export default function Home() {
 
     {/* Limos Section */}
     <Section className="max-w-6xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
-          Limousines
-        </h2>
+      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
+        Limousines
+      </h2>
         {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
         <div className="relative flex items-center justify-center mb-8" style={{ minHeight: '260px' }}>
           {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
@@ -347,7 +348,7 @@ export default function Home() {
         {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
-            <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-6 mt-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg md:w-1/4">
               Popular Limo Features
             </h2>
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
@@ -422,7 +423,7 @@ export default function Home() {
 
     {/* Coach Buses Section */}
     <Section className="max-w-6xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
+      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
         Coach Buses
       </h2>
 
@@ -496,9 +497,9 @@ export default function Home() {
       {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center gap-6">
-  <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
-          Popular Coach Bus Features
-        </h2>
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-6 mt-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg md:w-1/4">
+        Popular Coach Bus Features
+      </h2>
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
           {[
           {
