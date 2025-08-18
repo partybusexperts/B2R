@@ -142,10 +142,7 @@ export default function LiveWeatherAdvisor() {
     return `Low chance of rain based on the last 5 years.`;
   }
   return (
-    <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200 mt-8">
-      <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-sky-700 tracking-tight flex items-center gap-2">
-        <span role="img" aria-label="fire">🔥</span> Smart Weather & Comfort Tips
-      </h3>
+  <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200 mt-8">
       <form className="flex flex-col md:flex-row gap-4 mb-6 items-end" onSubmit={handleSubmit}>
         <div>
           <label className="block text-sm font-bold text-sky-800 mb-1">City</label>

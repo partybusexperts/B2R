@@ -141,7 +141,7 @@ export default function Home() {
 
       {/* Party Buses Section */}
   <section className="max-w-6xl mx-auto px-4 py-12">
-    <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 text-center mb-6 tracking-tight">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
       Party Buses
     </h2>
 
@@ -290,7 +290,7 @@ export default function Home() {
 
       {/* Limos Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
           Limousines
         </h2>
         {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
@@ -438,7 +438,7 @@ export default function Home() {
 
       {/* Coach Buses Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
         Coach Buses
       </h2>
 
@@ -715,7 +715,7 @@ export default function Home() {
 
       {/* Testimonials */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
           What Our Customers Say
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 max-w-4xl mx-auto">
@@ -782,7 +782,7 @@ export default function Home() {
       </section>
  {/* Tools Section (original slider version) */}
       <section className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
           Tools
         </h2>
         <p className="text-lg text-center text-blue-900 mb-6 max-w-2xl mx-auto">
@@ -793,15 +793,26 @@ export default function Home() {
         </div>
       </section>
   {/* Polls */}
+  <div className="max-w-6xl mx-auto px-4 mt-12 mb-2">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-2 tracking-tight">Limo Industry Polls</h2>
+    <p className="text-lg text-center text-blue-900 mb-6 max-w-2xl mx-auto">
+      See what real riders and industry pros are saying! Our live polls help you compare trends, get honest opinions, and make smarter choices for your next trip. Vote, view results, and join the conversation.
+    </p>
+  </div>
   <PollsSection />
   {/* Live Weather & Comfort Advisor */}
-  <LiveWeatherAdvisor />
+  <div className="py-8">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-sky-700 text-center mb-8 tracking-tight flex items-center gap-2">
+      <span role="img" aria-label="fire">🔥</span> Smart Weather & Comfort Tips
+    </h2>
+    <LiveWeatherAdvisor />
+  </div>
 
       {/* Review Submission & Slideshow Maker (Python backend suggestion) */}
       <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-12">
         {/* Review Submission */}
         <div className="flex-1 min-w-[260px]">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 mb-4 tracking-tight drop-shadow text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
             Leave a Review & Get Featured Above!
           </h2>
           <p className="text-gray-700 mb-4">
@@ -824,7 +835,7 @@ export default function Home() {
 
         {/* Slideshow Maker */}
         <div className="flex-1 min-w-[260px] border-l border-gray-200 pl-0 md:pl-8 flex flex-col items-center md:items-start">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 mb-4 tracking-tight drop-shadow text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
             Make & Share Your Slideshow Video
           </h2>
           <p className="text-gray-700 mb-4">
@@ -863,7 +874,7 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           <rect x="120" y="120" width="16" height="16" rx="4" fill="#34d399"/>
           <circle cx="40" cy="200" r="12" fill="#818cf8"/>
         </svg>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight">Events & Occasions</h2>
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">Events & Occasions</h2>
         {/* Render events in rows of 5, only once */}
         {Array.from({ length: Math.ceil(eventNames.length / 5) }).map((_, rowIdx) => (
   <React.Fragment key={rowIdx}>
