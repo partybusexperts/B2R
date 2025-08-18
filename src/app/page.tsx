@@ -947,7 +947,7 @@ export default function Home() {
         </Section>
 
   {/* Blog Topics */}
-  <div className="max-w-6xl mx-auto px-4 mt-16 mb-2">
+  <div className="max-w-6xl mx-auto px-4 mb-2">
   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">Blog Topics</h2>
     <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
       Dive into our expert blog for tips, guides, and real-world advice on planning the perfect group trip. From wedding shuttles to prom safety, cost breakdowns, and more—get the knowledge you need to book with confidence and make your event unforgettable.
@@ -999,13 +999,7 @@ export default function Home() {
   {/* Contact & Booking CTA */}
   <Section className="bg-blue-900 text-white">
     <div className="max-w-4xl mx-auto px-4 text-center">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">Book Your Bus or Limo Today!</h2>
-      <div className="flex flex-wrap justify-center gap-6 mb-6">
-        <div className="bg-blue-700 rounded-lg px-6 py-3 font-bold text-lg">
-          {/* PollsSection replaces all static poll markup */}
-          {/* Footer and other elements should be implemented in a separate layout or Footer component if needed */}
-        </div>
-      </div>
+      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight leading-[1.15] pb-2">Book Your Party Bus or Limo Today!</h2>
     </div>
   </Section>
   </PageLayout>
