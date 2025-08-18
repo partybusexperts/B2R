@@ -551,45 +551,77 @@ export default function Home() {
 
       {/* How It Works */}
       <section className="max-w-4xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-900">
-          How It Works
-        </h2>
-        <div className="grid md:grid-cols-4 gap-6 text-center">
-          {/* Step 1 */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-            <span className="text-4xl mb-3">📞</span>
-            <PartyBusFeatureModalButton
-              label="1. Contact Us"
-              title="Contact Us"
-              content={
-                <>
-                  <p>Call, email, or fill out our quote form to get started. Our team will help you find the perfect vehicle for your event.</p>
-                </>
-              }
-            />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          <h2 className="text-2xl font-bold text-center mb-6 text-blue-900">
+            How It Works
+          </h2>
+          <div className="grid md:grid-cols-4 gap-6 text-center">
+            {/* Step 1 */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+          <span className="text-4xl mb-3">📞</span>
+          <PartyBusFeatureModalButton
+            label="1. Contact Us"
+            title="Contact Us"
+            content={
+              <>
+            <p>Call, email, or fill out our quote form to get started. Our team will help you find the perfect vehicle for your event.</p>
+              </>
+            }
+          />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+            </div>
+            {/* Step 2 */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+          <span className="text-4xl mb-3">💬</span>
+          <PartyBusFeatureModalButton
+            label="2. Get a Quote"
+            title="Get a Quote"
+            content={
+              <>
+            <p>
+              Receive a fast, transparent quote based on your trip details—city, date, hours, and group size. No hidden fees.
+            </p>
+              </>
+            }
+          />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+            </div>
+            {/* Step 3 */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+          <span className="text-4xl mb-3">📝</span>
+          <PartyBusFeatureModalButton
+            label="3. Reserve Your Ride"
+            title="Reserve Your Ride"
+            content={
+              <>
+            <p>
+              Lock in your vehicle with a deposit. We’ll confirm all details and send your reservation agreement for review.
+            </p>
+              </>
+            }
+          />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+            </div>
+            {/* Step 4 */}
+            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+          <span className="text-4xl mb-3">🎉</span>
+          <PartyBusFeatureModalButton
+            label="4. Finalize & Ride"
+            title="Finalize & Ride"
+            content={
+              <>
+            <p>
+              Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
+            </p>
+            <div className="text-gray-700 text-base mt-2">
+              Finalize details & enjoy your trip!
+            </div>
+              </>
+            }
+          />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+            </div>
           </div>
-          {/* Step 4 (example, more steps can be added similarly) */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-            <span className="text-4xl mb-3">🎉</span>
-            <PartyBusFeatureModalButton
-              label="4. Finalize & Ride"
-              title="Finalize & Ride"
-              content={
-                <>
-                  <p>
-                    Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
-                  </p>
-                  <div className="text-gray-700 text-base mt-2">
-                    Finalize details & enjoy your trip!
-                  </div>
-                </>
-              }
-            />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-          </div>
-        </div>
-      </section>
+        </section>
 
       {/* Testimonials */}
       <section className="max-w-5xl mx-auto px-4 py-12">
@@ -738,20 +770,13 @@ Show off your ride, your event, or your crew—then share the link anywhere!
   </section>
   {/* Blog & Resources */}
       {/* Blog & Resources (Staggered, Modern Blocks) */}
+      {/* Tools Section (original slider version) */}
       <section className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
-          Vehicle Match & Booking Tools
+          Tools
         </h2>
-                {/* Slider/Carousel for tools section */}
-                <ToolsSlider />
-
-
-        <div className="flex justify-center mt-10">
-          <Link href="/tools" passHref legacyBehavior>
-            <a className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-2xl shadow-xl text-lg transition">
-              More Tools
-            </a>
-          </Link>
+        <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100">
+          <ToolsSlider />
         </div>
       </section>
   {/* Polls */}

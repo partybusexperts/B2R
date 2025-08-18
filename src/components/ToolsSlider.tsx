@@ -1,4 +1,5 @@
 import React, { useState, Suspense, lazy } from "react";
+import type { JSX } from "react";
 
 // Lazy-load heavy tools so they don't affect card sizing/layout
 const CapacityFinderTool = lazy(() => import("../components/CapacityFinderTool"));
@@ -7,19 +8,27 @@ const BudgetEstimator = lazy(() => import("../components/BudgetEstimator"));
 const PlaylistStarter = lazy(() => import("../components/PlaylistStarter"));
 const TailgateChecklist = lazy(() => import("../components/TailgateChecklist"));
 
+const RoutePlanner = lazy(() => import("../components/RoutePlanner"));
+const WeatherChecker = lazy(() => import("../components/WeatherChecker"));
+const AccessibilityGuide = lazy(() => import("../components/AccessibilityGuide"));
+const EventSync = lazy(() => import("../components/EventSync"));
+
 type ToolId =
   | "capacity"
   | "compare"
   | "budget"
   | "playlist"
-  | "tailgate";
+  | "tailgate"
+  | "route"
+  | "weather"
+  | "accessibility"
+  | "eventsync";
 
 const TOOLS: {
   id: ToolId;
   title: string;
   icon: string;
   desc: string;
-  // pass a component factory so it only renders when opened
   render: () => JSX.Element;
 }[] = [
   {
@@ -57,6 +66,34 @@ const TOOLS: {
     desc: "Everything you need for game day.",
     render: () => <TailgateChecklist />,
   },
+  {
+    id: "route",
+    title: "Route Planner",
+    icon: "🗺️",
+    desc: "Map your trip and optimize stops easily.",
+    render: () => <RoutePlanner />,
+  },
+  {
+    id: "weather",
+    title: "Weather Checker",
+    icon: "🌤️",
+    desc: "Check the forecast for your trip dates.",
+    render: () => <WeatherChecker />,
+  },
+  {
+    id: "accessibility",
+    title: "Accessibility Guide",
+    icon: "♿",
+    desc: "Find accessible vehicles and trip tips.",
+    render: () => <AccessibilityGuide />,
+  },
+  {
+    id: "eventsync",
+    title: "Event Sync",
+    icon: "📅",
+    desc: "Sync your trip with calendars and events.",
+    render: () => <EventSync />,
+  },
 ];
 
 export default function ToolsShowcase() {
@@ -65,7 +102,7 @@ export default function ToolsShowcase() {
 
   return (
     <section className="mx-auto max-w-6xl">
-      {/* Mobile: horizontal scroll; Desktop: grid */}
+      {/* Mobile: horizontal scroll */}
       <div className="md:hidden -mx-4 px-4 overflow-x-auto no-scrollbar">
         <div className="flex gap-4">
           {TOOLS.map(tool => (
@@ -73,25 +110,15 @@ export default function ToolsShowcase() {
           ))}
         </div>
       </div>
-
-      <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Desktop: grid view */}
+      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {TOOLS.map(tool => (
           <ToolCard key={tool.id} tool={tool} onOpen={() => setOpenId(tool.id)} />
         ))}
       </div>
-
-      {/* Modal (simple Tailwind modal; replace with your UI lib if you prefer) */}
-      {current && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setOpenId(null)}
-            aria-hidden
-          />
+      {/* Modal for tool details */}
+      {openId && current && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" role="dialog" aria-modal="true">
           <div className="relative z-10 w-full max-w-3xl rounded-2xl bg-white shadow-xl">
             <div className="flex items-center justify-between p-4 border-b">
               <h3 className="text-lg font-semibold">
@@ -134,7 +161,7 @@ function ToolCard({
     <div
       className="bg-[#eaf0ff] rounded-2xl shadow-sm border border-[#d7e2ff] p-4 flex flex-col justify-between
                  min-w-[260px] w-[280px] md:w-auto md:min-w-0
-                 h-56"  // equal height cards
+                 h-56"
     >
       <div>
         <h3 className="text-blue-900 text-lg font-bold mb-1 flex items-center gap-2">
@@ -160,4 +187,10 @@ function ToolCard({
 /* Optional: hide scrollbars for mobile strip (add to globals.css if needed)
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+*/
+
+/*
+TODO:
+- Implement the new tool components: RoutePlanner, WeatherChecker, AccessibilityGuide, EventSync in ../components/
+- If icons or descriptions need refinement, update as needed.
 */
