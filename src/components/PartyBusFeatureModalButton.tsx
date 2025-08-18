@@ -18,7 +18,7 @@ export default function PartyBusFeatureModalButton({ title, content, label }: Pr
         aria-label={label}
       >
         <span className="text-blue-500 text-xl mr-2">★</span>
-        {label}
+        <span className="text-blue-900 font-bold drop-shadow-sm">{label}</span>
       </button>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

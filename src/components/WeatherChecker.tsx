@@ -137,43 +137,43 @@ export default function WeatherChecker() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-xl shadow p-4 border border-sky-200 mt-4 text-[15px]">
-      <h3 className="text-lg md:text-xl font-bold mb-2 text-sky-700 tracking-tight flex items-center gap-2">
+  <div className="text-[15px]">
+      <h3 className="text-lg md:text-xl font-bold mb-2 text-blue-200 tracking-tight flex items-center gap-2">
         <span role="img" aria-label="cloud">☁️</span> Weather Checker
       </h3>
       <form className="flex flex-row gap-2 mb-3 items-end" onSubmit={handleSubmit}>
         <div>
-          <label className="block text-xs font-bold text-sky-800 mb-1">City</label>
+          <label className="block text-xs font-bold text-blue-200 mb-1">City</label>
           <input
-            className="input text-sm px-2 py-1"
+            className="text-sm px-2 py-1 rounded bg-blue-950/80 border border-blue-700/60 text-white placeholder:text-blue-300 focus:ring-2 focus:ring-blue-400 outline-none shadow"
             value={pendingCity}
             onChange={e => setPendingCity(e.target.value)}
             placeholder={autoCity || "Enter city"}
             style={{ width: 120 }}
           />
         </div>
-        <button type="submit" className="btn bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow text-sm">Go</button>
+        <button type="submit" className="bg-gradient-to-r from-blue-700 to-green-500 text-white px-3 py-1 rounded font-bold shadow text-sm hover:scale-105 transition-transform">Go</button>
         {/* Weather forecast location summary */}
         {city && (
-          <div className="ml-2 text-sky-800 font-semibold whitespace-nowrap text-xs">
+          <div className="ml-2 text-blue-200 font-semibold whitespace-nowrap text-xs">
             Forecast for {city}{region ? `, ${region}` : ''}
           </div>
         )}
       </form>
-      {loading && <div className="text-sky-700 font-semibold text-sm">Loading weather...</div>}
-      {error && <div className="text-red-600 font-semibold text-sm">{error}</div>}
+      {loading && <div className="text-blue-300 font-semibold text-sm">Loading weather...</div>}
+      {error && <div className="text-red-400 font-semibold text-sm">{error}</div>}
       {/* Current Weather Details (NWS or Open-Meteo) */}
       {currentWeather && currentWeather.nws && (
         <div className="mb-2">
-          <div className="font-bold text-sky-900 mb-1 text-sm">Current: {currentWeather.name || currentWeather.shortForecast}</div>
-          <div className="text-sky-800 text-xs">Temp: {currentWeather.temperature}°F</div>
-          <div className="text-sky-800 text-xs">Wind: {currentWeather.windSpeed} {currentWeather.windDirection}</div>
+          <div className="font-bold text-blue-100 mb-1 text-sm">Current: {currentWeather.name || currentWeather.shortForecast}</div>
+          <div className="text-blue-200 text-xs">Temp: {currentWeather.temperature}°F</div>
+          <div className="text-blue-200 text-xs">Wind: {currentWeather.windSpeed} {currentWeather.windDirection}</div>
         </div>
       )}
       {currentWeather && !currentWeather.nws && (
         <div className="mb-2">
-          <div className="font-bold text-sky-900 mb-1 text-sm">Current: {currentWeather.temperature}°F</div>
-          <div className="text-sky-800 text-xs">Wind: {currentWeather.windspeed} mph</div>
+          <div className="font-bold text-blue-100 mb-1 text-sm">Current: {currentWeather.temperature}°F</div>
+          <div className="text-blue-200 text-xs">Wind: {currentWeather.windspeed} mph</div>
         </div>
       )}
       {/* Forecast Table (NWS or Open-Meteo) */}
@@ -181,7 +181,7 @@ export default function WeatherChecker() {
         <div className="overflow-x-auto">
           <table className="min-w-[320px] w-full text-xs mt-1">
             <thead>
-              <tr className="bg-sky-100">
+              <tr className="bg-blue-900/80 text-blue-200">
                 <th className="p-1 text-left">Period</th>
                 <th className="p-1 text-left">Forecast</th>
                 <th className="p-1 text-left">Temp</th>
@@ -190,11 +190,11 @@ export default function WeatherChecker() {
             </thead>
             <tbody>
               {forecast.periods.map((p: any) => (
-                <tr key={p.number} className="border-b">
-                  <td className="p-1 font-bold">{p.name}</td>
-                  <td className="p-1">{p.shortForecast}</td>
-                  <td className="p-1">{p.temperature}°F</td>
-                  <td className="p-1">{p.probabilityOfPrecipitation?.value ? `${p.probabilityOfPrecipitation.value}%` : "-"}</td>
+                <tr key={p.number} className="border-b border-blue-800/40">
+                  <td className="p-1 font-bold text-blue-100">{p.name}</td>
+                  <td className="p-1 text-blue-200">{p.shortForecast}</td>
+                  <td className="p-1 text-blue-200">{p.temperature}°F</td>
+                  <td className="p-1 text-blue-200">{p.probabilityOfPrecipitation?.value ? `${p.probabilityOfPrecipitation.value}%` : "-"}</td>
                 </tr>
               ))}
             </tbody>
@@ -205,7 +205,7 @@ export default function WeatherChecker() {
         <div className="overflow-x-auto">
           <table className="min-w-[320px] w-full text-xs mt-1">
             <thead>
-              <tr className="bg-sky-100">
+              <tr className="bg-blue-900/80 text-blue-200">
                 <th className="p-1 text-left">Date</th>
                 <th className="p-1 text-left">High</th>
                 <th className="p-1 text-left">Low</th>
@@ -214,11 +214,11 @@ export default function WeatherChecker() {
             </thead>
             <tbody>
               {forecast.time.map((date: string, i: number) => (
-                <tr key={date} className="border-b">
-                  <td className="p-1 font-bold">{date}</td>
-                  <td className="p-1">{forecast.temperature_2m_max[i]}°F</td>
-                  <td className="p-1">{forecast.temperature_2m_min[i]}°F</td>
-                  <td className="p-1">{forecast.precipitation_sum[i] > 0 ? `${forecast.precipitation_sum[i]} in` : "-"}</td>
+                <tr key={date} className="border-b border-blue-800/40">
+                  <td className="p-1 font-bold text-blue-100">{date}</td>
+                  <td className="p-1 text-blue-200">{forecast.temperature_2m_max[i]}°F</td>
+                  <td className="p-1 text-blue-200">{forecast.temperature_2m_min[i]}°F</td>
+                  <td className="p-1 text-blue-200">{forecast.precipitation_sum[i] > 0 ? `${forecast.precipitation_sum[i]} in` : "-"}</td>
                 </tr>
               ))}
             </tbody>
@@ -227,7 +227,7 @@ export default function WeatherChecker() {
       )}
       {/* Rain advice (if historical data available) */}
       {historical && (
-        <div className="mt-2 text-sky-800 font-semibold text-xs">{rainAdvice(historical)}</div>
+        <div className="mt-2 text-blue-200 font-semibold text-xs">{rainAdvice(historical)}</div>
       )}
     </div>
   );

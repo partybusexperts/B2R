@@ -1,15 +1,10 @@
+"use client";
 import React, { Suspense, lazy } from "react";
-import type { Metadata } from "next";
 import PageLayout from "../../components/PageLayout";
 import Section from "../../components/Section";
 
 
 
-
-export const metadata: Metadata = {
-  title: 'Limo Tools',
-  viewport: 'width=device-width, initial-scale=1.0',
-};
 
 const CapacityFinderTool = lazy(() => import("../../components/CapacityFinderTool"));
 const VehicleComparisonTool = lazy(() => import("../../components/VehicleComparisonTool"));
