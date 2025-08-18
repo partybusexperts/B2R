@@ -19,6 +19,10 @@ export default function HeroSlideshow() {
     return () => clearInterval(id);
   }, []);
 
+  // Shared button classes for consistent sizing
+  const buttonBase =
+    "rounded-full font-bold px-8 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center";
+
   return (
     <section className="relative h-[90vh] min-h-[600px] w-full overflow-hidden flex items-center justify-center">
       {images.map((src, i) => (
@@ -47,30 +51,28 @@ export default function HeroSlideshow() {
           <div className="flex gap-4 flex-wrap justify-center">
             <a
               href="/quote"
-              className="rounded-full bg-white text-blue-800 font-bold px-8 py-3 text-lg shadow-lg hover:bg-blue-50 hover:text-blue-900 transition border border-blue-200"
+              className={`${buttonBase} bg-white text-blue-800 hover:bg-blue-50 hover:text-blue-900 border-blue-200`}
               style={{ letterSpacing: "0.03em" }}
             >
               Get Instant Quote
             </a>
             <a
               href="/fleet"
-              className="rounded-full bg-blue-700 text-white font-bold px-8 py-3 text-lg shadow-lg hover:bg-blue-800 transition border border-blue-800"
+              className={`${buttonBase} bg-blue-700 text-white hover:bg-blue-800 border-blue-800`}
               style={{ letterSpacing: "0.03em" }}
             >
               View Fleet
             </a>
+            <a
+              href="tel:8885352566"
+              aria-label="Call Bus2Ride at 888-535-2566"
+              className={`${buttonBase} bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900`}
+              style={{ letterSpacing: "0.03em" }}
+            >
+              <span className="relative text-blue-500 text-xl phone-nudge mr-2">📞</span>
+              <span className="relative">(888) 535-2566</span>
+            </a>
           </div>
-
-          {/* Call button with gentle icon nudge */}
-          <a
-            href="tel:8885352566"
-            aria-label="Call Bus2Ride at 888-535-2566"
-            className="relative inline-flex items-center gap-2 mt-4 rounded-full bg-white text-blue-800 font-bold px-8 py-3 text-lg shadow-lg border-2 border-blue-200 hover:bg-blue-50 hover:text-blue-900 transition"
-            style={{ letterSpacing: "0.03em" }}
-          >
-            <span className="relative text-blue-500 text-xl phone-nudge">📞</span>
-            <span className="relative">(888) 535-2566</span>
-          </a>
         </div>
       </div>
 
