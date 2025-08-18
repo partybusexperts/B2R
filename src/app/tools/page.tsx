@@ -1,9 +1,11 @@
 
 
-import PickupTimingPlanner from '../../components/PickupTimingPlanner';
-import type { Metadata } from 'next';
 
-import React from 'react';
+import React from "react";
+import PageLayout from "../../components/PageLayout";
+import Section from "../../components/Section";
+import PickupTimingPlanner from "../../components/PickupTimingPlanner";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: 'Limo Tools',
@@ -540,37 +542,52 @@ const tools = [
   },
 ];
 
+
 export default function LimoToolsPage() {
   return (
-    <div className="max-w-5xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-8 text-blue-700 text-center">Limo & Party Bus Tools</h1>
-      {/* Pickup Timing Planner (moved from homepage) */}
-      <div className="mb-16">
-        <PickupTimingPlanner />
-      </div>
-      {tools.map((tool, idx) => (
-        <div
-          key={tool.title}
-          className={`flex flex-col md:flex-row${idx % 2 === 1 ? '-reverse' : ''} bg-white rounded-xl shadow mb-8 p-6 md:items-center`}
-        >
-          <div className={`flex-1 mb-4 md:mb-0 ${idx % 2 === 1 ? 'md:ml-8' : 'md:mr-8'}`}>
-            <h2 className="text-xl font-semibold mb-2">{tool.title}</h2>
-            <p className="text-gray-600">{tool.desc}</p>
-          </div>
-          <div className="flex-1 bg-gray-50 rounded p-4 border">
-            {tool.inputs.map((input, i) => (
-              <input
-                key={i}
-                type="text"
-                placeholder={input.placeholder}
-                className="w-full mb-2 p-2 border rounded"
-              />
-            ))}
-            <button className="w-full bg-blue-600 text-white p-2 rounded font-semibold mb-2">{tool.button}</button>
-            <div className="text-gray-700 italic">{tool.response}</div>
-          </div>
+    <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
+      <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent">
+          Limo & Party Bus Tools
+        </h1>
+        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-100 font-medium">
+          Instantly calculate, plan, and optimize your ride. Use our suite of tools for quotes, cost splits, routes, and more.
+        </p>
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-green-500/10 blur-2xl opacity-60" />
+      </Section>
+      <Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
+        <div className="mb-16">
+          <PickupTimingPlanner />
         </div>
-      ))}
-    </div>
+        <div className="grid md:grid-cols-2 gap-10">
+          {tools.map((tool, idx) => (
+            <div
+              key={tool.title}
+              className="flex flex-col bg-blue-950/90 rounded-2xl shadow-2xl p-8 border border-blue-700/20 hover:scale-105 hover:shadow-2xl transition-all duration-200 overflow-hidden text-white"
+            >
+              <h2 className="text-2xl font-bold mb-3 text-blue-100 font-serif tracking-wide flex items-center gap-2">
+                {tool.title}
+              </h2>
+              <p className="mb-5 text-blue-200 flex-1 text-lg font-sans">{tool.desc}</p>
+              <div className="flex flex-col gap-2 mb-3">
+                {tool.inputs.map((input, i) => (
+                  <input
+                    key={i}
+                    type="text"
+                    placeholder={input.placeholder}
+                    className="w-full px-4 py-3 rounded-full border-2 border-blue-400 bg-blue-950/80 text-lg text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow placeholder:text-blue-400 font-sans"
+                  />
+                ))}
+              </div>
+              <button className="w-full bg-gradient-to-r from-blue-700 to-green-500 text-white font-bold px-6 py-3 rounded-full shadow-lg text-lg transition hover:scale-105 mb-2">
+                {tool.button}
+              </button>
+              <div className="text-blue-300 italic text-sm font-sans">{tool.response}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
+    </PageLayout>
   );
 }

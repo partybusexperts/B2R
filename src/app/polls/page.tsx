@@ -1,4 +1,8 @@
+"use client";
 
+import React from "react";
+import PageLayout from "../../components/PageLayout";
+import Section from "../../components/Section";
 
 const pollCategories = [
   {
@@ -234,6 +238,7 @@ function getAnswerType(poll: string) {
   return answerOptions[0];
 }
 
+
 export default function Page() {
   // Group by parent category for section headers
   const grouped = pollCategories.reduce((acc, cat) => {
@@ -243,27 +248,31 @@ export default function Page() {
   }, {} as Record<string, typeof pollCategories>);
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen">
-      <h1 className="text-5xl font-extrabold mb-6 text-blue-800 text-center drop-shadow-lg tracking-tight">Industry Polls & Data</h1>
-      <p className="mb-14 text-center text-xl text-gray-700 max-w-3xl mx-auto font-medium">
-        Bus2Ride.com offers the most comprehensive, up-to-date data and poll results in the global limo and group transportation industry.<br className="hidden md:block" />
-        Explore real customer opinions, trends, and insights to make smarter travel decisions!
-      </p>
+    <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
+      <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent">
+          Industry Polls & Data
+        </h1>
+        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-100 font-medium">
+          Bus2Ride.com offers the most comprehensive, up-to-date data and poll results in the global limo and group transportation industry.<br className="hidden md:block" />
+          Explore real customer opinions, trends, and insights to make smarter travel decisions!
+        </p>
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-green-500/10 blur-2xl opacity-60" />
+      </Section>
       {Object.entries(grouped).map(([parent, cats]) => (
-        <section key={parent} className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-blue-700 border-l-8 border-blue-400 pl-4 bg-blue-50/60 py-2 rounded-r-xl shadow-sm">
+        <Section key={parent} className="max-w-7xl mx-auto mb-16 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl py-10">
+          <h2 className="text-4xl font-extrabold mb-10 text-blue-200 font-serif tracking-tight text-center">
             {parent}
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {cats.map((cat) => (
               <div
                 key={cat.title}
-                className="relative group bg-white/90 rounded-2xl shadow-xl p-7 flex flex-col min-h-[340px] border border-blue-100 hover:scale-[1.025] hover:shadow-2xl transition-all duration-200 overflow-hidden"
+                className="relative group bg-blue-950/90 rounded-2xl shadow-2xl p-8 flex flex-col min-h-[340px] border border-blue-700/20 hover:scale-105 hover:shadow-2xl transition-all duration-200 overflow-hidden text-white"
               >
-                <div className="absolute -top-4 -right-4 opacity-10 text-[7rem] pointer-events-none select-none">
-
-                </div>
-                <h3 className="text-xl font-bold mb-5 text-blue-700 tracking-wide flex items-center gap-2">
+                <div className="absolute -top-4 -right-4 opacity-10 text-[7rem] pointer-events-none select-none"></div>
+                <h3 className="text-2xl font-bold mb-6 text-blue-100 font-serif tracking-wide flex items-center gap-2">
                   <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mr-2" />
                   {cat.title}
                 </h3>
@@ -271,19 +280,18 @@ export default function Page() {
                   {cat.polls.map((poll, i) => (
                     <li
                       key={poll}
-                      className="flex flex-col gap-2 bg-blue-50/60 rounded-lg px-4 py-3 border border-blue-100 hover:bg-blue-100/80 transition"
+                      className="flex flex-col gap-2 bg-blue-900/60 rounded-xl px-5 py-4 border border-blue-700/20 hover:bg-blue-900/80 transition"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-900 font-medium text-base leading-snug">{poll}</span>
-                        {/* <button className="ml-2 text-blue-400 opacity-70 hover:opacity-100 transition" title="Copy link (coming soon)"><FaLink /></button> */}
+                        <span className="text-blue-100 font-medium text-lg leading-snug font-sans">{poll}</span>
                       </div>
                       <div className="flex flex-wrap gap-3 mt-1">
-                        {getAnswerType(poll).map(opt => (
+                        {getAnswerType(poll).map((opt) => (
                           <label
                             key={opt}
-                            className="inline-flex items-center cursor-pointer bg-white border border-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-blue-700 shadow-sm hover:bg-blue-100/80 transition"
+                            className="inline-flex items-center cursor-pointer bg-blue-950/80 border border-blue-700/30 rounded-full px-4 py-2 text-base font-semibold text-blue-200 shadow-sm hover:bg-blue-900/80 transition font-sans"
                           >
-                            <input type="radio" name={`poll-${cat.title}-${i}`} className="accent-blue-600" disabled />
+                            <input type="radio" name={`poll-${cat.title}-${i}`} className="accent-blue-400" disabled />
                             <span className="ml-2">{opt}</span>
                           </label>
                         ))}
@@ -294,9 +302,9 @@ export default function Page() {
               </div>
             ))}
           </div>
-        </section>
+        </Section>
       ))}
-    </div>
+    </PageLayout>
   );
 }
 
