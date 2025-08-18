@@ -690,6 +690,20 @@ export default function Home() {
           </Link>
         </div>
       </section>
+ {/* Tools Section (original slider version) */}
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
+          Tools
+        </h2>
+        <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100">
+          <ToolsSlider />
+        </div>
+      </section>
+  {/* Polls */}
+  <PollsSection />
+  {/* Live Weather & Comfort Advisor */}
+  <LiveWeatherAdvisor />
+
       {/* Review Submission & Slideshow Maker (Python backend suggestion) */}
       <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-12">
         {/* Review Submission */}
@@ -770,19 +784,7 @@ Show off your ride, your event, or your crew—then share the link anywhere!
   </section>
   {/* Blog & Resources */}
       {/* Blog & Resources (Staggered, Modern Blocks) */}
-      {/* Tools Section (original slider version) */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
-          Tools
-        </h2>
-        <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100">
-          <ToolsSlider />
-        </div>
-      </section>
-  {/* Polls */}
-  <PollsSection />
-  {/* Live Weather & Comfort Advisor */}
-  <LiveWeatherAdvisor />
+      
 
   {/* Did You Know (Modern Scrollable Cards) */}
   <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
