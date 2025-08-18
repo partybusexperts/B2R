@@ -11,7 +11,7 @@ export default function Navigation() {
           <li><Link href="/" className="hover:text-blue-200 transition">Home</Link></li>
           <li className="relative group focus-within:z-50">
             <button
-              className="hover:text-blue-200 transition focus:outline-none flex items-center gap-1"
+              className="hover:text-blue-200 transition focus:outline-none flex items-center gap-1 group"
               aria-haspopup="true"
               aria-expanded="false"
               tabIndex={0}
@@ -20,7 +20,7 @@ export default function Navigation() {
               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
             </button>
             <ul
-              className="absolute left-0 mt-2 min-w-[12rem] bg-white text-blue-900 rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity z-50"
+              className="absolute left-0 mt-2 min-w-[14rem] bg-white text-blue-900 rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity duration-200 z-50 border border-blue-200"
             >
               <li>
                 <Link href="/party-buses" className="block px-4 py-2 hover:bg-blue-100" tabIndex={0}>Party Buses</Link>
