@@ -144,9 +144,7 @@ function Poll({ poll }: { poll: PollType }) {
 export default function PollsSection() {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-blue-900 tracking-tight" style={{ letterSpacing: '0.01em' }}>
-        Limo Industry Polls
-      </h2>
+  {/* Removed duplicate 'Limo Industry Polls' header to avoid double rendering */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         {POLL_QUESTIONS.map((poll) => (
           <Poll key={poll.id} poll={poll} />

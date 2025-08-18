@@ -802,9 +802,12 @@ export default function Home() {
   <PollsSection />
   {/* Live Weather & Comfort Advisor */}
   <div className="py-8">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-sky-700 text-center mb-8 tracking-tight flex items-center gap-2">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-4 tracking-tight flex items-center justify-center gap-2">
       <span role="img" aria-label="fire">🔥</span> Smart Weather & Comfort Tips
     </h2>
+    <p className="text-lg text-center text-blue-900 mb-8 max-w-2xl mx-auto">
+      Get real-time weather and comfort tips for your trip—no matter the season or city. We check the latest forecast and give you practical advice on what to wear, what to bring, and how to make your ride as comfortable as possible. Stay prepared and enjoy your journey!
+    </p>
     <LiveWeatherAdvisor />
   </div>
 
@@ -874,7 +877,10 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           <rect x="120" y="120" width="16" height="16" rx="4" fill="#34d399"/>
           <circle cx="40" cy="200" r="12" fill="#818cf8"/>
         </svg>
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">Events & Occasions</h2>
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-4 tracking-tight">Events & Occasions</h2>
+  <p className="text-lg text-center text-blue-900 mb-8 max-w-2xl mx-auto">
+    Explore our most popular events and occasions for group transportation. Whether it’s a wedding, prom, concert, sporting event, or a night out, we have the perfect ride for every celebration. Click any event to learn more, get tips, and see how Bus2Ride can make your occasion unforgettable!
+  </p>
         {/* Render events in rows of 5, only once */}
         {Array.from({ length: Math.ceil(eventNames.length / 5) }).map((_, rowIdx) => (
   <React.Fragment key={rowIdx}>
