@@ -2,6 +2,8 @@
 // Removed unused tool imports; only ToolsSlider is needed
 
 import React from "react";
+import PageLayout from "../components/PageLayout";
+import Section from "../components/Section";
 import LiveWeatherAdvisor from "../components/LiveWeatherAdvisor";
 import ToolsSlider from '../components/ToolsSlider';
 import HeroSlideshow from "../components/Hero";
@@ -11,6 +13,8 @@ import Link from "next/link";
 import SlideshowMaker from "../components/SlideshowMaker";
 import { ReviewForm } from "../components/ReviewForm";
 import PollsSection from "../components/PollsSection";
+import WhyRentWithUs from "../components/WhyRentWithUs";
+import { useEffect, useState } from "react";
 
 // List of images for each vehicle type
 const partyBusImages = [
@@ -62,8 +66,6 @@ const coachBusImages = [
   "/images/Bus-5.png",
 ];
 
-import { useEffect, useState } from "react";
-
 function getRandomImages(arr: string[], count: number) {
   // Deterministic: just take the first N for SSR
   return arr.slice(0, count);
@@ -78,8 +80,6 @@ function useShuffledImages(arr: string[], count: number) {
   }, [arr, count]);
   return shuffled;
 }
-
-import WhyRentWithUs from "../components/WhyRentWithUs";
 
 export default function Home() {
   // For demo: assign a random party bus image to each event card
@@ -108,189 +108,173 @@ export default function Home() {
     return eventNames.map((_, i) => partyBusImagesList[i % partyBusImagesList.length]);
   }, []);
   return (
-  <>
-
-  {/* Hero Slideshow (assuming it’s imported) */}
-  <HeroSlideshow />
-  {/* Removed phone button below hero/header */}
-
-      {/* Why Rent With Us */}
-    <section className="max-w-6xl mx-auto px-4 py-16 bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
-      <div>
-      <h2
-        className="text-4xl md:text-5xl font-extrabold mb-10 mt-8 text-blue-900 tracking-tight font-serif drop-shadow-sm"
-        style={{ letterSpacing: "0.01em" }}
-      >
-        Why Rent With <span className="text-blue-700">Bus2Ride?</span>
-      </h2>
-  {/* Feature list moved to Client Component */}
-  <WhyRentWithUs />
-      </div>
-      <div className="flex justify-center">
-      <img
-        src="/images/18 Passenger White Party Bus Exterior.png"
-        alt="Party Bus Exterior"
-        className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-3xl border-4 border-blue-100 shadow-2xl"
-      />
-      </div>
-    </section>
-
-
-      {/* CTA after Blog & Resources */}
-
-
+    <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
+      <Section className="!p-0 !py-0">
+        <HeroSlideshow />
+      </Section>
+      <Section className="max-w-6xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 items-center bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl">
+        <div>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-10 mt-8 text-blue-900 tracking-tight font-serif drop-shadow-sm" style={{ letterSpacing: "0.01em" }}>
+            Why Rent With <span className="text-blue-700">Bus2Ride?</span>
+          </h2>
+          <WhyRentWithUs />
+        </div>
+        <div className="flex justify-center">
+          <img src="/images/18 Passenger White Party Bus Exterior.png" alt="Party Bus Exterior" className="w-[420px] h-64 md:w-[480px] md:h-80 object-cover rounded-3xl border-4 border-blue-100 shadow-2xl" />
+        </div>
+      </Section>
       {/* Party Buses Section */}
-  <section className="max-w-6xl mx-auto px-4 py-12">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
-      Party Buses
-    </h2>
+      <Section className="max-w-6xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
+          Party Buses
+        </h2>
 
-    {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
-    <div className="relative flex items-center justify-center mb-8" style={{ minHeight: '260px' }}>
-      {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
-      <a
-        href="/fleet"
-        aria-label="View previous party buses"
-        className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
-        tabIndex={0}
-        style={{
-          boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
-          top: 'calc(50% - 44px)',
-          left: '-68px' // was -48px, now 20px farther for more space
-        }}
-      >
-        &#8592;
-      </a>
-      <div className="grid md:grid-cols-3 gap-6 w-full">
-        {useShuffledImages(partyBusImages, 3).map((img, idx) => (
-          <div
-            key={img}
-            className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
+        {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
+        <div className="relative flex items-center justify-center mb-8" style={{ minHeight: '260px' }}>
+          {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+          <a
+            href="/fleet"
+            aria-label="View previous party buses"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+            tabIndex={0}
+            style={{
+              boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+              top: 'calc(50% - 44px)',
+              left: '-68px' // was -48px, now 20px farther for more space
+            }}
           >
-            <img
-              src={img}
-              alt="Party Bus"
-              className="w-full h-60 object-cover rounded-2xl mb-4"
-            />
-            <h4 className="text-base font-bold mb-2">Party Bus {idx + 1}</h4>
-            <div className="flex flex-col gap-2 w-full">
-              <a
-                href="tel:8885352566"
-                className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
+            &#8592;
+          </a>
+          <div className="grid md:grid-cols-3 gap-6 w-full">
+            {useShuffledImages(partyBusImages, 3).map((img, idx) => (
+              <div
+                key={img}
+                className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
               >
-                888-535-2566
-              </a>
-              <a
-                href="mailto:info@bus2ride.com"
-                className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
-              >
-                Email Now
-              </a>
-              <a
-                href="/quote"
-                className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
-              >
-                Instant Live Quote
-              </a>
-            </div>
+                <img
+                  src={img}
+                  alt="Party Bus"
+                  className="w-full h-60 object-cover rounded-2xl mb-4"
+                />
+                <h4 className="text-base font-bold mb-2">Party Bus {idx + 1}</h4>
+                <div className="flex flex-col gap-2 w-full">
+                  <a
+                    href="tel:8885352566"
+                    className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
+                  >
+                    888-535-2566
+                  </a>
+                  <a
+                    href="mailto:info@bus2ride.com"
+                    className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
+                  >
+                    Email Now
+                  </a>
+                  <a
+                    href="/quote"
+                    className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
+                  >
+                    Instant Live Quote
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      {/* Right Arrow - absolutely positioned, vertically centered with the images, with extra space */}
-      <a
-        href="/fleet"
-        aria-label="View next party buses"
-        className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
-        tabIndex={0}
-        style={{
-          boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
-          top: 'calc(50% - 44px)',
-          right: '-68px' // was -48px, now 20px farther for more space
-        }}
+          {/* Right Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+          <a
+            href="/fleet"
+            aria-label="View next party buses"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+            tabIndex={0}
+            style={{
+              boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+              top: 'calc(50% - 44px)',
+              right: '-68px' // was -48px, now 20px farther for more space
+            }}
+          >
+            &#8594;
+          </a>
+        </div>
+
+        {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
+        {/* Party Bus Features as Modal Buttons (like Why Rent With Us) */}
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:items-center gap-6">
+    <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
+          Popular Party Bus Features
+        </h2>
+    <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
+      {[
+      {
+        text: "Lots of space to move & socialize",
+        modal: {
+        title: "Lots of Space to Move & Socialize",
+        content:
+          "Party buses are designed with open layouts and plenty of room, so your group can mingle, dance, and enjoy the ride together without feeling cramped.",
+        },
+      },
+      {
+        text: "Removable dance pole",
+        modal: {
+        title: "Removable Dance Pole",
+        content:
+          "Many party buses feature a removable dance pole for extra fun. If you prefer, it can be taken out for more space or left in for dancing.",
+        },
+      },
+      {
+        text: "Wet bars with ice & bottled water",
+        modal: {
+        title: "Wet Bars with Ice & Bottled Water",
+        content:
+          "Enjoy built-in wet bars stocked with ice and complimentary bottled water. Bring your own drinks to keep the party going!",
+        },
+      },
+      {
+        text: "Wrap-around leather seating",
+        modal: {
+        title: "Wrap-Around Leather Seating",
+        content:
+          "Luxurious wrap-around leather seating lets everyone face each other and relax in comfort, perfect for socializing.",
+        },
+      },
+      {
+        text: "Premium sound & LED lighting",
+        modal: {
+        title: "Premium Sound & LED Lighting",
+        content:
+          "Blast your favorite playlists with high-end sound systems and set the mood with vibrant LED party lighting.",
+        },
+      },
+      {
+        text: "Pro driver included",
+        modal: {
+        title: "Professional Driver Included",
+        content:
+          "Every rental comes with a licensed, experienced chauffeur so you can relax and enjoy the ride safely.",
+        },
+      },
+      ].map((feature, idx) => (
+      <li
+        key={idx}
+        className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
       >
-        &#8594;
-      </a>
-    </div>
+        <PartyBusFeatureModalButton
+        title={feature.modal.title}
+        content={feature.modal.content}
+        label={feature.text}
+        />
+        <span className="text-blue-500 text-lg ml-2">→</span>
+      </li>
+      ))}
+    </ul>
+          </div>
+        </div>
+        {/* End Party Bus Features */}
+      </Section>
 
-    {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
-    {/* Party Bus Features as Modal Buttons (like Why Rent With Us) */}
-    <div className="max-w-6xl mx-auto px-4">
-      <div className="flex flex-col md:flex-row md:items-center gap-6">
-  <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
-        Popular Party Bus Features
-      </h2>
-      <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
-        {[
-        {
-          text: "Lots of space to move & socialize",
-          modal: {
-          title: "Lots of Space to Move & Socialize",
-          content:
-            "Party buses are designed with open layouts and plenty of room, so your group can mingle, dance, and enjoy the ride together without feeling cramped.",
-          },
-        },
-        {
-          text: "Removable dance pole",
-          modal: {
-          title: "Removable Dance Pole",
-          content:
-            "Many party buses feature a removable dance pole for extra fun. If you prefer, it can be taken out for more space or left in for dancing.",
-          },
-        },
-        {
-          text: "Wet bars with ice & bottled water",
-          modal: {
-          title: "Wet Bars with Ice & Bottled Water",
-          content:
-            "Enjoy built-in wet bars stocked with ice and complimentary bottled water. Bring your own drinks to keep the party going!",
-          },
-        },
-        {
-          text: "Wrap-around leather seating",
-          modal: {
-          title: "Wrap-Around Leather Seating",
-          content:
-            "Luxurious wrap-around leather seating lets everyone face each other and relax in comfort, perfect for socializing.",
-          },
-        },
-        {
-          text: "Premium sound & LED lighting",
-          modal: {
-          title: "Premium Sound & LED Lighting",
-          content:
-            "Blast your favorite playlists with high-end sound systems and set the mood with vibrant LED party lighting.",
-          },
-        },
-        {
-          text: "Pro driver included",
-          modal: {
-          title: "Professional Driver Included",
-          content:
-            "Every rental comes with a licensed, experienced chauffeur so you can relax and enjoy the ride safely.",
-          },
-        },
-        ].map((feature, idx) => (
-        <li
-          key={idx}
-          className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
-        >
-          <PartyBusFeatureModalButton
-          title={feature.modal.title}
-          content={feature.modal.content}
-          label={feature.text}
-          />
-          <span className="text-blue-500 text-lg ml-2">→</span>
-        </li>
-        ))}
-      </ul>
-      </div>
-    </div>
-    {/* End Party Bus Features */}
-    </section>
-
-      {/* Limos Section */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
+    {/* Limos Section */}
+    <Section className="max-w-6xl mx-auto">
+      <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
           Limousines
         </h2>
         {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
@@ -432,13 +416,13 @@ export default function Home() {
       </ul>
       </div>
     </div>
-    </section>
+    </Section>
 
 
 
-      {/* Coach Buses Section */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
+    {/* Coach Buses Section */}
+    <Section className="max-w-6xl mx-auto">
+      <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
         Coach Buses
       </h2>
 
@@ -581,141 +565,141 @@ export default function Home() {
         </ul>
         </div>
       </div>
-      </section>
+    </Section>
 
 
-      {/* Trust & Reputation */}
-      <section className="bg-blue-50 py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-10 mt-8 text-blue-900">
-        The Most Trusted Limo & Bus Rental Company
-          </h2>
-          <p className="text-xl text-gray-700 mb-10">
-        Trusted by thousands, booked in minutes, driven by a passion for
-        making every ride unforgettable.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
-        {[
-          {
-            label: "Free Instant Estimates",
-            title: "Free Instant Estimates",
-            content:
-          "Get a real-time quote for your trip in seconds. No obligation, no hidden fees—just transparent pricing.",
-          },
-          {
-            label: "Massive Luxury Fleet",
-            title: "Massive Luxury Fleet",
-            content:
-          "Choose from the largest selection of party buses, limos, and coach buses in the region. Find the perfect ride for any group size or occasion.",
-          },
-          {
-            label: "Low Hourly Minimums",
-            title: "Low Hourly Minimums",
-            content:
-          "Book for as little as 2-3 hours on most vehicles. Only pay for the time you need—perfect for short trips and special events.",
-          },
-          {
-            label: "Professional Drivers",
-            title: "Professional Drivers",
-            content:
-          "Every ride is chauffeured by a licensed, experienced, and friendly driver. Safety and service are our top priorities.",
-          },
-        ].map((feature) => (
-          <div
-            key={feature.label}
-            className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center border-2 border-blue-100 relative"
-          >
-            <PartyBusFeatureModalButton
-          label={feature.title}
-          title={feature.title}
-          content={feature.content}
-            />
-            <span className="absolute right-6 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">
-          →
-            </span>
+    {/* Trust & Reputation */}
+    <Section className="bg-gradient-to-br from-blue-900/80 to-black">
+      <div className="max-w-4xl mx-auto px-4 text-center">
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-10 mt-8 text-white">
+      The Most Trusted Limo & Bus Rental Company
+        </h2>
+        <p className="text-xl text-blue-100 mb-10">
+      Trusted by thousands, booked in minutes, driven by a passion for
+      making every ride unforgettable.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
+      {[
+        {
+          label: "Free Instant Estimates",
+          title: "Free Instant Estimates",
+          content:
+        "Get a real-time quote for your trip in seconds. No obligation, no hidden fees—just transparent pricing.",
+        },
+        {
+          label: "Massive Luxury Fleet",
+          title: "Massive Luxury Fleet",
+          content:
+        "Choose from the largest selection of party buses, limos, and coach buses in the region. Find the perfect ride for any group size or occasion.",
+        },
+        {
+          label: "Low Hourly Minimums",
+          title: "Low Hourly Minimums",
+          content:
+        "Book for as little as 2-3 hours on most vehicles. Only pay for the time you need—perfect for short trips and special events.",
+        },
+        {
+          label: "Professional Drivers",
+          title: "Professional Drivers",
+          content:
+        "Every ride is chauffeured by a licensed, experienced, and friendly driver. Safety and service are our top priorities.",
+        },
+      ].map((feature) => (
+        <div
+          key={feature.label}
+          className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center border-2 border-blue-100 relative"
+        >
+          <PartyBusFeatureModalButton
+        label={feature.title}
+        title={feature.title}
+        content={feature.content}
+          />
+          <span className="absolute right-6 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">
+        →
+          </span>
+        </div>
+      ))}
+        </div>
+      </div>
+    </Section>
+
+    {/* How It Works */}
+    <Section className="max-w-4xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
+    <h2 className="text-2xl font-bold text-center mb-10 mt-8 text-white">
+          How It Works
+        </h2>
+        <div className="grid md:grid-cols-4 gap-6 text-center">
+          {/* Step 1 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">📞</span>
+        <PartyBusFeatureModalButton
+          label="1. Contact Us"
+          title="Contact Us"
+          content={
+            <>
+          <p>Call, email, or fill out our quote form to get started. Our team will help you find the perfect vehicle for your event.</p>
+            </>
+          }
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
-        ))}
+          {/* Step 2 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">💬</span>
+        <PartyBusFeatureModalButton
+          label="2. Get a Quote"
+          title="Get a Quote"
+          content={
+            <>
+          <p>
+            Receive a fast, transparent quote based on your trip details—city, date, hours, and group size. No hidden fees.
+          </p>
+            </>
+          }
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 3 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">📝</span>
+        <PartyBusFeatureModalButton
+          label="3. Reserve Your Ride"
+          title="Reserve Your Ride"
+          content={
+            <>
+          <p>
+            Lock in your vehicle with a deposit. We’ll confirm all details and send your reservation agreement for review.
+          </p>
+            </>
+          }
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+          </div>
+          {/* Step 4 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
+        <span className="text-4xl mb-3">🎉</span>
+        <PartyBusFeatureModalButton
+          label="4. Finalize & Ride"
+          title="Finalize & Ride"
+          content={
+            <>
+          <p>
+            Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
+          </p>
+          <div className="text-gray-700 text-base mt-2">
+            Finalize details & enjoy your trip!
+          </div>
+            </>
+          }
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* How It Works */}
-      <section className="max-w-4xl mx-auto px-4 py-12">
-      <h2 className="text-2xl font-bold text-center mb-10 mt-8 text-blue-900">
-            How It Works
-          </h2>
-          <div className="grid md:grid-cols-4 gap-6 text-center">
-            {/* Step 1 */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-          <span className="text-4xl mb-3">📞</span>
-          <PartyBusFeatureModalButton
-            label="1. Contact Us"
-            title="Contact Us"
-            content={
-              <>
-            <p>Call, email, or fill out our quote form to get started. Our team will help you find the perfect vehicle for your event.</p>
-              </>
-            }
-          />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-            </div>
-            {/* Step 2 */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-          <span className="text-4xl mb-3">💬</span>
-          <PartyBusFeatureModalButton
-            label="2. Get a Quote"
-            title="Get a Quote"
-            content={
-              <>
-            <p>
-              Receive a fast, transparent quote based on your trip details—city, date, hours, and group size. No hidden fees.
-            </p>
-              </>
-            }
-          />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-            </div>
-            {/* Step 3 */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-          <span className="text-4xl mb-3">📝</span>
-          <PartyBusFeatureModalButton
-            label="3. Reserve Your Ride"
-            title="Reserve Your Ride"
-            content={
-              <>
-            <p>
-              Lock in your vehicle with a deposit. We’ll confirm all details and send your reservation agreement for review.
-            </p>
-              </>
-            }
-          />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-            </div>
-            {/* Step 4 */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
-          <span className="text-4xl mb-3">🎉</span>
-          <PartyBusFeatureModalButton
-            label="4. Finalize & Ride"
-            title="Finalize & Ride"
-            content={
-              <>
-            <p>
-              Remaining balance is billed 7–14 days before your trip. We manage all service details on the day—just relax and enjoy the ride!
-            </p>
-            <div className="text-gray-700 text-base mt-2">
-              Finalize details & enjoy your trip!
-            </div>
-              </>
-            }
-          />
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-            </div>
-          </div>
-        </section>
-
-      {/* Testimonials */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
+    {/* Testimonials */}
+    <Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
           What Our Customers Say
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 max-w-4xl mx-auto">
@@ -779,89 +763,72 @@ export default function Home() {
             MORE REVIEWS
           </Link>
         </div>
-      </section>
+      </Section>
  {/* Tools Section (original slider version) */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
+      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">
           Tools
         </h2>
-        <p className="text-lg text-center text-blue-900 mb-6 max-w-2xl mx-auto">
+        <p className="text-lg text-center text-blue-100 mb-6 max-w-2xl mx-auto">
           Discover our exclusive suite of free tools—designed to make planning your party bus, limo, or group trip effortless. From instant quotes and route planners to weather checkers and event sync, these tools help you compare, book, and enjoy your ride with total confidence. Try them all and see why Bus2Ride is the most trusted name in group transportation!
         </p>
         <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100">
           <ToolsSlider />
         </div>
-      </section>
+      </Section>
   {/* Polls */}
+  <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
   <div className="max-w-6xl mx-auto px-4 mt-12 mb-2">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">Limo Industry Polls</h2>
-    <p className="text-lg text-center text-blue-900 mb-6 max-w-2xl mx-auto">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">Limo Industry Polls</h2>
+    <p className="text-lg text-center text-blue-100 mb-6 max-w-2xl mx-auto">
       See what real riders and industry pros are saying! Our live polls help you compare trends, get honest opinions, and make smarter choices for your next trip. Vote, view results, and join the conversation.
     </p>
   </div>
   <PollsSection />
+  </Section>
   {/* Live Weather & Comfort Advisor */}
+  <Section className="bg-gradient-to-br from-blue-900/80 to-black">
   <div className="py-16">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight flex items-center justify-center gap-2">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight flex items-center justify-center gap-2">
       <span role="img" aria-label="fire">🔥</span> Smart Weather & Comfort Tips
     </h2>
-    <p className="text-lg text-center text-blue-900 mb-10 max-w-2xl mx-auto">
+    <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
       Get real-time weather and comfort tips for your trip—no matter the season or city. We check the latest forecast and give you practical advice on what to wear, what to bring, and how to make your ride as comfortable as possible. Stay prepared and enjoy your journey!
     </p>
     <LiveWeatherAdvisor />
   </div>
+  </Section>
 
       {/* Review Submission & Slideshow Maker (Python backend suggestion) */}
-      <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-12">
-        {/* Review Submission */}
-        <div className="flex-1 min-w-[260px]">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-            Leave a Review & Get Featured Above!
-          </h2>
-          <p className="text-gray-700 mb-4">
-            Want to see your review in the main section above? Share your Bus2Ride experience below! Submit your review, add photos, or even upload a video. The best reviews will be featured at the top of this page for everyone to see.
-          </p>
-          <p className="text-green-700 font-semibold mb-2">
-            Featured reviews may appear on our homepage and social media.
-          </p>
-          {/* 
-            To make this work in Python:
-            - Use a Python backend (e.g., FastAPI, Django, Flask) with an endpoint to receive form data and file uploads.
-            - Use fetch or axios in React to POST the form data (including files) to your Python API.
-            - Store reviews and media in your backend/database.
-            - For testing, you can use FastAPI's /docs to test uploads, or use Postman.
-            - On submit, prevent default and send data via fetch to your Python endpoint.
-          */}
-          {/* Client component for review form */}
-          <ReviewForm />
-        </div>
-
-        {/* Slideshow Maker */}
-        <div className="flex-1 min-w-[260px] border-l border-gray-200 pl-0 md:pl-8 flex flex-col items-center md:items-start">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
-            Make & Share Your Slideshow Video
-          </h2>
-          <p className="text-gray-700 mb-4">
-            Upload your favorite party or limo photos (or anything else you’d like to share) and we’ll instantly turn them into a fun, shareable slideshow video—perfect for posting on Facebook, Instagram, or linking on your blog, website, or email.
-Show off your ride, your event, or your crew—then share the link anywhere!
-          </p>
-          {/* 
-            For slideshow video generation in Python:
-            - Use a Python backend (e.g., FastAPI) with an endpoint to accept multiple image uploads.
-            - Use a library like moviepy or OpenCV to generate a video from images.
-            - Return the video file or a download link.
-            - In React, POST the images to your Python endpoint and show a download link or preview when ready.
-          */}
-          <div id="slideshow-tool" className="w-full flex flex-col items-center mb-2">
-            {/* Link to Slideshow Tool removed as requested */}
+      <Section className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
+        <div className="flex flex-col md:flex-row gap-8 w-full">
+          <div className="flex-1">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-8 tracking-tight">
+              Leave a Review & Get Featured Above!
+            </h2>
+            <p className="text-blue-100 mb-4">
+              Want to see your review in the main section above? Share your Bus2Ride experience below! Submit your review, add photos, or even upload a video. The best reviews will be featured at the top of this page for everyone to see.
+            </p>
+            <p className="text-green-400 font-semibold mb-2">
+              Featured reviews may appear on our homepage and social media.
+            </p>
+            <ReviewForm />
           </div>
-          <SlideshowMaker />
-
+          <div className="flex-1 min-w-[260px] border-l border-gray-200 pl-0 md:pl-8 flex flex-col items-center md:items-start">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-8 tracking-tight">
+              Make & Share Your Slideshow Video
+            </h2>
+            <p className="text-blue-100 mb-4">
+              Upload your favorite party or limo photos (or anything else you’d like to share) and we’ll instantly turn them into a fun, shareable slideshow video—perfect for posting on Facebook, Instagram, or linking on your blog, website, or email. Show off your ride, your event, or your crew—then share the link anywhere!
+            </p>
+            <div id="slideshow-tool" className="w-full flex flex-col items-center mb-2" />
+            <SlideshowMaker />
+          </div>
         </div>
-      </div>
+      </Section>
 
       {/* Group Transportation Services */}
-      <section className="max-w-7xl mx-auto px-4 py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100">
+      <Section className="max-w-7xl mx-auto relative overflow-hidden bg-gradient-to-br from-blue-900/80 to-black">
         {/* Decorative Confetti SVGs */}
         <svg className="absolute left-0 top-0 w-48 h-48 opacity-20 pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="40" cy="40" r="12" fill="#60a5fa"/>
@@ -877,14 +844,14 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           <rect x="120" y="120" width="16" height="16" rx="4" fill="#34d399"/>
           <circle cx="40" cy="200" r="12" fill="#818cf8"/>
         </svg>
-  </section>
+  </Section>
   <div className="max-w-6xl mx-auto px-4 mt-16 mb-2">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">Events & Occasions</h2>
-    <p className="text-lg text-center text-blue-900 mb-10 max-w-2xl mx-auto">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">Events & Occasions</h2>
+    <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
       Explore our most popular events and occasions for group transportation. Whether it’s a wedding, prom, concert, sporting event, or a night out, we have the perfect ride for every celebration. Click any event to learn more, get tips, and see how Bus2Ride can make your occasion unforgettable!
     </p>
   </div>
-  <section className="max-w-7xl mx-auto px-4 py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100">
+  <Section className="max-w-7xl mx-auto relative overflow-hidden bg-gradient-to-br from-blue-900/80 to-black">
         {/* Decorative Confetti SVGs */}
         <svg className="absolute left-0 top-0 w-48 h-48 opacity-20 pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="40" cy="40" r="12" fill="#60a5fa"/>
@@ -929,12 +896,10 @@ Show off your ride, your event, or your crew—then share the link anywhere!
             )}
           </React.Fragment>
         ))}
-  </section>
-      {/* Blog & Resources */}
-
-        {/* Did You Know (Modern Scrollable Cards) */}
-        <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
-        <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
+  </Section>
+      {/* Did You Know (Modern Scrollable Cards) */}
+      <Section className="bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
+        <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-white tracking-tight">Did You Know?</h3>
         <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
           {[
           {
@@ -978,16 +943,16 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           More Facts
           </a>
         </div>
-        </section>
+        </Section>
 
   {/* Blog Topics */}
   <div className="max-w-6xl mx-auto px-4 mt-16 mb-2">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">Blog Topics</h2>
-    <p className="text-lg text-center text-blue-900 mb-10 max-w-2xl mx-auto">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">Blog Topics</h2>
+    <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
       Dive into our expert blog for tips, guides, and real-world advice on planning the perfect group trip. From wedding shuttles to prom safety, cost breakdowns, and more—get the knowledge you need to book with confidence and make your event unforgettable.
     </p>
   </div>
-  <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
+  <Section className="bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
     {/* Blog grid remains unchanged */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       {[
@@ -1028,10 +993,10 @@ Show off your ride, your event, or your crew—then share the link anywhere!
     <div className="flex justify-center mt-8">
       <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Blog Posts</button>
     </div>
-  </section>
+  </Section>
 
   {/* Contact & Booking CTA */}
-  <section className="bg-blue-900 text-white py-12">
+  <Section className="bg-blue-900 text-white">
     <div className="max-w-4xl mx-auto px-4 text-center">
       <h2 className="text-2xl font-bold mb-4">Book Your Bus or Limo Today!</h2>
       <div className="flex flex-wrap justify-center gap-6 mb-6">
@@ -1041,7 +1006,7 @@ Show off your ride, your event, or your crew—then share the link anywhere!
         </div>
       </div>
     </div>
-  </section>
-  </>
+  </Section>
+  </PageLayout>
   );
 }
