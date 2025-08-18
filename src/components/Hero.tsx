@@ -38,7 +38,7 @@ export default function HeroSlideshow() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40 z-10" />
 
       <div className="relative z-20 flex flex-col items-center justify-center h-full w-full px-6 md:px-10 lg:px-16">
-        <div className="backdrop-blur-xl bg-black/60 rounded-3xl shadow-2xl px-8 py-10 md:px-16 md:py-14 flex flex-col items-center w-full max-w-3xl border-2 border-blue-800/40">
+  <div className="backdrop-blur-xl bg-black/30 rounded-3xl shadow-2xl px-8 py-10 md:px-16 md:py-14 flex flex-col items-center w-full max-w-3xl border-2 border-blue-800/40">
           <h1 className="text-4xl md:text-7xl font-extrabold text-center mb-4 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-400 bg-clip-text text-transparent drop-shadow-lg">
             Bus 2 Ride
           </h1>

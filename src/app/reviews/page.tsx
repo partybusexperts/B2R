@@ -1,62 +1,87 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-type Review = {
-  name: string;
-  review: string;
-  content?: string;
-  rating: number;
-  photo_url?: string;
-  video_url?: string;
-};
+const reviews = [
+  {
+    name: "Paul P.",
+    text: "Absolutely excellent! Great customer service! We changed drop off points several times and they were so accommodating. Gail in the office is top notch and on top of everything! The price was very good. The driver was so nice and professional. The limo looked pristine, inside and out. Use them, you wont regret it!! Used for my son's wedding on August 11."
+  },
+  {
+    name: "Jessie A.",
+    text: "The limo company that you need to call when u have an event .Prices and limos and party bus are like no other limo company ."
+  },
+  {
+    name: "Dee C.",
+    text: "Definitely lives up to their name! We used them for our bachelorette/bachelor parties and our wedding and will be using them again. They were absolutely great! Even let me extend an hour when I decided my bachelorette party was too much fun and I wasn't ready to go yet!! :) I would absolutely recommend them and do to everyone!!"
+  },
+  {
+    name: "Halee H.",
+    text: "The price is great, inside is very clean, driver was very friendly and accommodating! Will never use another company besides this one!"
+  },
+  {
+    name: "Rachel L.",
+    text: "We had the best time ever!! Darrius was our driver and he was so fun and amazing!! It was for our bachelor/bachelorette weekend and he made it so much fun!!! I would recommend them 100%!!!"
+  },
+  {
+    name: "Becky B.",
+    text: "Sonny can take your event to the next level with his beautiful limos and sedans making you feel like a movie star! Highly recommend his service!"
+  },
+  {
+    name: "George S.",
+    text: "Top of the line chauffer and limo service."
+  },
+  {
+    name: "Teresa S.",
+    text: "What a memorable night for our students at Faith Christian School prom. Rick was an excellent and safe driver, providing top notch customer service, and was prompt with timing. The owner was great to work with and has the best prices and customer service. We will definitely choose them for next year's prom. Amazing experience!"
+  },
+  {
+    name: "Carleigh S.",
+    text: "We have used them twice. One for a 16 year old birthday party and once just for transportation for a large group. Always on time. Drivers were wonderful. Will be using again in the future."
+  },
+  {
+    name: "Lindsay J.",
+    text: "Used for a wedding and very satisfied! Drivers were very communicative. Jerry was friendly and easy to work with. Would recommend."
+  },
+  {
+    name: "Leah K.",
+    text: "We rented a party bus for my daughter’s 10th birthday and I cannot say enough good things about our experience! Communicating with Jerry and our driver Jim was easy and direct. They kept me informed with arrival time and were prompt when I asked a last minute question. They accommodated all of our requests - made the party the BEST experience and party EVER! Our driver, Jim, was laid back, polite, and happily took the girls whenever they wanted to ride! This is THE BEST service ever and I would HIGHLY recommend using them. You talk directly to the owner and the price can not be beat!!! Thank you Accent for making all our 10th birthday dreams come true!!! You guys are the BEST!"
+  },
+  {
+    name: "Angela F.",
+    text: "We booked the party bus for prom. The driver was on time and friendly. The bus was clean and comfortable. The kids had a wonderful time and made great memories! I highly recommend them and will use them for future events."
+  },
+  {
+    name: "Kaley H.",
+    text: "We had the best evening last Saturday! Our driver was on time and courteous, delivered us to our destination both ways, and even got the things we left on the bus back to us."
+  },
+  {
+    name: "Amanda P.",
+    text: "Best limo company around ! Worth every dime ! Our driver, Mike, was sweet, easy going and a great driver! The limo was clean and updated ! Will use them from now on !!"
+  },
+  {
+    name: "Chad M.",
+    text: "Booked a party bus several months in advance and I was very impressed with the service we received! Jerry made the booking process very simple and fast!"
+  }
+];
 
 export default function ReviewsPage() {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/reviews")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch reviews");
-        return res.json();
-      })
-      .then((data) => setReviews(data.reverse()))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
-
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-8 text-blue-900 tracking-tight">
-        Customer Reviews
-      </h1>
-      <p className="text-lg text-center text-gray-700 mb-12">
-        Bus2Ride prides itself on happy customers. Here are real reviews from our riders!
-      </p>
-      {loading && <div className="text-center">Loading reviews…</div>}
-      {error && <div className="text-center text-red-600">{error}</div>}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 max-w-4xl mx-auto">
-        {reviews.length === 0 && !loading && (
-          <div className="col-span-2 text-center text-gray-500">No reviews yet. Be the first to leave one!</div>
-        )}
-        {reviews.map((r, i) => (
-          <div key={i} className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
-            {r.content && <div className="font-bold text-blue-900 mb-2">{r.content}</div>}
-            <p className="text-gray-700 italic mb-4 text-lg">{r.review}</p>
-            {r.photo_url && (
-              <img src={r.photo_url} alt="Review photo" className="rounded-lg mb-2 max-h-40 object-contain" />
-            )}
-            {r.video_url && (
-              <video src={r.video_url} controls className="rounded-lg mb-2 max-h-40 w-full" />
-            )}
-            <div className="flex items-center gap-2 mt-2">
-              <span className="font-bold text-blue-700">— {r.name}</span>
-              <span className="text-yellow-400">{'★'.repeat(r.rating)}</span>
+    <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black text-white py-16 px-4">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-10 bg-gradient-to-r from-blue-200 via-blue-500 to-blue-800 bg-clip-text text-transparent drop-shadow-lg">Customer Reviews</h1>
+        <div className="grid gap-8 md:grid-cols-2">
+          {reviews.map((review, i) => (
+            <div key={i} className="bg-white/10 border-2 border-blue-700/40 rounded-2xl shadow-xl p-6 flex flex-col gap-3 hover:scale-[1.025] transition-transform">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="bg-gradient-to-br from-blue-400 via-blue-600 to-blue-900 rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold text-white shadow-lg">
+                  {review.name[0]}
+                </div>
+                <span className="font-bold text-blue-100 text-lg">{review.name}</span>
+              </div>
+              <div className="text-blue-50 text-base leading-relaxed">{review.text}</div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

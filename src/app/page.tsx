@@ -788,10 +788,9 @@ export default function Home() {
   </Section>
   {/* Live Weather & Comfort Advisor */}
   <Section className="bg-gradient-to-br from-blue-900/80 to-black">
-  <div className="py-16">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight flex items-center justify-center gap-2">
-      <span role="img" aria-label="fire">🔥</span>
-      <span className="bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">Smart Weather & Comfort Tips</span>
+  <div>
+    <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">
+      Smart Weather & Comfort Tips
     </h2>
     <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
       Get real-time weather and comfort tips for your trip—no matter the season or city. We check the latest forecast and give you practical advice on what to wear, what to bring, and how to make your ride as comfortable as possible. Stay prepared and enjoy your journey!
@@ -992,7 +991,7 @@ export default function Home() {
       ))}
     </div>
     <div className="flex justify-center mt-8">
-      <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Blog Posts</button>
+  <a href="/blog" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition inline-block text-center">More Blog Posts</a>
     </div>
   </Section>
 
