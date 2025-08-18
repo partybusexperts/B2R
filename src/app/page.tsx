@@ -145,41 +145,71 @@ export default function Home() {
       Party Buses
     </h2>
 
-    {/* 3 Image Boxes (centered button text, no arrows) */}
-    <div className="grid md:grid-cols-3 gap-6 mb-8">
-      {useShuffledImages(partyBusImages, 3).map((img, idx) => (
-        <div
-          key={img}
-          className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
-        >
-          <img
-            src={img}
-            alt="Party Bus"
-            className="w-full h-60 object-cover rounded-2xl mb-4"
-          />
-          <h4 className="text-base font-bold mb-2">Party Bus {idx + 1}</h4>
-          <div className="flex flex-col gap-2 w-full">
-            <a
-              href="tel:8885352566"
-              className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
-            >
-              888-535-2566
-            </a>
-            <a
-              href="mailto:info@bus2ride.com"
-              className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
-            >
-              Email Now
-            </a>
-            <a
-              href="/quote"
-              className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
-            >
-              Instant Live Quote
-            </a>
+    {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
+    <div className="relative flex items-center justify-center mb-8" style={{ minHeight: '260px' }}>
+      {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+      <a
+        href="/fleet"
+        aria-label="View previous party buses"
+        className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+        tabIndex={0}
+        style={{
+          boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+          top: 'calc(50% - 44px)',
+          left: '-68px' // was -48px, now 20px farther for more space
+        }}
+      >
+        &#8592;
+      </a>
+      <div className="grid md:grid-cols-3 gap-6 w-full">
+        {useShuffledImages(partyBusImages, 3).map((img, idx) => (
+          <div
+            key={img}
+            className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
+          >
+            <img
+              src={img}
+              alt="Party Bus"
+              className="w-full h-60 object-cover rounded-2xl mb-4"
+            />
+            <h4 className="text-base font-bold mb-2">Party Bus {idx + 1}</h4>
+            <div className="flex flex-col gap-2 w-full">
+              <a
+                href="tel:8885352566"
+                className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
+              >
+                888-535-2566
+              </a>
+              <a
+                href="mailto:info@bus2ride.com"
+                className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
+              >
+                Email Now
+              </a>
+              <a
+                href="/quote"
+                className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
+              >
+                Instant Live Quote
+              </a>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+      {/* Right Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+      <a
+        href="/fleet"
+        aria-label="View next party buses"
+        className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+        tabIndex={0}
+        style={{
+          boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+          top: 'calc(50% - 44px)',
+          right: '-68px' // was -48px, now 20px farther for more space
+        }}
+      >
+        &#8594;
+      </a>
     </div>
 
     {/* Features BELOW the 3 boxes — EXACT same format as "Why Rent With" buttons */}
@@ -263,41 +293,71 @@ export default function Home() {
         <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
           Limousines
         </h2>
-        {/* 3 Image Boxes (centered button text, no arrows) */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {getRandomImages(limoImages, 3).map((img, idx) => (
-            <div
-              key={img}
-              className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
-            >
-              <img
-                src={img}
-                alt="Limo"
-                className="w-full h-60 object-cover rounded-2xl mb-4"
-              />
-              <h4 className="text-base font-bold mb-2">Limo {idx + 1}</h4>
-              <div className="flex flex-col gap-2 w-full">
-                <a
-                  href="tel:8885352566"
-                  className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
-                >
-                  888-535-2566
-                </a>
-                <a
-                  href="mailto:info@bus2ride.com"
-                  className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
-                >
-                  Email Now
-                </a>
-                <a
-                  href="/quote"
-                  className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
-                >
-                  Instant Live Quote
-                </a>
+        {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
+        <div className="relative flex items-center justify-center mb-8" style={{ minHeight: '260px' }}>
+          {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+          <a
+            href="/fleet"
+            aria-label="View previous limos"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+            tabIndex={0}
+            style={{
+              boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+              top: 'calc(50% - 44px)',
+              left: '-68px'
+            }}
+          >
+            &#8592;
+          </a>
+          <div className="grid md:grid-cols-3 gap-6 w-full">
+            {getRandomImages(limoImages, 3).map((img, idx) => (
+              <div
+                key={img}
+                className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center"
+              >
+                <img
+                  src={img}
+                  alt="Limo"
+                  className="w-full h-60 object-cover rounded-2xl mb-4"
+                />
+                <h4 className="text-base font-bold mb-2">Limo {idx + 1}</h4>
+                <div className="flex flex-col gap-2 w-full">
+                  <a
+                    href="tel:8885352566"
+                    className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg hover:bg-blue-800 transition text-center text-base px-3 font-serif"
+                  >
+                    888-535-2566
+                  </a>
+                  <a
+                    href="mailto:info@bus2ride.com"
+                    className="w-full bg-blue-600 text-white font-bold py-1 rounded-lg hover:bg-blue-700 transition text-center text-base px-3 font-serif"
+                  >
+                    Email Now
+                  </a>
+                  <a
+                    href="/quote"
+                    className="w-full bg-green-500 text-white font-bold py-1 rounded-lg hover:bg-green-600 transition text-center text-base px-3 font-serif"
+                  >
+                    Instant Live Quote
+                  </a>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          {/* Right Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+          <a
+            href="/fleet"
+            aria-label="View next limos"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+            tabIndex={0}
+            style={{
+              boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+              top: 'calc(50% - 44px)',
+              right: '-68px'
+            }}
+          >
+            &#8594;
+          </a>
         </div>
 
         {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
@@ -382,41 +442,71 @@ export default function Home() {
         Coach Buses
       </h2>
 
-      {/* 3 Image Boxes with centered buttons, no arrows */}
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
-        {getRandomImages(coachBusImages, 3).map((img, idx) => (
-        <div
-          key={img}
-          className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+      {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
+      <div className="relative flex items-center justify-center mb-10" style={{ minHeight: '288px' }}>
+        {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+        <a
+          href="/fleet"
+          aria-label="View previous coach buses"
+          className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+          tabIndex={0}
+          style={{
+            boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+            top: 'calc(50% - 56px)', // h-72 = 288px, so 144px, but offset for margin/padding
+            left: '-68px'
+          }}
         >
-          <img
-          src={img}
-          alt="Coach Bus"
-          className="w-full h-72 object-cover rounded-2xl mb-5"
-          />
-          <h4 className="text-lg font-bold mb-2">Coach Bus {idx + 1}</h4>
-          <div className="flex flex-col gap-2 w-full">
-          <a
-            href="tel:8885352566"
-            className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
-          >
-            888-535-2566
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
-          >
-            Email Now
-          </a>
-          <a
-            href="/quote"
-            className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
-          >
-            Instant Live Quote
-          </a>
-          </div>
+          &#8592;
+        </a>
+        <div className="grid md:grid-cols-3 gap-6 w-full">
+          {getRandomImages(coachBusImages, 3).map((img, idx) => (
+            <div
+              key={img}
+              className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center"
+            >
+              <img
+                src={img}
+                alt="Coach Bus"
+                className="w-full h-72 object-cover rounded-2xl mb-5"
+              />
+              <h4 className="text-lg font-bold mb-2">Coach Bus {idx + 1}</h4>
+              <div className="flex flex-col gap-2 w-full">
+                <a
+                  href="tel:8885352566"
+                  className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg hover:bg-blue-800 transition text-center text-sm px-3"
+                >
+                  888-535-2566
+                </a>
+                <a
+                  href="mailto:info@bus2ride.com"
+                  className="w-full bg-blue-600 text-white font-bold py-1.5 rounded-lg hover:bg-blue-700 transition text-center text-sm px-3"
+                >
+                  Email Now
+                </a>
+                <a
+                  href="/quote"
+                  className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg hover:bg-green-600 transition text-center text-sm px-3"
+                >
+                  Instant Live Quote
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
-        ))}
+        {/* Right Arrow - absolutely positioned, vertically centered with the images, with extra space */}
+        <a
+          href="/fleet"
+          aria-label="View next coach buses"
+          className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+          tabIndex={0}
+          style={{
+            boxShadow: '0 2px 12px 0 rgba(30,64,175,0.10)',
+            top: 'calc(50% - 56px)',
+            right: '-68px'
+          }}
+        >
+          &#8594;
+        </a>
       </div>
 
       {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
