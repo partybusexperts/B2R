@@ -101,7 +101,10 @@ export default function ToolsShowcase() {
   const current = TOOLS.find(t => t.id === openId);
 
   return (
-    <section className="mx-auto max-w-6xl">
+    <section className="mx-auto max-w-6xl relative overflow-hidden py-8 md:py-12 animate-gradient bg-[linear-gradient(120deg,#e0e7ff_0%,#f0f9ff_50%,#e0e7ff_100%)]">
+      {/* Decorative Confetti SVGs */}
+      <svg className="absolute left-0 top-0 w-32 h-32 opacity-20 pointer-events-none animate-float-slow" viewBox="0 0 128 128" fill="none"><circle cx="32" cy="32" r="12" fill="#60a5fa"/><rect x="80" y="20" width="16" height="16" rx="4" fill="#fbbf24"/><circle cx="110" cy="60" r="8" fill="#f472b6"/></svg>
+      <svg className="absolute right-0 bottom-0 w-40 h-40 opacity-20 pointer-events-none animate-float" viewBox="0 0 160 160" fill="none"><circle cx="120" cy="40" r="14" fill="#fbbf24"/><rect x="30" y="120" width="18" height="18" rx="5" fill="#60a5fa"/><circle cx="60" cy="60" r="10" fill="#f472b6"/></svg>
       {/* Mobile: horizontal scroll */}
       <div className="md:hidden -mx-4 px-4 overflow-x-auto no-scrollbar">
         <div className="flex gap-4">
@@ -122,7 +125,7 @@ export default function ToolsShowcase() {
           <div className="relative z-10 w-full max-w-3xl rounded-2xl bg-white shadow-xl">
             <div className="flex items-center justify-between p-4 border-b">
               <h3 className="text-lg font-semibold">
-                <span className="mr-2">{current.icon}</span>
+                <span className="mr-2 animate-bounce-slow">{current.icon}</span>
                 {current.title}
               </h3>
               <button
@@ -159,13 +162,11 @@ function ToolCard({
 }) {
   return (
     <div
-      className="bg-[#eaf0ff] rounded-2xl shadow-sm border border-[#d7e2ff] p-4 flex flex-col justify-between
-                 min-w-[260px] w-[280px] md:w-auto md:min-w-0
-                 h-56"
+      className="bg-[#eaf0ff] rounded-2xl shadow-md border border-[#d7e2ff] p-4 flex flex-col justify-between min-w-[260px] w-[280px] md:w-auto md:min-w-0 h-56 transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-blue-400 group cursor-pointer"
     >
       <div>
         <h3 className="text-blue-900 text-lg font-bold mb-1 flex items-center gap-2">
-          <span className="text-2xl">{tool.icon}</span>
+          <span className="text-2xl group-hover:animate-bounce">{tool.icon}</span>
           <span className="line-clamp-1">{tool.title}</span>
         </h3>
         <p className="text-gray-600 text-sm leading-snug line-clamp-3">
@@ -175,13 +176,21 @@ function ToolCard({
       <div className="pt-3">
         <button
           onClick={onOpen}
-          className="w-full rounded-xl bg-blue-700 text-white text-sm font-medium py-2 hover:bg-blue-800 transition"
+          className="w-full rounded-xl bg-blue-700 text-white text-sm font-medium py-2 hover:bg-blue-800 transition shadow group-hover:shadow-lg"
         >
           Open
         </button>
       </div>
     </div>
   );
+// Animations for gradient and confetti (add to globals.css if not present)
+// .animate-gradient { background-size: 200% 200%; animation: gradientMove 8s ease-in-out infinite; }
+// @keyframes gradientMove { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+// .animate-float { animation: float 6s ease-in-out infinite alternate; }
+// .animate-float-slow { animation: float 10s ease-in-out infinite alternate; }
+// @keyframes float { 0%{transform:translateY(0)} 100%{transform:translateY(-20px)} }
+// .animate-bounce-slow { animation: bounce 2.5s infinite; }
+// @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 }
 
 /* Optional: hide scrollbars for mobile strip (add to globals.css if needed)
