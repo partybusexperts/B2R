@@ -118,7 +118,7 @@ export default function Home() {
     <section className="max-w-6xl mx-auto px-4 py-16 bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
       <div>
       <h2
-        className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 tracking-tight font-serif drop-shadow-sm"
+        className="text-4xl md:text-5xl font-extrabold mb-10 mt-8 text-blue-900 tracking-tight font-serif drop-shadow-sm"
         style={{ letterSpacing: "0.01em" }}
       >
         Why Rent With <span className="text-blue-700">Bus2Ride?</span>
@@ -141,7 +141,7 @@ export default function Home() {
 
       {/* Party Buses Section */}
   <section className="max-w-6xl mx-auto px-4 py-12">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
       Party Buses
     </h2>
 
@@ -216,7 +216,7 @@ export default function Home() {
     {/* Party Bus Features as Modal Buttons (like Why Rent With Us) */}
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex flex-col md:flex-row md:items-center gap-6">
-      <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+  <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
         Popular Party Bus Features
       </h2>
       <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
@@ -290,7 +290,7 @@ export default function Home() {
 
       {/* Limos Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
           Limousines
         </h2>
         {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
@@ -363,7 +363,7 @@ export default function Home() {
         {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
-            <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+            <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
               Popular Limo Features
             </h2>
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
@@ -438,7 +438,7 @@ export default function Home() {
 
       {/* Coach Buses Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
         Coach Buses
       </h2>
 
@@ -512,7 +512,7 @@ export default function Home() {
       {/* Features BELOW the 3 boxes, styled like "Why Rent With" buttons */}
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-center gap-6">
-        <h2 className="text-2xl font-bold text-blue-900 md:w-1/4">
+  <h2 className="text-2xl font-bold text-blue-900 md:w-1/4 mb-6 mt-4">
           Popular Coach Bus Features
         </h2>
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-blue-900 flex-1">
@@ -587,7 +587,7 @@ export default function Home() {
       {/* Trust & Reputation */}
       <section className="bg-blue-50 py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-blue-900">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-10 mt-8 text-blue-900">
         The Most Trusted Limo & Bus Rental Company
           </h2>
           <p className="text-xl text-gray-700 mb-10">
@@ -641,7 +641,7 @@ export default function Home() {
 
       {/* How It Works */}
       <section className="max-w-4xl mx-auto px-4 py-12">
-          <h2 className="text-2xl font-bold text-center mb-6 text-blue-900">
+      <h2 className="text-2xl font-bold text-center mb-10 mt-8 text-blue-900">
             How It Works
           </h2>
           <div className="grid md:grid-cols-4 gap-6 text-center">
@@ -715,7 +715,7 @@ export default function Home() {
 
       {/* Testimonials */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
           What Our Customers Say
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 max-w-4xl mx-auto">
@@ -782,7 +782,7 @@ export default function Home() {
       </section>
  {/* Tools Section (original slider version) */}
       <section className="max-w-6xl mx-auto px-4 py-12">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-8 tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">
           Tools
         </h2>
         <p className="text-lg text-center text-blue-900 mb-6 max-w-2xl mx-auto">
@@ -794,18 +794,18 @@ export default function Home() {
       </section>
   {/* Polls */}
   <div className="max-w-6xl mx-auto px-4 mt-12 mb-2">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-2 tracking-tight">Limo Industry Polls</h2>
+  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">Limo Industry Polls</h2>
     <p className="text-lg text-center text-blue-900 mb-6 max-w-2xl mx-auto">
       See what real riders and industry pros are saying! Our live polls help you compare trends, get honest opinions, and make smarter choices for your next trip. Vote, view results, and join the conversation.
     </p>
   </div>
   <PollsSection />
   {/* Live Weather & Comfort Advisor */}
-  <div className="py-8">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-4 tracking-tight flex items-center justify-center gap-2">
+  <div className="py-16">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight flex items-center justify-center gap-2">
       <span role="img" aria-label="fire">🔥</span> Smart Weather & Comfort Tips
     </h2>
-    <p className="text-lg text-center text-blue-900 mb-8 max-w-2xl mx-auto">
+    <p className="text-lg text-center text-blue-900 mb-10 max-w-2xl mx-auto">
       Get real-time weather and comfort tips for your trip—no matter the season or city. We check the latest forecast and give you practical advice on what to wear, what to bring, and how to make your ride as comfortable as possible. Stay prepared and enjoy your journey!
     </p>
     <LiveWeatherAdvisor />
@@ -877,10 +877,29 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           <rect x="120" y="120" width="16" height="16" rx="4" fill="#34d399"/>
           <circle cx="40" cy="200" r="12" fill="#818cf8"/>
         </svg>
-  <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-4 tracking-tight">Events & Occasions</h2>
-  <p className="text-lg text-center text-blue-900 mb-8 max-w-2xl mx-auto">
-    Explore our most popular events and occasions for group transportation. Whether it’s a wedding, prom, concert, sporting event, or a night out, we have the perfect ride for every celebration. Click any event to learn more, get tips, and see how Bus2Ride can make your occasion unforgettable!
-  </p>
+  </section>
+  <div className="max-w-6xl mx-auto px-4 mt-16 mb-2">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">Events & Occasions</h2>
+    <p className="text-lg text-center text-blue-900 mb-10 max-w-2xl mx-auto">
+      Explore our most popular events and occasions for group transportation. Whether it’s a wedding, prom, concert, sporting event, or a night out, we have the perfect ride for every celebration. Click any event to learn more, get tips, and see how Bus2Ride can make your occasion unforgettable!
+    </p>
+  </div>
+  <section className="max-w-7xl mx-auto px-4 py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100">
+        {/* Decorative Confetti SVGs */}
+        <svg className="absolute left-0 top-0 w-48 h-48 opacity-20 pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="12" fill="#60a5fa"/>
+          <rect x="120" y="30" width="18" height="18" rx="4" fill="#fbbf24"/>
+          <circle cx="170" cy="80" r="8" fill="#f472b6"/>
+          <rect x="60" y="120" width="14" height="14" rx="3" fill="#34d399"/>
+          <circle cx="180" cy="180" r="10" fill="#818cf8"/>
+        </svg>
+        <svg className="absolute right-0 bottom-0 w-56 h-56 opacity-20 pointer-events-none" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="180" cy="40" r="14" fill="#fbbf24"/>
+          <rect x="30" y="160" width="20" height="20" rx="5" fill="#60a5fa"/>
+          <circle cx="60" cy="60" r="10" fill="#f472b6"/>
+          <rect x="120" y="120" width="16" height="16" rx="4" fill="#34d399"/>
+          <circle cx="40" cy="200" r="12" fill="#818cf8"/>
+        </svg>
         {/* Render events in rows of 5, only once */}
         {Array.from({ length: Math.ceil(eventNames.length / 5) }).map((_, rowIdx) => (
   <React.Fragment key={rowIdx}>
@@ -962,8 +981,14 @@ Show off your ride, your event, or your crew—then share the link anywhere!
         </section>
 
   {/* Blog Topics */}
+  <div className="max-w-6xl mx-auto px-4 mt-16 mb-2">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 text-center mb-10 mt-8 tracking-tight">Blog Topics</h2>
+    <p className="text-lg text-center text-blue-900 mb-10 max-w-2xl mx-auto">
+      Dive into our expert blog for tips, guides, and real-world advice on planning the perfect group trip. From wedding shuttles to prom safety, cost breakdowns, and more—get the knowledge you need to book with confidence and make your event unforgettable.
+    </p>
+  </div>
   <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
-    <h3 className="text-2xl md:text-3xl font-extrabold mb-8 text-blue-900 tracking-tight">Blog Topics</h3>
+    {/* Blog grid remains unchanged */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       {[
         {
