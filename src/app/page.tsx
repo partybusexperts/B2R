@@ -126,12 +126,12 @@ export default function Home() {
       </Section>
       {/* Party Buses Section */}
       <Section className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
           Party Buses
         </h2>
 
-        {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
-        <div className="relative flex items-center justify-center mb-8" style={{ minHeight: '260px' }}>
+  {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
+  <div className="relative flex items-center justify-center mb-8 mt-6" style={{ minHeight: '260px' }}>
           {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
           <a
             href="/fleet"
@@ -275,9 +275,9 @@ export default function Home() {
 
     {/* Limos Section */}
     <Section className="max-w-6xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
-        Limousines
-      </h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
+          Limousines
+        </h2>
         {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
         <div className="relative flex items-center justify-center mb-8" style={{ minHeight: '260px' }}>
           {/* Left Arrow - absolutely positioned, vertically centered with the images, with extra space */}
@@ -423,9 +423,9 @@ export default function Home() {
 
     {/* Coach Buses Section */}
     <Section className="max-w-6xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
-        Coach Buses
-      </h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
+          Coach Buses
+        </h2>
 
       {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
       <div className="relative flex items-center justify-center mb-10" style={{ minHeight: '288px' }}>
@@ -625,9 +625,9 @@ export default function Home() {
 
     {/* How It Works */}
     <Section className="max-w-4xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg">
-      How It Works
-    </h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
+          How It Works
+        </h2>
         <div className="grid md:grid-cols-4 gap-6 text-center">
           {/* Step 1 */}
           <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative">
@@ -699,7 +699,7 @@ export default function Home() {
 
     {/* Testimonials */}
     <Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">
           What Our Customers Say
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 max-w-4xl mx-auto">
@@ -948,7 +948,7 @@ export default function Home() {
 
   {/* Blog Topics */}
   <div className="max-w-6xl mx-auto px-4 mt-16 mb-2">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">Blog Topics</h2>
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">Blog Topics</h2>
     <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
       Dive into our expert blog for tips, guides, and real-world advice on planning the perfect group trip. From wedding shuttles to prom safety, cost breakdowns, and more—get the knowledge you need to book with confidence and make your event unforgettable.
     </p>
