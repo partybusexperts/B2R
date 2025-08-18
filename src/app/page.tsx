@@ -785,6 +785,9 @@ export default function Home() {
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
           Tools
         </h2>
+        <p className="text-lg text-center text-blue-900 mb-6 max-w-2xl mx-auto">
+          Discover our exclusive suite of free tools—designed to make planning your party bus, limo, or group trip effortless. From instant quotes and route planners to weather checkers and event sync, these tools help you compare, book, and enjoy your ride with total confidence. Try them all and see why Bus2Ride is the most trusted name in group transportation!
+        </p>
         <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100">
           <ToolsSlider />
         </div>
@@ -866,13 +869,17 @@ Show off your ride, your event, or your crew—then share the link anywhere!
   <React.Fragment key={rowIdx}>
             <div key={rowIdx} className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
               {eventNames.slice(rowIdx * 5, rowIdx * 5 + 5).map((event, i) => (
-                <div key={event} className="bg-white rounded-xl shadow p-6 flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-300 hover:-translate-y-2 cursor-pointer">
+                <a
+                  key={event}
+                  href={`/events/${event.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}
+                  className="bg-white rounded-xl shadow p-6 flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-300 hover:-translate-y-2 cursor-pointer group text-inherit no-underline"
+                >
                   <img src={eventImages[rowIdx * 5 + i]} alt="Party Bus" className="w-full h-64 aspect-[4/3] object-cover rounded-lg mb-4" />
-                  <h4 className="font-semibold mb-2 text-center">{event}</h4>
-                  <a href="#" className="text-blue-700 font-bold hover:underline mb-2">Learn More</a>
-                  <a href="tel:8885352566" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center mb-1">Call 888-535-2566</a>
-                  <a href="mailto:info@bus2ride.com" className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-center">info@bus2ride.com</a>
-                </div>
+                  <h4 className="font-semibold mb-2 text-center group-hover:text-blue-700 transition-colors">{event}</h4>
+                  <span className="text-blue-700 font-bold hover:underline mb-2">Learn More</span>
+                  <span className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg text-center mb-1 mt-2 opacity-80 group-hover:opacity-100 transition">Call 888-535-2566</span>
+                  <span className="block w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-center opacity-80 group-hover:opacity-100 transition">info@bus2ride.com</span>
+                </a>
               ))}
             </div>
             {(rowIdx + 1) % 2 === 0 && rowIdx !== Array.from({ length: Math.ceil(eventNames.length / 5) }).length - 1 && (
