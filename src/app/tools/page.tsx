@@ -1,20 +1,284 @@
 "use client";
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, useState } from "react";
+import ToolModalButton from "../../components/ToolModalButton";
+
+
+
+
+// ToolCard: makes each legacy tool interactive and functional
+function ToolCard({ tool }: { tool: Tool }) {
+  const [shareCopied, setShareCopied] = useState(false);
+  // For modal tool logic
+  const [inputs, setInputs] = useState(() => tool.inputs ? tool.inputs.map(() => "") : []);
+  const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Helper: call API endpoints for real-data tools (same as before)
+  async function handleAction() {
+    setLoading(true);
+    setError("");
+    setResult(null);
+    try {
+      let res;
+      if (tool.title === "Vehicle Capacity Finder") {
+        const group_size = Number(inputs[0]);
+        const r = await fetch("/api/vehicle-capacity", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ group_size }),
+        });
+        res = await r.json();
+        if (res.error) setError(res.error);
+        else setResult(res);
+      } else if (tool.title === "Budget Estimator") {
+        const group_size = Number(inputs[0]);
+        const hours = Number(inputs[1]) || 4;
+        const r = await fetch("/api/budget-estimate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ group_size, hours }),
+        });
+        res = await r.json();
+        if (res.error) setError(res.error);
+        else setResult(res);
+      } else if (tool.title === "Vehicle Comparison") {
+        const vehicle1 = inputs[0] || "";
+        const vehicle2 = inputs[1] || "";
+        const r = await fetch("/api/vehicle-compare", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vehicle1, vehicle2 }),
+        });
+        res = await r.json();
+        setResult(res);
+      } else if (tool.title === "Weather Checker") {
+        const city = inputs[0] || "";
+        const date = inputs[1] || "";
+        const r = await fetch("/api/weather-check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ city, date }),
+        });
+        res = await r.json();
+        setResult(res);
+      } else {
+        let res = "";
+        switch (tool.title) {
+          case "Cost Split Calculator": {
+            const total = parseFloat(inputs[0]);
+            const people = parseInt(inputs[1]);
+            if (!total || !people || people <= 0) res = "Please enter valid numbers.";
+            else res = `Per-person cost: $${(total / people).toFixed(2)}`;
+            break;
+          }
+          case "Bus Size Recommender": {
+            const size = parseInt(inputs[0]);
+            if (!size || size <= 0) res = "Enter a group size.";
+            else if (size <= 10) res = "Recommended: 10-passenger van";
+            else if (size <= 20) res = "Recommended: 20-passenger bus";
+            else if (size <= 30) res = "Recommended: 30-passenger bus";
+            else if (size <= 40) res = "Recommended: 40-passenger bus";
+            else res = "Recommended: Charter bus";
+            break;
+          }
+          default: {
+            res = tool.response || "(Demo only)";
+          }
+        }
+        setResult(res);
+      }
+    } catch (e) {
+      setError("Server error");
+    }
+    setLoading(false);
+  }
+
+  // Share link logic
+  const shareUrl = typeof window !== "undefined"
+    ? `${window.location.origin}/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`
+    : `https://yourdomain.com/tools#${tool.title.toLowerCase().replace(/\s+/g, '-')}`;
+
+  function handleShare() {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareUrl);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 1500);
+    }
+  }
+
+  return (
+    <div className="flex flex-col bg-blue-950/90 rounded-2xl shadow-2xl border border-blue-500/20 p-8 hover:scale-105 transition-transform text-white min-h-[220px] items-center justify-between">
+      <h3 className="text-2xl font-bold mb-2 text-blue-200 font-serif flex items-center gap-2 text-center">
+        {tool.icon && <span className="text-2xl">{tool.icon}</span>}
+        {tool.title}
+      </h3>
+      <p className="text-blue-100 mb-4 font-sans text-center">{tool.desc}</p>
+      <ToolModalButton
+        title={tool.title}
+        desc={tool.desc}
+        icon={tool.icon}
+        buttonLabel="TRY ME"
+      >
+        {/* Modal content: tool UI only! */}
+        {tool.title === "Vehicle Capacity Finder" && (
+          <div className="flex flex-col gap-2 mb-4">
+            <input
+              type="number"
+              placeholder="Enter group size"
+              className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+              value={inputs[0] || ""}
+              onChange={e => setInputs([e.target.value, inputs[1] || ""])}
+              disabled={loading}
+            />
+          </div>
+        )}
+        {tool.title === "Budget Estimator" && (
+          <div className="flex flex-col gap-2 mb-4">
+            <input
+              type="number"
+              placeholder="Enter group size"
+              className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+              value={inputs[0] || ""}
+              onChange={e => setInputs([e.target.value, inputs[1] || ""])}
+              disabled={loading}
+            />
+            <input
+              type="number"
+              placeholder="Enter hours (default 4)"
+              className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+              value={inputs[1] || ""}
+              onChange={e => setInputs([inputs[0] || "", e.target.value])}
+              disabled={loading}
+            />
+          </div>
+        )}
+        {tool.title === "Vehicle Comparison" && (
+          <div className="flex flex-col gap-2 mb-4">
+            <input
+              type="text"
+              placeholder="Vehicle 1 name (e.g. Party Bus 20)"
+              className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+              value={inputs[0] || ""}
+              onChange={e => setInputs([e.target.value, inputs[1] || ""])}
+              disabled={loading}
+            />
+            <input
+              type="text"
+              placeholder="Vehicle 2 name (e.g. Party Bus 30)"
+              className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+              value={inputs[1] || ""}
+              onChange={e => setInputs([inputs[0] || "", e.target.value])}
+              disabled={loading}
+            />
+          </div>
+        )}
+        {tool.title === "Weather Checker" && (
+          <div className="flex flex-col gap-2 mb-4">
+            <input
+              type="text"
+              placeholder="Enter city"
+              className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+              value={inputs[0] || ""}
+              onChange={e => setInputs([e.target.value, inputs[1] || ""])}
+              disabled={loading}
+            />
+            <input
+              type="date"
+              placeholder="Enter date"
+              className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+              value={inputs[1] || ""}
+              onChange={e => setInputs([inputs[0] || "", e.target.value])}
+              disabled={loading}
+            />
+          </div>
+        )}
+        {tool.inputs && !["Vehicle Capacity Finder","Budget Estimator","Vehicle Comparison","Weather Checker"].includes(tool.title) && (
+          <div className="flex flex-col gap-2 mb-4">
+            {tool.inputs.map((input: { placeholder: string }, j: number) => (
+              <input
+                key={j}
+                type="text"
+                placeholder={input.placeholder}
+                className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-blue-900 px-3 py-2 placeholder:text-blue-400 focus:ring-2 focus:ring-blue-400"
+                value={inputs[j]}
+                onChange={e => setInputs(inputs.map((v, idx) => idx === j ? e.target.value : v))}
+                disabled={loading}
+              />
+            ))}
+          </div>
+        )}
+        <button
+          className="w-full bg-gradient-to-r from-blue-700 to-blue-400 text-white p-2 rounded font-bold mb-2 hover:scale-105 transition-transform shadow-lg"
+          onClick={handleAction}
+          disabled={loading}
+        >
+          {loading ? "Working..." : tool.button || "Go"}
+        </button>
+        {error && (
+          <div className="text-red-400 italic text-sm font-sans mb-2">{error}</div>
+        )}
+        {result && tool.title === "Vehicle Capacity Finder" && Array.isArray(result) && (
+          <div className="text-blue-300 italic text-sm font-sans mb-2">
+            {result.map((v: any, i: number) => (
+              <div key={i} className="mb-2 p-2 bg-blue-900/60 rounded">
+                <div className="font-bold">{v.name}</div>
+                <div>Capacity: {v.capacity}</div>
+                <div>Hourly: ${v.hourly}</div>
+              </div>
+            ))}
+          </div>
+        )}
+        {result && tool.title === "Budget Estimator" && result.vehicle && (
+          <div className="text-blue-300 italic text-sm font-sans mb-2">
+            <div>Vehicle: <b>{result.vehicle}</b></div>
+            <div>Hourly: ${result.hourly}</div>
+            <div>Hours: {result.hours}</div>
+            <div className="font-bold">Total: ${result.total}</div>
+          </div>
+        )}
+        {result && tool.title === "Vehicle Comparison" && Array.isArray(result) && (
+          <div className="text-blue-300 italic text-sm font-sans mb-2 grid grid-cols-2 gap-2">
+            {result.map((v: any, i: number) => (
+              <div key={i} className="p-2 bg-blue-900/60 rounded">
+                <div className="font-bold">{v.name}</div>
+                {v.error ? <div className="text-red-400">{v.error}</div> : (
+                  <>
+                    <div>Capacity: {v.capacity}</div>
+                    <div>Hourly: ${v.hourly}</div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {result && tool.title === "Weather Checker" && (
+          <div className="text-blue-300 italic text-sm font-sans mb-2">
+            <div>{result.city} on {result.date}:</div>
+            <div className="font-bold">{result.summary}, {result.temp}&deg;F</div>
+          </div>
+        )}
+        {result && !["Vehicle Capacity Finder","Budget Estimator","Vehicle Comparison","Weather Checker"].includes(tool.title) && (
+          <div className="text-blue-300 italic text-sm font-sans mb-2">{result}</div>
+        )}
+      </ToolModalButton>
+      <button
+        className="text-blue-300 underline text-sm mb-2 hover:text-blue-100"
+        onClick={handleShare}
+        type="button"
+      >
+        Share this tool on your website
+      </button>
+      {shareCopied && <div className="text-green-400 text-xs mt-1">Link copied!</div>}
+    </div>
+  );
+}
 import PageLayout from "../../components/PageLayout";
 import Section from "../../components/Section";
 
 
 
 
-const CapacityFinderTool = lazy(() => import("../../components/CapacityFinderTool"));
-const VehicleComparisonTool = lazy(() => import("../../components/VehicleComparisonTool"));
-const BudgetEstimator = lazy(() => import("../../components/BudgetEstimator"));
-const PlaylistStarter = lazy(() => import("../../components/PlaylistStarter"));
-const TailgateChecklist = lazy(() => import("../../components/TailgateChecklist"));
-const RoutePlanner = lazy(() => import("../../components/RoutePlanner"));
-const WeatherChecker = lazy(() => import("../../components/WeatherChecker"));
-const AccessibilityGuide = lazy(() => import("../../components/AccessibilityGuide"));
-const EventSync = lazy(() => import("../../components/EventSync"));
 
 type Tool = {
   title: string;
@@ -27,15 +291,15 @@ type Tool = {
 };
 
 const TOP_TOOLS: Tool[] = [
-  { title: "Vehicle Capacity Finder", desc: "Enter your group size to see best-fit vehicles.", icon: "🚌", render: () => <CapacityFinderTool /> },
-  { title: "Vehicle Comparison", desc: "Pick two vehicle types and compare quickly.", icon: "⚖️", render: () => <VehicleComparisonTool /> },
-  { title: "Budget Estimator", desc: "Get a fast ballpark price for your trip.", icon: "💰", render: () => <BudgetEstimator /> },
-  { title: "Playlist Starter", desc: "One-click Spotify vibes for any occasion.", icon: "🎶", render: () => <PlaylistStarter /> },
-  { title: "Tailgate Checklist", desc: "Everything you need for game day.", icon: "🏈", render: () => <TailgateChecklist /> },
-  { title: "Route Planner", desc: "Map your trip and optimize stops easily.", icon: "🗺️", render: () => <RoutePlanner /> },
-  { title: "Weather Checker", desc: "Check the forecast for your trip dates.", icon: "🌤️", render: () => <WeatherChecker /> },
-  { title: "Accessibility Guide", desc: "Find accessible vehicles and trip tips.", icon: "♿", render: () => <AccessibilityGuide /> },
-  { title: "Event Sync", desc: "Sync your trip with calendars and events.", icon: "📅", render: () => <EventSync /> },
+  { title: "Vehicle Capacity Finder", desc: "Enter your group size to see best-fit vehicles.", icon: "🚌", button: "Try Tool" },
+  { title: "Vehicle Comparison", desc: "Pick two vehicle types and compare quickly.", icon: "⚖️", button: "Try Tool" },
+  { title: "Budget Estimator", desc: "Get a fast ballpark price for your trip.", icon: "💰", button: "Try Tool" },
+  { title: "Playlist Starter", desc: "One-click Spotify vibes for any occasion.", icon: "🎶", button: "Try Tool" },
+  { title: "Tailgate Checklist", desc: "Everything you need for game day.", icon: "🏈", button: "Try Tool" },
+  { title: "Route Planner", desc: "Map your trip and optimize stops easily.", icon: "🗺️", button: "Try Tool" },
+  { title: "Weather Checker", desc: "Check the forecast for your trip dates.", icon: "🌤️", button: "Try Tool" },
+  { title: "Accessibility Guide", desc: "Find accessible vehicles and trip tips.", icon: "♿", button: "Try Tool" },
+  { title: "Event Sync", desc: "Sync your trip with calendars and events.", icon: "📅", button: "Try Tool" },
 ];
 
 const LEGACY_TOOLS: Tool[] = [
@@ -115,31 +379,7 @@ export default function LimoToolsPage() {
         <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
             {ALL_TOOLS.map((tool) => (
-              <div key={tool.title} className="flex flex-col bg-blue-950/90 rounded-2xl shadow-2xl border border-blue-500/20 p-8 hover:scale-105 transition-transform text-white min-h-[340px]">
-                <h3 className="text-2xl font-bold mb-2 text-blue-200 font-serif flex items-center gap-2">
-                  {tool.icon && <span className="text-2xl">{tool.icon}</span>}
-                  {tool.title}
-                </h3>
-                <p className="text-blue-100 mb-4 font-sans">{tool.desc}</p>
-                {tool.inputs && (
-                  <div className="flex flex-col gap-2 mb-4">
-                    {tool.inputs.map((input, j) => (
-                      <input key={j} type="text" placeholder={input.placeholder} className="w-full rounded border border-blue-700/40 bg-blue-900/40 text-white px-3 py-2 placeholder:text-blue-200 focus:ring-2 focus:ring-blue-400" />
-                    ))}
-                  </div>
-                )}
-                {tool.button && (
-                  <button className="w-full bg-gradient-to-r from-blue-700 to-green-500 text-white p-2 rounded font-bold mb-2 hover:scale-105 transition-transform shadow-lg">{tool.button}</button>
-                )}
-                {tool.response && (
-                  <div className="text-blue-300 italic text-sm font-sans">{tool.response}</div>
-                )}
-                {tool.render && (
-                  <Suspense fallback={<div className="text-blue-200">Loading…</div>}>
-                    {tool.render()}
-                  </Suspense>
-                )}
-              </div>
+              <ToolCard key={tool.title} tool={tool} />
             ))}
           </div>
         </Section>

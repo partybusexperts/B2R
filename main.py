@@ -1,3 +1,61 @@
+from fastapi import Body
+import pandas as pd
+import random
+
+# --- Simple API: Vehicle Capacity Finder ---
+@app.post("/api/vehicle-capacity")
+def vehicle_capacity(data: dict = Body(...)):
+    group_size = int(data.get("group_size", 0))
+    df = pd.read_csv("data/vehicles_cleaned.csv")
+    matches = df[df["capacity"] >= group_size].sort_values("capacity")
+    if matches.empty:
+        return {"error": "No suitable vehicles found."}
+    return matches.head(3).to_dict(orient="records")
+
+# --- Simple API: Budget Estimator ---
+@app.post("/api/budget-estimate")
+def budget_estimate(data: dict = Body(...)):
+    group_size = int(data.get("group_size", 0))
+    hours = int(data.get("hours", 4))
+    df = pd.read_csv("data/vehicles_cleaned.csv")
+    # Pick cheapest vehicle that fits group
+    matches = df[df["capacity"] >= group_size].sort_values("hourly")
+    if matches.empty:
+        return {"error": "No vehicle found for group size."}
+    v = matches.iloc[0]
+    total = float(v["hourly"]) * hours
+    return {"vehicle": v["name"], "hourly": v["hourly"], "hours": hours, "total": total}
+
+# --- Simple API: Vehicle Comparison ---
+@app.post("/api/vehicle-compare")
+def vehicle_compare(data: dict = Body(...)):
+    v1 = data.get("vehicle1", "")
+    v2 = data.get("vehicle2", "")
+    df = pd.read_csv("data/vehicles_cleaned.csv")
+    res = []
+    for v in [v1, v2]:
+        row = df[df["name"].str.lower() == v.lower()]
+        if not row.empty:
+            res.append(row.iloc[0].to_dict())
+        else:
+            res.append({"name": v, "error": "Not found"})
+    return res
+
+# --- Simple API: Weather Checker (demo, static data) ---
+@app.post("/api/weather-check")
+def weather_check(data: dict = Body(...)):
+    # In real use, call a weather API here
+    city = data.get("city", "")
+    date = data.get("date", "")
+    # Demo: random weather
+    weather = random.choice([
+        {"summary": "Sunny", "temp": 82},
+        {"summary": "Cloudy", "temp": 75},
+        {"summary": "Rainy", "temp": 68},
+        {"summary": "Storms", "temp": 70},
+        {"summary": "Clear", "temp": 78},
+    ])
+    return {"city": city, "date": date, **weather}
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse, FileResponse
