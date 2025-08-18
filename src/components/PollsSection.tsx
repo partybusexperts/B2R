@@ -100,7 +100,7 @@ function Poll({ poll }: { poll: PollType }) {
 
   return (
     <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start border-l-4 border-blue-400 w-full">
-      <div className="font-bold mb-2">{poll.question}</div>
+      <div className="font-bold mb-2 text-blue-900">{poll.question}</div>
       {!voted ? (
         <div className="flex gap-2 flex-wrap">
           {poll.options.map(option => (
@@ -121,14 +121,14 @@ function Poll({ poll }: { poll: PollType }) {
             const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
             return (
               <div key={option} className="flex items-center mb-1 w-full">
-                <span className="w-24 text-blue-900 text-sm font-semibold">{option}</span>
+                <span className="w-24 text-blue-800 text-sm font-semibold">{option}</span>
                 <div className="flex-1 bg-blue-100 rounded h-4 mx-2">
                   <div
                     className="bg-blue-700 h-4 rounded"
                     style={{ width: totalVotes > 0 ? `${percent}%` : 0 }}
                   />
                 </div>
-                <span className="text-blue-900 text-xs font-bold min-w-[32px] text-right">
+                <span className="text-blue-800 text-xs font-bold min-w-[32px] text-right">
                   {count} {totalVotes > 0 ? `(${percent}%)` : ""}
                 </span>
               </div>

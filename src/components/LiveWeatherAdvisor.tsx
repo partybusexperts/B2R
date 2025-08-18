@@ -1,31 +1,22 @@
-import React, { useEffect, useState } from "react";
 
+import React, { useEffect, useState } from "react";
 
 // Open-Meteo: no API key needed
 const WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast";
 const GEOCODE_API_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const GEOIP_API_URL = "https://ipapi.co/json/";
-// NWS API base
 const NWS_POINTS_API = "https://api.weather.gov/points";
-
-function getTodayYYYYMMDD() {
-  const d = new Date();
-  return d.toISOString().slice(0, 10);
-}
 
 export default function LiveWeatherAdvisor() {
   const [city, setCity] = useState("");
   const [region, setRegion] = useState("");
-  const [date, setDate] = useState(getTodayYYYYMMDD());
   const [autoCity, setAutoCity] = useState("");
-  const [forecast, setForecast] = useState(null);
-  const [historical, setHistorical] = useState(null);
-  const [currentWeather, setCurrentWeather] = useState(null);
+  const [forecast, setForecast] = useState<any>(null);
+  const [currentWeather, setCurrentWeather] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [eventType, setEventType] = useState("");
   const [pendingCity, setPendingCity] = useState("");
-  const [pendingDate, setPendingDate] = useState("");
 
   // Get city from IP on mount
   useEffect(() => {
@@ -42,14 +33,12 @@ export default function LiveWeatherAdvisor() {
       });
   }, []);
 
-
   // Fetch weather using NWS for US, Open-Meteo for others
-  const fetchWeather = async (cityToUse: string, dateToUse: string) => {
-    if (!cityToUse || !dateToUse) return;
+  const fetchWeather = async (cityToUse: string) => {
+    if (!cityToUse) return;
     setLoading(true);
     setError("");
     setForecast(null);
-    setHistorical(null);
     setCurrentWeather(null);
 
     try {
@@ -88,7 +77,6 @@ export default function LiveWeatherAdvisor() {
 
       setForecast(forecastData.daily);
       setCurrentWeather(forecastData.current_weather);
-      setHistorical(null);
       setLoading(false);
     } catch (e: any) {
       setError(e.message || "Could not fetch weather");
@@ -97,52 +85,28 @@ export default function LiveWeatherAdvisor() {
     }
   };
 
-
   // Fetch on submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCity(pendingCity);
-    setDate(pendingDate);
-    fetchWeather(pendingCity, pendingDate);
+    fetchWeather(pendingCity);
   };
-
 
   // Update pending values only on mount
   useEffect(() => {
     setPendingCity(city);
-    setPendingDate(date);
   }, []);
 
-  // Fetch weather when city or date changes
+  // Fetch weather when city changes
   useEffect(() => {
-    if (city && date) {
-      fetchWeather(city, date);
+    if (city) {
+      fetchWeather(city);
     }
-  }, [city, date]);
+  }, [city]);
 
   // Helper: summarize historical rain (using day_summary)
-  // Helper: summarize historical rain (using day_summary)
-  type HistoricalYear = {
-    date?: string;
-    temperature?: { min: number; max: number };
-    precipitation?: { total: number };
-    [key: string]: any;
-  };
-
-  function rainAdvice(hist: HistoricalYear[] | null) {
-    if (!hist || !Array.isArray(hist)) return "No historical data available.";
-    let rainCount = 0;
-    hist.forEach((year: HistoricalYear) => {
-      if (year && year.precipitation && year.precipitation.total > 0) {
-        rainCount++;
-      }
-    });
-    if (rainCount >= 3) return `It has rained ${rainCount} of the last 5 years on this date — plan for rain!`;
-    if (rainCount > 0) return `Rain possible: ${rainCount} of the last 5 years had rain on this date.`;
-    return `Low chance of rain based on the last 5 years.`;
-  }
   return (
-  <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200 mt-8">
+    <div className="bg-gradient-to-br from-sky-50 to-sky-100 rounded-2xl shadow-xl p-8 border border-sky-200 mt-8">
       <form className="flex flex-col md:flex-row gap-4 mb-6 items-end" onSubmit={handleSubmit}>
         <div>
           <label className="block text-sm font-bold text-sky-800 mb-1">City</label>
@@ -151,15 +115,6 @@ export default function LiveWeatherAdvisor() {
             value={pendingCity}
             onChange={e => setPendingCity(e.target.value)}
             placeholder={autoCity || "Enter city"}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-sky-800 mb-1">Date</label>
-          <input
-            className="input"
-            type="date"
-            value={pendingDate}
-            onChange={e => setPendingDate(e.target.value)}
           />
         </div>
         <button type="submit" className="btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">Submit</button>
@@ -198,7 +153,7 @@ export default function LiveWeatherAdvisor() {
         <div className="mb-4">
           <h4 className="text-lg font-bold text-sky-800 mb-2">7-Day Forecast (NWS)</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {forecast.periods.slice(0, 7).map((period, i: number) => (
+            {forecast.periods.slice(0, 7).map((period: any, i: number) => (
               <div key={i} className="bg-white rounded-xl shadow p-3 text-center border border-sky-200">
                 <div className="font-bold text-sky-700">{period.name}</div>
                 <div className="text-2xl">{period.temperature}°F</div>
@@ -213,7 +168,7 @@ export default function LiveWeatherAdvisor() {
         <div className="mb-4">
           <h4 className="text-lg font-bold text-sky-800 mb-2">7-Day Forecast</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {forecast.time.map((date, i) => (
+            {forecast.time.map((date: any, i: number) => (
               <div key={i} className="bg-white rounded-xl shadow p-3 text-center border border-sky-200">
                 <div className="font-bold text-sky-700">{new Date(date).toLocaleDateString()}</div>
                 <div className="text-2xl">{forecast.weathercode[i]}</div>
@@ -308,7 +263,7 @@ export default function LiveWeatherAdvisor() {
                 <li>Charge your phone and bring a portable charger.</li>
               </>
             )}
-            {!currentWeather && !city && <li>Enter a city and date to get custom packing tips!</li>}
+            {!currentWeather && !city && <li>Enter a city to get custom packing tips!</li>}
           </ul>
         </div>
         <div>
