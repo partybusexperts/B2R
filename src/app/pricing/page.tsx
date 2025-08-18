@@ -1,6 +1,8 @@
 "use client";
 
-import Image from "next/image";
+import React from "react";
+import PageLayout from "@/components/PageLayout";
+import Section from "@/components/Section";
 
 const pricingFaq = [
   {
@@ -66,52 +68,93 @@ const pricingFaq = [
   },
 ];
 
-import { FaDollarSign, FaBusAlt, FaQuestionCircle, FaPhoneAlt } from "react-icons/fa";
+// Removed react-icons import
 
 export default function PricingPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-50 pb-16">
+    <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-700 to-blue-500 text-white py-14 mb-10 shadow-lg rounded-b-3xl">
-        <div className="max-w-3xl mx-auto px-4 text-center flex flex-col items-center">
-          <span className="bg-white/20 rounded-full p-4 mb-4"><FaDollarSign size={40} /></span>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-3 drop-shadow-lg">Transparent Pricing</h1>
-          <p className="text-lg md:text-xl mb-6 font-medium">Know what to expect—no surprises, just great value for your luxury ride.</p>
-          <a href="/contact" className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-lg shadow transition">Get a Custom Quote</a>
-        </div>
-      </section>
+      <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent">
+          Transparent Pricing
+        </h1>
+        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-100 font-medium">
+          Know what to expect—no surprises, just great value for your luxury ride.
+        </p>
+        <a
+          href="/quote"
+          className="inline-block px-10 py-5 rounded-full bg-gradient-to-r from-blue-700 to-green-500 text-white font-bold text-2xl shadow-xl hover:scale-110 transition-transform"
+        >
+          Get Instant Quote
+        </a>
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-green-500/10 blur-2xl opacity-60" />
+      </Section>
 
-      {/* FAQ Cards in 3 rows, 4 per row */}
-      <section className="max-w-6xl mx-auto px-4 grid gap-10">
-        {[0, 1, 2].map((row) => (
-          <div key={row} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-            {pricingFaq.slice(row * 4, row * 4 + 4).map((item) => (
-              <div
-                key={item.title}
-                className="relative bg-white rounded-2xl shadow-lg flex flex-col items-center gap-6 p-8 border-l-8 border-blue-200 hover:border-blue-500 hover:shadow-2xl transition-all group"
-                style={{ background: "linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%)" }}
-              >
-                <div className="w-full h-32 relative flex-shrink-0 mb-2 flex items-center justify-center">
-                  <span className="absolute left-2 top-2 text-blue-400 group-hover:text-blue-600 transition-all"><FaBusAlt size={28} /></span>
-                  <Image src={item.image} alt={item.title} fill className="object-contain rounded-xl" />
-                </div>
-                <h2 className="text-xl font-bold text-blue-800 mb-2 flex items-center gap-2"><FaQuestionCircle className="text-blue-400" />{item.title}</h2>
-                <p className="text-gray-700 text-base text-center">{item.answer}</p>
-              </div>
-            ))}
+      {/* Stats Section */}
+      <Section className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 bg-gradient-to-r from-blue-900/80 via-blue-950/80 to-black/90 rounded-3xl shadow-xl my-12 py-10">
+        {[
+          { label: "Lowest Hourly Minimums", value: "2-4 Hours", icon: "⏰" },
+          { label: "Transparent Quotes", value: "No Hidden Fees", icon: "💵" },
+          { label: "All-Inclusive Pricing", value: "Taxes & Fees Included", icon: "🧾" },
+          { label: "Flexible Payment", value: "Cards, ACH, Wallets", icon: "💳" },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform"
+          >
+            <span className="text-5xl mb-2">{stat.icon}</span>
+            <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">
+              {stat.value}
+            </span>
+            <span className="text-lg text-blue-100 font-sans">{stat.label}</span>
           </div>
         ))}
-      </section>
+      </Section>
 
-      {/* CTA Card */}
-      <section className="max-w-2xl mx-auto px-4 py-12">
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl shadow-xl p-8 text-center flex flex-col items-center">
-          <FaPhoneAlt size={36} className="text-white mb-2" />
-          <h2 className="text-2xl font-bold mb-2 text-white">Ready to get your custom quote?</h2>
-          <p className="text-white mb-4">Contact our team and we’ll help you find the perfect vehicle and price for your event.</p>
-          <a href="/contact" className="inline-block bg-white text-green-700 px-6 py-3 rounded-lg font-semibold hover:bg-green-100 transition">Contact Us</a>
+      {/* FAQ Cards Section */}
+      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
+          Pricing FAQ
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {pricingFaq.map((item) => (
+            <div
+              key={item.title}
+              className="bg-blue-950/90 rounded-3xl shadow-2xl overflow-hidden flex flex-col hover:scale-105 transition-transform border border-blue-500/20 text-white p-8"
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-20 h-20 object-contain rounded-xl mb-4 border-2 border-blue-400/20 mx-auto"
+                loading="lazy"
+              />
+              <h3 className="text-xl font-bold mb-3 text-blue-200 font-serif flex items-center gap-2">
+                {item.title}
+              </h3>
+              <p className="mb-2 text-blue-100 flex-1 text-base font-sans text-center">
+                {item.answer}
+              </p>
+            </div>
+          ))}
         </div>
-      </section>
-    </main>
+      </Section>
+
+      {/* CTA Section */}
+      <Section className="max-w-2xl mx-auto text-center bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
+        <h2 className="text-5xl font-extrabold mb-6 text-blue-200 font-serif tracking-tight">
+          Get Your Custom Quote
+        </h2>
+        <p className="mb-8 text-xl text-blue-100 font-sans">
+          Get a real-time quote in seconds. No hidden fees, no surprises. Just awesome rides.
+        </p>
+        <a
+          href="/quote"
+          className="inline-block px-12 py-5 rounded-full bg-gradient-to-r from-blue-700 to-green-500 text-white font-bold text-2xl shadow-xl hover:scale-110 transition-transform"
+        >
+          Book Now
+        </a>
+      </Section>
+    </PageLayout>
   );
 }
