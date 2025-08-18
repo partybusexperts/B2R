@@ -1,3 +1,5 @@
+"use client";
+// ...existing code...
 import React, { useState } from "react";
 import { geocodeAddress } from "../utils/geocode";
 

@@ -1,3 +1,5 @@
+"use client";
+// ...existing code...
 import React, { useState, Suspense, lazy } from "react";
 import type { JSX } from "react";
 
@@ -96,15 +98,13 @@ const TOOLS: {
   },
 ];
 
+
 export default function ToolsShowcase() {
   const [openId, setOpenId] = useState<ToolId | null>(null);
   const current = TOOLS.find(t => t.id === openId);
 
   return (
-    <section className="mx-auto max-w-6xl relative overflow-hidden py-8 md:py-12 animate-gradient bg-[linear-gradient(120deg,#e0e7ff_0%,#f0f9ff_50%,#e0e7ff_100%)]">
-      {/* Decorative Confetti SVGs */}
-      <svg className="absolute left-0 top-0 w-32 h-32 opacity-20 pointer-events-none animate-float-slow" viewBox="0 0 128 128" fill="none"><circle cx="32" cy="32" r="12" fill="#60a5fa"/><rect x="80" y="20" width="16" height="16" rx="4" fill="#fbbf24"/><circle cx="110" cy="60" r="8" fill="#f472b6"/></svg>
-      <svg className="absolute right-0 bottom-0 w-40 h-40 opacity-20 pointer-events-none animate-float" viewBox="0 0 160 160" fill="none"><circle cx="120" cy="40" r="14" fill="#fbbf24"/><rect x="30" y="120" width="18" height="18" rx="5" fill="#60a5fa"/><circle cx="60" cy="60" r="10" fill="#f472b6"/></svg>
+    <section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12">
       {/* Mobile: horizontal scroll */}
       <div className="md:hidden -mx-4 px-4 overflow-x-auto no-scrollbar">
         <div className="flex gap-4">
@@ -114,7 +114,7 @@ export default function ToolsShowcase() {
         </div>
       </div>
       {/* Desktop: grid view */}
-      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
         {TOOLS.map(tool => (
           <ToolCard key={tool.id} tool={tool} onOpen={() => setOpenId(tool.id)} />
         ))}
@@ -148,6 +148,7 @@ export default function ToolsShowcase() {
   );
 }
 
+
 function ToolCard({
   tool,
   onOpen,
@@ -162,35 +163,28 @@ function ToolCard({
 }) {
   return (
     <div
-      className="bg-[#eaf0ff] rounded-2xl shadow-md border border-[#d7e2ff] p-4 flex flex-col justify-between min-w-[260px] w-[280px] md:w-auto md:min-w-0 h-56 transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-blue-400 group cursor-pointer"
+      className="flex flex-col bg-blue-950/90 rounded-2xl shadow-2xl border border-blue-500/20 p-8 hover:scale-105 transition-transform text-white min-h-[340px] cursor-pointer"
+      onClick={onOpen}
     >
       <div>
-        <h3 className="text-blue-900 text-lg font-bold mb-1 flex items-center gap-2">
+        <h3 className="text-2xl font-bold mb-2 text-blue-200 font-serif flex items-center gap-2">
           <span className="text-2xl group-hover:animate-bounce">{tool.icon}</span>
           <span className="line-clamp-1">{tool.title}</span>
         </h3>
-        <p className="text-gray-600 text-sm leading-snug line-clamp-3">
+        <p className="text-blue-100 mb-4 font-sans text-base leading-snug line-clamp-3">
           {tool.desc}
         </p>
       </div>
-      <div className="pt-3">
+      <div className="pt-3 mt-auto">
         <button
           onClick={onOpen}
-          className="w-full rounded-xl bg-blue-700 text-white text-sm font-medium py-2 hover:bg-blue-800 transition shadow group-hover:shadow-lg"
+          className="w-full bg-gradient-to-r from-blue-700 to-green-500 text-white p-2 rounded font-bold mb-2 hover:scale-105 transition-transform shadow-lg"
         >
           Open
         </button>
       </div>
     </div>
   );
-// Animations for gradient and confetti (add to globals.css if not present)
-// .animate-gradient { background-size: 200% 200%; animation: gradientMove 8s ease-in-out infinite; }
-// @keyframes gradientMove { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-// .animate-float { animation: float 6s ease-in-out infinite alternate; }
-// .animate-float-slow { animation: float 10s ease-in-out infinite alternate; }
-// @keyframes float { 0%{transform:translateY(0)} 100%{transform:translateY(-20px)} }
-// .animate-bounce-slow { animation: bounce 2.5s infinite; }
-// @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 }
 
 /* Optional: hide scrollbars for mobile strip (add to globals.css if needed)

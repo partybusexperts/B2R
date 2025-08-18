@@ -1,3 +1,5 @@
+"use client";
+// ...existing code...
 import React, { useState } from "react";
 
 function pad(n: number) { return n < 10 ? `0${n}` : n; }
