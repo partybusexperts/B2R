@@ -844,15 +844,30 @@ Show off your ride, your event, or your crew—then share the link anywhere!
       </div>
 
       {/* Group Transportation Services */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
+      <section className="max-w-7xl mx-auto px-4 py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100">
+        {/* Decorative Confetti SVGs */}
+        <svg className="absolute left-0 top-0 w-48 h-48 opacity-20 pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="12" fill="#60a5fa"/>
+          <rect x="120" y="30" width="18" height="18" rx="4" fill="#fbbf24"/>
+          <circle cx="170" cy="80" r="8" fill="#f472b6"/>
+          <rect x="60" y="120" width="14" height="14" rx="3" fill="#34d399"/>
+          <circle cx="180" cy="180" r="10" fill="#818cf8"/>
+        </svg>
+        <svg className="absolute right-0 bottom-0 w-56 h-56 opacity-20 pointer-events-none" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="180" cy="40" r="14" fill="#fbbf24"/>
+          <rect x="30" y="160" width="20" height="20" rx="5" fill="#60a5fa"/>
+          <circle cx="60" cy="60" r="10" fill="#f472b6"/>
+          <rect x="120" y="120" width="16" height="16" rx="4" fill="#34d399"/>
+          <circle cx="40" cy="200" r="12" fill="#818cf8"/>
+        </svg>
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight">Events & Occasions</h2>
         {/* Render events in rows of 5, only once */}
         {Array.from({ length: Math.ceil(eventNames.length / 5) }).map((_, rowIdx) => (
   <React.Fragment key={rowIdx}>
             <div key={rowIdx} className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
               {eventNames.slice(rowIdx * 5, rowIdx * 5 + 5).map((event, i) => (
-                <div key={event} className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
-                  <img src={eventImages[rowIdx * 5 + i]} alt="Party Bus" className="w-full h-32 object-cover rounded-lg mb-4" />
+                <div key={event} className="bg-white rounded-xl shadow p-6 flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-300 hover:-translate-y-2 cursor-pointer">
+                  <img src={eventImages[rowIdx * 5 + i]} alt="Party Bus" className="w-full h-64 aspect-[4/3] object-cover rounded-lg mb-4" />
                   <h4 className="font-semibold mb-2 text-center">{event}</h4>
                   <a href="#" className="text-blue-700 font-bold hover:underline mb-2">Learn More</a>
                   <a href="tel:8885352566" className="block w-full bg-blue-700 text-white font-bold py-2 rounded-lg hover:bg-blue-800 transition text-center mb-1">Call 888-535-2566</a>
