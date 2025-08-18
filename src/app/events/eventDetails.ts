@@ -23,6 +23,7 @@ export const eventDetails = [
   {
     name: 'Sporting Events',
     description: 'Cheer on your favorite team! Avoid traffic and parking hassles with group transportation to any sporting event.',
+    href: '/events/sporting-events',
   },
   {
     name: 'Weddings',
@@ -39,6 +40,7 @@ export const eventDetails = [
   {
     name: 'Concerts / Events',
     description: 'Enjoy concerts and special events without the stress of driving. Let us get your group there and back safely.',
+    href: '/events/concerts', // TODO: Create this page
   },
   {
     name: 'Bachelor Parties',
