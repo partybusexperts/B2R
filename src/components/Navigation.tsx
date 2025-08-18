@@ -21,8 +21,6 @@ export default function Navigation() {
             </button>
             <ul
               className="absolute left-0 mt-2 min-w-[12rem] bg-white text-blue-900 rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-opacity z-50"
-              onMouseEnter={e => e.currentTarget.classList.add('pointer-events-auto', 'opacity-100')}
-              onMouseLeave={e => e.currentTarget.classList.remove('pointer-events-auto', 'opacity-100')}
             >
               <li>
                 <Link href="/party-buses" className="block px-4 py-2 hover:bg-blue-100" tabIndex={0}>Party Buses</Link>
