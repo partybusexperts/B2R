@@ -735,7 +735,8 @@ Show off your ride, your event, or your crew—then share the link anywhere!
             )}
           </React.Fragment>
         ))}
-      {/* Blog & Resources */}
+  </section>
+  {/* Blog & Resources */}
       {/* Blog & Resources (Staggered, Modern Blocks) */}
       <section className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8 text-blue-900 tracking-tight drop-shadow">
@@ -857,6 +858,6 @@ Show off your ride, your event, or your crew—then share the link anywhere!
       </div>
     </div>
   </section>
-    </>
+  </>
   );
 }
