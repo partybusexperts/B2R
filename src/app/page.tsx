@@ -782,52 +782,55 @@ Show off your ride, your event, or your crew—then share the link anywhere!
           </React.Fragment>
         ))}
   </section>
-  {/* Blog & Resources */}
-      {/* Blog & Resources (Staggered, Modern Blocks) */}
-      
+      {/* Blog & Resources */}
 
-  {/* Did You Know (Modern Scrollable Cards) */}
-  <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
-    <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
-    <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
-      {[
-        {
-          icon: "🛋️",
-          title: "Book by comfort, not max headcount",
-          desc: "Most buses seat more than their ‘comfortable’ number.",
-        },
-        {
-          icon: "🎓",
-          title: "Prom Saturdays sell out first",
-          desc: "Book 3–6 weeks early (Mar–May) for best selection.",
-        },
-        {
-          icon: "🚦",
-          title: "Gameday traffic can double travel time",
-          desc: "Add a 30–45 min buffer for big events.",
-        },
-        {
-          icon: "💡",
-          title: "LED party lighting uses almost no power",
-          desc: "Run it the whole trip for max fun.",
-        },
-        {
-          icon: "📍",
-          title: "Most venues require a loading zone",
-          desc: "Ask us for the exact pin to avoid delays.",
-        },
-      ].map((fact, idx) => (
-        <div key={idx} className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
-          <div className="text-4xl mb-2">{fact.icon}</div>
-          <div className="font-semibold text-lg text-blue-900 mb-1 text-center">{fact.title}</div>
-          <div className="text-blue-800 text-center text-base">{fact.desc}</div>
+        {/* Did You Know (Modern Scrollable Cards) */}
+        <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
+        <h3 className="text-2xl md:text-3xl font-extrabold mb-6 text-blue-900 tracking-tight">Did You Know?</h3>
+        <div className="flex gap-6 overflow-x-auto pb-2 hide-scrollbar">
+          {[
+          {
+            icon: "🛋️",
+            title: "Book by comfort, not max headcount",
+            desc: "Most buses seat more than their ‘comfortable’ number.",
+          },
+          {
+            icon: "🎓",
+            title: "Prom Saturdays sell out first",
+            desc: "Book 3–6 weeks early (Mar–May) for best selection.",
+          },
+          {
+            icon: "🚦",
+            title: "Gameday traffic can double travel time",
+            desc: "Add a 30–45 min buffer for big events.",
+          },
+          {
+            icon: "💡",
+            title: "LED party lighting uses almost no power",
+            desc: "Run it the whole trip for max fun.",
+          },
+          {
+            icon: "📍",
+            title: "Most venues require a loading zone",
+            desc: "Ask us for the exact pin to avoid delays.",
+          },
+          ].map((fact, idx) => (
+          <div key={idx} className="min-w-[260px] bg-white rounded-xl shadow p-6 flex flex-col items-center border-2 border-blue-400">
+            <div className="text-4xl mb-2">{fact.icon}</div>
+            <div className="font-semibold text-lg text-blue-900 mb-1 text-center">{fact.title}</div>
+            <div className="text-blue-800 text-center text-base">{fact.desc}</div>
+          </div>
+          ))}
         </div>
-      ))}
-    </div>
-    <div className="flex justify-center mt-8">
-      <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition">More Facts</button>
-    </div>
-  </section>
+        <div className="flex justify-center mt-8">
+          <a
+          href="/facts"
+          className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition"
+          >
+          More Facts
+          </a>
+        </div>
+        </section>
 
   {/* Blog Topics */}
   <section className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
