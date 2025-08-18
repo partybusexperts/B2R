@@ -3,13 +3,8 @@ import React from "react";
 import PageLayout from "@/components/PageLayout";
 import Section from "@/components/Section";
 import PollsSection from "@/components/PollsSection";
+import StatsStrip from "@/components/StatsStrip";
 
-const partyBusStats = [
-	{ label: "Fleet Size", value: "20+ Buses", icon: "🚍" },
-	{ label: "Max Capacity", value: "40 Passengers", icon: "👥" },
-	{ label: "Avg. Rating", value: "4.9/5", icon: "⭐" },
-	{ label: "Cities Served", value: "50+", icon: "🌆" },
-];
 
 const amenities = [
 	{ label: "LED Party Lighting", icon: "💡" },
@@ -95,64 +90,118 @@ const gallery = [
 export default function PartyBusesPage() {
 	return (
 		<PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
-			   <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
-				   <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
-				   <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent">
-					   Chicago Party Buses
-				   </h1>
-				   <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-100 font-medium">
-					   The ultimate way to celebrate, travel, and make memories. Our luxury party buses are ready for your next big event.
-				   </p>
-				   <a
-					   href="#book"
-					   className="inline-block px-10 py-5 rounded-full bg-gradient-to-r from-blue-700 to-green-500 text-white font-bold text-2xl shadow-xl hover:scale-110 transition-transform"
-				   >
-					   Get Instant Quote
-				   </a>
-				   <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-green-500/10 blur-2xl opacity-60" />
-			   </Section>
-			   <Section className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 bg-gradient-to-r from-blue-900/80 via-blue-950/80 to-black/90 rounded-3xl shadow-xl my-12 py-10">
-				   {partyBusStats.map((stat) => (
-					   <div
-						   key={stat.label}
-						   className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform"
-					   >
-						   <span className="text-5xl mb-2">{stat.icon}</span>
-						   <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">
-							   {stat.value}
-						   </span>
-						   <span className="text-lg text-blue-100 font-sans">{stat.label}</span>
-					   </div>
-				   ))}
-			   </Section>
-			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
-				   <h2 className="text-4xl md:text-5xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
-					   Party Bus Gallery
-				   </h2>
-				   <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-blue-500/40 scrollbar-track-transparent">
-					   <a
-						   href="/fleet/20-passenger-party-bus"
-						   className="block focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-2xl"
-					   >
-						   <img
-							   key="main-party-bus"
-							   src="/images/18 Passenger White Party Bus Exterior.png"
-							   alt="20 Passenger Party Bus"
-							   className="rounded-2xl shadow-xl w-80 h-56 object-cover object-center hover:scale-105 transition-transform border-4 border-blue-700/30"
-							   loading="lazy"
-						   />
-					   </a>
-					   {gallery.slice(1).map((img, i) => (
-						   <img
-							   key={img}
-							   src={img}
-							   alt={`Party Bus ${i + 2}`}
-							   className="rounded-2xl shadow-xl w-80 h-56 object-cover object-center hover:scale-105 transition-transform border-4 border-blue-700/30"
-							   loading="lazy"
-						   />
-					   ))}
-				   </div>
-			   </Section>
+							 <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden min-h-[480px] md:min-h-[600px] py-24 md:py-36">
+									<div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
+									  <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
+										  Bus2Ride Party Bus Fleet
+									  </h1>
+									  <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-100 font-medium">
+										  Explore our full lineup of luxury party buses—perfect for any celebration, big or small. This page features only our party bus options. For limos or coach buses, see the links below.
+									  </p>
+												<div className="flex flex-col sm:flex-row gap-4 justify-center mb-4 z-10 w-full max-w-2xl">
+													<a
+														href="#book"
+														className="rounded-full font-bold px-8 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 hover:bg-blue-50 hover:text-blue-900 border-blue-200"
+														style={{ letterSpacing: "0.03em" }}
+													>
+														Get Instant Quote
+													</a>
+													<a
+														href="/fleet"
+														className="rounded-full font-bold px-8 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-blue-700 text-white hover:bg-blue-800 border-blue-800"
+														style={{ letterSpacing: "0.03em" }}
+													>
+														View Fleet
+													</a>
+													<a
+														href="/contact"
+														className="rounded-full font-bold px-8 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900"
+														style={{ letterSpacing: "0.03em" }}
+													>
+														<span className="relative text-blue-500 text-xl phone-nudge mr-2">📞</span>
+														<span className="relative">Contact Us</span>
+													</a>
+												</div>
+												<style>{`
+													@keyframes nudge {
+														0%, 80%, 100% { transform: translateX(0); }
+														85% { transform: translateX(-2px); }
+														90% { transform: translateX(2px); }
+														95% { transform: translateX(-1px); }
+													}
+													.phone-nudge {
+														display: inline-block;
+														animation: nudge 5s ease-in-out infinite;
+													}
+												`}</style>
+									<div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-800/10 blur-2xl opacity-60" />
+							 </Section>
+											 <Section className="max-w-6xl mx-auto my-12 py-10 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl flex flex-col items-center">
+												 <h2 className="text-4xl md:text-5xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">Why Ride With Bus2Ride?</h2>
+												 <div className="w-full max-w-3xl">
+													 <StatsStrip />
+												 </div>
+											 </Section>
+							 <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
+									 <h2 className="text-5xl md:text-6xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
+											 All Our Party Buses!
+									 </h2>
+									 <p className="text-xl text-blue-100 text-center mb-10 font-medium">Browse our full party bus fleet—find your perfect ride for any occasion!</p>
+									 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+															 {Array.from({ length: 20 }).map((_, i) => (
+																 <div key={i} className="flex flex-col items-center bg-blue-950/80 rounded-2xl shadow-xl p-6 border border-blue-700/20 hover:scale-105 transition-transform">
+																	 <img
+																		 src={`/images/Bus-${(i % 5) + 1}.png`}
+																		 alt={`Party Bus ${i + 1}`}
+																		 className="rounded-2xl shadow-xl w-full max-w-xl h-80 object-cover object-center mb-4 border-4 border-blue-700/30"
+																		 loading="lazy"
+																	 />
+																	 <h3 className="text-2xl font-bold text-blue-100 mb-2 font-serif">Party Bus {i + 1}</h3>
+																	 <p className="text-lg text-blue-200 text-center mb-4">Spacious, stylish, and ready for your next big event!</p>
+																							 <div className="flex flex-col md:flex-row gap-2 justify-center items-center w-full mt-2">
+																								 <a href="tel:8885352566" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.02em" }}>
+																									 <span className="relative text-blue-500 text-lg phone-nudge mr-1">📞</span>
+																									 <span className="relative">(888) 535-2566</span>
+																								 </a>
+																								 <a href="mailto:info@bus2ride.com" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-blue-700 text-white border-blue-800 hover:bg-blue-800" style={{ letterSpacing: "0.02em" }}>
+																									 <span className="relative text-white text-lg mr-1">✉️</span>
+																									 <span className="relative">Email</span>
+																								 </a>
+																								 <a href="/quote" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.02em" }}>
+																									 <span className="relative text-blue-500 text-lg mr-1">⚡</span>
+																									 <span className="relative">Quote</span>
+																								 </a>
+																							 </div>
+																 </div>
+															 ))}
+									 </div>
+									 <div className="flex flex-col md:flex-row gap-6 justify-center items-center mt-8">
+										 <a href="tel:8885352566" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.03em" }}>
+											 <span className="relative text-blue-500 text-2xl phone-nudge mr-2">📞</span>
+											 <span className="relative">(888) 535-2566</span>
+										 </a>
+										 <a href="mailto:info@bus2ride.com" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-blue-700 text-white border-blue-800 hover:bg-blue-800" style={{ letterSpacing: "0.03em" }}>
+											 <span className="relative text-white text-2xl mr-2">✉️</span>
+											 <span className="relative">Email Now</span>
+										 </a>
+										 <a href="/quote" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.03em" }}>
+											 <span className="relative text-blue-500 text-2xl mr-2">⚡</span>
+											 <span className="relative">Instant Live Quote</span>
+										 </a>
+									 </div>
+									 <style>{`
+										 @keyframes nudge {
+											 0%, 80%, 100% { transform: translateX(0); }
+											 85% { transform: translateX(-2px); }
+											 90% { transform: translateX(2px); }
+											 95% { transform: translateX(-1px); }
+										 }
+										 .phone-nudge {
+											 display: inline-block;
+											 animation: nudge 5s ease-in-out infinite;
+										 }
+									 `}</style>
+							 </Section>
 			   <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
 				   <h2 className="text-5xl font-extrabold mb-12 text-center text-blue-200 font-serif tracking-tight">
 					   Our Most Popular Party Buses
@@ -240,11 +289,11 @@ export default function PartyBusesPage() {
 				   <div className="flex flex-col md:flex-row gap-10 justify-center items-center">
 					   <div className="flex flex-col items-center w-full md:w-1/2">
 						   <img src="/images/10 Passenger Black Lincoln Stretch Limo Exterior Black.png" alt="Limousine" className="rounded-2xl shadow-xl w-full max-w-md h-64 object-cover object-center mb-4 border-4 border-blue-700/30" />
-						   <a href="/limos" className="mt-2 inline-block bg-gradient-to-r from-blue-700 to-green-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition hover:scale-105">LIMOUSINES</a>
+						   <a href="/limos" className="mt-2 inline-block bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition hover:scale-105">LIMOUSINES</a>
 					   </div>
 					   <div className="flex flex-col items-center w-full md:w-1/2">
 						   <img src="/images/Bus-1.png" alt="Coach Bus" className="rounded-2xl shadow-xl w-full max-w-md h-64 object-cover object-center mb-4 border-4 border-blue-700/30" />
-						   <a href="/coach-buses" className="mt-2 inline-block bg-gradient-to-r from-blue-700 to-green-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition hover:scale-105">COACH BUSES</a>
+						   <a href="/coach-buses" className="mt-2 inline-block bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition hover:scale-105">COACH BUSES</a>
 					   </div>
 				   </div>
 			   </Section>
@@ -287,7 +336,7 @@ export default function PartyBusesPage() {
 				   </p>
 				   <a
 					   href="/quote"
-					   className="inline-block px-12 py-5 rounded-full bg-gradient-to-r from-blue-700 to-green-500 text-white font-bold text-2xl shadow-xl hover:scale-110 transition-transform"
+					   className="inline-block px-12 py-5 rounded-full bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold text-2xl shadow-xl hover:scale-110 transition-transform"
 				   >
 					   Book Your Party Bus
 				   </a>

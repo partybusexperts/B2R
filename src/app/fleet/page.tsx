@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 
 const vehicles = [
@@ -56,6 +57,17 @@ const vehicles = [
 export default function FleetPage() {
   return (
     <main className="min-h-screen bg-gray-50 pb-16">
+      {/* Hero Section */}
+      <section className="w-full bg-gradient-to-br from-blue-50 to-sky-100 flex flex-col items-center justify-center py-20 md:py-32 mb-10 rounded-b-3xl shadow-lg border-b border-blue-200">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-4 text-blue-900 drop-shadow-lg">Chicago Party Buses</h1>
+        <p className="text-center text-xl md:text-2xl text-slate-800 max-w-2xl mb-8 font-medium">The ultimate way to celebrate, travel, and make memories. Our luxury party buses are ready for your next big event.</p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/quote" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold text-lg shadow transition">Get Instant Quote</a>
+          <a href="/fleet" className="bg-white border border-blue-600 text-blue-700 hover:bg-blue-50 px-8 py-3 rounded-lg font-semibold text-lg shadow transition">See All Buses</a>
+          <a href="/contact" className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold text-lg shadow transition">Contact Us</a>
+        </div>
+      </section>
+      {/* Fleet Section */}
       <section className="max-w-6xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-extrabold text-center mb-4 text-gray-900">Our Fleet</h1>
         <p className="text-center text-lg text-gray-600 mb-10">
