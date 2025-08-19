@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import Section from "@/components/Section";
 import PollsSection from "@/components/PollsSection";
@@ -7,7 +7,12 @@ import StatsStrip from "@/components/StatsStrip";
 
 
 const amenities = [
-	{ label: "Wrap-Around Leather Seating", icon: "�️" },
+	{
+		label: "Wrap-Around Leather Seating",
+		icon: "�️",
+		description:
+			"Our plush wrap-around leather seating lets everyone face each other, making it perfect for socializing and keeping the party vibe going all night!",
+	},
 	{ label: "Dance Pole (Optional)", icon: "🕺" },
 	{ label: "TVs (Usually DVD)", icon: "�" },
 	{ label: "Wet Bars & Drink Holders", icon: "🍸" },
@@ -93,6 +98,7 @@ const gallery = [
 ];
 
 export default function PartyBusesPage() {
+	const [showAmenityModal, setShowAmenityModal] = useState(false);
 	return (
 		<PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
 							 <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden min-h-[480px] md:min-h-[600px] py-24 md:py-36">
@@ -207,23 +213,53 @@ export default function PartyBusesPage() {
 									   `}</style>
 							   </Section>
 
-							   <Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
-								   <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
-									   Amenities & Features
-								   </h2>
-								   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-									   {amenities.map((a) => (
-										   <button
-											   key={a.label}
-											   type="button"
-											   className="flex items-center gap-3 text-lg md:text-xl text-white bg-blue-950/80 rounded-xl px-6 py-4 shadow border border-blue-700/20 hover:bg-blue-900/60 transition-colors font-sans font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400"
-											   tabIndex={0}
-										   >
-											   <span className="text-blue-200 text-2xl">{a.icon}</span> {a.label}
-										   </button>
-									   ))}
-								   </div>
-							   </Section>
+										<Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
+											<h2 className="text-4xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
+												Amenities & Features
+											</h2>
+											<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+												<button
+													type="button"
+													className="flex items-center gap-3 text-lg md:text-xl text-white bg-blue-950/80 rounded-xl px-6 py-4 shadow border border-blue-700/20 hover:bg-blue-900/60 transition-colors font-sans font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400"
+													tabIndex={0}
+													onClick={() => setShowAmenityModal(true)}
+													aria-label={amenities[0].label}
+												>
+													<span className="text-blue-200 text-2xl">{amenities[0].icon}</span> {amenities[0].label}
+												</button>
+												{amenities.slice(1).map((a) => (
+													<button
+														key={a.label}
+														type="button"
+														className="flex items-center gap-3 text-lg md:text-xl text-white bg-blue-950/80 rounded-xl px-6 py-4 shadow border border-blue-700/20 font-sans font-semibold opacity-70 cursor-not-allowed"
+														tabIndex={-1}
+														aria-disabled="true"
+														disabled
+													>
+														<span className="text-blue-200 text-2xl">{a.icon}</span> {a.label}
+													</button>
+												))}
+											</div>
+											{/* Modal for first amenity */}
+											{showAmenityModal && (
+												<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+													<div className="bg-white text-blue-900 rounded-2xl shadow-2xl p-8 max-w-md w-full relative animate-fadeIn">
+														<button
+															onClick={() => setShowAmenityModal(false)}
+															className="absolute top-3 right-3 text-2xl text-blue-700 hover:text-blue-900 font-bold focus:outline-none"
+															aria-label="Close modal"
+														>
+															×
+														</button>
+														<div className="flex items-center gap-4 mb-4">
+															<span className="text-3xl">{amenities[0].icon}</span>
+															<h3 className="text-2xl font-bold font-serif">{amenities[0].label}</h3>
+														</div>
+														<p className="text-lg font-sans">{amenities[0].description}</p>
+													</div>
+												</div>
+											)}
+										</Section>
 			   <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
 				   <h2 className="text-5xl font-extrabold mb-12 text-center text-blue-200 font-serif tracking-tight">
 					   Our Most Popular Party Buses
