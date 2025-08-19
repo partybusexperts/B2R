@@ -88,27 +88,27 @@ const amenities = [
 ];
 
 const buses = [
-	{
-		name: "40 Passenger Party Bus",
-		image: "/review_uploads/40 Passenger Party Bus With Pole.jpg",
-		description:
-			"Our flagship party bus with wraparound seating, club lighting, and a booming sound system. Perfect for big nights out.",
-		features: ["Dance Pole", "BYOB", "Bluetooth Audio", "Restroom"],
-	},
-	{
-		name: "30 Passenger Party Bus",
-		image: "/public/images/partybus30.jpg",
-		description:
-			"Sleek, stylish, and loaded with amenities. Ideal for birthdays, proms, and bachelor/bachelorette parties.",
-		features: ["LED Lights", "TVs", "Cooler Storage"],
-	},
-	{
-		name: "20 Passenger Party Bus",
-		image: "/public/images/partybus20.jpg",
-		description:
-			"Compact luxury for smaller groups. Enjoy the same party experience in a more intimate setting.",
-		features: ["Leather Seats", "Premium Audio"],
-	},
+   {
+	   name: "40 Passenger Party Bus",
+	   image: "/review_uploads/40 Passenger Party Bus With Pole.jpg",
+	   description:
+		   "Our flagship party bus with wraparound seating, club lighting, and a booming sound system. Perfect for big nights out.",
+	   features: ["Dance Pole", "BYOB", "Bluetooth Audio", "Restroom"],
+   },
+   {
+	   name: "30 Passenger Party Bus",
+	   image: "/images/Bus-2.png",
+	   description:
+		   "Sleek, stylish, and loaded with amenities. Ideal for birthdays, proms, and bachelor/bachelorette parties.",
+	   features: ["LED Lights", "TVs", "Cooler Storage"],
+   },
+   {
+	   name: "20 Passenger Party Bus",
+	   image: "/images/Bus-3.png",
+	   description:
+		   "Compact luxury for smaller groups. Enjoy the same party experience in a more intimate setting.",
+	   features: ["Leather Seats", "Premium Audio"],
+   },
 ];
 
 const testimonials = [
@@ -207,11 +207,11 @@ export default function PartyBusesPage() {
 												`}</style>
 									<div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-800/10 blur-2xl opacity-60" />
 							 </Section>
-													 <Section className="max-w-6xl mx-auto my-12 py-10 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl flex flex-col items-center">
-														 <div className="w-full max-w-3xl">
-															 <StatsStrip />
-														 </div>
-													 </Section>
+							 <Section className="max-w-6xl mx-auto my-12 py-10 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl flex flex-col items-center">
+								 <div className="w-full max-w-3xl">
+									 <StatsStrip />
+								 </div>
+							 </Section>
 							   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
 									   <h2 className="text-5xl md:text-6xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
 											   All Our Party Buses!
@@ -243,7 +243,7 @@ export default function PartyBusesPage() {
 														   </a>
 													   </div>
 												   </div>
-											   ))}
+												   ))}
 									   </div>
 									   <div className="flex flex-col md:flex-row gap-6 justify-center items-center mt-8">
 										   <a href="tel:8885352566" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.03em" }}>
@@ -326,6 +326,7 @@ export default function PartyBusesPage() {
 								   alt={bus.name}
 								   className="w-full h-64 object-cover object-center"
 								   loading="lazy"
+								   style={{ background: '#222', objectFit: 'cover' }}
 							   />
 							   <div className="p-8 flex-1 flex flex-col">
 								   <h3 className="text-3xl font-bold mb-3 text-white font-serif">
