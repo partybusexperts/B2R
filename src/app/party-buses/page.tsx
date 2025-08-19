@@ -136,12 +136,11 @@ export default function PartyBusesPage() {
 												`}</style>
 									<div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-800/10 blur-2xl opacity-60" />
 							 </Section>
-											 <Section className="max-w-6xl mx-auto my-12 py-10 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl flex flex-col items-center">
-												 <h2 className="text-4xl md:text-5xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">Why Ride With Bus2Ride?</h2>
-												 <div className="w-full max-w-3xl">
-													 <StatsStrip />
-												 </div>
-											 </Section>
+													 <Section className="max-w-6xl mx-auto my-12 py-10 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl flex flex-col items-center">
+														 <div className="w-full max-w-3xl">
+															 <StatsStrip />
+														 </div>
+													 </Section>
 							 <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
 									 <h2 className="text-5xl md:text-6xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
 											 All Our Party Buses!
