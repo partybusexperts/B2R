@@ -349,28 +349,7 @@ export default function PartyBusesPage() {
 					   ))}
 				   </div>
 			   </Section>
-			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
-				   <h2 className="text-4xl font-extrabold mb-10 text-center text-blue-200 font-serif tracking-tight">
-					   What Our Riders Say
-				   </h2>
-				   <div className="grid md:grid-cols-3 gap-10">
-					   {testimonials.map((t) => (
-						   <div
-							   key={t.name}
-							   className="bg-blue-950/90 rounded-2xl shadow-xl p-8 flex flex-col items-center text-center border border-blue-500/10 hover:scale-105 transition-transform text-white"
-						   >
-							   <img
-								   src={t.image}
-								   alt={t.name}
-								   className="w-20 h-20 rounded-full object-cover mb-4 border-4 border-blue-400/30"
-								   loading="lazy"
-							   />
-							   <p className="text-lg text-white mb-3 font-sans">“{t.text}”</p>
-							   <span className="font-bold text-white font-serif">{t.name}</span>
-						   </div>
-					   ))}
-				   </div>
-			   </Section>
+			  {/* What Our Riders Say section temporarily removed */}
 
 			   {/* Limousine & Charter Bus Rentals Section */}
 			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-14 text-white">
@@ -389,6 +368,61 @@ export default function PartyBusesPage() {
 						   <img src="/images/Bus-1.png" alt="Coach Bus" className="rounded-2xl shadow-xl w-full max-w-md h-64 object-cover object-center mb-4 border-4 border-blue-700/30" />
 						   <a href="/coach-buses" className="mt-2 inline-block bg-gradient-to-r from-blue-700 to-blue-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg text-lg transition hover:scale-105">COACH BUSES</a>
 					   </div>
+				   </div>
+			   </Section>
+
+			   {/* Helpful Party Bus Tools Section */}
+			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-14 text-white">
+				   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight text-blue-200">
+					   Helpful Party Bus Tools
+				   </h2>
+				   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-center items-stretch">
+					   {/* Per Person Splitter */}
+					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
+						   <span className="text-4xl mb-2">🧮</span>
+						   <span className="font-bold text-lg mb-1">Per Person Splitter</span>
+						   <span className="text-blue-100 text-center text-base">Easily split the total cost among your group—no math headaches.</span>
+					   </div>
+					   {/* BYOB Pack & Ice Calculator */}
+					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
+						   <span className="text-4xl mb-2">🥤</span>
+						   <span className="font-bold text-lg mb-1">BYOB Pack & Ice Calculator</span>
+						   <span className="text-blue-100 text-center text-base">Figure out how much to bring so nobody runs dry (or warm) on the bus.</span>
+					   </div>
+					   {/* Seat Space Fit Advisor */}
+					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
+						   <span className="text-4xl mb-2">🪑</span>
+						   <span className="font-bold text-lg mb-1">Seat Space Fit Advisor</span>
+						   <span className="text-blue-100 text-center text-base">Check if your group will fit comfortably—no squishing, no surprises.</span>
+					   </div>
+					   {/* Bar Hop Route Builder */}
+					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
+						   <span className="text-4xl mb-2">🗺️</span>
+						   <span className="font-bold text-lg mb-1">Bar Hop Route Builder</span>
+						   <span className="text-blue-100 text-center text-base">Plan your stops and build the perfect party route for the night.</span>
+					   </div>
+					   {/* Vibe Selector */}
+					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
+						   <span className="text-4xl mb-2">🎶</span>
+						   <span className="font-bold text-lg mb-1">Vibe Selector</span>
+						   <span className="text-blue-100 text-center text-base">Pick your party mood—chill, club, throwback, or wild—and get playlist ideas.</span>
+					   </div>
+					   {/* Stop Timing Planner */}
+					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
+						   <span className="text-4xl mb-2">⏱️</span>
+						   <span className="font-bold text-lg mb-1">Stop Timing Planner</span>
+						   <span className="text-blue-100 text-center text-base">Map out how long to spend at each stop so you never feel rushed (or bored).</span>
+					   </div>
+				   </div>
+				   <div className="flex justify-center mt-10">
+					   <button
+						   type="button"
+						   className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center bg-gradient-to-r from-blue-700 to-blue-500 text-white border-blue-800 hover:bg-blue-800"
+						   style={{ letterSpacing: "0.03em" }}
+					   >
+						   <span className="text-2xl mr-2">➕</span>
+						   More Tools
+					   </button>
 				   </div>
 			   </Section>
 			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
