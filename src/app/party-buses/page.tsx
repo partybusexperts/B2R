@@ -13,18 +13,78 @@ const amenities = [
 		description:
 			"Our plush wrap-around leather seating lets everyone face each other, making it perfect for socializing and keeping the party vibe going all night!",
 	},
-	{ label: "Dance Pole (Optional)", icon: "🕺" },
-	{ label: "TVs (Usually DVD)", icon: "�" },
-	{ label: "Wet Bars & Drink Holders", icon: "🍸" },
-	{ label: "Laser Light Show", icon: "�" },
-	{ label: "Bluetooth Surround Sound Audio", icon: "🔊" },
-	{ label: "Professional Driver", icon: "🧑‍✈️" },
-	{ label: "Unlimited Stops (for smoke, bathroom, supplies, etc.)", icon: "�" },
-	{ label: "Ability to Dance & Stand Up", icon: "🩰" },
-	{ label: "Better for Socializing, Less Claustrophobic", icon: "🫂" },
-	{ label: "Easy to Get In and Out Of", icon: "�" },
-	{ label: "BYOB Friendly", icon: "🍾" },
-	{ label: "Some Restrooms on Big Party Buses", icon: "�" },
+	{
+		label: "Dance Pole (Optional)",
+		icon: "🕺",
+		description:
+			"A removable dance pole for those who want to add a little extra fun and flair to the party. Always optional, always a crowd-pleaser!",
+	},
+	{
+		label: "TVs (Usually DVD)",
+		icon: "�",
+		description:
+			"Enjoy your favorite movies or music videos on our built-in TVs. Most buses include DVD players for group entertainment on the go.",
+	},
+	{
+		label: "Wet Bars & Drink Holders",
+		icon: "🍸",
+		description:
+			"Multiple wet bars and plenty of drink holders keep your beverages cold and close at hand. Cheers to a great night!",
+	},
+	{
+		label: "Laser Light Show",
+		icon: "�",
+		description:
+			"Dynamic laser and LED lighting effects create a true club atmosphere inside the bus. The party starts as soon as you step on board!",
+	},
+	{
+		label: "Bluetooth Surround Sound Audio",
+		icon: "🔊",
+		description:
+			"Connect your phone or device via Bluetooth and play your own playlists through our premium surround sound system.",
+	},
+	{
+		label: "Professional Driver",
+		icon: "🧑‍✈️",
+		description:
+			"All rentals include a courteous, professional, and fully licensed chauffeur so you can relax and enjoy the ride.",
+	},
+	{
+		label: "Unlimited Stops (for smoke, bathroom, supplies, etc.)",
+		icon: "�",
+		description:
+			"Need to make a pit stop? No problem! Unlimited stops for bathroom breaks, supplies, or just to stretch your legs.",
+	},
+	{
+		label: "Ability to Dance & Stand Up",
+		icon: "🩰",
+		description:
+			"Spacious interiors let you dance, mingle, and move around safely—no cramped seating here!",
+	},
+	{
+		label: "Better for Socializing, Less Claustrophobic",
+		icon: "🫂",
+		description:
+			"Open layouts and wrap-around seating make it easy to chat, laugh, and connect with everyone in your group.",
+	},
+	{
+		label: "Easy to Get In and Out Of",
+		icon: "�",
+		description:
+			"Wide doors and low steps make boarding and exiting the bus a breeze for all guests.",
+	},
+	{
+		label: "BYOB Friendly",
+		icon: "🍾",
+		description:
+			"Bring your own beverages and keep the party going your way. Just no glass bottles, please!",
+	},
+	{
+		label: "Some Restrooms on Big Party Buses",
+		icon: "�",
+		description:
+			"Select larger party buses include onboard restrooms for maximum comfort and convenience during your trip.",
+	},
 ];
 
 const buses = [
@@ -98,7 +158,7 @@ const gallery = [
 ];
 
 export default function PartyBusesPage() {
-	const [showAmenityModal, setShowAmenityModal] = useState(false);
+	const [openAmenityIdx, setOpenAmenityIdx] = useState<number | null>(null);
 	return (
 		<PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
 							 <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden min-h-[480px] md:min-h-[600px] py-24 md:py-36">
@@ -218,44 +278,35 @@ export default function PartyBusesPage() {
 												Amenities & Features
 											</h2>
 											<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-												<button
-													type="button"
-													className="flex items-center gap-3 text-lg md:text-xl text-white bg-blue-950/80 rounded-xl px-6 py-4 shadow border border-blue-700/20 hover:bg-blue-900/60 transition-colors font-sans font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400"
-													tabIndex={0}
-													onClick={() => setShowAmenityModal(true)}
-													aria-label={amenities[0].label}
-												>
-													<span className="text-blue-200 text-2xl">{amenities[0].icon}</span> {amenities[0].label}
-												</button>
-												{amenities.slice(1).map((a) => (
+												{amenities.map((a, idx) => (
 													<button
 														key={a.label}
 														type="button"
-														className="flex items-center gap-3 text-lg md:text-xl text-white bg-blue-950/80 rounded-xl px-6 py-4 shadow border border-blue-700/20 font-sans font-semibold opacity-70 cursor-not-allowed"
-														tabIndex={-1}
-														aria-disabled="true"
-														disabled
+														className="flex items-center gap-3 text-lg md:text-xl text-white bg-blue-950/80 rounded-xl px-6 py-4 shadow border border-blue-700/20 hover:bg-blue-900/60 transition-colors font-sans font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400"
+														tabIndex={0}
+														onClick={() => setOpenAmenityIdx(idx)}
+														aria-label={a.label}
 													>
 														<span className="text-blue-200 text-2xl">{a.icon}</span> {a.label}
 													</button>
 												))}
 											</div>
-											{/* Modal for first amenity */}
-											{showAmenityModal && (
+											{/* Modal for amenities */}
+											{openAmenityIdx !== null && (
 												<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
 													<div className="bg-white text-blue-900 rounded-2xl shadow-2xl p-8 max-w-md w-full relative animate-fadeIn">
 														<button
-															onClick={() => setShowAmenityModal(false)}
+															onClick={() => setOpenAmenityIdx(null)}
 															className="absolute top-3 right-3 text-2xl text-blue-700 hover:text-blue-900 font-bold focus:outline-none"
 															aria-label="Close modal"
 														>
 															×
 														</button>
 														<div className="flex items-center gap-4 mb-4">
-															<span className="text-3xl">{amenities[0].icon}</span>
-															<h3 className="text-2xl font-bold font-serif">{amenities[0].label}</h3>
+															<span className="text-3xl">{amenities[openAmenityIdx].icon}</span>
+															<h3 className="text-2xl font-bold font-serif">{amenities[openAmenityIdx].label}</h3>
 														</div>
-														<p className="text-lg font-sans">{amenities[0].description}</p>
+														<p className="text-lg font-sans">{amenities[openAmenityIdx].description || "No additional details available for this amenity."}</p>
 													</div>
 												</div>
 											)}
