@@ -7,14 +7,19 @@ import StatsStrip from "@/components/StatsStrip";
 
 
 const amenities = [
-	{ label: "LED Party Lighting", icon: "💡" },
-	{ label: "Premium Sound System", icon: "🔊" },
-	{ label: "Dance Poles", icon: "🕺" },
-	{ label: "Leather Seating", icon: "🛋️" },
+	{ label: "Wrap-Around Leather Seating", icon: "�️" },
+	{ label: "Dance Pole (Optional)", icon: "🕺" },
+	{ label: "TVs (Usually DVD)", icon: "�" },
+	{ label: "Wet Bars & Drink Holders", icon: "🍸" },
+	{ label: "Laser Light Show", icon: "�" },
+	{ label: "Bluetooth Surround Sound Audio", icon: "🔊" },
+	{ label: "Professional Driver", icon: "🧑‍✈️" },
+	{ label: "Unlimited Stops (for smoke, bathroom, supplies, etc.)", icon: "�" },
+	{ label: "Ability to Dance & Stand Up", icon: "🩰" },
+	{ label: "Better for Socializing, Less Claustrophobic", icon: "🫂" },
+	{ label: "Easy to Get In and Out Of", icon: "�" },
 	{ label: "BYOB Friendly", icon: "🍾" },
-	{ label: "Flat Screen TVs", icon: "📺" },
-	{ label: "Onboard Restroom (select buses)", icon: "🚻" },
-	{ label: "WiFi (select buses)", icon: "📶" },
+	{ label: "Some Restrooms on Big Party Buses", icon: "�" },
 ];
 
 const buses = [
@@ -141,66 +146,84 @@ export default function PartyBusesPage() {
 															 <StatsStrip />
 														 </div>
 													 </Section>
-							 <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
-									 <h2 className="text-5xl md:text-6xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
-											 All Our Party Buses!
-									 </h2>
-									 <p className="text-xl text-blue-100 text-center mb-10 font-medium">Browse our full party bus fleet—find your perfect ride for any occasion!</p>
-									 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-															 {Array.from({ length: 20 }).map((_, i) => (
-																 <div key={i} className="flex flex-col items-center bg-blue-950/80 rounded-2xl shadow-xl p-6 border border-blue-700/20 hover:scale-105 transition-transform">
-																	 <img
-																		 src={`/images/Bus-${(i % 5) + 1}.png`}
-																		 alt={`Party Bus ${i + 1}`}
-																		 className="rounded-2xl shadow-xl w-full max-w-xl h-80 object-cover object-center mb-4 border-4 border-blue-700/30"
-																		 loading="lazy"
-																	 />
-																	 <h3 className="text-2xl font-bold text-blue-100 mb-2 font-serif">Party Bus {i + 1}</h3>
-																	 <p className="text-lg text-blue-200 text-center mb-4">Spacious, stylish, and ready for your next big event!</p>
-																							 <div className="flex flex-col md:flex-row gap-2 justify-center items-center w-full mt-2">
-																								 <a href="tel:8885352566" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.02em" }}>
-																									 <span className="relative text-blue-500 text-lg phone-nudge mr-1">📞</span>
-																									 <span className="relative">(888) 535-2566</span>
-																								 </a>
-																								 <a href="mailto:info@bus2ride.com" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-blue-700 text-white border-blue-800 hover:bg-blue-800" style={{ letterSpacing: "0.02em" }}>
-																									 <span className="relative text-white text-lg mr-1">✉️</span>
-																									 <span className="relative">Email</span>
-																								 </a>
-																								 <a href="/quote" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.02em" }}>
-																									 <span className="relative text-blue-500 text-lg mr-1">⚡</span>
-																									 <span className="relative">Quote</span>
-																								 </a>
-																							 </div>
-																 </div>
-															 ))}
-									 </div>
-									 <div className="flex flex-col md:flex-row gap-6 justify-center items-center mt-8">
-										 <a href="tel:8885352566" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.03em" }}>
-											 <span className="relative text-blue-500 text-2xl phone-nudge mr-2">📞</span>
-											 <span className="relative">(888) 535-2566</span>
-										 </a>
-										 <a href="mailto:info@bus2ride.com" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-blue-700 text-white border-blue-800 hover:bg-blue-800" style={{ letterSpacing: "0.03em" }}>
-											 <span className="relative text-white text-2xl mr-2">✉️</span>
-											 <span className="relative">Email Now</span>
-										 </a>
-										 <a href="/quote" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.03em" }}>
-											 <span className="relative text-blue-500 text-2xl mr-2">⚡</span>
-											 <span className="relative">Instant Live Quote</span>
-										 </a>
-									 </div>
-									 <style>{`
-										 @keyframes nudge {
-											 0%, 80%, 100% { transform: translateX(0); }
-											 85% { transform: translateX(-2px); }
-											 90% { transform: translateX(2px); }
-											 95% { transform: translateX(-1px); }
-										 }
-										 .phone-nudge {
-											 display: inline-block;
-											 animation: nudge 5s ease-in-out infinite;
-										 }
-									 `}</style>
-							 </Section>
+							   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
+									   <h2 className="text-5xl md:text-6xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
+											   All Our Party Buses!
+									   </h2>
+									   <p className="text-xl text-blue-100 text-center mb-10 font-medium">Browse our full party bus fleet—find your perfect ride for any occasion!</p>
+									   <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+											   {Array.from({ length: 20 }).map((_, i) => (
+												   <div key={i} className="flex flex-col items-center bg-blue-950/80 rounded-2xl shadow-xl p-6 border border-blue-700/20 hover:scale-105 transition-transform">
+													   <img
+														   src={`/images/Bus-${(i % 5) + 1}.png`}
+														   alt={`Party Bus ${i + 1}`}
+														   className="rounded-2xl shadow-xl w-full max-w-xl h-80 object-cover object-center mb-4 border-4 border-blue-700/30"
+														   loading="lazy"
+													   />
+													   <h3 className="text-2xl font-bold text-blue-100 mb-2 font-serif">Party Bus {i + 1}</h3>
+													   <p className="text-lg text-blue-200 text-center mb-4">Spacious, stylish, and ready for your next big event!</p>
+													   <div className="flex flex-col md:flex-row gap-2 justify-center items-center w-full mt-2">
+														   <a href="tel:8885352566" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.02em" }}>
+															   <span className="relative text-blue-500 text-lg phone-nudge mr-1">📞</span>
+															   <span className="relative">(888) 535-2566</span>
+														   </a>
+														   <a href="mailto:info@bus2ride.com" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-blue-700 text-white border-blue-800 hover:bg-blue-800" style={{ letterSpacing: "0.02em" }}>
+															   <span className="relative text-white text-lg mr-1">✉️</span>
+															   <span className="relative">Email</span>
+														   </a>
+														   <a href="/quote" className="rounded-full font-bold px-4 py-2 text-sm shadow transition border flex items-center justify-center min-w-[110px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.02em" }}>
+															   <span className="relative text-blue-500 text-lg mr-1">⚡</span>
+															   <span className="relative">Quote</span>
+														   </a>
+													   </div>
+												   </div>
+											   ))}
+									   </div>
+									   <div className="flex flex-col md:flex-row gap-6 justify-center items-center mt-8">
+										   <a href="tel:8885352566" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.03em" }}>
+											   <span className="relative text-blue-500 text-2xl phone-nudge mr-2">📞</span>
+											   <span className="relative">(888) 535-2566</span>
+										   </a>
+										   <a href="mailto:info@bus2ride.com" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-blue-700 text-white border-blue-800 hover:bg-blue-800" style={{ letterSpacing: "0.03em" }}>
+											   <span className="relative text-white text-2xl mr-2">✉️</span>
+											   <span className="relative">Email Now</span>
+										   </a>
+										   <a href="/quote" className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center bg-white text-blue-800 border-blue-200 hover:bg-blue-50 hover:text-blue-900" style={{ letterSpacing: "0.03em" }}>
+											   <span className="relative text-blue-500 text-2xl mr-2">⚡</span>
+											   <span className="relative">Instant Live Quote</span>
+										   </a>
+									   </div>
+									   <style>{`
+										   @keyframes nudge {
+											   0%, 80%, 100% { transform: translateX(0); }
+											   85% { transform: translateX(-2px); }
+											   90% { transform: translateX(2px); }
+											   95% { transform: translateX(-1px); }
+										   }
+										   .phone-nudge {
+											   display: inline-block;
+											   animation: nudge 5s ease-in-out infinite;
+										   }
+									   `}</style>
+							   </Section>
+
+							   <Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
+								   <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
+									   Amenities & Features
+								   </h2>
+								   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+									   {amenities.map((a) => (
+										   <button
+											   key={a.label}
+											   type="button"
+											   className="flex items-center gap-3 text-lg md:text-xl text-white bg-blue-950/80 rounded-xl px-6 py-4 shadow border border-blue-700/20 hover:bg-blue-900/60 transition-colors font-sans font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400"
+											   tabIndex={0}
+										   >
+											   <span className="text-blue-200 text-2xl">{a.icon}</span> {a.label}
+										   </button>
+									   ))}
+								   </div>
+							   </Section>
 			   <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
 				   <h2 className="text-5xl font-extrabold mb-12 text-center text-blue-200 font-serif tracking-tight">
 					   Our Most Popular Party Buses
@@ -238,21 +261,6 @@ export default function PartyBusesPage() {
 						   </div>
 					   ))}
 				   </div>
-			   </Section>
-			   <Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
-				   <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight">
-					   Amenities & Features
-				   </h2>
-				   <ul className="grid grid-cols-2 md:grid-cols-4 gap-8">
-					   {amenities.map((a) => (
-						   <li
-							   key={a.label}
-							   className="flex items-center gap-3 text-xl text-white bg-blue-950/70 rounded-xl px-6 py-4 shadow border border-blue-700/20 hover:bg-blue-900/60 transition-colors font-sans"
-						   >
-							   <span className="text-blue-200 text-2xl">{a.icon}</span> {a.label}
-						   </li>
-					   ))}
-				   </ul>
 			   </Section>
 			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 text-white">
 				   <h2 className="text-4xl font-extrabold mb-10 text-center text-blue-200 font-serif tracking-tight">
