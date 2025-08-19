@@ -114,10 +114,10 @@ export default function StatsStrip({
   return (
     <section className="w-full">
       <div className="relative max-w-3xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl px-6 py-10 flex flex-col items-center mb-8 border border-blue-700/30">
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-center text-blue-200 font-serif tracking-tight drop-shadow-lg">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-8 text-center text-blue-200 font-serif tracking-tight drop-shadow-lg">
           Why Ride With Bus2Ride?
         </h2>
-        <div className="flex flex-col md:flex-row gap-6 w-full justify-center items-center mb-6">
+        <div className="flex flex-col md:flex-row gap-6 w-full justify-center items-center mb-8">
           <button
             className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm min-w-[200px] hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             onClick={() => setModal("fleet")}
@@ -183,7 +183,7 @@ export default function StatsStrip({
             </div>
           )}
         </div>
-        <div className="w-full max-w-2xl mx-auto mt-2">
+        <div className="w-full max-w-2xl mx-auto">
           <p className="text-lg md:text-xl font-medium text-blue-100 text-center">
             Bus2Ride offers the region’s largest, most modern party bus fleet. Enjoy luxury amenities, professional drivers, and flexible options for any group size. Safety, comfort, and unforgettable experiences—every ride, every time.
           </p>
