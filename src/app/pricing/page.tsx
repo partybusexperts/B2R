@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useMemo, useState } from "react";
 
 /** Local Section that forwards className (use this or ensure your imported Section does) */
@@ -11,6 +12,7 @@ function Section({
 }) {
   return <section className={className}>{children}</section>;
 }
+
 
 // Example FAQ data (images must live in /public and be referenced as "/file.svg")
 const faqData = [
@@ -32,8 +34,64 @@ const faqData = [
   },
 ];
 
+const statsData = [
+  {
+    icon: "⏰",
+    title: "3-4 Hours",
+    subtitle: "Minimum Booking",
+    modalTitle: "Minimum Booking Time",
+    modalContent:
+      "Most party bus rentals require a 3-4 hour minimum. This ensures you get the best value and covers travel, setup, and cleanup time.",
+  },
+  {
+    icon: "💵",
+    title: "No Hidden Fees",
+    subtitle: "Transparent Quotes",
+    modalTitle: "No Hidden Fees",
+    modalContent:
+      "All quotes include taxes, fees, and standard gratuity. What you see is what you pay—no surprises at checkout.",
+  },
+  {
+    icon: "🧾",
+    title: "Taxes, Fees & Tips Included",
+    subtitle: "All-Inclusive Pricing",
+    modalTitle: "All-Inclusive Pricing",
+    modalContent:
+      "Our pricing covers all mandatory charges, including taxes, fees, and standard driver tips. You can tip extra if you wish, but it's never required.",
+  },
+  {
+    icon: "💳",
+    title: "Cards, Zelle, CashApp, etc.",
+    subtitle: "Flexible Payment",
+    modalTitle: "Flexible Payment Methods",
+    modalContent:
+      "We accept all major credit/debit cards, Zelle, CashApp, and more. No ACH or crypto wallets. Pay your way, securely.",
+  },
+];
+
+function Modal({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: React.ReactNode }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="bg-gradient-to-br from-blue-900 to-black rounded-2xl shadow-2xl p-8 max-w-md w-full relative border border-blue-400/30">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-blue-200 hover:text-white text-2xl font-bold focus:outline-none"
+          aria-label="Close"
+        >
+          ×
+        </button>
+        <h3 className="text-2xl font-bold mb-4 text-blue-100 font-serif">{title}</h3>
+        <div className="text-blue-100 text-lg">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+
 export default function PricingPage() {
   const [search, setSearch] = useState("");
+  const [modalIdx, setModalIdx] = useState<number | null>(null);
 
   const filteredFaq = useMemo(() => {
     const q = search.toLowerCase();
@@ -92,31 +150,30 @@ export default function PricingPage() {
         <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-900/10 blur-2xl opacity-60" />
       </div>
       {/* Stats */}
-            <Section className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 bg-gradient-to-r from-blue-900/80 via-blue-950/80 to-black/90 rounded-3xl shadow-xl my-12 py-10">
-              {/* Updated stats section per requirements */}
-              <div className="flex flex-wrap justify-center gap-10 w-full">
-                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
-                  <span className="text-5xl mb-2">⏰</span>
-                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">3-4 Hours</span>
-                  <span className="text-lg text-blue-100 font-sans">Minimum Booking</span>
-                </div>
-                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
-                  <span className="text-5xl mb-2">💵</span>
-                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">No Hidden Fees</span>
-                  <span className="text-lg text-blue-100 font-sans">Transparent Quotes</span>
-                </div>
-                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
-                  <span className="text-5xl mb-2">🧾</span>
-                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">Taxes, Fees & Tips Included</span>
-                  <span className="text-lg text-blue-100 font-sans">All-Inclusive Pricing</span>
-                </div>
-                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
-                  <span className="text-5xl mb-2">💳</span>
-                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">Cards, Zelle, CashApp, etc.</span>
-                  <span className="text-lg text-blue-100 font-sans">Flexible Payment</span>
-                </div>
-              </div>
-            </Section>
+      <Section className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 bg-gradient-to-r from-blue-900/80 via-blue-950/80 to-black/90 rounded-3xl shadow-xl my-12 py-10">
+        <div className="flex flex-wrap justify-center gap-10 w-full">
+          {statsData.map((stat, idx) => (
+            <button
+              key={stat.title}
+              className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-blue-400"
+              onClick={() => setModalIdx(idx)}
+              aria-label={`More info: ${stat.title}`}
+              type="button"
+            >
+              <span className="text-5xl mb-2">{stat.icon}</span>
+              <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">{stat.title}</span>
+              <span className="text-lg text-blue-100 font-sans">{stat.subtitle}</span>
+            </button>
+          ))}
+        </div>
+        <Modal
+          open={modalIdx !== null}
+          onClose={() => setModalIdx(null)}
+          title={modalIdx !== null ? statsData[modalIdx].modalTitle : ""}
+        >
+          {modalIdx !== null ? statsData[modalIdx].modalContent : null}
+        </Modal>
+      </Section>
 
       {/* Pricing FAQ with search and scroll */}
       <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 px-6">
