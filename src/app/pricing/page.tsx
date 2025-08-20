@@ -9,8 +9,7 @@ import Section from "../../components/Section";
 const faqData = [
   {
     title: "How much does a party bus cost?",
-    answer:
-      "Prices vary by city, date, and vehicle size. Use our Instant Quote Tool for real-time pricing!",
+    answer: "Prices vary by city, date, and vehicle size. Use our Instant Quote Tool for real-time pricing!",
     image: "/globe.svg",
   },
   {
@@ -22,6 +21,81 @@ const faqData = [
     title: "How do I split the cost with friends?",
     answer: "Use our Cost Split Calculator in the Tools section below!",
     image: "/window.svg",
+  },
+  {
+    title: "What is the minimum booking time?",
+    answer: "Most rentals require a 3-4 hour minimum to ensure value and availability.",
+    image: "/clock.svg",
+  },
+  {
+    title: "What payment methods are accepted?",
+    answer: "We accept all major credit/debit cards, Zelle, CashApp, and more.",
+    image: "/globe.svg",
+  },
+  {
+    title: "Can I bring my own drinks?",
+    answer: "Yes! Most party buses allow BYOB for guests 21+ (local laws apply).",
+    image: "/vercel.svg",
+  },
+  {
+    title: "Is gratuity included?",
+    answer: "Standard driver gratuity is included in your quote. Extra tips are optional.",
+    image: "/window.svg",
+  },
+  {
+    title: "How far in advance should I book?",
+    answer: "Book 2-6 weeks ahead for best selection, especially during peak seasons.",
+    image: "/clock.svg",
+  },
+  {
+    title: "Can I see the bus before booking?",
+    answer: "Yes, we can provide photos or schedule a viewing upon request.",
+    image: "/globe.svg",
+  },
+  {
+    title: "What if my group is larger than expected?",
+    answer: "Contact us ASAP. We’ll help you upgrade to a larger vehicle if available.",
+    image: "/vercel.svg",
+  },
+  {
+    title: "Are there cancellation fees?",
+    answer: "Deposits are non-refundable, but we’ll work with you to reschedule if needed.",
+    image: "/window.svg",
+  },
+  {
+    title: "Can I decorate the bus?",
+    answer: "Yes, simple decorations are allowed. Please ask for guidelines before your trip.",
+    image: "/clock.svg",
+  },
+  {
+    title: "Is smoking allowed?",
+    answer: "No smoking or vaping is allowed on any vehicle.",
+    image: "/globe.svg",
+  },
+  {
+    title: "What happens if we go over time?",
+    answer: "Overtime is billed in 15- or 30-minute increments at your quoted rate.",
+    image: "/vercel.svg",
+  },
+  {
+    title: "Can I change my pickup/dropoff location?",
+    answer: "Yes, just let us know in advance so we can update your reservation.",
+    image: "/window.svg",
+  },
+  {
+    title: "Are party buses safe?",
+    answer: "All vehicles are DOT-inspected and driven by licensed, professional chauffeurs.",
+    image: "/clock.svg",
+  },
+  {
+    title: "Do you offer one-way trips?",
+    answer: "Yes, one-way and round-trip bookings are available. Ask for details!",
+    image: "/globe.svg",
+  },
+  {
+    title: "How do I get a quote?",
+    answer: "Use our Instant Quote Tool or call us for a custom quote in minutes.",
+    image: "/vercel.svg",
   },
 ];
 
