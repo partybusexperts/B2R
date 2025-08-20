@@ -82,13 +82,15 @@ export default function LocationsPage() {
       {/* Hero Section */}
       <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
         <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent">
+        <div className="pt-16" />
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
           Find Your City
         </h1>
-        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-100 font-medium">
+        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-12 text-blue-100 font-medium">
           We serve cities and towns across the U.S. Use the search or browse below to find service in your area.
         </p>
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-green-500/10 blur-2xl opacity-60" />
+        <div className="pb-10" />
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-900/10 blur-2xl opacity-60" />
       </Section>
 
       {/* Search Bar Section */}
