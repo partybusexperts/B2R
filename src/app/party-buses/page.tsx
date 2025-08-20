@@ -111,38 +111,38 @@ const buses = [
    },
 ];
 
-const testimonials = [
+const toolList = [
 	{
-		name: "Jessica R.",
-		text: "The party bus made our bachelorette night unforgettable! The lights, music, and vibe were next level.",
-		image: "/public/images/testimonial1.jpg",
+		name: "Per Person Splitter",
+		icon: "🧮",
+		desc: "Easily split the total cost among your group—no math headaches."
 	},
 	{
-		name: "Mike D.",
-		text: "We booked for prom and it was the best decision ever. The driver was awesome and the bus was spotless.",
-		image: "/public/images/testimonial2.jpg",
+		name: "BYOB Pack & Ice Calculator",
+		icon: "🥤",
+		desc: "Figure out how much to bring so nobody runs dry (or warm) on the bus."
 	},
 	{
-		name: "Samantha K.",
-		text: "Our group loved the sound system and the dance pole! Will book again for sure.",
-		image: "/public/images/testimonial3.jpg",
+		name: "Seat Space Fit Advisor",
+		icon: "🪑",
+		desc: "Check if your group will fit comfortably—no squishing, no surprises."
 	},
+	{
+		name: "Bar Hop Route Builder",
+		icon: "🗺️",
+		desc: "Plan your stops and build the perfect party route for the night."
+	},
+	{
+		name: "Vibe Selector",
+		icon: "🎶",
+		desc: "Pick your party mood—chill, club, throwback, or wild—and get playlist ideas."
+	},
+	{
+		name: "Stop Timing Planner",
+		icon: "⏱️",
+		desc: "Map out how long to spend at each stop so you never feel rushed (or bored)."
+	}
 ];
-
-const faqs = [
-	{
-		q: "Can we bring our own drinks?",
-		a: "Absolutely! All our party buses are BYOB friendly. Just no glass bottles, please.",
-	},
-	{
-		q: "Is there a minimum rental time?",
-		a: "Most rentals have a 4-hour minimum, but we can accommodate special requests.",
-	},
-	{
-		q: "Do you provide a driver?",
-		a: "Yes, all rentals include a professional, licensed chauffeur.",
-	},
-	{
 		q: "Can we play our own music?",
 		a: "Of course! All buses have Bluetooth and AUX connections.",
 	},
