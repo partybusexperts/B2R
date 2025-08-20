@@ -1,63 +1,56 @@
+type Tool = { name: string; icon: string; desc: string; href: string };
+const toolList: Tool[] = [
+	{
+		name: "Per Person Splitter",
+		icon: "🧮",
+		desc: "Easily split the total cost among your group—no math headaches.",
+		href: "/tools/split",
+	},
+	{
+		name: "Vehicle Capacity Finder",
+	icon: "🚌",
+		desc: "Enter group size, get the best-fitting buses instantly.",
+		href: "/tools/capacity",
+	},
+	{
+		name: "Route & Time Estimator",
+		icon: "🗺️",
+		desc: "Rough travel time for your pickup → stops → dropoff.",
+		href: "/tools/route",
+	},
+];
+
+const [toolSearch, setToolSearch] = useState("");
+const filteredTools = toolList.filter(
+	t =>
+		t.name.toLowerCase().includes(toolSearch.toLowerCase()) ||
+		t.desc.toLowerCase().includes(toolSearch.toLowerCase())
+);
+
+<Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-500/30">
+	<h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
+		Helpful Tools
+	</h2>
+	<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+		{toolList.map((t) => (
+			<a
+				key={t.name}
+				href={t.href}
+				className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100 hover:shadow-2xl hover:-translate-y-1 transition block"
+			>
+				<div className="text-4xl mb-2">{t.icon}</div>
+				<div className="text-blue-900 font-extrabold text-lg mb-1">{t.name}</div>
+				<p className="text-blue-800">{t.desc}</p>
+			</a>
+		))}
+	</div>
+</Section>
 "use client";
 import React, { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import Section from "@/components/Section";
 import PollsSection from "@/components/PollsSection";
 import StatsStrip from "@/components/StatsStrip";
-
-
-const amenities = [
-	{
-		label: "Wrap-Around Leather Seating",
-		icon: "�️",
-		description:
-			"Our plush wrap-around leather seating lets everyone face each other, making it perfect for socializing and keeping the party vibe going all night!",
-	},
-	{
-		label: "Dance Pole (Optional)",
-		icon: "🕺",
-		description:
-			"A removable dance pole for those who want to add a little extra fun and flair to the party. Always optional, always a crowd-pleaser!",
-	},
-	{
-		label: "TVs (Usually DVD)",
-		icon: "�",
-		description:
-			"Enjoy your favorite movies or music videos on our built-in TVs. Most buses include DVD players for group entertainment on the go.",
-	},
-	{
-		label: "Wet Bars & Drink Holders",
-		icon: "🍸",
-		description:
-			"Multiple wet bars and plenty of drink holders keep your beverages cold and close at hand. Cheers to a great night!",
-	},
-	{
-		label: "Laser Light Show",
-		icon: "�",
-		description:
-			"Dynamic laser and LED lighting effects create a true club atmosphere inside the bus. The party starts as soon as you step on board!",
-	},
-	{
-		label: "Bluetooth Surround Sound Audio",
-		icon: "🔊",
-		description:
-			"Connect your phone or device via Bluetooth and play your own playlists through our premium surround sound system.",
-	},
-	{
-		label: "Professional Driver",
-		icon: "🧑‍✈️",
-		description:
-			"All rentals include a courteous, professional, and fully licensed chauffeur so you can relax and enjoy the ride.",
-	},
-	{
-		label: "Unlimited Stops (for smoke, bathroom, supplies, etc.)",
-		icon: "�",
-		description:
-			"Need to make a pit stop? No problem! Unlimited stops for bathroom breaks, supplies, or just to stretch your legs.",
-	},
-	{
-		label: "Ability to Dance & Stand Up",
-		icon: "🩰",
 		description:
 			"Spacious interiors let you dance, mingle, and move around safely—no cramped seating here!",
 	},
@@ -95,24 +88,8 @@ const buses = [
 		   "Our flagship party bus with wraparound seating, club lighting, and a booming sound system. Perfect for big nights out.",
 	   features: ["Dance Pole", "BYOB", "Bluetooth Audio", "Restroom"],
    },
-   {
-	   name: "30 Passenger Party Bus",
-	   image: "/images/Bus-2.png",
-	   description:
-		   "Sleek, stylish, and loaded with amenities. Ideal for birthdays, proms, and bachelor/bachelorette parties.",
-	   features: ["LED Lights", "TVs", "Cooler Storage"],
-   },
-   {
-	   name: "20 Passenger Party Bus",
-	   image: "/images/Bus-3.png",
-	   description:
-		   "Compact luxury for smaller groups. Enjoy the same party experience in a more intimate setting.",
-	   features: ["Leather Seats", "Premium Audio"],
-   },
-];
+// Removed duplicate tools section from the top of the file
 
-const toolList = [
-	{
 		name: "Per Person Splitter",
 		icon: "🧮",
 		desc: "Easily split the total cost among your group—no math headaches."
