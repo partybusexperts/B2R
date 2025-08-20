@@ -366,24 +366,43 @@ const LEGACY_TOOLS: Tool[] = [
 const ALL_TOOLS: Tool[] = [...TOP_TOOLS, ...LEGACY_TOOLS];
 
 export default function LimoToolsPage() {
+  const [search, setSearch] = useState("");
+  const filteredTools = ALL_TOOLS.filter(
+    t =>
+      t.title.toLowerCase().includes(search.toLowerCase()) ||
+      t.desc.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
-      <Section className="max-w-6xl mx-auto flex flex-col items-center justify-center text-center bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl my-12 py-12">
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent">
-          Limo & Party Bus Tools
-        </h1>
-        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-900 font-medium">
-          Instantly calculate, plan, and optimize your ride. Use our suite of tools for quotes, cost splits, routes, and more.
-        </p>
-
-        <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-            {ALL_TOOLS.map((tool) => (
+      <div className="w-full bg-gradient-to-br from-blue-950 via-blue-900 to-black py-16 md:py-20 px-0 text-white">
+        <div className="max-w-6xl mx-auto flex flex-col items-center px-4 md:px-0">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-center mb-4 font-serif tracking-tight bg-gradient-to-r from-blue-300 via-blue-200 to-blue-400 bg-clip-text text-transparent drop-shadow-lg">
+            Limo & Party Bus Tools
+          </h1>
+          <p className="text-xl md:text-2xl text-blue-100 text-center max-w-2xl font-medium mb-8">
+            Instantly calculate, plan, and optimize your ride. Use our suite of tools for quotes, cost splits, routes, and more.
+          </p>
+          {/* Search Bar */}
+          <div className="w-full flex justify-center mb-10">
+            <input
+              type="text"
+              placeholder="Search tools..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-blue-950/80 border border-blue-700/40 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              aria-label="Search tools"
+            />
+          </div>
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 justify-center items-stretch">
+            {filteredTools.map((tool) => (
               <ToolCard key={tool.title} tool={tool} />
             ))}
+            {filteredTools.length === 0 && (
+              <div className="col-span-full text-center text-blue-200 text-xl py-12">No tools found.</div>
+            )}
           </div>
-        </Section>
-      </Section>
+        </div>
+      </div>
     </PageLayout>
   );
 }

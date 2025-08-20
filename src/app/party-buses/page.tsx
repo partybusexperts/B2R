@@ -405,60 +405,87 @@ export default function PartyBusesPage() {
 				   </div>
 			   </Section>
 
-			   {/* Helpful Party Bus Tools Section */}
-			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-14 text-white">
-				   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight text-blue-200">
-					   Helpful Party Bus Tools
-				   </h2>
-				   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-center items-stretch">
-					   {/* Per Person Splitter */}
-					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
-						   <span className="text-4xl mb-2">🧮</span>
-						   <span className="font-bold text-lg mb-1">Per Person Splitter</span>
-						   <span className="text-blue-100 text-center text-base">Easily split the total cost among your group—no math headaches.</span>
-					   </div>
-					   {/* BYOB Pack & Ice Calculator */}
-					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
-						   <span className="text-4xl mb-2">🥤</span>
-						   <span className="font-bold text-lg mb-1">BYOB Pack & Ice Calculator</span>
-						   <span className="text-blue-100 text-center text-base">Figure out how much to bring so nobody runs dry (or warm) on the bus.</span>
-					   </div>
-					   {/* Seat Space Fit Advisor */}
-					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
-						   <span className="text-4xl mb-2">🪑</span>
-						   <span className="font-bold text-lg mb-1">Seat Space Fit Advisor</span>
-						   <span className="text-blue-100 text-center text-base">Check if your group will fit comfortably—no squishing, no surprises.</span>
-					   </div>
-					   {/* Bar Hop Route Builder */}
-					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
-						   <span className="text-4xl mb-2">🗺️</span>
-						   <span className="font-bold text-lg mb-1">Bar Hop Route Builder</span>
-						   <span className="text-blue-100 text-center text-base">Plan your stops and build the perfect party route for the night.</span>
-					   </div>
-					   {/* Vibe Selector */}
-					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
-						   <span className="text-4xl mb-2">🎶</span>
-						   <span className="font-bold text-lg mb-1">Vibe Selector</span>
-						   <span className="text-blue-100 text-center text-base">Pick your party mood—chill, club, throwback, or wild—and get playlist ideas.</span>
-					   </div>
-					   {/* Stop Timing Planner */}
-					   <div className="flex flex-col items-center bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl shadow-lg px-8 py-7 w-full max-w-xs hover:scale-105 transition">
-						   <span className="text-4xl mb-2">⏱️</span>
-						   <span className="font-bold text-lg mb-1">Stop Timing Planner</span>
-						   <span className="text-blue-100 text-center text-base">Map out how long to spend at each stop so you never feel rushed (or bored).</span>
-					   </div>
-				   </div>
-				   <div className="flex justify-center mt-10">
-					   <button
-						   type="button"
-						   className="rounded-full font-bold px-8 py-4 text-lg shadow-lg transition border flex items-center justify-center bg-gradient-to-r from-blue-700 to-blue-500 text-white border-blue-800 hover:bg-blue-800"
-						   style={{ letterSpacing: "0.03em" }}
-					   >
-						   <span className="text-2xl mr-2">➕</span>
-						   More Tools
-					   </button>
-				   </div>
-			   </Section>
+																			 {/* Limo & Party Bus Tools Section - with search bar */}
+																			 <div className="w-full bg-gradient-to-br from-blue-950 via-blue-900 to-black py-20 md:py-24 px-0 text-white">
+																				 <div className="max-w-6xl mx-auto flex flex-col items-center px-4 md:px-0">
+																					 <h2 className="text-5xl md:text-6xl font-extrabold text-center mb-4 font-serif tracking-tight bg-gradient-to-r from-blue-300 via-blue-200 to-blue-400 bg-clip-text text-transparent drop-shadow-lg">
+																						 Limo & Party Bus Tools
+																					 </h2>
+																					 <p className="text-xl md:text-2xl text-blue-100 text-center max-w-2xl font-medium mb-8">
+																						 Instantly calculate, plan, and optimize your ride. Use our suite of tools for quotes, cost splits, routes, and more.
+																					 </p>
+																					 {/* Search Bar */}
+																					 <div className="w-full flex justify-center mb-10">
+																						 <input
+																							 type="text"
+																							 placeholder="Search tools..."
+																							 value={toolSearch}
+																							 onChange={e => setToolSearch(e.target.value)}
+																							 className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-blue-950/80 border border-blue-700/40 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+																							 aria-label="Search tools"
+																						 />
+																					 </div>
+																					 <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 justify-center items-stretch">
+																						 {filteredTools.map((tool) => (
+																							 <div key={tool.name} className="flex flex-col items-center bg-gradient-to-br from-blue-800/90 via-blue-700/90 to-blue-600/80 rounded-2xl shadow-xl px-8 py-8 w-full max-w-xs mx-auto hover:scale-105 transition-transform border border-blue-400/20">
+																								 <span className="text-4xl mb-2">{tool.icon}</span>
+																								 <span className="font-bold text-lg mb-1">{tool.name}</span>
+																								 <span className="text-blue-100 text-center text-base">{tool.desc}</span>
+																							 </div>
+																						 ))}
+																					 </div>
+																					 <div className="flex justify-center mt-12">
+																						 <button
+																							 type="button"
+																							 className="rounded-full font-bold px-10 py-5 text-xl shadow-xl transition border flex items-center justify-center bg-gradient-to-r from-blue-700 to-blue-500 text-white border-blue-800 hover:bg-blue-800"
+																							 style={{ letterSpacing: "0.03em" }}
+																						 >
+																							 <span className="text-2xl mr-2">➕</span>
+																							 More Tools
+																						 </button>
+																					 </div>
+																				 </div>
+																			 </div>
+// Tool data and search state for tools section
+const toolList = [
+	{
+		name: "Per Person Splitter",
+		icon: "🧮",
+		desc: "Easily split the total cost among your group—no math headaches.",
+	},
+	{
+		name: "BYOB Pack & Ice Calculator",
+		icon: "🥤",
+		desc: "Figure out how much to bring so nobody runs dry (or warm) on the bus.",
+	},
+	{
+		name: "Seat Space Fit Advisor",
+		icon: "🪑",
+		desc: "Check if your group will fit comfortably—no squishing, no surprises.",
+	},
+	{
+		name: "Bar Hop Route Builder",
+		icon: "🗺️",
+		desc: "Plan your stops and build the perfect party route for the night.",
+	},
+	{
+		name: "Vibe Selector",
+		icon: "🎶",
+		desc: "Pick your party mood—chill, club, throwback, or wild—and get playlist ideas.",
+	},
+	{
+		name: "Stop Timing Planner",
+		icon: "⏱️",
+		desc: "Map out how long to spend at each stop so you never feel rushed (or bored).",
+	},
+];
+
+const [toolSearch, setToolSearch] = useState("");
+const filteredTools = toolList.filter(
+	t =>
+		t.name.toLowerCase().includes(toolSearch.toLowerCase()) ||
+		t.desc.toLowerCase().includes(toolSearch.toLowerCase())
+);
 			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
 				   <div className="max-w-6xl mx-auto px-4 mt-12 mb-2">
 					   <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">Party Bus Polls</h2>
