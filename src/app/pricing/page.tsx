@@ -167,8 +167,29 @@ function Modal({
 }
 
 export default function PricingPage() {
-	const [search, setSearch] = useState("");
-	const [modalIdx, setModalIdx] = useState<number | null>(null);
+
+		const [search, setSearch] = useState("");
+		const [modalIdx, setModalIdx] = useState<number | null>(null);
+		const [showQuoteModal, setShowQuoteModal] = useState(false);
+
+		// Demo Instant Quote Tool logic
+		const [quoteForm, setQuoteForm] = useState({ city: "", zip: "", hours: 4, passengers: 10 });
+		const [quoteResult, setQuoteResult] = useState<string | null>(null);
+		function handleQuoteChange(e: React.ChangeEvent<HTMLInputElement>) {
+			const { name, value } = e.target;
+			setQuoteForm((prev) => ({ ...prev, [name]: value }));
+		}
+		function handleQuoteSubmit(e: React.FormEvent) {
+			e.preventDefault();
+			// Fake price logic for demo
+			const base = 150;
+			const price = base + Number(quoteForm.hours) * 100 + Number(quoteForm.passengers) * 5;
+			setQuoteResult(`$${price} (est.)`);
+		}
+		function resetQuoteModal() {
+			setQuoteForm({ city: "", zip: "", hours: 4, passengers: 10 });
+			setQuoteResult(null);
+		}
 
 	const filteredFaq = useMemo(() => {
 		const q = search.toLowerCase();
@@ -364,62 +385,147 @@ export default function PricingPage() {
 			</Section>
 
 			{/* --------------------------------- Tools -------------------------------- */}
-			<Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-500/30">
-				<h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
-					Helpful Tools
-				</h2>
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-					<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-						<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">
-							⚡ Instant Quote Tool
-						</h3>
-						<p className="text-blue-800 mb-3">
-							Get a real-time quote for your trip in seconds. No obligation, no hidden fees.
-						</p>
-						<a
-							href="/quote"
-							className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition"
-						>
-							Try Now
-						</a>
-					</div>
-					<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-						<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">
-							🚌 Vehicle Capacity Finder
-						</h3>
-						<p className="text-blue-800 mb-3">
-							Enter your group size and see which vehicles fit best.
-						</p>
-						<a
-							href="/tools"
-							className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition"
-						>
-							Try Now
-						</a>
-					</div>
-					<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-						<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">
-							💸 Cost Split Calculator
-						</h3>
-						<p className="text-blue-800 mb-3">
-							Know your per-person cost instantly by entering the total and group size.
-						</p>
-						<a
-							href="/tools"
-							className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition"
-						>
-							Try Now
-						</a>
-					</div>
-				</div>
-				<div className="flex justify-center">
-					<a
-						href="/tools"
-						className="inline-block bg-white hover:bg-blue-50 text-blue-900 font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border-2 border-blue-100"
-					>
-						See All Tools
-					</a>
-				</div>
+					<Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-500/30">
+						<h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
+							Helpful Tools
+						</h2>
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+							{/* Instant Quote Tool Card */}
+							<button
+								type="button"
+								className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100 text-left hover:shadow-2xl hover:-translate-y-1 transition focus:outline-none"
+								onClick={() => { setShowQuoteModal(true); resetQuoteModal(); }}
+								aria-label="Open Instant Quote Tool"
+							>
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">⚡ Instant Quote Tool</h3>
+								<p className="text-blue-800 mb-3">Get a real-time quote for your trip in seconds. No obligation, no hidden fees.</p>
+								<span className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition mt-2">Try Now</span>
+							</button>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🚌 Vehicle Capacity Finder</h3>
+								<p className="text-blue-800 mb-3">Enter your group size and see which vehicles fit best.</p>
+								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
+							</div>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">💸 Cost Split Calculator</h3>
+								<p className="text-blue-800 mb-3">Know your per-person cost instantly by entering the total and group size.</p>
+								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
+							</div>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">📅 Date Price Checker</h3>
+								<p className="text-blue-800 mb-3">See how prices change by date, season, or holiday.</p>
+								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
+							</div>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">📍 Zip Code Price Lookup</h3>
+								<p className="text-blue-800 mb-3">Find pricing for your city or zip code instantly.</p>
+								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
+							</div>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🕒 Hourly vs. Flat Rate Tool</h3>
+								<p className="text-blue-800 mb-3">Compare hourly and flat-rate pricing for your trip.</p>
+								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
+							</div>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🚐 Vehicle Comparison Tool</h3>
+								<p className="text-blue-800 mb-3">Compare prices and features for all vehicle types.</p>
+								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
+							</div>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🧾 Fee & Tax Estimator</h3>
+								<p className="text-blue-800 mb-3">Estimate taxes, fees, and gratuity for your booking.</p>
+								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
+							</div>
+							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
+								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">💬 Ask a Pricing Expert</h3>
+								<p className="text-blue-800 mb-3">Get personalized pricing help from our team.</p>
+								<a href="/contact" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Contact Us</a>
+							</div>
+						</div>
+								<div className="flex justify-center">
+									<a
+										href="/tools"
+										className="inline-block bg-white hover:bg-blue-50 text-blue-900 font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border-2 border-blue-100"
+									>
+										See All Tools
+									</a>
+								</div>
+
+								{/* Instant Quote Modal */}
+								{showQuoteModal && (
+									<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+										<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+											<button
+												onClick={() => setShowQuoteModal(false)}
+												className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none"
+												aria-label="Close"
+											>
+												×
+											</button>
+											<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Instant Quote Tool</h3>
+											<form onSubmit={handleQuoteSubmit} className="space-y-4">
+												<div>
+													<label className="block text-blue-900 font-bold mb-1">City</label>
+													<input
+														type="text"
+														name="city"
+														value={quoteForm.city}
+														onChange={handleQuoteChange}
+														className="w-full rounded-lg border border-blue-300 px-3 py-2"
+														placeholder="Enter city"
+													/>
+												</div>
+												<div>
+													<label className="block text-blue-900 font-bold mb-1">Zip Code</label>
+													<input
+														type="text"
+														name="zip"
+														value={quoteForm.zip}
+														onChange={handleQuoteChange}
+														className="w-full rounded-lg border border-blue-300 px-3 py-2"
+														placeholder="Enter zip code"
+													/>
+												</div>
+												<div>
+													<label className="block text-blue-900 font-bold mb-1">Hours</label>
+													<input
+														type="number"
+														name="hours"
+														min="1"
+														max="24"
+														value={quoteForm.hours}
+														onChange={handleQuoteChange}
+														className="w-full rounded-lg border border-blue-300 px-3 py-2"
+													/>
+												</div>
+												<div>
+													<label className="block text-blue-900 font-bold mb-1">Passengers</label>
+													<input
+														type="number"
+														name="passengers"
+														min="1"
+														max="100"
+														value={quoteForm.passengers}
+														onChange={handleQuoteChange}
+														className="w-full rounded-lg border border-blue-300 px-3 py-2"
+													/>
+												</div>
+												<button
+													type="submit"
+													className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2"
+												>
+													Get Quote
+												</button>
+											</form>
+											{quoteResult && (
+												<div className="mt-6 text-center">
+													<div className="text-2xl font-bold text-blue-900">Estimated Price: {quoteResult}</div>
+													<div className="text-blue-700 mt-2">(This is a demo. For a real quote, use our full tool!)</div>
+												</div>
+											)}
+										</div>
+									</div>
+								)}
 			</Section>
 
 			{/* ------------------------------- Reviews ------------------------------- */}
