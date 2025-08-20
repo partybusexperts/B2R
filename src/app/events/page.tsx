@@ -37,10 +37,56 @@ const EventsPage: React.FC = () => {
   const handleGo = () => {
     if (!selectedEvent) return;
     window.location.href = selectedEvent;
-  };
+  }
   return (
-    <div className="min-h-screen w-full bg-[#1a237e] py-10 px-2 md:px-0 flex flex-col items-center">
-      <div className="w-full max-w-7xl bg-gradient-to-b from-[#223a7a] to-[#1a237e] rounded-3xl shadow-2xl p-6 md:p-12 flex flex-col items-center mb-8">
+    <>
+      {/* Transparent Pricing Header - matches pricing page */}
+      <div className="relative flex flex-col items-center justify-center text-center !p-0 !py-0 overflow-hidden w-full bg-gradient-to-br from-blue-950 via-blue-900 to-black">
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
+        <div className="pt-16" />
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-8 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
+          Transparent Pricing
+        </h1>
+        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-12 text-blue-100 font-medium">
+          Know what to expect—no surprises, just great value for your luxury ride.
+        </p>
+        <div className="flex flex-row flex-wrap gap-4 justify-center items-center mb-14">
+          <a
+            href="tel:8885352566"
+            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[170px] max-w-full text-center bg-white text-blue-900 border-blue-200 hover:bg-blue-100 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
+            style={{wordBreak: 'keep-all'}}
+          >
+            <span className="flex items-center gap-2 min-w-0">
+              <span className="text-pink-500 text-xl">📞</span>
+              <span className="leading-tight text-blue-900 font-semibold truncate">(888) 535-2566</span>
+            </span>
+          </a>
+          <a
+            href="mailto:info@bus2ride.com"
+            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[120px] max-w-full text-center bg-blue-700 text-white border-blue-700 hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
+            style={{wordBreak: 'keep-all'}}
+          >
+            <span className="flex items-center gap-2 min-w-0">
+              <span className="text-white text-xl">✉️</span>
+              <span className="leading-tight text-white font-semibold truncate">Email Now</span>
+            </span>
+          </a>
+          <a
+            href="/quote"
+            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[150px] max-w-full text-center bg-blue-700 text-white border-blue-200 hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
+            style={{wordBreak: 'keep-all'}}
+          >
+            <span className="flex items-center gap-2 min-w-0">
+              <span className="text-yellow-400 text-xl">⚡</span>
+              <span className="leading-tight text-white font-semibold truncate">Instant Live Quote</span>
+            </span>
+          </a>
+        </div>
+        <div className="pb-10" />
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-900/10 blur-2xl opacity-60" />
+      </div>
+      <div className="min-h-screen w-full bg-[#1a237e] py-10 px-2 md:px-0 flex flex-col items-center">
+        <div className="w-full max-w-7xl bg-gradient-to-b from-[#223a7a] to-[#1a237e] rounded-3xl shadow-2xl p-6 md:p-12 flex flex-col items-center mb-8">
         <div className="w-full flex flex-col md:flex-row items-center justify-center gap-3 mb-6">
           <label htmlFor="event-jump" className="text-blue-200 font-semibold mr-2">Jump to an event:</label>
           <select
@@ -126,7 +172,7 @@ const EventsPage: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default EventsPage;
 
