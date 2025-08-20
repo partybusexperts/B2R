@@ -92,25 +92,31 @@ export default function PricingPage() {
         <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-900/10 blur-2xl opacity-60" />
       </div>
       {/* Stats */}
-      <Section className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 bg-gradient-to-r from-blue-900/80 via-blue-950/80 to-black/90 rounded-3xl shadow-xl my-12 py-10 px-6">
-        {[
-          { label: "Lowest Hourly Minimums", value: "2-4 Hours", icon: "⏰" },
-          { label: "Transparent Quotes", value: "No Hidden Fees", icon: "💵" },
-          { label: "All-Inclusive Pricing", value: "Taxes & Fees Included", icon: "🧾" },
-          { label: "Flexible Payment", value: "Cards, ACH, Wallets", icon: "💳" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform"
-          >
-            <span className="text-5xl mb-2">{stat.icon}</span>
-            <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">
-              {stat.value}
-            </span>
-            <span className="text-lg text-blue-100 font-sans">{stat.label}</span>
-          </div>
-        ))}
-      </Section>
+            <Section className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 bg-gradient-to-r from-blue-900/80 via-blue-950/80 to-black/90 rounded-3xl shadow-xl my-12 py-10">
+              {/* Updated stats section per requirements */}
+              <div className="flex flex-wrap justify-center gap-10 w-full">
+                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
+                  <span className="text-5xl mb-2">⏰</span>
+                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">3-4 Hours</span>
+                  <span className="text-lg text-blue-100 font-sans">Minimum Booking</span>
+                </div>
+                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
+                  <span className="text-5xl mb-2">💵</span>
+                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">No Hidden Fees</span>
+                  <span className="text-lg text-blue-100 font-sans">Transparent Quotes</span>
+                </div>
+                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
+                  <span className="text-5xl mb-2">🧾</span>
+                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">Taxes, Fees & Tips Included</span>
+                  <span className="text-lg text-blue-100 font-sans">All-Inclusive Pricing</span>
+                </div>
+                <div className="flex flex-col items-center px-10 py-8 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-950 shadow-2xl min-w-[200px] border border-blue-500/30 hover:scale-105 transition-transform">
+                  <span className="text-5xl mb-2">💳</span>
+                  <span className="text-3xl font-bold text-blue-300 mb-1 font-serif">Cards, Zelle, CashApp, etc.</span>
+                  <span className="text-lg text-blue-100 font-sans">Flexible Payment</span>
+                </div>
+              </div>
+            </Section>
 
       {/* Pricing FAQ with search and scroll */}
       <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10 px-6">
