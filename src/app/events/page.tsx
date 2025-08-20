@@ -41,45 +41,45 @@ const EventsPage: React.FC = () => {
 
   return (
     <>
-      {/* Transparent Pricing Header - matches pricing page */}
-      <div className="relative flex flex-col items-center justify-center text-center !p-0 !py-0 overflow-hidden w-full bg-gradient-to-br from-blue-950 via-blue-900 to-black">
+      {/* Events & Occasions Header */}
+      <div className="relative flex flex-col items-center justify-center text-center !p-0 !py-0 overflow-hidden w-full bg-gradient-to-br from-blue-900/80 via-blue-950/80 to-black/90">
         <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
         <div className="pt-16" />
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-8 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
-          Transparent Pricing
+        <h1 className="text-6xl md:text-8xl font-extrabold mb-10 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
+          Events & Occasions
         </h1>
-        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-12 text-blue-100 font-medium">
-          Know what to expect—no surprises, just great value for your luxury ride.
+        <p className="text-3xl md:text-4xl max-w-4xl mx-auto mb-14 text-blue-100 font-medium">
+          Explore our most popular events and occasions for group transportation. Whether it’s a wedding, prom, concert, sporting event, or a night out, we have the perfect ride for every celebration. Click any event to learn more, get tips, and see how Bus2Ride can make your occasion unforgettable!
         </p>
         <div className="flex flex-row flex-wrap gap-4 justify-center items-center mb-14">
           <a
-            href="tel:8885352566"
+            href="/quote"
+            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[170px] max-w-full text-center bg-white text-blue-900 border-blue-200 hover:bg-blue-100 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
+            style={{wordBreak: 'keep-all'}}
+          >
+            <span className="flex items-center gap-2 min-w-0">
+              <span className="text-blue-700 text-xl">⚡</span>
+              <span className="leading-tight text-blue-900 font-semibold truncate">Get Instant Quote</span>
+            </span>
+          </a>
+          <a
+            href="/fleet"
+            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[170px] max-w-full text-center bg-blue-700 text-white border-blue-700 hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
+            style={{wordBreak: 'keep-all'}}
+          >
+            <span className="flex items-center gap-2 min-w-0">
+              <span className="text-white text-xl">🚌</span>
+              <span className="leading-tight text-white font-semibold truncate">View Fleet</span>
+            </span>
+          </a>
+          <a
+            href="mailto:info@bus2ride.com"
             className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[170px] max-w-full text-center bg-white text-blue-900 border-blue-200 hover:bg-blue-100 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
             style={{wordBreak: 'keep-all'}}
           >
             <span className="flex items-center gap-2 min-w-0">
               <span className="text-pink-500 text-xl">📞</span>
-              <span className="leading-tight text-blue-900 font-semibold truncate">(888) 535-2566</span>
-            </span>
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[120px] max-w-full text-center bg-blue-700 text-white border-blue-700 hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
-            style={{wordBreak: 'keep-all'}}
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <span className="text-white text-xl">✉️</span>
-              <span className="leading-tight text-white font-semibold truncate">Email Now</span>
-            </span>
-          </a>
-          <a
-            href="/quote"
-            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[150px] max-w-full text-center bg-blue-700 text-white border-blue-200 hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
-            style={{wordBreak: 'keep-all'}}
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <span className="text-yellow-400 text-xl">⚡</span>
-              <span className="leading-tight text-white font-semibold truncate">Instant Live Quote</span>
+              <span className="leading-tight text-blue-900 font-semibold truncate">Contact Us</span>
             </span>
           </a>
         </div>
