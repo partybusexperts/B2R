@@ -38,6 +38,7 @@ const EventsPage: React.FC = () => {
     if (!selectedEvent) return;
     window.location.href = selectedEvent;
   }
+
   return (
     <>
       {/* Transparent Pricing Header - matches pricing page */}
@@ -171,8 +172,8 @@ const EventsPage: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 }
-
 export default EventsPage;
 

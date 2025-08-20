@@ -46,6 +46,15 @@ export default function PricingPage() {
 
   return (
     <>
+      {/* Transparent Pricing Header */}
+      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl mt-12 mb-0 py-10 flex flex-col items-center">
+        <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-center text-blue-100 font-serif tracking-tight drop-shadow-lg">
+          Transparent Pricing
+        </h1>
+        <p className="text-lg md:text-2xl text-blue-200 text-center max-w-2xl mb-2 font-sans">
+          No hidden fees. No surprises. Just clear, all-inclusive rates for every trip.
+        </p>
+      </Section>
       {/* Stats */}
       <Section className="max-w-6xl mx-auto flex flex-wrap justify-center gap-10 bg-gradient-to-r from-blue-900/80 via-blue-950/80 to-black/90 rounded-3xl shadow-xl my-12 py-10 px-6">
         {[
