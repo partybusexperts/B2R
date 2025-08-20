@@ -451,12 +451,12 @@ const toolList = [
 	{
 		name: "Per Person Splitter",
 		icon: "🧮",
-		desc: "Easily split the total cost among your group—no math headaches.",
+		desc: "Easily split the total cost among your group—no math headaches."
 	},
 	{
 		name: "BYOB Pack & Ice Calculator",
 		icon: "🥤",
-		desc: "Figure out how much to bring so nobody runs dry (or warm) on the bus.",
+		desc: "Figure out how much to bring so nobody runs dry (or warm) on the bus."
 	},
 	{
 		name: "Seat Space Fit Advisor",
