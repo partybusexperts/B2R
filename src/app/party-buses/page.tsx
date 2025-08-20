@@ -45,12 +45,21 @@ const filteredTools = toolList.filter(
 		))}
 	</div>
 </Section>
+
 "use client";
 import React, { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import Section from "@/components/Section";
-import PollsSection from "@/components/PollsSection";
+// import PollsSection from "@/components/PollsSection";
 import StatsStrip from "@/components/StatsStrip";
+
+// Feature data array (move this after imports, before your component)
+type Feature = { label: string; icon: string; description: string };
+
+const PARTY_BUS_FEATURES: Feature[] = [
+	{
+		label: "More Space to Move Around",
+		icon: "🕺",
 		description:
 			"Spacious interiors let you dance, mingle, and move around safely—no cramped seating here!",
 	},
@@ -58,11 +67,17 @@ import StatsStrip from "@/components/StatsStrip";
 		label: "Better for Socializing, Less Claustrophobic",
 		icon: "🫂",
 		description:
-			"Open layouts and wrap-around seating make it easy to chat, laugh, and connect with everyone in your group.",
+			"Wrap-around seating means everyone faces each other and can actually talk; great group energy.",
+	},
+	{
+		label: "Wet bars with ice & bottled water",
+		icon: "🧊",
+		description:
+			"Built-in wet bars with ice and complimentary bottled water. Bring your own drinks (21+ where legal).",
 	},
 	{
 		label: "Easy to Get In and Out Of",
-		icon: "�",
+		icon: "🚪",
 		description:
 			"Wide doors and low steps make boarding and exiting the bus a breeze for all guests.",
 	},
@@ -74,7 +89,7 @@ import StatsStrip from "@/components/StatsStrip";
 	},
 	{
 		label: "Some Restrooms on Big Party Buses",
-		icon: "�",
+		icon: "🚻",
 		description:
 			"Select larger party buses include onboard restrooms for maximum comfort and convenience during your trip.",
 	},
@@ -87,48 +102,7 @@ const buses = [
 	   description:
 		   "Our flagship party bus with wraparound seating, club lighting, and a booming sound system. Perfect for big nights out.",
 	   features: ["Dance Pole", "BYOB", "Bluetooth Audio", "Restroom"],
-   },
-// Removed duplicate tools section from the top of the file
-
-		name: "Per Person Splitter",
-		icon: "🧮",
-		desc: "Easily split the total cost among your group—no math headaches."
 	},
-	{
-		name: "BYOB Pack & Ice Calculator",
-		icon: "🥤",
-		desc: "Figure out how much to bring so nobody runs dry (or warm) on the bus."
-	},
-	{
-		name: "Seat Space Fit Advisor",
-		icon: "🪑",
-		desc: "Check if your group will fit comfortably—no squishing, no surprises."
-	},
-	{
-		name: "Bar Hop Route Builder",
-		icon: "🗺️",
-		desc: "Plan your stops and build the perfect party route for the night."
-	},
-	{
-		name: "Vibe Selector",
-		icon: "🎶",
-		desc: "Pick your party mood—chill, club, throwback, or wild—and get playlist ideas."
-	},
-	{
-		name: "Stop Timing Planner",
-		icon: "⏱️",
-		desc: "Map out how long to spend at each stop so you never feel rushed (or bored)."
-	}
-];
-
-const gallery = [
-	"/review_uploads/40 Passenger Party Bus With Pole.jpg",
-	"/public/images/partybus30.jpg",
-	"/public/images/partybus20.jpg",
-	"/public/images/partybus-night.jpg",
-	"/public/images/partybus-interior.jpg",
-	"/public/images/partybus-led.jpg",
-];
 
 export default function PartyBusesPage() {
 	const [openAmenityIdx, setOpenAmenityIdx] = useState<number | null>(null);
@@ -459,10 +433,26 @@ const filteredTools = toolList.filter(
 		t.name.toLowerCase().includes(toolSearch.toLowerCase()) ||
 		t.desc.toLowerCase().includes(toolSearch.toLowerCase())
 );
-			   <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
-				   <div className="max-w-6xl mx-auto px-4 mt-12 mb-2">
-					   <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">Party Bus Polls</h2>
-					   <p className="text-lg text-center text-blue-100 mb-6 max-w-2xl mx-auto">
+							 {/* Features Section */}
+							 <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-500/30">
+								 <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
+									 Why Party Buses Rock
+								 </h2>
+								 <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+									 {PARTY_BUS_FEATURES.map((f) => (
+										 <li key={f.label} className="bg-white rounded-lg shadow px-4 py-3 border border-blue-200 text-blue-900 flex flex-col items-start">
+											 <span className="text-2xl mb-1">{f.icon}</span>
+											 <div className="font-semibold text-lg mb-1">{f.label}</div>
+											 <div className="text-blue-800 text-sm">{f.description}</div>
+										 </li>
+									 ))}
+								 </ul>
+							 </Section>
+
+							 <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
+									 <div className="max-w-6xl mx-auto px-4 mt-12 mb-2">
+											 <h2 className="text-4xl md:text-5xl font-extrabold text-white text-center mb-10 mt-8 tracking-tight">Party Bus Polls</h2>
+											 <p className="text-lg text-center text-blue-100 mb-6 max-w-2xl mx-auto">
 						   See what real party bus riders and industry pros are saying! Our live polls help you compare trends, get honest opinions, and make smarter choices for your next trip. Vote, view results, and join the conversation.
 					   </p>
 				   </div>
@@ -473,20 +463,7 @@ const filteredTools = toolList.filter(
 					   Frequently Asked Questions
 				   </h2>
 				   <div className="space-y-6">
-					   {faqs.map((faq, i) => (
-						   <details
-							   key={faq.q}
-							   className="group border border-blue-700/30 rounded-xl bg-blue-950/70 p-6 hover:bg-blue-900/40 transition-colors text-white"
-						   >
-							   <summary className="cursor-pointer text-lg font-semibold text-white group-open:text-white flex items-center gap-2 font-sans">
-								   <span className="text-2xl">
-									   {i % 2 === 0 ? "❓" : "💬"}
-								   </span>{" "}
-								   {faq.q}
-							   </summary>
-							   <p className="mt-3 text-white text-base font-sans">{faq.a}</p>
-						   </details>
-					   ))}
+					   {/* faqs.map section removed: faqs is undefined */}
 				   </div>
 			   </Section>
 			   <Section id="book" className="max-w-2xl mx-auto text-center bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
