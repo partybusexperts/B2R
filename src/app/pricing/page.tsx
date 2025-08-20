@@ -170,26 +170,116 @@ export default function PricingPage() {
 
 		const [search, setSearch] = useState("");
 		const [modalIdx, setModalIdx] = useState<number | null>(null);
-		const [showQuoteModal, setShowQuoteModal] = useState(false);
+				// Modal state for all 9 tools
+				const [activeTool, setActiveTool] = useState<null | number>(null);
 
-		// Demo Instant Quote Tool logic
-		const [quoteForm, setQuoteForm] = useState({ city: "", zip: "", hours: 4, passengers: 10 });
-		const [quoteResult, setQuoteResult] = useState<string | null>(null);
-		function handleQuoteChange(e: React.ChangeEvent<HTMLInputElement>) {
-			const { name, value } = e.target;
-			setQuoteForm((prev) => ({ ...prev, [name]: value }));
-		}
-		function handleQuoteSubmit(e: React.FormEvent) {
-			e.preventDefault();
-			// Fake price logic for demo
-			const base = 150;
-			const price = base + Number(quoteForm.hours) * 100 + Number(quoteForm.passengers) * 5;
-			setQuoteResult(`$${price} (est.)`);
-		}
-		function resetQuoteModal() {
-			setQuoteForm({ city: "", zip: "", hours: 4, passengers: 10 });
-			setQuoteResult(null);
-		}
+				// Reset logic for each tool modal
+				function openToolModal(idx: number) {
+					setActiveTool(idx);
+					if (idx === 0) { resetQuoteModal(); }
+					if (idx === 1) { setVcfPassengers(10); setVcfResult(null); }
+					if (idx === 2) { setSplitTotal(1000); setSplitPeople(10); setSplitResult(null); }
+					if (idx === 3) { setDate(""); setDateResult(null); }
+					if (idx === 4) { setZip(""); setZipResult(null); }
+					if (idx === 5) { setHvfHours(4); setHvfFlat(700); setHvfResult(null); }
+					if (idx === 6) { setVcType("party"); setVcResult(null); }
+					if (idx === 7) { setFeeBase(1000); setFeeResult(null); }
+					if (idx === 8) { setAskMsg(""); setAskResult(null); }
+				}
+
+			// Demo forms/results for each tool
+			// 0: Instant Quote Tool
+			const [quoteForm, setQuoteForm] = useState({ city: "", zip: "", hours: 4, passengers: 10 });
+			const [quoteResult, setQuoteResult] = useState<string | null>(null);
+			function handleQuoteChange(e: React.ChangeEvent<HTMLInputElement>) {
+				const { name, value } = e.target;
+				setQuoteForm((prev) => ({ ...prev, [name]: value }));
+			}
+			function handleQuoteSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				const base = 150;
+				const price = base + Number(quoteForm.hours) * 100 + Number(quoteForm.passengers) * 5;
+				setQuoteResult(`$${price} (est.)`);
+			}
+			function resetQuoteModal() {
+				setQuoteForm({ city: "", zip: "", hours: 4, passengers: 10 });
+				setQuoteResult(null);
+			}
+
+			// 1: Vehicle Capacity Finder
+			const [vcfPassengers, setVcfPassengers] = useState(10);
+			const [vcfResult, setVcfResult] = useState<string | null>(null);
+			function handleVcfSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				if (vcfPassengers <= 14) setVcfResult("Try a Sprinter or Limo (up to 14)");
+				else if (vcfPassengers <= 24) setVcfResult("Mini Bus or Small Party Bus (15-24)");
+				else if (vcfPassengers <= 40) setVcfResult("Large Party Bus or Coach (25-40)");
+				else setVcfResult("Multiple vehicles or Coach Bus (40+)");
+			}
+
+			// 2: Cost Split Calculator
+			const [splitTotal, setSplitTotal] = useState(1000);
+			const [splitPeople, setSplitPeople] = useState(10);
+			const [splitResult, setSplitResult] = useState<string | null>(null);
+			function handleSplitSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				if (splitPeople > 0) setSplitResult(`$${(splitTotal / splitPeople).toFixed(2)} per person`);
+				else setSplitResult(null);
+			}
+
+			// 3: Date Price Checker
+			const [date, setDate] = useState("");
+			const [dateResult, setDateResult] = useState<string | null>(null);
+			function handleDateSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				if (date.match(/12-25|01-01/)) setDateResult("Holiday pricing: +20% (est.)");
+				else setDateResult("Standard pricing applies");
+			}
+
+			// 4: Zip Code Price Lookup
+			const [zip, setZip] = useState("");
+			const [zipResult, setZipResult] = useState<string | null>(null);
+			function handleZipSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				if (zip.startsWith("9")) setZipResult("CA/West Coast pricing: $200/hr (est.)");
+				else setZipResult("$150/hr (est.)");
+			}
+
+			// 5: Hourly vs. Flat Rate Tool
+			const [hvfHours, setHvfHours] = useState(4);
+			const [hvfFlat, setHvfFlat] = useState(700);
+			const [hvfResult, setHvfResult] = useState<string | null>(null);
+			function handleHvfSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				const hourly = hvfHours * 180;
+				setHvfResult(hourly < hvfFlat ? `Hourly ($${hourly}) is cheaper` : `Flat rate ($${hvfFlat}) is cheaper`);
+			}
+
+			// 6: Vehicle Comparison Tool
+			const [vcType, setVcType] = useState("party");
+			const [vcResult, setVcResult] = useState<string | null>(null);
+			function handleVcSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				if (vcType === "party") setVcResult("Party Bus: $200/hr, 20-40ppl");
+				else if (vcType === "limo") setVcResult("Limo: $150/hr, 8-14ppl");
+				else setVcResult("Coach: $250/hr, 40+ppl");
+			}
+
+			// 7: Fee & Tax Estimator
+			const [feeBase, setFeeBase] = useState(1000);
+			const [feeResult, setFeeResult] = useState<string | null>(null);
+			function handleFeeSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				setFeeResult(`Est. taxes/fees: $${(feeBase * 0.18).toFixed(2)}`);
+			}
+
+			// 8: Ask a Pricing Expert
+			const [askMsg, setAskMsg] = useState("");
+			const [askResult, setAskResult] = useState<string | null>(null);
+			function handleAskSubmit(e: React.FormEvent) {
+				e.preventDefault();
+				setAskResult("Thank you! Our team will reply soon.");
+			}
 
 	const filteredFaq = useMemo(() => {
 		const q = search.toLowerCase();
@@ -389,58 +479,58 @@ export default function PricingPage() {
 						<h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
 							Helpful Tools
 						</h2>
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-							{/* Instant Quote Tool Card */}
-							<button
-								type="button"
-								className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100 text-left hover:shadow-2xl hover:-translate-y-1 transition focus:outline-none"
-								onClick={() => { setShowQuoteModal(true); resetQuoteModal(); }}
-								aria-label="Open Instant Quote Tool"
-							>
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">⚡ Instant Quote Tool</h3>
-								<p className="text-blue-800 mb-3">Get a real-time quote for your trip in seconds. No obligation, no hidden fees.</p>
-								<span className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition mt-2">Try Now</span>
-							</button>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🚌 Vehicle Capacity Finder</h3>
-								<p className="text-blue-800 mb-3">Enter your group size and see which vehicles fit best.</p>
-								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
-							</div>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">💸 Cost Split Calculator</h3>
-								<p className="text-blue-800 mb-3">Know your per-person cost instantly by entering the total and group size.</p>
-								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
-							</div>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">📅 Date Price Checker</h3>
-								<p className="text-blue-800 mb-3">See how prices change by date, season, or holiday.</p>
-								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
-							</div>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">📍 Zip Code Price Lookup</h3>
-								<p className="text-blue-800 mb-3">Find pricing for your city or zip code instantly.</p>
-								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
-							</div>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🕒 Hourly vs. Flat Rate Tool</h3>
-								<p className="text-blue-800 mb-3">Compare hourly and flat-rate pricing for your trip.</p>
-								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
-							</div>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🚐 Vehicle Comparison Tool</h3>
-								<p className="text-blue-800 mb-3">Compare prices and features for all vehicle types.</p>
-								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
-							</div>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">🧾 Fee & Tax Estimator</h3>
-								<p className="text-blue-800 mb-3">Estimate taxes, fees, and gratuity for your booking.</p>
-								<a href="/tools" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Try Now</a>
-							</div>
-							<div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100">
-								<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">💬 Ask a Pricing Expert</h3>
-								<p className="text-blue-800 mb-3">Get personalized pricing help from our team.</p>
-								<a href="/contact" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition">Contact Us</a>
-							</div>
+								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+									{/* Tool Cards */}
+									{[
+										{
+											title: "⚡ Instant Quote Tool",
+											desc: "Get a real-time quote for your trip in seconds. No obligation, no hidden fees.",
+										},
+										{
+											title: "🚌 Vehicle Capacity Finder",
+											desc: "Enter your group size and see which vehicles fit best.",
+										},
+										{
+											title: "💸 Cost Split Calculator",
+											desc: "Know your per-person cost instantly by entering the total and group size.",
+										},
+										{
+											title: "📅 Date Price Checker",
+											desc: "See how prices change by date, season, or holiday.",
+										},
+										{
+											title: "📍 Zip Code Price Lookup",
+											desc: "Find pricing for your city or zip code instantly.",
+										},
+										{
+											title: "🕒 Hourly vs. Flat Rate Tool",
+											desc: "Compare hourly and flat-rate pricing for your trip.",
+										},
+										{
+											title: "🚐 Vehicle Comparison Tool",
+											desc: "Compare prices and features for all vehicle types.",
+										},
+										{
+											title: "🧾 Fee & Tax Estimator",
+											desc: "Estimate taxes, fees, and gratuity for your booking.",
+										},
+										{
+											title: "💬 Ask a Pricing Expert",
+											desc: "Get personalized pricing help from our team.",
+										},
+																].map((tool, idx) => (
+																	<button
+																		key={tool.title}
+																		type="button"
+																		className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100 text-left hover:shadow-2xl hover:-translate-y-1 transition focus:outline-none"
+																		onClick={() => openToolModal(idx)}
+																		aria-label={`Open ${tool.title}`}
+																	>
+																		<h3 className="text-blue-900 font-extrabold text-lg mb-2 flex items-center gap-2">{tool.title}</h3>
+																		<p className="text-blue-800 mb-3">{tool.desc}</p>
+																		<span className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition mt-2">Try Now</span>
+																	</button>
+																))}
 						</div>
 								<div className="flex justify-center">
 									<a
@@ -451,81 +541,129 @@ export default function PricingPage() {
 									</a>
 								</div>
 
-								{/* Instant Quote Modal */}
-								{showQuoteModal && (
-									<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-										<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
-											<button
-												onClick={() => setShowQuoteModal(false)}
-												className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none"
-												aria-label="Close"
-											>
-												×
-											</button>
-											<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Instant Quote Tool</h3>
-											<form onSubmit={handleQuoteSubmit} className="space-y-4">
-												<div>
-													<label className="block text-blue-900 font-bold mb-1">City</label>
-													<input
-														type="text"
-														name="city"
-														value={quoteForm.city}
-														onChange={handleQuoteChange}
-														className="w-full rounded-lg border border-blue-300 px-3 py-2"
-														placeholder="Enter city"
-													/>
+										{/* Tool Modals */}
+										{activeTool === 0 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Instant Quote Tool</h3>
+													<form onSubmit={handleQuoteSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">City</label><input type="text" name="city" value={quoteForm.city} onChange={handleQuoteChange} className="w-full rounded-lg border border-blue-300 px-3 py-2" placeholder="Enter city" /></div>
+														<div><label className="block text-blue-900 font-bold mb-1">Zip Code</label><input type="text" name="zip" value={quoteForm.zip} onChange={handleQuoteChange} className="w-full rounded-lg border border-blue-300 px-3 py-2" placeholder="Enter zip code" /></div>
+														<div><label className="block text-blue-900 font-bold mb-1">Hours</label><input type="number" name="hours" min="1" max="24" value={quoteForm.hours} onChange={handleQuoteChange} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<div><label className="block text-blue-900 font-bold mb-1">Passengers</label><input type="number" name="passengers" min="1" max="100" value={quoteForm.passengers} onChange={handleQuoteChange} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Get Quote</button>
+													</form>
+													{quoteResult && (<div className="mt-6 text-center"><div className="text-2xl font-bold text-blue-900">Estimated Price: {quoteResult}</div><div className="text-blue-700 mt-2">(This is a demo. For a real quote, use our full tool!)</div></div>)}
 												</div>
-												<div>
-													<label className="block text-blue-900 font-bold mb-1">Zip Code</label>
-													<input
-														type="text"
-														name="zip"
-														value={quoteForm.zip}
-														onChange={handleQuoteChange}
-														className="w-full rounded-lg border border-blue-300 px-3 py-2"
-														placeholder="Enter zip code"
-													/>
+											</div>
+										)}
+										{activeTool === 1 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Vehicle Capacity Finder</h3>
+													<form onSubmit={handleVcfSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Passengers</label><input type="number" min="1" max="100" value={vcfPassengers} onChange={e => setVcfPassengers(Number(e.target.value))} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Find Vehicle</button>
+													</form>
+													{vcfResult && (<div className="mt-6 text-center text-blue-900 font-bold">{vcfResult}</div>)}
 												</div>
-												<div>
-													<label className="block text-blue-900 font-bold mb-1">Hours</label>
-													<input
-														type="number"
-														name="hours"
-														min="1"
-														max="24"
-														value={quoteForm.hours}
-														onChange={handleQuoteChange}
-														className="w-full rounded-lg border border-blue-300 px-3 py-2"
-													/>
+											</div>
+										)}
+										{activeTool === 2 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Cost Split Calculator</h3>
+													<form onSubmit={handleSplitSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Total Price</label><input type="number" min="1" value={splitTotal} onChange={e => setSplitTotal(Number(e.target.value))} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<div><label className="block text-blue-900 font-bold mb-1">People</label><input type="number" min="1" value={splitPeople} onChange={e => setSplitPeople(Number(e.target.value))} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Calculate</button>
+													</form>
+													{splitResult && (<div className="mt-6 text-center text-blue-900 font-bold">{splitResult}</div>)}
 												</div>
-												<div>
-													<label className="block text-blue-900 font-bold mb-1">Passengers</label>
-													<input
-														type="number"
-														name="passengers"
-														min="1"
-														max="100"
-														value={quoteForm.passengers}
-														onChange={handleQuoteChange}
-														className="w-full rounded-lg border border-blue-300 px-3 py-2"
-													/>
+											</div>
+										)}
+										{activeTool === 3 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Date Price Checker</h3>
+													<form onSubmit={handleDateSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Date (MM-DD)</label><input type="text" value={date} onChange={e => setDate(e.target.value)} className="w-full rounded-lg border border-blue-300 px-3 py-2" placeholder="e.g. 12-25" /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Check</button>
+													</form>
+													{dateResult && (<div className="mt-6 text-center text-blue-900 font-bold">{dateResult}</div>)}
 												</div>
-												<button
-													type="submit"
-													className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2"
-												>
-													Get Quote
-												</button>
-											</form>
-											{quoteResult && (
-												<div className="mt-6 text-center">
-													<div className="text-2xl font-bold text-blue-900">Estimated Price: {quoteResult}</div>
-													<div className="text-blue-700 mt-2">(This is a demo. For a real quote, use our full tool!)</div>
+											</div>
+										)}
+										{activeTool === 4 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Zip Code Price Lookup</h3>
+													<form onSubmit={handleZipSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Zip Code</label><input type="text" value={zip} onChange={e => setZip(e.target.value)} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Lookup</button>
+													</form>
+													{zipResult && (<div className="mt-6 text-center text-blue-900 font-bold">{zipResult}</div>)}
 												</div>
-											)}
-										</div>
-									</div>
-								)}
+											</div>
+										)}
+										{activeTool === 5 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Hourly vs. Flat Rate Tool</h3>
+													<form onSubmit={handleHvfSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Hours</label><input type="number" min="1" max="24" value={hvfHours} onChange={e => setHvfHours(Number(e.target.value))} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<div><label className="block text-blue-900 font-bold mb-1">Flat Rate ($)</label><input type="number" min="1" value={hvfFlat} onChange={e => setHvfFlat(Number(e.target.value))} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Compare</button>
+													</form>
+													{hvfResult && (<div className="mt-6 text-center text-blue-900 font-bold">{hvfResult}</div>)}
+												</div>
+											</div>
+										)}
+										{activeTool === 6 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Vehicle Comparison Tool</h3>
+													<form onSubmit={handleVcSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Type</label><select value={vcType} onChange={e => setVcType(e.target.value)} className="w-full rounded-lg border border-blue-300 px-3 py-2"><option value="party">Party Bus</option><option value="limo">Limo</option><option value="coach">Coach Bus</option></select></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Compare</button>
+													</form>
+													{vcResult && (<div className="mt-6 text-center text-blue-900 font-bold">{vcResult}</div>)}
+												</div>
+											</div>
+										)}
+										{activeTool === 7 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Fee & Tax Estimator</h3>
+													<form onSubmit={handleFeeSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Base Price</label><input type="number" min="1" value={feeBase} onChange={e => setFeeBase(Number(e.target.value))} className="w-full rounded-lg border border-blue-300 px-3 py-2" /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Estimate</button>
+													</form>
+													{feeResult && (<div className="mt-6 text-center text-blue-900 font-bold">{feeResult}</div>)}
+												</div>
+											</div>
+										)}
+										{activeTool === 8 && (
+											<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+												<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative border-2 border-blue-400/30">
+													<button onClick={() => setActiveTool(null)} className="absolute top-3 right-3 text-blue-900 hover:text-blue-700 text-2xl font-bold focus:outline-none" aria-label="Close">×</button>
+													<h3 className="text-2xl font-extrabold mb-4 text-blue-900 font-serif tracking-tight">Ask a Pricing Expert</h3>
+													<form onSubmit={handleAskSubmit} className="space-y-4">
+														<div><label className="block text-blue-900 font-bold mb-1">Your Question</label><textarea value={askMsg} onChange={e => setAskMsg(e.target.value)} className="w-full rounded-lg border border-blue-300 px-3 py-2" rows={3} placeholder="Type your question..." /></div>
+														<button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl shadow transition mt-2">Send</button>
+													</form>
+													{askResult && (<div className="mt-6 text-center text-blue-900 font-bold">{askResult}</div>)}
+												</div>
+											</div>
+										)}
 			</Section>
 
 			{/* ------------------------------- Reviews ------------------------------- */}
