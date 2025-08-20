@@ -388,11 +388,11 @@ export default function Page() {
   }, [openModal]);
 
   return (
-    <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
+  <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
       <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
         <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
         <div className="pt-16" />
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent">
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
           Industry Polls & Data
         </h1>
         <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-12 text-blue-100 font-medium">
@@ -400,7 +400,7 @@ export default function Page() {
           Explore real customer opinions, trends, and insights to make smarter travel decisions!
         </p>
         <div className="pb-10" />
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-green-500/10 blur-2xl opacity-60" />
+  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-400/10 blur-2xl opacity-60" />
       </Section>
       {Object.entries(grouped).map(([parent, cats]) => (
         <Section key={parent} className="max-w-7xl mx-auto mb-16 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl py-10">
@@ -448,7 +448,7 @@ export default function Page() {
                   </ul>
                   {hasMore && (
                     <button
-                      className="mt-auto px-6 py-2 rounded-full bg-gradient-to-r from-pink-400 via-blue-400 to-green-400 text-blue-950 font-extrabold shadow-xl hover:scale-110 hover:shadow-2xl transition-all text-lg focus:outline-none focus:ring-4 focus:ring-pink-300 animate-pulse"
+                      className="mt-auto px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-blue-950 font-extrabold shadow-xl hover:scale-110 hover:shadow-2xl transition-all text-lg focus:outline-none focus:ring-4 focus:ring-blue-300 animate-pulse"
                       onClick={() => setOpenModal(cat.title)}
                       aria-label={`Show more polls for ${cat.title}`}
                       tabIndex={isModalOpen ? -1 : 0}
@@ -466,25 +466,25 @@ export default function Page() {
                       role="dialog"
                     >
                       <div
-                        className="bg-gradient-to-br from-blue-900 via-blue-950 to-black rounded-3xl shadow-2xl p-10 max-w-2xl w-full relative border-4 border-pink-400/30 animate-fade-in"
+                        className="bg-gradient-to-br from-blue-900 via-blue-950 to-black rounded-3xl shadow-2xl p-10 max-w-2xl w-full relative border-4 border-blue-400/40 animate-fade-in"
                         onClick={e => e.stopPropagation()}
                       >
                         <button
-                          className="absolute top-4 right-4 text-pink-300 hover:text-pink-500 text-3xl font-extrabold focus:outline-none"
+                          className="absolute top-4 right-4 text-blue-300 hover:text-blue-400 text-3xl font-extrabold focus:outline-none"
                           onClick={() => setOpenModal(null)}
                           aria-label="Close more polls modal"
                         >
                           ×
                         </button>
-                        <h3 className="text-3xl font-extrabold mb-8 text-pink-200 font-serif tracking-wide flex items-center gap-2 drop-shadow">
-                          <span className="inline-block w-3 h-3 rounded-full bg-pink-400 mr-2" />
+                        <h3 className="text-3xl font-extrabold mb-8 text-blue-200 font-serif tracking-wide flex items-center gap-2 drop-shadow">
+                          <span className="inline-block w-3 h-3 rounded-full bg-blue-400 mr-2" />
                           {cat.title} <span className="ml-2 text-lg text-blue-200">– All Polls</span>
                         </h3>
                         <ul className="space-y-5 mb-6 max-h-[60vh] overflow-y-auto pr-2">
                           {cat.polls.map((poll, i) => (
                             <li
                               key={poll}
-                              className="flex flex-col gap-2 bg-blue-900/70 rounded-xl px-5 py-4 border border-pink-400/20 hover:bg-blue-900/90 transition"
+                              className="flex flex-col gap-2 bg-blue-900/70 rounded-xl px-5 py-4 border border-blue-400/20 hover:bg-blue-900/90 transition"
                             >
                               <div className="flex items-center justify-between">
                                 <span className="text-blue-100 font-medium text-lg leading-snug font-sans">{poll}</span>
@@ -493,9 +493,9 @@ export default function Page() {
                                 {getAnswerType(poll).map((opt) => (
                                   <label
                                     key={opt}
-                                    className="inline-flex items-center cursor-pointer bg-blue-950/80 border border-pink-400/30 rounded-full px-4 py-2 text-base font-semibold text-pink-200 shadow-sm hover:bg-blue-900/80 transition font-sans"
+                                    className="inline-flex items-center cursor-pointer bg-blue-950/80 border border-blue-400/30 rounded-full px-4 py-2 text-base font-semibold text-blue-200 shadow-sm hover:bg-blue-900/80 transition font-sans"
                                   >
-                                    <input type="radio" name={`modal-poll-${cat.title}-${i}`} className="accent-pink-400" disabled />
+                                    <input type="radio" name={`modal-poll-${cat.title}-${i}`} className="accent-blue-400" disabled />
                                     <span className="ml-2">{opt}</span>
                                   </label>
                                 ))}
@@ -504,7 +504,7 @@ export default function Page() {
                           ))}
                         </ul>
                         <button
-                          className="mt-2 px-8 py-3 rounded-full bg-gradient-to-r from-pink-400 via-blue-400 to-green-400 text-blue-950 font-extrabold shadow-xl hover:scale-110 hover:shadow-2xl transition-all text-xl focus:outline-none focus:ring-4 focus:ring-pink-300 w-full"
+                          className="mt-2 px-8 py-3 rounded-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-blue-950 font-extrabold shadow-xl hover:scale-110 hover:shadow-2xl transition-all text-xl focus:outline-none focus:ring-4 focus:ring-blue-300 w-full"
                           onClick={() => setOpenModal(null)}
                         >
                           Close
