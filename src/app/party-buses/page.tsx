@@ -143,10 +143,6 @@ const toolList = [
 		desc: "Map out how long to spend at each stop so you never feel rushed (or bored)."
 	}
 ];
-		q: "Can we play our own music?",
-		a: "Of course! All buses have Bluetooth and AUX connections.",
-	},
-];
 
 const gallery = [
 	"/review_uploads/40 Passenger Party Bus With Pole.jpg",
