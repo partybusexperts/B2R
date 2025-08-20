@@ -119,7 +119,7 @@ export default function Page() {
   return (
     <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
       <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
-        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
+        {/* Move background div after search bar to avoid overlay issues */}
         <div className="pt-16" />
         <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
           Blog & Insights
@@ -127,7 +127,7 @@ export default function Page() {
         <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-12 text-blue-100 font-medium">
           The latest news, tips, and trends in group transportation, party buses, limos, and more—brought to you by Bus2Ride.com.
         </p>
-        <div className="w-full flex justify-center mb-8">
+        <div className="w-full flex justify-center mb-8 z-10 relative">
           <input
             type="text"
             value={search}
@@ -135,9 +135,11 @@ export default function Page() {
             placeholder="Search blog posts..."
             className="w-full max-w-xl rounded-full px-6 py-3 text-lg bg-blue-950/80 border border-blue-700/40 text-blue-100 placeholder-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-400/40 transition shadow-lg"
             aria-label="Search blog posts"
+            autoFocus
           />
         </div>
         <div className="pb-10" />
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
         <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-400/10 blur-2xl opacity-60" />
       </Section>
       <Section className="max-w-7xl mx-auto mb-16 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl py-10">
