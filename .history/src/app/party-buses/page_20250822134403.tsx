@@ -43,7 +43,7 @@ const TOOL_SIZE_CLASS: Record<Tool["size"], string> = {
   lg: "max-w-5xl min-h-[540px]",
 };
 
-/* ---------------- Placeholder images ---------------- */
+/* ---------------- Party bus images (rotate by index) ---------------- */
 const PARTY_IMAGES = [
   "/images/partybus-01.jpg",
   "/images/partybus-02.jpg",
@@ -53,9 +53,6 @@ const PARTY_IMAGES = [
   "/images/partybus-06.jpg",
 ];
 
-const LIMO_IMG = "/images/limo-hero.jpg";
-const SHUTTLE_IMG = "/images/shuttle-hero.jpg";
-
 /* ---------------- Fleet ---------------- */
 const BUSES: Bus[] = [
   {
@@ -63,7 +60,7 @@ const BUSES: Bus[] = [
     capacity: 14,
     type: "Sprinter",
     highlights: ["Wrap-around seating", "LED ceiling & floor", "Bluetooth sound"],
-    image: "",
+    image: "", // will be filled from PARTY_IMAGES
     badge: "Most Popular",
   },
   {
@@ -123,35 +120,10 @@ const REVIEWS = [
   { name: "Becky B.", text: "Made us feel like movie stars! Highly recommend." },
 ];
 
-/* ---------------- Events ---------------- */
-const EVENT_TITLES = [
-  "Weddings","Bachelor Parties","Bachelorette Parties","Proms","Homecoming Dances","Birthday Parties",
-  "Concerts","Sporting Events","Wine Tours","Brewery Tours","Corporate Events","Night Out on the Town",
-  "Anniversary Celebrations","Quinceañeras","Sweet 16 Parties","Graduation Celebrations","Bar Mitzvahs/Bat Mitzvahs",
-  "Casino Trips","Holiday Parties","Tailgate Parties","Family Reunions","Retirement Parties","Music Festivals",
-  "Charity Events/Galas","Sightseeing Tours","Engagement Parties","Baby Showers","Bar Crawls","School Reunions","Award Ceremonies",
-];
-
-const EVENT_IMAGES = [
-  "/images/events-01.jpg",
-  "/images/events-02.jpg",
-  "/images/events-03.jpg",
-  "/images/events-04.jpg",
-  "/images/events-05.jpg",
-  "/images/events-06.jpg",
-  "/images/events-07.jpg",
-  "/images/events-08.jpg",
-];
-
-const eventBlurb = (title: string) =>
-  `Perfect for ${title.toLowerCase()}—on-time pickups, clean rides, and a vibe your group will love.`;
-
+/* ---------------- Component ---------------- */
 export default function PartyBusesPage() {
   const [toolSearch, setToolSearch] = useState("");
   const [activeToolIdx, setActiveToolIdx] = useState<number | null>(null);
-  const [reviewSearch, setReviewSearch] = useState("");
-  const [pollSearch, setPollSearch] = useState("");
-  const [eventSearch, setEventSearch] = useState("");
 
   const filteredTools = useMemo(
     () =>
@@ -163,25 +135,7 @@ export default function PartyBusesPage() {
     [toolSearch]
   );
 
-  const filteredReviews = useMemo(() => {
-    const q = reviewSearch.trim().toLowerCase();
-    if (!q) return REVIEWS;
-    return REVIEWS.filter(
-      (r) => r.name.toLowerCase().includes(q) || r.text.toLowerCase().includes(q)
-    );
-  }, [reviewSearch]);
-
-  const filteredPolls = useMemo(() => {
-    const q = pollSearch.trim().toLowerCase();
-    if (!q) return POLLS;
-    return POLLS.filter(
-      (p) =>
-        p.question.toLowerCase().includes(q) ||
-        p.options.some((o) => o.toLowerCase().includes(q))
-    );
-  }, [pollSearch]);
-
-  // Deterministic images
+  // Deterministic “random” image per bus by index (avoids SSR hydration issues)
   const busesWithImages = useMemo(
     () =>
       BUSES.map((b, i) => ({
@@ -190,24 +144,6 @@ export default function PartyBusesPage() {
       })),
     []
   );
-
-  const eventsWithImages = useMemo(
-    () =>
-      EVENT_TITLES.map((title, i) => ({
-        title,
-        image: EVENT_IMAGES[i % EVENT_IMAGES.length],
-        desc: eventBlurb(title),
-      })),
-    []
-  );
-
-  const filteredEvents = useMemo(() => {
-    const q = eventSearch.trim().toLowerCase();
-    if (!q) return eventsWithImages;
-    return eventsWithImages.filter(
-      (e) => e.title.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q)
-    );
-  }, [eventSearch, eventsWithImages]);
 
   const closeModal = useCallback(() => setActiveToolIdx(null), []);
   useEffect(() => {
@@ -247,109 +183,92 @@ export default function PartyBusesPage() {
             ⚡ Instant Live Quote
           </a>
         </div>
-
-        {/* Decorative wave divider */}
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path
-              d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
-              fill="#0b142b"
-              opacity="0.9"
-            />
-          </svg>
-        </div>
       </section>
 
       {/* ---------- FLEET ---------- */}
-      <section className="bg-[#0b142b] pt-8 pb-14">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
-            Pick Your Party Bus
-          </h2>
-          <p className="text-blue-200/90 text-center max-w-3xl mx-auto mt-3 mb-10">
-            From sleek Sprinters to mega buses—every ride is clean, comfy, and ready to turn up the vibe. Choose the size that fits your crew.
-          </p>
+      <section className="max-w-7xl mx-auto px-4 md:px-6 my-10 md:my-14">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-white font-serif tracking-tight">
+          Pick Your Party Machine
+        </h2>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {busesWithImages.map((bus) => (
-              <div
-                key={bus.name}
-                className="bg-[#0d1733]/90 border border-blue-900/50 rounded-[24px] shadow-[0_10px_30px_rgba(2,6,23,.5)] overflow-hidden"
-              >
-                {/* header */}
-                <div className="flex items-center justify-between px-6 pt-5 min-h-[28px]">
-                  <span className="text-xs font-semibold text-blue-200/80">{bus.type}</span>
-                  {bus.badge ? (
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-700 text-white border border-blue-400/30">
-                      {bus.badge}
-                    </span>
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {busesWithImages.map((bus) => (
+            <div
+              key={bus.name}
+              className="bg-[#0b142b]/90 border border-blue-900/50 rounded-[24px] shadow-[0_10px_30px_rgba(2,6,23,.5)] overflow-hidden"
+            >
+              {/* fixed header height for uniform cards */}
+              <div className="flex items-center justify-between px-6 pt-5 min-h-[28px]">
+                <span className="text-xs font-semibold text-blue-200/80">{bus.type}</span>
+                {bus.badge ? (
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-700 text-white border border-blue-400/30">
+                    {bus.badge}
+                  </span>
+                ) : (
+                  <span className="h-[18px]" />
+                )}
+              </div>
+
+              {/* bigger image */}
+              <div className="px-6 mt-3">
+                <div className="h-56 md:h-64 w-full overflow-hidden rounded-2xl border border-blue-900/40 bg-[#0e1a39] flex items-center justify-center">
+                  {bus.image ? (
+                    <img src={bus.image} alt={bus.name} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="h-[18px]" />
+                    <div className="text-blue-300/80">Vehicle preview</div>
                   )}
                 </div>
+              </div>
 
-                {/* bigger image */}
-                <div className="px-6 mt-3">
-                  <div className="h-96 md:h-[26rem] w-full overflow-hidden rounded-2xl border border-blue-900/40 bg-[#0e1a39] flex items-center justify-center">
-                    {bus.image ? (
-                      <img src={bus.image} alt={bus.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="text-blue-300/80">Vehicle preview</div>
-                    )}
-                  </div>
-                </div>
+              {/* title + capacity */}
+              <div className="px-6 mt-4">
+                <h3 className="text-2xl font-extrabold text-white tracking-tight">{bus.name}</h3>
+                <div className="mt-1 mb-3 text-sm font-semibold text-blue-300">Seats up to {bus.capacity}</div>
 
-                {/* title + capacity */}
-                <div className="px-6 mt-5">
-                  <h3 className="text-2xl font-extrabold text-white tracking-tight">{bus.name}</h3>
-                  <div className="mt-1 mb-4 text-sm font-semibold text-blue-300">Seats up to {bus.capacity}</div>
-                  <ul className="text-blue-200/90 text-[0.95rem] space-y-1 min-h-[72px]">
-                    {bus.highlights.slice(0, 3).map((h) => (
-                      <li key={h} className="flex items-start gap-2">
-                        <span className="mt-[2px]">•</span>
-                        <span>{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {/* fixed highlights block height for uniform cards */}
+                <ul className="text-blue-200/90 text-[0.95rem] space-y-1 min-h-[72px]">
+                  {bus.highlights.slice(0, 3).map((h) => (
+                    <li key={h} className="flex items-start gap-2">
+                      <span className="mt-[2px]">•</span>
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-                {/* bottom buttons */}
-                <div className="px-6 pb-6 pt-4">
-                  <div className="grid grid-cols-3 gap-2">
-                    <a
-                      href={`tel:${PHONE_TEL}`}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-700 text-white hover:bg-blue-800 border border-blue-800 transition"
-                    >
-                      Call
-                    </a>
-                    <a
-                      href={`mailto:${EMAIL}`}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-900 text-white hover:bg-blue-950 border border-blue-900 transition"
-                    >
-                      Email
-                    </a>
-                    <a
-                      href="/quote#instant"
-                      className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
-                    >
-                      ⚡ Quote
-                    </a>
-                  </div>
+              {/* bottom buttons */}
+              <div className="px-6 pb-6 pt-4">
+                <div className="grid grid-cols-3 gap-2">
+                  <a
+                    href={`tel:${PHONE_TEL}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-700 text-white hover:bg-blue-800 border border-blue-800 transition"
+                  >
+                    Call
+                  </a>
+                  <a
+                    href={`mailto:${EMAIL}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-900 text-white hover:bg-blue-950 border border-blue-900 transition"
+                  >
+                    Email
+                  </a>
+                  <a
+                    href="/quote#instant"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
+                  >
+                    ⚡ Quote
+                  </a>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ---------- WHY PARTY BUSES ROCK ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 text-white font-serif tracking-tight">
           Why Party Buses Rock
         </h2>
-        <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-8">
-          It’s the ultimate rolling venue—room to move, easy boarding, wrap-around seating, and the vibe dialed just right.
-        </p>
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {PARTY_BUS_FEATURES.map((f) => (
             <li key={f.label} className="bg-[#f8fbff] rounded-lg shadow px-4 py-3 border border-blue-200 text-blue-900 flex flex-col items-start">
@@ -361,58 +280,13 @@ export default function PartyBusesPage() {
         </ul>
       </section>
 
-      {/* ---------- REVIEWS (moved here, with dark search) ---------- */}
+      {/* ---------- POLLS ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
-          Customer Reviews
-        </h2>
-        <div className="w-full flex justify-center mb-8">
-          <input
-            type="text"
-            placeholder="Search reviews by name or keywords…"
-            value={reviewSearch}
-            onChange={(e) => setReviewSearch(e.target.value)}
-            className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#0b142b] border border-blue-900/50 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-          />
-        </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {filteredReviews.map((review, i) => (
-            <div key={i} className="relative bg-[#0b142b] border border-blue-900/40 rounded-2xl shadow-xl p-7 flex flex-col gap-3 hover:scale-[1.02] transition-transform overflow-hidden">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="bg-blue-700 rounded-full w-11 h-11 flex items-center justify-center text-2xl font-bold text-white shadow-lg border border-blue-400/30">
-                  {review.name[0]}
-                </div>
-                <span className="font-bold text-blue-100 text-lg">{review.name}</span>
-                <span className="ml-auto text-yellow-400 text-xl">★★★★★</span>
-              </div>
-              <div className="text-blue-50 text-base leading-relaxed font-medium">
-                {review.text}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ---------- POLLS (after Reviews, with search like tools) ---------- */}
-      <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 text-white font-serif tracking-tight">
           Party Bus Polls
         </h2>
-        <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-6">
-          Real riders. Real opinions. Compare trends and get honest insights to plan the perfect night.
-        </p>
-        <div className="w-full flex justify-center mb-8">
-          <input
-            type="text"
-            placeholder="Search polls…"
-            value={pollSearch}
-            onChange={(e) => setPollSearch(e.target.value)}
-            className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#0b142b] border border-blue-900/50 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-            aria-label="Search polls"
-          />
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          {filteredPolls.map((poll, idx) => (
+          {POLLS.map((poll, idx) => (
             <div key={idx} className="bg-[#0b142b] rounded-2xl shadow-xl border border-blue-900/40 p-6 flex flex-col items-center">
               <h3 className="text-xl font-bold text-blue-100 mb-2 text-center">{poll.question}</h3>
               <ul className="text-blue-200 mb-2 text-center">
@@ -436,22 +310,22 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- LIMOS & SHUTTLES PROMO (with images) ---------- */}
+      {/* ---------- NEW: LIMOS & SHUTTLES PROMO (between Polls and Tools) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
           We Also Have Limousines & Shuttle Buses
         </h2>
         <p className="text-blue-200 text-center max-w-3xl mx-auto mb-8">
-          Need something different? Explore classic limos for smaller groups—or jump into a spacious shuttle bus for simple, comfy transport.
+          Need something different? Explore our classic limousines for smaller groups—or jump into a spacious shuttle bus for simple, comfy transport.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Limo */}
           <a href="/limos" className="group">
             <div className="rounded-2xl border border-blue-900/40 bg-[#0b142b] overflow-hidden shadow-xl">
-              <div className="h-96 w-full bg-[#0e1a39]">
-                <img src={LIMO_IMG} alt="Limousine" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
+              <div className="h-64 w-full bg-[#0e1a39]">
+                <img src="/images/limo-hero.jpg" alt="Limousine" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
               </div>
-              <div className="px-6 py-5">
+              <div className="px-6 py-4">
                 <h3 className="text-2xl font-extrabold text-white">Limousines</h3>
                 <p className="text-blue-300">Elegant rides for 6–20 passengers.</p>
               </div>
@@ -460,10 +334,10 @@ export default function PartyBusesPage() {
           {/* Shuttle */}
           <a href="/shuttles" className="group">
             <div className="rounded-2xl border border-blue-900/40 bg-[#0b142b] overflow-hidden shadow-xl">
-              <div className="h-96 w-full bg-[#0e1a39]">
-                <img src={SHUTTLE_IMG} alt="Shuttle Bus" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
+              <div className="h-64 w-full bg-[#0e1a39]">
+                <img src="/images/shuttle-hero.jpg" alt="Shuttle Bus" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
               </div>
-              <div className="px-6 py-5">
+              <div className="px-6 py-4">
                 <h3 className="text-2xl font-extrabold text-white">Shuttle Buses</h3>
                 <p className="text-blue-300">Simple & comfy transport for larger groups.</p>
               </div>
@@ -472,37 +346,10 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- HOW IT WORKS (single-line clickable) ---------- */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 my-12">
-        <div className="bg-[#0b142b] border border-blue-900/40 rounded-3xl shadow-xl px-5 md:px-8 py-8">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
-            How It Works
-          </h2>
-          <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
-            {[
-              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact" },
-              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant" },
-              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve" },
-              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary" },
-            ].map((s) => (
-              <a
-                key={s.step}
-                href={s.href}
-                className="flex-1 group bg-[#0e1a39] border border-blue-900/60 rounded-2xl px-5 py-6 text-center hover:border-blue-400/60 hover:shadow-[0_0_0_2px_rgba(96,165,250,.25)] transition"
-              >
-                <div className="text-2xl">{s.icon}</div>
-                <div className="font-extrabold text-white mt-1">{s.step}. {s.label}</div>
-                <div className="mt-1 text-blue-300 text-sm opacity-90 group-hover:opacity-100">Click to continue →</div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ---------- TOOLS (with modals) ---------- */}
       <section className="w-full bg-gradient-to-br from-[#0e1a39] to-[#080e1f] py-16 md:py-20 border-t border-blue-900/40">
         <div className="max-w-6xl mx-auto flex flex-col items-center px-4 md:px-0">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 font-serif tracking-tight text-white">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 font-serif tracking-tight text-white">
             Limo & Party Bus Tools
           </h2>
           <p className="text-lg md:text-xl text-blue-100 text-center max-w-2xl font-medium mb-8">
@@ -535,65 +382,41 @@ export default function PartyBusesPage() {
               );
             })}
           </div>
-
-          <div className="flex justify-center mt-10">
-            <a
-              href="/tools"
-              className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-800"
-            >
-              More Tools
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* ---------- EVENTS (search + More Events button) ---------- */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 my-12 pb-12">
-        <div className="bg-[#0b142b] border border-blue-900/40 rounded-3xl shadow-xl px-6 md:px-8 py-10">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight mb-3">
-            Events We Love Rolling To
-          </h2>
-          <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-6">
-            From milestone moments to big-night blowouts—book the perfect ride for your event and make traffic part of the fun.
-          </p>
-          <div className="w-full flex justify-center mb-8">
-            <input
-              type="text"
-              placeholder="Search events…"
-              value={eventSearch}
-              onChange={(e) => setEventSearch(e.target.value)}
-              className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#0b142b] border border-blue-900/50 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              aria-label="Search events"
-            />
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredEvents.map((ev) => (
-              <div
-                key={ev.title}
-                className="relative group rounded-2xl overflow-hidden border border-blue-900/40 shadow-lg bg-[#0e1a39]"
-              >
-                <div className="h-60 md:h-72 w-full">
-                  <img src={ev.image} alt={ev.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform" />
+      {/* ---------- REVIEWS ---------- */}
+      <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 text-white font-serif tracking-tight">
+          Customer Reviews
+        </h2>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {REVIEWS.map((review, i) => (
+            <div key={i} className="relative bg-[#0b142b] border border-blue-900/40 rounded-2xl shadow-xl p-7 flex flex-col gap-3 hover:scale-[1.02] transition-transform overflow-hidden">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="bg-blue-700 rounded-full w-11 h-11 flex items-center justify-center text-2xl font-bold text-white shadow-lg border border-blue-400/30">
+                  {review.name[0]}
                 </div>
-                <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
-                  <div className="text-2xl font-extrabold text-white drop-shadow">{ev.title}</div>
-                  <div className="text-blue-200 text-sm mt-1">{ev.desc}</div>
-                </div>
+                <span className="font-bold text-blue-100 text-lg">{review.name}</span>
+                <span className="ml-auto text-yellow-400 text-xl">★★★★★</span>
               </div>
-            ))}
-          </div>
-          <div className="flex justify-center mt-8">
-            <a
-              href="/events"
-              className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-800"
-            >
-              More Events
-            </a>
-          </div>
+              <div className="text-blue-50 text-base leading-relaxed font-medium">
+                {review.text}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center mt-10">
+          <a
+            href="/reviews"
+            className="inline-block bg-white hover:bg-blue-50 text-blue-900 font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-200"
+          >
+            More Reviews
+          </a>
         </div>
       </section>
 
-      {/* ---------- TOOL MODAL ---------- */}
+      {/* ---------- TOOL MODAL (generic, size varies by tool) ---------- */}
       {activeToolIdx !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
@@ -616,7 +439,7 @@ export default function PartyBusesPage() {
               <h3 className="text-2xl font-extrabold text-white mb-3 font-serif tracking-tight">
                 {TOOL_LIST[activeToolIdx].name}
               </h3>
-              {/* Placeholder tool bodies */}
+              {/* Placeholder content per tool — replace with real components later */}
               {TOOL_LIST[activeToolIdx].name === "Per Person Splitter" && (
                 <div className="grid gap-3 max-w-md">
                   <label className="text-blue-200 text-sm font-semibold">Total Price ($)</label>

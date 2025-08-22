@@ -43,7 +43,7 @@ const TOOL_SIZE_CLASS: Record<Tool["size"], string> = {
   lg: "max-w-5xl min-h-[540px]",
 };
 
-/* ---------------- Placeholder images ---------------- */
+/* ---------------- Party bus images (rotate by index) ---------------- */
 const PARTY_IMAGES = [
   "/images/partybus-01.jpg",
   "/images/partybus-02.jpg",
@@ -52,9 +52,6 @@ const PARTY_IMAGES = [
   "/images/partybus-05.jpg",
   "/images/partybus-06.jpg",
 ];
-
-const LIMO_IMG = "/images/limo-hero.jpg";
-const SHUTTLE_IMG = "/images/shuttle-hero.jpg";
 
 /* ---------------- Fleet ---------------- */
 const BUSES: Bus[] = [
@@ -150,8 +147,6 @@ export default function PartyBusesPage() {
   const [toolSearch, setToolSearch] = useState("");
   const [activeToolIdx, setActiveToolIdx] = useState<number | null>(null);
   const [reviewSearch, setReviewSearch] = useState("");
-  const [pollSearch, setPollSearch] = useState("");
-  const [eventSearch, setEventSearch] = useState("");
 
   const filteredTools = useMemo(
     () =>
@@ -171,17 +166,7 @@ export default function PartyBusesPage() {
     );
   }, [reviewSearch]);
 
-  const filteredPolls = useMemo(() => {
-    const q = pollSearch.trim().toLowerCase();
-    if (!q) return POLLS;
-    return POLLS.filter(
-      (p) =>
-        p.question.toLowerCase().includes(q) ||
-        p.options.some((o) => o.toLowerCase().includes(q))
-    );
-  }, [pollSearch]);
-
-  // Deterministic images
+  // Deterministic image per bus by index (avoids SSR hydration issues)
   const busesWithImages = useMemo(
     () =>
       BUSES.map((b, i) => ({
@@ -200,14 +185,6 @@ export default function PartyBusesPage() {
       })),
     []
   );
-
-  const filteredEvents = useMemo(() => {
-    const q = eventSearch.trim().toLowerCase();
-    if (!q) return eventsWithImages;
-    return eventsWithImages.filter(
-      (e) => e.title.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q)
-    );
-  }, [eventSearch, eventsWithImages]);
 
   const closeModal = useCallback(() => setActiveToolIdx(null), []);
   useEffect(() => {
@@ -290,7 +267,7 @@ export default function PartyBusesPage() {
 
                 {/* bigger image */}
                 <div className="px-6 mt-3">
-                  <div className="h-96 md:h-[26rem] w-full overflow-hidden rounded-2xl border border-blue-900/40 bg-[#0e1a39] flex items-center justify-center">
+                  <div className="h-72 md:h-80 w-full overflow-hidden rounded-2xl border border-blue-900/40 bg-[#0e1a39] flex items-center justify-center">
                     {bus.image ? (
                       <img src={bus.image} alt={bus.name} className="w-full h-full object-cover" />
                     ) : (
@@ -361,58 +338,16 @@ export default function PartyBusesPage() {
         </ul>
       </section>
 
-      {/* ---------- REVIEWS (moved here, with dark search) ---------- */}
-      <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
-          Customer Reviews
-        </h2>
-        <div className="w-full flex justify-center mb-8">
-          <input
-            type="text"
-            placeholder="Search reviews by name or keywords…"
-            value={reviewSearch}
-            onChange={(e) => setReviewSearch(e.target.value)}
-            className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#0b142b] border border-blue-900/50 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-          />
-        </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {filteredReviews.map((review, i) => (
-            <div key={i} className="relative bg-[#0b142b] border border-blue-900/40 rounded-2xl shadow-xl p-7 flex flex-col gap-3 hover:scale-[1.02] transition-transform overflow-hidden">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="bg-blue-700 rounded-full w-11 h-11 flex items-center justify-center text-2xl font-bold text-white shadow-lg border border-blue-400/30">
-                  {review.name[0]}
-                </div>
-                <span className="font-bold text-blue-100 text-lg">{review.name}</span>
-                <span className="ml-auto text-yellow-400 text-xl">★★★★★</span>
-              </div>
-              <div className="text-blue-50 text-base leading-relaxed font-medium">
-                {review.text}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ---------- POLLS (after Reviews, with search like tools) ---------- */}
+      {/* ---------- POLLS ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
           Party Bus Polls
         </h2>
-        <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-6">
+        <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-8">
           Real riders. Real opinions. Compare trends and get honest insights to plan the perfect night.
         </p>
-        <div className="w-full flex justify-center mb-8">
-          <input
-            type="text"
-            placeholder="Search polls…"
-            value={pollSearch}
-            onChange={(e) => setPollSearch(e.target.value)}
-            className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#0b142b] border border-blue-900/50 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-            aria-label="Search polls"
-          />
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          {filteredPolls.map((poll, idx) => (
+          {POLLS.map((poll, idx) => (
             <div key={idx} className="bg-[#0b142b] rounded-2xl shadow-xl border border-blue-900/40 p-6 flex flex-col items-center">
               <h3 className="text-xl font-bold text-blue-100 mb-2 text-center">{poll.question}</h3>
               <ul className="text-blue-200 mb-2 text-center">
@@ -436,7 +371,7 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- LIMOS & SHUTTLES PROMO (with images) ---------- */}
+      {/* ---------- LIMOS & SHUTTLES PROMO ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
           We Also Have Limousines & Shuttle Buses
@@ -448,8 +383,8 @@ export default function PartyBusesPage() {
           {/* Limo */}
           <a href="/limos" className="group">
             <div className="rounded-2xl border border-blue-900/40 bg-[#0b142b] overflow-hidden shadow-xl">
-              <div className="h-96 w-full bg-[#0e1a39]">
-                <img src={LIMO_IMG} alt="Limousine" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
+              <div className="h-80 w-full bg-[#0e1a39]">
+                <img src="/images/limo-hero.jpg" alt="Limousine" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
               </div>
               <div className="px-6 py-5">
                 <h3 className="text-2xl font-extrabold text-white">Limousines</h3>
@@ -460,8 +395,8 @@ export default function PartyBusesPage() {
           {/* Shuttle */}
           <a href="/shuttles" className="group">
             <div className="rounded-2xl border border-blue-900/40 bg-[#0b142b] overflow-hidden shadow-xl">
-              <div className="h-96 w-full bg-[#0e1a39]">
-                <img src={SHUTTLE_IMG} alt="Shuttle Bus" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
+              <div className="h-80 w-full bg-[#0e1a39]">
+                <img src="/images/shuttle-hero.jpg" alt="Shuttle Bus" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
               </div>
               <div className="px-6 py-5">
                 <h3 className="text-2xl font-extrabold text-white">Shuttle Buses</h3>
@@ -472,29 +407,36 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- HOW IT WORKS (single-line clickable) ---------- */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 my-12">
-        <div className="bg-[#0b142b] border border-blue-900/40 rounded-3xl shadow-xl px-5 md:px-8 py-8">
+      {/* ---------- HOW IT WORKS (after Limos/Shuttles, before Tools) ---------- */}
+      <section className="max-w-6xl mx-auto my-12 px-6">
+        <div className="bg-[#0b142b] border border-blue-900/40 rounded-3xl shadow-xl px-6 md:px-10 py-10">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
             How It Works
           </h2>
-          <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
-            {[
-              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact" },
-              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant" },
-              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve" },
-              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary" },
-            ].map((s) => (
-              <a
-                key={s.step}
-                href={s.href}
-                className="flex-1 group bg-[#0e1a39] border border-blue-900/60 rounded-2xl px-5 py-6 text-center hover:border-blue-400/60 hover:shadow-[0_0_0_2px_rgba(96,165,250,.25)] transition"
-              >
-                <div className="text-2xl">{s.icon}</div>
-                <div className="font-extrabold text-white mt-1">{s.step}. {s.label}</div>
-                <div className="mt-1 text-blue-300 text-sm opacity-90 group-hover:opacity-100">Click to continue →</div>
-              </a>
-            ))}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-7 items-center gap-4">
+            {/* 1 */}
+            <div className="md:col-span-1 bg-[#0e1a39] border border-blue-900/50 rounded-2xl px-5 py-6 text-center">
+              <div className="text-2xl">📞</div>
+              <div className="font-extrabold text-white mt-1">★1. Contact Us</div>
+            </div>
+            <div className="hidden md:flex items-center justify-center text-3xl text-blue-300">→</div>
+            {/* 2 */}
+            <div className="md:col-span-1 bg-[#0e1a39] border border-blue-900/50 rounded-2xl px-5 py-6 text-center">
+              <div className="text-2xl">💬</div>
+              <div className="font-extrabold text-white mt-1">★2. Get a Quote</div>
+            </div>
+            <div className="hidden md:flex items-center justify-center text-3xl text-blue-300">→</div>
+            {/* 3 */}
+            <div className="md:col-span-2 bg-[#0e1a39] border border-blue-900/50 rounded-2xl px-5 py-6 text-center">
+              <div className="text-2xl">📝</div>
+              <div className="font-extrabold text-white mt-1">★3. Reserve Your Ride</div>
+            </div>
+            <div className="hidden md:flex items-center justify-center text-3xl text-blue-300">→</div>
+            {/* 4 */}
+            <div className="md:col-span-1 bg-[#0e1a39] border border-blue-900/50 rounded-2xl px-5 py-6 text-center">
+              <div className="text-2xl">🎉</div>
+              <div className="font-extrabold text-white mt-1">★4. Finalize & Ride</div>
+            </div>
           </div>
         </div>
       </section>
@@ -539,7 +481,7 @@ export default function PartyBusesPage() {
           <div className="flex justify-center mt-10">
             <a
               href="/tools"
-              className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-800"
+              className="inline-block bg-white hover:bg-blue-50 text-blue-900 font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-200"
             >
               More Tools
             </a>
@@ -547,27 +489,17 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- EVENTS (search + More Events button) ---------- */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 my-12 pb-12">
+      {/* ---------- EVENTS (before Reviews) ---------- */}
+      <section className="max-w-7xl mx-auto px-4 md:px-6 my-12">
         <div className="bg-[#0b142b] border border-blue-900/40 rounded-3xl shadow-xl px-6 md:px-8 py-10">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight mb-3">
             Events We Love Rolling To
           </h2>
-          <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-6">
+          <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-8">
             From milestone moments to big-night blowouts—book the perfect ride for your event and make traffic part of the fun.
           </p>
-          <div className="w-full flex justify-center mb-8">
-            <input
-              type="text"
-              placeholder="Search events…"
-              value={eventSearch}
-              onChange={(e) => setEventSearch(e.target.value)}
-              className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#0b142b] border border-blue-900/50 text-white placeholder-blue-300 shadow focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              aria-label="Search events"
-            />
-          </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredEvents.map((ev) => (
+            {eventsWithImages.map((ev) => (
               <div
                 key={ev.title}
                 className="relative group rounded-2xl overflow-hidden border border-blue-900/40 shadow-lg bg-[#0e1a39]"
@@ -582,18 +514,50 @@ export default function PartyBusesPage() {
               </div>
             ))}
           </div>
-          <div className="flex justify-center mt-8">
-            <a
-              href="/events"
-              className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-800"
-            >
-              More Events
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* ---------- TOOL MODAL ---------- */}
+      {/* ---------- REVIEWS (with search) ---------- */}
+      <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
+          Customer Reviews
+        </h2>
+        <div className="w-full flex justify-center mb-8">
+          <input
+            type="text"
+            placeholder="Search reviews by name or keywords…"
+            value={reviewSearch}
+            onChange={(e) => setReviewSearch(e.target.value)}
+            className="w-full max-w-xl rounded-2xl px-5 py-4 bg-white/90 text-blue-900 border-2 border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-medium shadow"
+          />
+        </div>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {filteredReviews.map((review, i) => (
+            <div key={i} className="relative bg-[#0b142b] border border-blue-900/40 rounded-2xl shadow-xl p-7 flex flex-col gap-3 hover:scale-[1.02] transition-transform overflow-hidden">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="bg-blue-700 rounded-full w-11 h-11 flex items-center justify-center text-2xl font-bold text-white shadow-lg border border-blue-400/30">
+                  {review.name[0]}
+                </div>
+                <span className="font-bold text-blue-100 text-lg">{review.name}</span>
+                <span className="ml-auto text-yellow-400 text-xl">★★★★★</span>
+              </div>
+              <div className="text-blue-50 text-base leading-relaxed font-medium">
+                {review.text}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center mt-10">
+          <a
+            href="/reviews"
+            className="inline-block bg-white hover:bg-blue-50 text-blue-900 font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-200"
+          >
+            More Reviews
+          </a>
+        </div>
+      </section>
+
+      {/* ---------- TOOL MODAL (generic, size varies by tool) ---------- */}
       {activeToolIdx !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
@@ -616,7 +580,7 @@ export default function PartyBusesPage() {
               <h3 className="text-2xl font-extrabold text-white mb-3 font-serif tracking-tight">
                 {TOOL_LIST[activeToolIdx].name}
               </h3>
-              {/* Placeholder tool bodies */}
+              {/* Placeholder content per tool — replace with real components later */}
               {TOOL_LIST[activeToolIdx].name === "Per Person Splitter" && (
                 <div className="grid gap-3 max-w-md">
                   <label className="text-blue-200 text-sm font-semibold">Total Price ($)</label>
