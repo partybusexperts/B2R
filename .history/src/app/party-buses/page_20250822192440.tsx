@@ -46,11 +46,11 @@ const TOOL_SIZE_CLASS: Record<Tool["size"], string> = {
 /* ---------------- Placeholder images ---------------- */
 const PARTY_IMAGES = [
   "/images/Bus-1.png",
-  "/images/Bus-2.png",
-  "/images/Bus-3.png",
-  "/images/Bus-4.png",
   "/images/Bus-1.png",
-  "/images/Bus-5.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
 ];
 
 const LIMO_IMG = "/images/limo-hero.jpg";
@@ -141,13 +141,13 @@ const POPULAR_EVENT_TITLES = [
 ];
 
 const EVENT_IMAGES = [
-  "/images/Bus-3.png",
-  "/images/Bus-4.png",
-  "/images/Bus-5.png",
-  "/images/Bus-3.png",
-  "/images/Bus-2.png",
-  "/images/Bus-5.png",
-  "/images/Bus-3.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
+  "/images/Bus-1.png",
   "/images/Bus-1.png",
 ];
 
