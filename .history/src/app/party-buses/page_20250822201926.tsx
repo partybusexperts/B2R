@@ -358,74 +358,29 @@ export default function PartyBusesPage() {
 
       {/* ---------- WHY PARTY BUSES ROCK (unified styling) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
-    Why Party Buses Rock
-  </h2>
-  <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-8">
-    It’s the ultimate rolling venue—room to move, easy boarding, wrap-around seating, and the vibe dialed just right.
-  </p>
-
-  <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {PARTY_BUS_FEATURES.map((f, idx) => (
-      <li key={f.label} className="relative">
-        {/* Checkbox controls the modal purely with CSS (no React state) */}
-        <input
-          id={`whybus-${idx}`}
-          type="checkbox"
-          className="peer sr-only"
-          aria-hidden="true"
-        />
-
-        {/* Card (click to open) */}
-        <label
-          htmlFor={`whybus-${idx}`}
-          className="group block bg-[#0b142b] rounded-2xl shadow border border-blue-900/40 px-5 py-4 text-blue-100 cursor-pointer hover:scale-105 transition-transform"
-          aria-label={`Learn more about: ${f.label}`}
-        >
-          <div className="flex items-start gap-3">
-            <div className="shrink-0 w-9 h-9 rounded-full bg-blue-900/30 border border-blue-700/40 flex items-center justify-center text-xl group-hover:bg-blue-800/50 transition">
-              {f.icon}
-            </div>
-            <div>
-              <div className="font-semibold text-white text-lg mb-0.5">{f.label}</div>
-              <div className="text-blue-300 text-sm">{f.description}</div>
-            </div>
-          </div>
-        </label>
-
-        {/* Modal (opens when checkbox is checked) */}
-        <div className="hidden peer-checked:flex fixed inset-0 z-50 items-center justify-center p-4">
-          {/* Clickable backdrop to close */}
-          <label
-            htmlFor={`whybus-${idx}`}
-            className="absolute inset-0 bg-black/60 cursor-pointer"
-            aria-label="Close"
-          />
-          <div className="relative z-10 w-full max-w-md min-h-[300px] bg-gradient-to-br from-[#0c193a] to-[#070e20] border border-blue-900/50 rounded-2xl shadow-2xl">
-            {/* Close button */}
-            <label
-              htmlFor={`whybus-${idx}`}
-              className="absolute top-3 right-3 text-blue-200 hover:text-white text-2xl font-bold cursor-pointer"
-              aria-label="Close"
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
+          Why Party Buses Rock
+        </h2>
+        <p className="text-blue-200/90 text-center max-w-3xl mx-auto mb-8">
+          It’s the ultimate rolling venue—room to move, easy boarding, wrap-around seating, and the vibe dialed just right.
+        </p>
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {PARTY_BUS_FEATURES.map((f) => (
+            <li
+              key={f.label}
+              className="bg-[#0b142b] rounded-2xl shadow border border-blue-900/40 px-5 py-4 text-blue-100 flex items-start gap-3"
             >
-              ×
-            </label>
-            {/* Modal content */}
-            <div className="px-6 py-7 flex flex-col items-center text-center">
-              <div className="w-14 h-14 rounded-full bg-blue-900/30 border border-blue-700/40 flex items-center justify-center text-3xl mb-4">
+              <div className="shrink-0 w-9 h-9 rounded-full bg-blue-900/30 border border-blue-700/40 flex items-center justify-center text-xl">
                 {f.icon}
               </div>
-              <h3 className="text-2xl font-extrabold text-white mb-2 font-serif tracking-tight">
-                {f.label}
-              </h3>
-              <div className="text-blue-200 text-lg">{f.description}</div>
-            </div>
-          </div>
-        </div>
-      </li>
-    ))}
-  </ul>
-</section>
+              <div>
+                <div className="font-semibold text-white text-lg mb-0.5">{f.label}</div>
+                <div className="text-blue-300 text-sm">{f.description}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       {/* ---------- REVIEWS (with button) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1a39] to-[#080e1f] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-900/40">
@@ -546,100 +501,32 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- HOW IT WORKS (CSS-only modals) ---------- */}
-<section className="max-w-7xl mx-auto px-4 md:px-6 my-12">
-  <div className="bg-[#0b142b] border border-blue-900/40 rounded-3xl shadow-xl px-5 md:px-8 py-8">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
-      How the Bus2Ride Booking Process Works
-    </h2>
-
-    <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
-      {[
-        { step: "★1", label: "Contact Us", icon: "📞", href: "/contact" },
-        { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant" },
-        { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve" },
-        { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary" },
-      ].map((s, idx) => (
-        <div key={s.step} className="relative flex-1">
-          {/* Hidden checkbox controls the modal with CSS only */}
-          <input
-            id={`howit-${idx}`}
-            type="checkbox"
-            className="peer sr-only"
-            aria-hidden="true"
-          />
-
-          {/* Card (click to open modal) */}
-          <label
-            htmlFor={`howit-${idx}`}
-            role="button"
-            tabIndex={0}
-            className="block cursor-pointer group bg-[#0e1a39] border border-blue-900/60 rounded-2xl px-5 py-6 text-center hover:border-blue-400/60 hover:shadow-[0_0_0_2px_rgba(96,165,250,.25)] transition"
-            aria-label={`Open details for: ${s.label}`}
-          >
-            <div className="text-2xl">{s.icon}</div>
-            <div className="font-extrabold text-white mt-1">
-              {s.step}. {s.label}
-            </div>
-            <div className="mt-1 text-blue-300 text-sm opacity-90 group-hover:opacity-100">
-              Click to continue →
-            </div>
-          </label>
-
-          {/* Modal (visible when checkbox is checked) */}
-          <div className="hidden peer-checked:flex fixed inset-0 z-50 items-center justify-center p-4">
-            {/* Clickable backdrop to close */}
-            <label
-              htmlFor={`howit-${idx}`}
-              className="absolute inset-0 bg-black/60 cursor-pointer"
-              aria-label="Close"
-            />
-
-            <div className="relative z-10 w-full max-w-lg bg-gradient-to-br from-[#0c193a] to-[#070e20] border border-blue-900/50 rounded-2xl shadow-2xl">
-              {/* Close button */}
-              <label
-                htmlFor={`howit-${idx}`}
-                className="absolute top-3 right-3 text-blue-200 hover:text-white text-2xl font-bold cursor-pointer"
-                aria-label="Close"
+      {/* ---------- HOW IT WORKS (renamed) ---------- */}
+      <section className="max-w-7xl mx-auto px-4 md:px-6 my-12">
+        <div className="bg-[#0b142b] border border-blue-900/40 rounded-3xl shadow-xl px-5 md:px-8 py-8">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
+            How the Bus2Ride Booking Process Works
+          </h2>
+          <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
+            {[
+              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact" },
+              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant" },
+              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve" },
+              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary" },
+            ].map((s) => (
+              <a
+                key={s.step}
+                href={s.href}
+                className="flex-1 group bg-[#0e1a39] border border-blue-900/60 rounded-2xl px-5 py-6 text-center hover:border-blue-400/60 hover:shadow-[0_0_0_2px_rgba(96,165,250,.25)] transition"
               >
-                ×
-              </label>
-
-              {/* Modal content */}
-              <div className="px-6 py-7 text-center">
-                <div className="mx-auto w-14 h-14 rounded-full bg-blue-900/30 border border-blue-700/40 flex items-center justify-center text-3xl mb-4">
-                  {s.icon}
-                </div>
-                <h3 className="text-2xl font-extrabold text-white mb-2 font-serif tracking-tight">
-                  {s.step}. {s.label}
-                </h3>
-                <p className="text-blue-200/90">
-                  Move to the next step below or reach out if you need help.
-                </p>
-
-                <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-                  <a
-                    href={s.href}
-                    className="inline-flex items-center justify-center rounded-xl px-5 py-2.5 font-bold bg-blue-700 text-white hover:bg-blue-800 border border-blue-800 transition"
-                  >
-                    Go to {s.label}
-                  </a>
-                  <a
-                    href={`tel:${PHONE_TEL}`}
-                    className="inline-flex items-center justify-center rounded-xl px-5 py-2.5 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
-                  >
-                    Call {PHONE_DISPLAY}
-                  </a>
-                </div>
-              </div>
-            </div>
+                <div className="text-2xl">{s.icon}</div>
+                <div className="font-extrabold text-white mt-1">{s.step}. {s.label}</div>
+                <div className="mt-1 text-blue-300 text-sm opacity-90 group-hover:opacity-100">Click to continue →</div>
+              </a>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
-
+      </section>
 
       {/* ---------- TOOLS (with modals) ---------- */}
       <section className="w-full bg-gradient-to-br from-[#0e1a39] to-[#080e1f] py-16 md:py-20 border-t border-blue-900/40">
