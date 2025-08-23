@@ -130,6 +130,7 @@ const REVIEWS = [
 ];
 
 /* ---------------- Events ---------------- */
+// Curated “top 12” to show on the page
 const POPULAR_EVENT_TITLES = [
   "Weddings",
   "Proms",
@@ -194,6 +195,7 @@ export default function PartyBusesPage() {
     );
   }, [pollSearch]);
 
+  // Deterministic images
   const busesWithImages = useMemo(
     () =>
       BUSES.map((b, i) => ({
@@ -230,16 +232,13 @@ export default function PartyBusesPage() {
 
   return (
     <main className="text-slate-100 bg-[#0f1f46]">
-      {/* ---------- HERO (brighter for stronger contrast) ---------- */}
+      {/* ---------- HERO ---------- */}
       <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        {/* Primary bright gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        {/* Subtle sheen overlay to make it pop */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#163b7a] via-[#123267] to-[#0e2755]" />
+        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_3px_12px_rgba(30,58,138,.35)]">
           Bus2Ride Party Bus Fleet
         </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
+        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-100/95 font-medium">
           Explore luxury party buses—big energy, smooth rides, quotes in seconds.
         </p>
         <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
@@ -263,13 +262,13 @@ export default function PartyBusesPage() {
           </a>
         </div>
 
-        {/* Decorative wave divider to separate clearly from darker page */}
+        {/* Decorative wave divider */}
         <div className="absolute bottom-[-1px] left-0 right-0">
           <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
             <path
               d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
               fill="#122a56"
-              opacity="1"
+              opacity="0.9"
             />
           </svg>
         </div>
@@ -316,9 +315,8 @@ export default function PartyBusesPage() {
 
                 {/* title + capacity */}
                 <div className="px-6 mt-5">
-                  {/* CENTERED NAME PER YOUR REQUEST */}
-                  <h3 className="text-2xl font-extrabold text-white tracking-tight text-center">{bus.name}</h3>
-                  <div className="mt-1 mb-4 text-sm font-semibold text-blue-200 text-center">Seats up to {bus.capacity}</div>
+                  <h3 className="text-2xl font-extrabold text-white tracking-tight">{bus.name}</h3>
+                  <div className="mt-1 mb-4 text-sm font-semibold text-blue-200">Seats up to {bus.capacity}</div>
                   <ul className="text-blue-100/95 text-[0.95rem] space-y-1 min-h-[72px]">
                     {bus.highlights.slice(0, 3).map((h) => (
                       <li key={h} className="flex items-start gap-2">
@@ -429,7 +427,7 @@ export default function PartyBusesPage() {
         </ul>
       </section>
 
-      {/* ---------- REVIEWS ---------- */}
+      {/* ---------- REVIEWS (with button) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
           Customer Reviews
@@ -469,7 +467,7 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- POLLS ---------- */}
+      {/* ---------- POLLS (aligned + lighter) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
           Party Bus Polls
@@ -512,7 +510,7 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* ---------- LIMOS & SHUTTLES PROMO ---------- */}
+      {/* ---------- LIMOS & SHUTTLES PROMO (with images) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
           We Also Have Limousines & Shuttle Buses
@@ -528,8 +526,8 @@ export default function PartyBusesPage() {
                 <img src={LIMO_IMG} alt="Limousine" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
               </div>
               <div className="px-6 py-5">
-                <h3 className="text-2xl font-extrabold text-white text-center">Limousines</h3>
-                <p className="text-blue-200 text-center">Elegant rides for 6–20 passengers.</p>
+                <h3 className="text-2xl font-extrabold text-white">Limousines</h3>
+                <p className="text-blue-200">Elegant rides for 6–20 passengers.</p>
               </div>
             </div>
           </a>
@@ -540,8 +538,8 @@ export default function PartyBusesPage() {
                 <img src={SHUTTLE_IMG} alt="Shuttle Bus" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
               </div>
               <div className="px-6 py-5">
-                <h3 className="text-2xl font-extrabold text-white text-center">Shuttle Buses</h3>
-                <p className="text-blue-200 text-center">Simple & comfy transport for larger groups.</p>
+                <h3 className="text-2xl font-extrabold text-white">Shuttle Buses</h3>
+                <p className="text-blue-200">Simple & comfy transport for larger groups.</p>
               </div>
             </div>
           </a>
