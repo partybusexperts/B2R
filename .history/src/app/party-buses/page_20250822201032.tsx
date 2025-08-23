@@ -97,7 +97,7 @@ const BUSES: Bus[] = [
     image: "",
   },
   {
-    name: "Mini Coach (22–28 Passenger party bus)",
+    name: "Mini Coach (22–28 Pax)",
     capacity: 28,
     type: "Coach",
     highlights: [
