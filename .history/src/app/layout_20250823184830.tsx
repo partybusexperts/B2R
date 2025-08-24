@@ -1,14 +1,15 @@
 // app/layout.tsx
-import "../styles/b2r.css"; // global theme (scoped by .theme-b2r)
-import "./globals.css";
+import "../styles/b2r.css"; // if your layout is at app/layout.tsx
+// (if your layout is at src/app/layout.tsx, use "../../styles/b2r.css")
 
-import type { Metadata } from "next";
-import Navigation from "../components/Navigation";
-import Footer from "../components/footer";
+import type { Metadata } from 'next';
+import './globals.css';
+import Navigation from '../components/Navigation';
+import Footer from '../components/footer';
 
 export const metadata: Metadata = {
-  title: "Bus2Ride | Party Bus, Limo & Coach Rentals",
-  description: "Luxury party bus, limo and coach rentals for any occasion.",
+  title: 'Bus2Ride | Party Bus, Limo & Coach Rentals',
+  description: 'Luxury party bus, limo and coach rentals for any occasion.',
 };
 
 export default function RootLayout({
@@ -18,10 +19,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* Apply the theme site-wide by putting .theme-b2r on <body> */}
-      <body className="theme-b2r min-h-screen antialiased">
+      <body className="min-h-screen bg-[#0f2148] text-blue-50">
         <Navigation />
-        <main>{children}</main>
+        {children}
         <Footer
           phoneDisplay="(888) 535-2566"
           phoneTel="8885352566"
