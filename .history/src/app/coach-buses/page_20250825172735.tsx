@@ -17,14 +17,14 @@ const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
 const EMAIL = "info@bus2ride.com";
 
-/* ---------------- Coach Bus Features ---------------- */
-const COACH_BUS_FEATURES: Feature[] = [
-  { label: "Reclining High-Back Seats", icon: "💺", description: "Comfortable forward-facing reclining seats keep everyone relaxed on long trips." },
-  { label: "Professional Charter Driver", icon: "🧑‍✈️", description: "Experienced, licensed drivers focused on safety, punctuality and smooth travel." },
-  { label: "Wi‑Fi & Power (Many Coaches)", icon: "📶", description: "Stay productive or entertained with available onboard Wi‑Fi and individual power / USB outlets.*" },
-  { label: "Large Underbody Luggage", icon: "🧳", description: "Store suitcases, equipment and gear easily in spacious undercarriage bays." },
-  { label: "Overhead Parcel Racks", icon: "🧷", description: "Keep small bags & personal items within reach in open overhead racks." },
-  { label: "Onboard Restroom (Most 40+)", icon: "🚻", description: "Mid & full size motorcoaches typically include a clean restroom for longer travel." },
+/* ---------------- Features ---------------- */
+const PARTY_BUS_FEATURES: Feature[] = [
+  { label: "More Space to Move Around", icon: "🕺", description: "Spacious interiors let you dance, mingle, and move around safely—no cramped seating here!" },
+  { label: "Better for Socializing, Less Claustrophobic", icon: "🫂", description: "Wrap-around seating means everyone faces each other and can actually talk; great group energy." },
+  { label: "Wet bars with ice & bottled water", icon: "🧊", description: "Built-in wet bars with ice and complimentary bottled water. Bring your own drinks (21+ where legal)." },
+  { label: "Easy to Get In and Out Of", icon: "🚪", description: "Wide doors and low steps make boarding and exiting the bus a breeze for all guests." },
+  { label: "BYOB Friendly", icon: "🍾", description: "Bring your own beverages and keep the party going your way. Just no glass bottles, please!" },
+  { label: "Some Restrooms on Big Party Buses", icon: "🚻", description: "Select larger party buses include onboard restrooms for maximum comfort and convenience during your trip." },
 ];
 
 /* ---------------- Tools (with modal sizes) ---------------- */
@@ -44,11 +44,11 @@ const TOOL_SIZE_CLASS: Record<Tool["size"], string> = {
 };
 
 /* ---------------- Placeholder images ---------------- */
-const COACH_IMAGES = [
+const PARTY_IMAGES = [
+  "/images/Bus-1.png",
+  "/images/Bus-2.png",
   "/images/Bus-3.png",
   "/images/Bus-4.png",
-  "/images/Bus-5.png",
-  "/images/Bus-2.png",
   "/images/Bus-1.png",
   "/images/Bus-5.png",
 ];
@@ -57,63 +57,67 @@ const COACH_IMAGES = [
 const LIMO_IMG = "/images/Bus-1.png";
 const SHUTTLE_IMG = "/images/Bus-1.png";
 
-/* ---------------- Coach Fleet ---------------- */
+/* ---------------- Fleet ---------------- */
 const BUSES: Bus[] = [
   {
-    name: "Mini Coach (24–28 Passenger)",
+    name: "Mercedes Sprinter Limo Party Bus",
+    capacity: 14,
+    type: "Sprinter",
+    highlights: ["Wrap-around seating", "LED ceiling & floor", "Bluetooth sound"],
+    image: "",
+    badge: "Most Popular",
+  },
+  {
+    name: "H2 Hummer Stretch Limousine",
+    capacity: 18,
+    type: "Limo",
+    highlights: ["Premium sound", "Bar setup", "Disco lighting"],
+    image: "",
+    badge: "Iconic",
+  },
+  {
+    name: "Luxury Party Bus (24–26 Pax)",
+    capacity: 26,
+    type: "Party Bus",
+    highlights: ["Dance lighting", "BYOB-friendly", "Dual coolers"],
+    image: "",
+  },
+  {
+    name: "Executive Party Bus (30–34 Pax)",
+    capacity: 34,
+    type: "Party Bus",
+    highlights: ["Spacious interior", "USB charging", "TV screens"],
+    image: "",
+  },
+  {
+    name: "Mega Party Bus (40–45 Pax)",
+    capacity: 45,
+    type: "Party Bus",
+    highlights: ["Restroom (select models)", "Subwoofer system", "Ambient LEDs"],
+    image: "",
+  },
+  {
+    name: "Mini Coach (22–28 Passenger party bus)",
     capacity: 28,
     type: "Coach",
-    highlights: ["Reclining seats", "Overhead racks", "Climate control"],
+    highlights: [
+      "Forward seating",
+      "Comfort ride",
+      "Great for tours",
+      "Awesome all around"
+    ],
     image: "",
-    badge: "Popular"
-  },
-  {
-    name: "Mid-Size Coach (36–40 Passenger)",
-    capacity: 40,
-    type: "Coach",
-    highlights: ["Great value", "USB / outlets*", "Luggage bays"],
-    image: "",
-  },
-  {
-    name: "Executive Coach (44–50 Passenger)",
-    capacity: 50,
-    type: "Coach",
-    highlights: ["Wi‑Fi*", "Restroom", "Soft ride suspension"],
-    image: "",
-    badge: "Corporate"
-  },
-  {
-    name: "Luxury Motorcoach (54–56 Passenger)",
-    capacity: 56,
-    type: "Coach",
-    highlights: ["Premium seating", "Panoramic windows", "Entertainment system"],
-    image: "",
-  },
-  {
-    name: "Sleeper / Entertainer Coach",
-    capacity: 12,
-    type: "Coach",
-    highlights: ["Bunks", "Lounge area", "Tour ready"],
-    image: "",
-  },
-  {
-    name: "ADA Accessible Coach (Lift Equipped)",
-    capacity: 50,
-    type: "Coach",
-    highlights: ["Wheelchair lift", "Secure tie-downs", "Inclusive travel"],
-    image: "",
-    badge: "Accessible"
   },
 ];
 
 /* ---------------- Polls & Reviews ---------------- */
 const POLLS = [
-  { question: "Top factor in coach bus pricing?", options: ["Mileage", "Date/season", "Vehicle size", "Amenities"] },
-  { question: "Is onboard Wi‑Fi important to you?", options: ["Must have", "Nice extra", "Don’t need"] },
-  { question: "Do you require a restroom for your trip?", options: ["Yes", "No", "Depends on length"] },
-  { question: "Preferred trip type?", options: ["Corporate", "School / Team", "Tour / Sightseeing", "Event Shuttle"] },
-  { question: "Need outlet / charging at seats?", options: ["Yes", "No", "Only for long trips"] },
-  { question: "How soon do you usually book?", options: ["< 1 week", "1–3 weeks", "1–2 months", "> 2 months"] },
+  { question: "What’s the most important factor in party bus pricing?", options: ["Group size", "Date/season", "Trip length", "Vehicle type"] },
+  { question: "Would you pay more for a newer party bus?", options: ["Yes", "No"] },
+  { question: "How much extra would you pay for a party bus with a restroom?", options: ["$0", "$50", "$100", "$200+"] },
+  { question: "What’s a fair hourly rate for a 20-passenger limo?", options: ["$100", "$150", "$200", "$250+"] },
+  { question: "Would you split the cost of a party bus with friends?", options: ["Always", "Sometimes", "Never"] },
+  { question: "Do you prefer all-inclusive pricing or itemized fees?", options: ["All-inclusive", "Itemized", "No preference"] },
 ];
 
 const REVIEWS = [
@@ -127,35 +131,35 @@ const REVIEWS = [
 
 /* ---------------- Events ---------------- */
 const POPULAR_EVENT_TITLES = [
-  "Corporate Conferences",
-  "Team Travel",
-  "Airport Transfers",
-  "Sporting Events",
-  "School Trips",
-  "Tours & Excursions",
-  "Conventions",
   "Weddings",
-  "Retreats",
-  "Shuttle Circuits",
-  "Church Groups",
-  "Band / Performance Tours",
+  "Proms",
+  "Birthday Parties",
+  "Concerts",
+  "Sporting Events",
+  "Bachelorette Parties",
+  "Bachelor Parties",
+  "Night Out on the Town",
+  "Wine Tours",
+  "Brewery Tours",
+  "Corporate Events",
+  "Quinceañeras",
 ];
 
 const EVENT_IMAGES = [
+  "/images/Bus-3.png",
   "/images/Bus-4.png",
   "/images/Bus-5.png",
+  "/images/Bus-3.png",
   "/images/Bus-2.png",
+  "/images/Bus-5.png",
   "/images/Bus-3.png",
   "/images/Bus-1.png",
-  "/images/Bus-3.png",
-  "/images/Bus-5.png",
-  "/images/Bus-4.png",
 ];
 
 const eventBlurb = (title: string) =>
-  `Reliable, comfortable coach transportation tailored for ${title.toLowerCase()}.`;
+  `Perfect for ${title.toLowerCase()}—on-time pickups, clean rides, and a vibe your group will love.`;
 
-export default function CoachBusesPage() {
+export default function PartyBusesPage() {
   const [toolSearch, setToolSearch] = useState("");
   const [activeToolIdx, setActiveToolIdx] = useState<number | null>(null);
   const [reviewSearch, setReviewSearch] = useState("");
@@ -194,7 +198,7 @@ export default function CoachBusesPage() {
     () =>
       BUSES.map((b, i) => ({
         ...b,
-        image: b.image && b.image.trim() ? b.image : COACH_IMAGES[i % COACH_IMAGES.length],
+        image: b.image && b.image.trim() ? b.image : PARTY_IMAGES[i % PARTY_IMAGES.length],
       })),
     []
   );
@@ -233,10 +237,10 @@ export default function CoachBusesPage() {
         {/* Subtle sheen overlay to make it pop */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
         <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          Coach & Charter Bus Fleet
+          Bus2Ride Party Bus Fleet
         </h1>
         <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
-          Safe, efficient, comfortable transportation for corporate, school, tour & event travel.
+          Explore luxury party buses—big energy, smooth rides, quotes in seconds.
         </p>
         <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
           <a
@@ -271,14 +275,14 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* ---------- COACH FLEET ---------- */}
+      {/* ---------- FLEET ---------- */}
       <section className="bg-[#122a56] pt-8 pb-14">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
-            Choose Your Coach Bus
+            Pick Your Party Bus
           </h2>
           <p className="text-blue-100/90 text-center max-w-3xl mx-auto mt-3 mb-10">
-            From mini coaches to full-size luxury motorcoaches—get the right capacity, amenities and comfort level for your itinerary.
+            From sleek Sprinters to mega buses—every ride is clean, comfy, and ready to turn up the vibe. Choose the size that fits your crew.
           </p>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -305,7 +309,7 @@ export default function CoachBusesPage() {
                     {bus.image ? (
                       <img src={bus.image} alt={bus.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="text-blue-100/80">Coach preview</div>
+                      <div className="text-blue-100/80">Vehicle preview</div>
                     )}
                   </div>
                 </div>
@@ -354,17 +358,17 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* ---------- WHY COACH BUSES (lightened) ---------- */}
+      {/* ---------- WHY PARTY BUSES ROCK (lightened) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
-          Why Coach Buses Work Best
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
+          Why Party Buses Rock
         </h2>
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">
-          Charter coaches deliver reliable long-distance comfort, organized boarding, luggage capacity and amenities groups rely on.
+          It’s the ultimate rolling venue—room to move, easy boarding, wrap-around seating, and the vibe dialed just right.
         </p>
 
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {COACH_BUS_FEATURES.map((f, idx) => (
+          {PARTY_BUS_FEATURES.map((f, idx) => (
             <li key={f.label} className="relative">
               {/* Checkbox controls the modal purely with CSS (no React state) */}
               <input
@@ -465,10 +469,10 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* ---------- COACH POLLS ---------- */}
+      {/* ---------- POLLS ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
-          Coach Bus Polls
+          Party Bus Polls
         </h2>
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-6">
           Real riders. Real opinions. Compare trends and get honest insights to plan the perfect night.
@@ -508,13 +512,13 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* ---------- OTHER VEHICLE TYPES PROMO ---------- */}
+      {/* ---------- LIMOS & SHUTTLES PROMO ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
-          We Also Offer Limousines & Party Buses
+          We Also Have Limousines & Shuttle Buses
         </h2>
         <p className="text-blue-100 text-center max-w-3xl mx-auto mb-8">
-          Need a different style? Explore stretch limousines for formal events or party buses for social energy and wrap-around seating.
+          Need something different? Explore classic limos for smaller groups—or jump into a spacious shuttle bus for simple, comfy transport.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Limo */}
@@ -529,15 +533,15 @@ export default function CoachBusesPage() {
               </div>
             </div>
           </a>
-      {/* Party Bus */}
-      <a href="/party-buses" className="group">
+          {/* Shuttle */}
+          <a href="/shuttles" className="group">
             <div className="rounded-2xl border border-blue-800/30 bg-[#12244e] overflow-hidden shadow-xl">
               <div className="h-96 w-full bg-[#173264]">
-        <img src={SHUTTLE_IMG} alt="Party Bus" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
+                <img src={SHUTTLE_IMG} alt="Shuttle Bus" className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform" />
               </div>
               <div className="px-6 py-5">
-        <h3 className="text-2xl font-extrabold text-white text-center">Party Buses</h3>
-        <p className="text-blue-200 text-center">Social interiors, lighting & premium sound.</p>
+                <h3 className="text-2xl font-extrabold text-white text-center">Shuttle Buses</h3>
+                <p className="text-blue-200 text-center">Simple & comfy transport for larger groups.</p>
               </div>
             </div>
           </a>
@@ -553,10 +557,10 @@ export default function CoachBusesPage() {
 
           <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
             {[
-              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact", body: (<p>Tell us origin, destination(s), dates, passenger count and any amenities (Wi‑Fi, restroom, outlets, ADA, luggage needs).</p>) },
-              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant", body: (<p>We price based on mileage, hours on the road, coach size, date/season and special requirements. Transparent. No hidden fees.</p>) },
-              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve", body: (<p>Approve the itinerary & pricing, sign charter agreement, and place deposit to lock in your vehicle & driver.</p>) },
-              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary", body: (<p>Finalize pickup times, passenger list & last‑minute adjustments. We dispatch, track, and keep you updated day-of.</p>) },
+              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact" },
+              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant" },
+              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve" },
+              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary" },
             ].map((s, idx) => (
               <div key={s.step} className="relative flex-1">
                 {/* Hidden checkbox controls the modal with CSS only */}
@@ -611,31 +615,9 @@ export default function CoachBusesPage() {
                       <h3 className="text-2xl font-extrabold text-white mb-2 font-serif tracking-tight">
                         {s.step}. {s.label}
                       </h3>
-                      <div className="text-blue-100/90 text-left space-y-3 text-base leading-relaxed">
-                        {s.body}
-                        <ul className="list-disc list-inside text-blue-200 text-sm space-y-1">
-                          {idx === 0 && [
-                            "Group size & luggage volume help us size the coach",
-                            "Multiple stops? Provide order & dwell times",
-                            "Need ADA lift access? Let us know early",
-                          ].map(x => <li key={x}>{x}</li>)}
-                          {idx === 1 && [
-                            "Quote usually valid 7–14 days (busy seasons shorter)",
-                            "Ask about multi-day / shuttle discounts",
-                            "We can hold a tentative slot briefly if needed",
-                          ].map(x => <li key={x}>{x}</li>)}
-                          {idx === 2 && [
-                            "Deposit typically 20–30%",
-                            "Balance due prior to departure unless invoiced",
-                            "You receive confirmed driver assignment closer to trip",
-                          ].map(x => <li key={x}>{x}</li>)}
-                          {idx === 3 && [
-                            "Driver monitors traffic & adjusts routing",
-                            "Support line available during trip",
-                            "Post‑trip feedback helps improve service",
-                          ].map(x => <li key={x}>{x}</li>)}
-                        </ul>
-                      </div>
+                      <p className="text-blue-100/90">
+                        Move to the next step below or reach out if you need help.
+                      </p>
 
                       <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
                         <a
@@ -816,83 +798,76 @@ export default function CoachBusesPage() {
               {/* Placeholder tool bodies */}
               {TOOL_LIST[activeToolIdx].name === "Per Person Splitter" && (
                 <div className="grid gap-3 max-w-md">
-                  <label className="text-blue-100 text-sm font-semibold">Total Trip Cost ($)</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="1200" />
-                  <label className="text-blue-100 text-sm font-semibold mt-3">Passenger Count</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="48" />
-                  <label className="text-blue-100 text-sm font-semibold mt-3">Gratuity % (optional)</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="10" />
-                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Split Cost</button>
+                  <label className="text-blue-100 text-sm font-semibold">Total Price ($)</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="e.g., 800" />
+                  <label className="text-blue-100 text-sm font-semibold mt-3">People</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="e.g., 16" />
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Calculate
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "BYOB Pack & Ice Calculator" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Estimate total beverages & ice volume to keep everyone supplied.</p>
-                  <div className="grid md:grid-cols-4 gap-3">
+                  <p className="text-blue-100">Estimate drinks/ice for your group.</p>
+                  <div className="grid md:grid-cols-3 gap-3">
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="People" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Hours" />
                     <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                      <option>Balanced Mix</option>
-                      <option>Light Drinks</option>
-                      <option>Heavy Drinks</option>
-                    </select>
-                    <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                      <option>Coolers?</option>
-                      <option>1 Small</option>
-                      <option>2 Medium</option>
-                      <option>Large</option>
+                      <option>Mixed</option>
+                      <option>Mostly Beer</option>
+                      <option>Mostly Spirits</option>
                     </select>
                   </div>
-                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Estimate</button>
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Estimate
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Seat Space Fit Advisor" && (
                 <div className="grid gap-3 max-w-md">
-                  <p className="text-blue-100">Will this group fit one coach or need two?</p>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Passengers (e.g. 72)" />
-                  <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                    <option>Coach Size Planned</option>
-                    <option>40</option>
-                    <option>50</option>
-                    <option>56</option>
-                  </select>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Check Fit</button>
+                  <p className="text-blue-100">Check comfort based on passengers.</p>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Passengers" />
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Check Fit
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Bar Hop Route Builder" && (
                 <div className="grid gap-3 max-w-5xl">
-                  <p className="text-blue-100">Build a multi-stop itinerary (use for tours, shuttles, or campus loops).</p>
-                  <div className="grid md:grid-cols-3 gap-3">
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 1" />
+                  <p className="text-blue-100">Add stops, set durations, and build your route.</p>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 1 (address/name)" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 2" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 3" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 4" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Layover (min)" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Avg Drive (min)" />
                   </div>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Build Route</button>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Build Route
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Vibe Selector" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Pick a travel atmosphere for curated playlist + amenity suggestions.</p>
+                  <p className="text-blue-100">Choose your vibe and we’ll suggest playlists.</p>
                   <div className="grid md:grid-cols-3 gap-3">
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Relaxed</button>
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Productive</button>
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Social</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Chill</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Club</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Throwback</button>
                   </div>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Stop Timing Planner" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Distribute total charter hours across planned stops efficiently.</p>
-                  <div className="grid md:grid-cols-4 gap-3">
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Total Hrs" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="# Stops" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Drive Avg" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Buffer %" />
+                  <p className="text-blue-100">Map your stop durations.</p>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Total hours" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="# of stops" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Avg drive (min)" />
                   </div>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Plan</button>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Plan
+                  </button>
                 </div>
               )}
             </div>

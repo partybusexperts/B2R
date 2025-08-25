@@ -19,8 +19,8 @@ const EMAIL = "info@bus2ride.com";
 
 /* ---------------- Coach Bus Features ---------------- */
 const COACH_BUS_FEATURES: Feature[] = [
-  { label: "Reclining High-Back Seats", icon: "💺", description: "Comfortable forward-facing reclining seats keep everyone relaxed on long trips." },
-  { label: "Professional Charter Driver", icon: "🧑‍✈️", description: "Experienced, licensed drivers focused on safety, punctuality and smooth travel." },
+  { label: "Reclining High-Back Seats", icon: "�", description: "Comfortable forward-facing reclining seats keep everyone relaxed on long trips." },
+  { label: "Professional Charter Driver", icon: "�‍✈️", description: "Experienced, licensed drivers focused on safety, punctuality and smooth travel." },
   { label: "Wi‑Fi & Power (Many Coaches)", icon: "📶", description: "Stay productive or entertained with available onboard Wi‑Fi and individual power / USB outlets.*" },
   { label: "Large Underbody Luggage", icon: "🧳", description: "Store suitcases, equipment and gear easily in spacious undercarriage bays." },
   { label: "Overhead Parcel Racks", icon: "🧷", description: "Keep small bags & personal items within reach in open overhead racks." },
@@ -95,14 +95,6 @@ const BUSES: Bus[] = [
     type: "Coach",
     highlights: ["Bunks", "Lounge area", "Tour ready"],
     image: "",
-  },
-  {
-    name: "ADA Accessible Coach (Lift Equipped)",
-    capacity: 50,
-    type: "Coach",
-    highlights: ["Wheelchair lift", "Secure tie-downs", "Inclusive travel"],
-    image: "",
-    badge: "Accessible"
   },
 ];
 
@@ -356,7 +348,7 @@ export default function CoachBusesPage() {
 
   {/* ---------- WHY COACH BUSES (lightened) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
           Why Coach Buses Work Best
         </h2>
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">
@@ -553,10 +545,10 @@ export default function CoachBusesPage() {
 
           <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
             {[
-              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact", body: (<p>Tell us origin, destination(s), dates, passenger count and any amenities (Wi‑Fi, restroom, outlets, ADA, luggage needs).</p>) },
-              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant", body: (<p>We price based on mileage, hours on the road, coach size, date/season and special requirements. Transparent. No hidden fees.</p>) },
-              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve", body: (<p>Approve the itinerary & pricing, sign charter agreement, and place deposit to lock in your vehicle & driver.</p>) },
-              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary", body: (<p>Finalize pickup times, passenger list & last‑minute adjustments. We dispatch, track, and keep you updated day-of.</p>) },
+              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact" },
+              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant" },
+              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve" },
+              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary" },
             ].map((s, idx) => (
               <div key={s.step} className="relative flex-1">
                 {/* Hidden checkbox controls the modal with CSS only */}
@@ -611,31 +603,9 @@ export default function CoachBusesPage() {
                       <h3 className="text-2xl font-extrabold text-white mb-2 font-serif tracking-tight">
                         {s.step}. {s.label}
                       </h3>
-                      <div className="text-blue-100/90 text-left space-y-3 text-base leading-relaxed">
-                        {s.body}
-                        <ul className="list-disc list-inside text-blue-200 text-sm space-y-1">
-                          {idx === 0 && [
-                            "Group size & luggage volume help us size the coach",
-                            "Multiple stops? Provide order & dwell times",
-                            "Need ADA lift access? Let us know early",
-                          ].map(x => <li key={x}>{x}</li>)}
-                          {idx === 1 && [
-                            "Quote usually valid 7–14 days (busy seasons shorter)",
-                            "Ask about multi-day / shuttle discounts",
-                            "We can hold a tentative slot briefly if needed",
-                          ].map(x => <li key={x}>{x}</li>)}
-                          {idx === 2 && [
-                            "Deposit typically 20–30%",
-                            "Balance due prior to departure unless invoiced",
-                            "You receive confirmed driver assignment closer to trip",
-                          ].map(x => <li key={x}>{x}</li>)}
-                          {idx === 3 && [
-                            "Driver monitors traffic & adjusts routing",
-                            "Support line available during trip",
-                            "Post‑trip feedback helps improve service",
-                          ].map(x => <li key={x}>{x}</li>)}
-                        </ul>
-                      </div>
+                      <p className="text-blue-100/90">
+                        Move to the next step below or reach out if you need help.
+                      </p>
 
                       <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
                         <a
@@ -664,10 +634,10 @@ export default function CoachBusesPage() {
       <section className="w-full bg-gradient-to-br from-[#122a5c] to-[#0f2148] py-16 md:py-20 border-t border-blue-800/30">
         <div className="max-w-6xl mx-auto flex flex-col items-center px-4 md:px-0">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 font-serif tracking-tight text-white">
-            Limo & Party Bus Tools
+            Coach Trip Planning Tools
           </h2>
           <p className="text-lg md:text-xl text-blue-100 text-center max-w-2xl font-medium mb-8">
-            Click a tool to open it in a perfectly-sized modal—some are compact, others full-width. Your customers can use them right here.
+            Estimate costs, plan routes, split fares & prep for a smooth charter experience.
           </p>
           <div className="w-full flex justify-center mb-8">
             <input
@@ -816,83 +786,76 @@ export default function CoachBusesPage() {
               {/* Placeholder tool bodies */}
               {TOOL_LIST[activeToolIdx].name === "Per Person Splitter" && (
                 <div className="grid gap-3 max-w-md">
-                  <label className="text-blue-100 text-sm font-semibold">Total Trip Cost ($)</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="1200" />
-                  <label className="text-blue-100 text-sm font-semibold mt-3">Passenger Count</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="48" />
-                  <label className="text-blue-100 text-sm font-semibold mt-3">Gratuity % (optional)</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="10" />
-                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Split Cost</button>
+                  <label className="text-blue-100 text-sm font-semibold">Total Price ($)</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="e.g., 800" />
+                  <label className="text-blue-100 text-sm font-semibold mt-3">People</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="e.g., 16" />
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Calculate
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "BYOB Pack & Ice Calculator" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Estimate total beverages & ice volume to keep everyone supplied.</p>
-                  <div className="grid md:grid-cols-4 gap-3">
+                  <p className="text-blue-100">Estimate drinks/ice for your group.</p>
+                  <div className="grid md:grid-cols-3 gap-3">
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="People" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Hours" />
                     <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                      <option>Balanced Mix</option>
-                      <option>Light Drinks</option>
-                      <option>Heavy Drinks</option>
-                    </select>
-                    <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                      <option>Coolers?</option>
-                      <option>1 Small</option>
-                      <option>2 Medium</option>
-                      <option>Large</option>
+                      <option>Mixed</option>
+                      <option>Mostly Beer</option>
+                      <option>Mostly Spirits</option>
                     </select>
                   </div>
-                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Estimate</button>
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Estimate
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Seat Space Fit Advisor" && (
                 <div className="grid gap-3 max-w-md">
-                  <p className="text-blue-100">Will this group fit one coach or need two?</p>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Passengers (e.g. 72)" />
-                  <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                    <option>Coach Size Planned</option>
-                    <option>40</option>
-                    <option>50</option>
-                    <option>56</option>
-                  </select>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Check Fit</button>
+                  <p className="text-blue-100">Check comfort based on passengers.</p>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Passengers" />
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Check Fit
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Bar Hop Route Builder" && (
                 <div className="grid gap-3 max-w-5xl">
-                  <p className="text-blue-100">Build a multi-stop itinerary (use for tours, shuttles, or campus loops).</p>
-                  <div className="grid md:grid-cols-3 gap-3">
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 1" />
+                  <p className="text-blue-100">Add stops, set durations, and build your route.</p>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 1 (address/name)" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 2" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 3" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 4" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Layover (min)" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Avg Drive (min)" />
                   </div>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Build Route</button>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Build Route
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Vibe Selector" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Pick a travel atmosphere for curated playlist + amenity suggestions.</p>
+                  <p className="text-blue-100">Choose your vibe and we’ll suggest playlists.</p>
                   <div className="grid md:grid-cols-3 gap-3">
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Relaxed</button>
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Productive</button>
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Social</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Chill</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Club</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Throwback</button>
                   </div>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Stop Timing Planner" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Distribute total charter hours across planned stops efficiently.</p>
-                  <div className="grid md:grid-cols-4 gap-3">
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Total Hrs" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="# Stops" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Drive Avg" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Buffer %" />
+                  <p className="text-blue-100">Map your stop durations.</p>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Total hours" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="# of stops" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Avg drive (min)" />
                   </div>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Plan</button>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Plan
+                  </button>
                 </div>
               )}
             </div>
