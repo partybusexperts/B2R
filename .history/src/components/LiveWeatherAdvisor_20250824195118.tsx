@@ -3,6 +3,84 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 /** ----------------------------------------------------------------
+ * Small helpers (robust fetch + approximate IP geolocation)
+ * ---------------------------------------------------------------- */
+async function fetchJson(
+  url: string,
+  opts: RequestInit & { timeoutMs?: number } = {}
+) {
+  const { timeoutMs = 8000, ...rest } = opts;
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    // cache-buster + no-store to avoid stale responses
+    const noCacheUrl = url + (url.includes("?") ? "&" : "?") + "r=" + Math.random().toString(36).slice(2);
+    const res = await fetch(noCacheUrl, { ...rest, signal: ctrl.signal, cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status} on ${url}`);
+    return await res.json();
+  } finally {
+    clearTimeout(id);
+  }
+}
+
+async function getApproxIPLocation(): Promise<{ lat: number; lon: number; label: string } | null> {
+  const providers: Array<() => Promise<{ lat: number; lon: number; label: string } | null>> = [
+    // 1) ipwho.is
+    async () => {
+      const j = await fetchJson("https://ipwho.is/?fields=latitude,longitude,city,region");
+      if (j?.latitude && j?.longitude)
+        return { lat: j.latitude, lon: j.longitude, label: [j.city, j.region].filter(Boolean).join(", ") };
+      return null;
+    },
+    // 2) ipapi.co
+    async () => {
+      const j = await fetchJson("https://ipapi.co/json/");
+      if (j?.latitude && j?.longitude)
+        return { lat: j.latitude, lon: j.longitude, label: [j.city, j.region].filter(Boolean).join(", ") };
+      return null;
+    },
+    // 3) ipapi.dev
+    async () => {
+      const j = await fetchJson("https://ipapi.dev/json/");
+      if (j?.latitude && j?.longitude)
+        return { lat: j.latitude, lon: j.longitude, label: [j.city, j.region].filter(Boolean).join(", ") };
+      return null;
+    },
+    // 4) geojs.io
+    async () => {
+      const j = await fetchJson("https://get.geojs.io/v1/ip/geo.json");
+      if (j?.latitude && j?.longitude)
+        return { lat: parseFloat(j.latitude), lon: parseFloat(j.longitude), label: [j.city, j.region].filter(Boolean).join(", ") };
+      return null;
+    },
+  ];
+  for (const fn of providers) {
+    try {
+      const hit = await fn();
+      if (hit) return hit;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+// Tiny emoji “icons” to avoid external deps
+const Icon = {
+  MapPin: () => <span className="inline-block align-[-2px]">📍</span>,
+  Locate: () => <span className="inline-block align-[-2px]">📡</span>,
+  Search: () => <span className="inline-block align-[-2px]">🔍</span>,
+  Thermo: () => <span className="inline-block align-[-2px]">🌡️</span>,
+  Wind: () => <span className="inline-block align-[-2px]">💨</span>,
+  Drop: () => <span className="inline-block align-[-2px]">💧</span>,
+  Sun: () => <span className="inline-block align-[-2px]">🌅</span>,
+  Moon: () => <span className="inline-block align-[-2px]">🌙</span>,
+  Rain: () => <span className="inline-block align-[-2px]">🌧️</span>,
+  Alert: () => <span className="inline-block align-[-2px]">⚠️</span>,
+  Gauge: () => <span className="inline-block align-[-2px]">📏</span>,
+};
+
+/** ----------------------------------------------------------------
  * Types
  * ---------------------------------------------------------------- */
 interface Place {
@@ -63,24 +141,8 @@ interface AlertItem {
 }
 
 /** ----------------------------------------------------------------
- * Small helpers (no geolocation/IP)
+ * Small utils
  * ---------------------------------------------------------------- */
-async function fetchJson(
-  url: string,
-  opts: RequestInit & { timeoutMs?: number } = {}
-) {
-  const { timeoutMs = 8000, ...rest } = opts;
-  const ctrl = new AbortController();
-  const id = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { ...rest, signal: ctrl.signal, cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status} on ${url}`);
-    return await res.json();
-  } finally {
-    clearTimeout(id);
-  }
-}
-
 const cToF = (c: number) => (c * 9) / 5 + 32;
 const mphToKmh = (mph: number) => mph * 1.60934;
 
@@ -133,35 +195,11 @@ function useDebounced<T>(value: T, delay = 300) {
   return debounced;
 }
 
-// Tiny emoji “icons” to avoid external deps
-const Icon = {
-  MapPin: () => <span className="inline-block align-[-2px]">📍</span>,
-  Search:  () => <span className="inline-block align-[-2px]">🔍</span>,
-  Thermo:  () => <span className="inline-block align-[-2px]">🌡️</span>,
-  Wind:    () => <span className="inline-block align-[-2px]">💨</span>,
-  Drop:    () => <span className="inline-block align-[-2px]">💧</span>,
-  Sun:     () => <span className="inline-block align-[-2px]">🌅</span>,
-  Moon:    () => <span className="inline-block align-[-2px]">🌙</span>,
-  Rain:    () => <span className="inline-block align-[-2px]">🌧️</span>,
-  Alert:   () => <span className="inline-block align-[-2px]">⚠️</span>,
-  Gauge:   () => <span className="inline-block align-[-2px]">📏</span>,
-};
-
-/** ----------------------------------------------------------------
- * Defaults (no approximate location)
- * ---------------------------------------------------------------- */
-const DEFAULT_PLACE: Place = {
-  name: "Wheaton, Illinois",
-  latitude: 41.8661,
-  longitude: -88.1070,
-  country_code: "US",
-};
-
 /** ----------------------------------------------------------------
  * Component
  * ---------------------------------------------------------------- */
 const LiveWeatherAdvisor: React.FC = () => {
-  // Core state
+  // Core
   const [place, setPlace] = useState<Place | null>(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Place[]>([]);
@@ -176,12 +214,11 @@ const LiveWeatherAdvisor: React.FC = () => {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
-  const [infoMessage, setInfoMessage] = useState<string>("");
-
+  const [geoMessage, setGeoMessage] = useState<string>("");
   const debouncedQuery = useDebounced(query, 300);
   const suggestBoxRef = useRef<HTMLDivElement>(null);
 
-  // Event selector (bottom of app)
+  // Event selector
   const EVENT_TYPES = [
     "None",
     "Concert",
@@ -196,7 +233,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   type EventType = typeof EVENT_TYPES[number];
   const [eventType, setEventType] = useState<EventType>("None");
 
-  /** Boot: use pinned city if present, else load Wheaton, IL (no IP/GPS) */
+  /** Boot: restore last city or try approximate IP location */
   useEffect(() => {
     const boot = async () => {
       try {
@@ -205,14 +242,11 @@ const LiveWeatherAdvisor: React.FC = () => {
         if (saved) {
           const p: Place = JSON.parse(saved);
           await loadAllForPlace(p);
-          setInfoMessage(`Loaded your pinned city: ${p.name}`);
           return;
         }
-        await loadAllForPlace(DEFAULT_PLACE);
-        setInfoMessage("Defaulting to Wheaton, IL. Search to change, then pin it.");
-        if (typeof window !== "undefined") localStorage.setItem("wx:lastPlace", JSON.stringify(DEFAULT_PLACE));
+        await useApproxLocation(); // works on HTTP too
       } catch {
-        setError("Unable to load initial city.");
+        setError("Unable to determine location.");
       } finally {
         setLoading(false);
       }
@@ -262,6 +296,51 @@ const LiveWeatherAdvisor: React.FC = () => {
   }, []);
 
   /** Fetchers */
+  const geocodeOne = async (name: string): Promise<Place> => {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+      name
+    )}&count=1&language=en&format=json`;
+    const j = await fetchJson(url);
+    if (!j.results || !j.results.length) throw new Error("City not found");
+    const p = j.results[0];
+    return {
+      name: [p.name, p.admin1, p.country].filter(Boolean).join(", "),
+      latitude: p.latitude,
+      longitude: p.longitude,
+      country: p.country,
+      admin1: p.admin1,
+      country_code: p.country_code,
+      timezone: p.timezone,
+    } as Place;
+  };
+
+  const reverseGeocode = async ({
+    latitude,
+    longitude,
+  }: {
+    latitude: number;
+    longitude: number;
+  }): Promise<Place> => {
+    const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${latitude}&longitude=${longitude}&language=en&format=json`;
+    const j = await fetchJson(url);
+    const p = j.results?.[0];
+    if (!p)
+      return {
+        name: `Lat ${latitude.toFixed(2)}, Lon ${longitude.toFixed(2)}`,
+        latitude,
+        longitude,
+      } as Place;
+    return {
+      name: [p.name, p.admin1, p.country].filter(Boolean).join(", "),
+      latitude: p.latitude,
+      longitude: p.longitude,
+      country: p.country,
+      admin1: p.admin1,
+      country_code: p.country_code,
+      timezone: p.timezone,
+    } as Place;
+  };
+
   const fetchForecast = async (p: Place): Promise<WeatherApiResponse> => {
     const params = new URLSearchParams({
       latitude: String(p.latitude),
@@ -295,8 +374,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   };
 
   const fetchNwsAlerts = async (p: Place): Promise<AlertItem[]> => {
-    // Only attempt NWS if US or unknown (we'll allow unknown to try)
-    if (p.country_code && p.country_code !== "US") return [];
+    if (p.country_code !== "US") return [];
     try {
       const j = await fetchJson(`https://api.weather.gov/alerts/active?point=${p.latitude},${p.longitude}`);
       const items: AlertItem[] = (j.features || []).slice(0, 5).map((f: any) => ({
@@ -323,6 +401,39 @@ const LiveWeatherAdvisor: React.FC = () => {
       if (typeof window !== "undefined") localStorage.setItem("wx:lastPlace", JSON.stringify(p));
     } catch {
       setError("Failed to fetch weather data. Try another location.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /** Approximate location (always works, even on HTTP) */
+  const useApproxLocation = async () => {
+    try {
+      setLoading(true);
+      setGeoMessage("Finding approximate location…");
+      const hit = await getApproxIPLocation();
+      if (hit) {
+        const p = await reverseGeocode({ latitude: hit.lat, longitude: hit.lon });
+        await loadAllForPlace(p);
+        setGeoMessage(`Approximate location set${hit.label ? `: ${hit.label}` : ""}.`);
+      } else {
+        setGeoMessage(
+          "Could not determine location from IP. Some networks/ad-blockers block geo APIs. You can still search above or pin a city."
+        );
+        if (!place) {
+          const fallback = await geocodeOne("Wheaton, Illinois");
+          await loadAllForPlace(fallback);
+          setGeoMessage("Could not determine location from IP. Loaded Wheaton, IL as a temporary fallback.");
+        }
+      }
+    } catch {
+      if (!place) {
+        const fallback = await geocodeOne("Wheaton, Illinois");
+        await loadAllForPlace(fallback);
+        setGeoMessage("Network issue getting IP location. Loaded Wheaton, IL as a temporary fallback.");
+      } else {
+        setGeoMessage("Network issue getting IP location. Try again, disable ad-block for this page, or search above.");
+      }
     } finally {
       setLoading(false);
     }
@@ -388,6 +499,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   const showTemp = (c: number | undefined) => {
     if (typeof c !== "number" || Number.isNaN(c)) return "–";
     return unit === "F" ? `${Math.round(cToF(c))}°F` : `${Math.round(c)}°C`;
+    // Open-Meteo returns C, we convert when displaying
   };
 
   const showSpeed = (mph?: number) => {
@@ -395,7 +507,7 @@ const LiveWeatherAdvisor: React.FC = () => {
     return speedUnit === "mph" ? `${Math.round(mph)} mph` : `${Math.round(mphToKmh(mph))} km/h`;
   };
 
-  /** Weather-aware tips + event checklist */
+  /** Weather-aware packing tips + event checklist */
   const packingTips = useMemo(() => {
     const tips: string[] = [];
     if (typeof currentTemp === "number") {
@@ -511,7 +623,7 @@ const LiveWeatherAdvisor: React.FC = () => {
           )}
         </div>
 
-        {/* Controls (search, pin, toggles) */}
+        {/* Controls */}
         <HeaderControls
           query={query}
           setQuery={setQuery}
@@ -532,21 +644,22 @@ const LiveWeatherAdvisor: React.FC = () => {
             setSpeedUnit(s);
             if (typeof window !== "undefined") localStorage.setItem("wx:speed", s);
           }}
+          useApproxLocation={useApproxLocation}
           pinCurrentCity={() => {
             if (place && typeof window !== "undefined") {
               localStorage.setItem("wx:lastPlace", JSON.stringify(place));
-              alert(`${place.name} pinned as your default.`);
+              setGeoMessage(`${place.name} pinned as your default.`);
             }
           }}
         />
       </div>
 
-      {/* Info / Error */}
-      {infoMessage && (
-        <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-2 rounded-xl">
-          {infoMessage}
-        </div>
+      {/* Geolocation hint */}
+      {geoMessage && (
+        <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-2 rounded-xl">{geoMessage}</div>
       )}
+
+      {/* Status */}
       {loading && <div className="mt-8 text-center text-gray-800 animate-pulse">Loading weather data…</div>}
       {error && (
         <div className="mt-6 bg-rose-50 text-rose-800 border border-rose-200 px-4 py-3 rounded-xl flex items-center gap-2">
@@ -729,7 +842,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   );
 };
 
-/** Header controls (no Approximate/GPS buttons) */
+/** Header controls as a tiny subcomponent */
 function HeaderControls(props: {
   query: string;
   setQuery: (v: string) => void;
@@ -740,6 +853,7 @@ function HeaderControls(props: {
   setUnit: (u: "C" | "F") => void;
   speedUnit: "mph" | "km/h";
   setSpeedUnit: (s: "mph" | "km/h") => void;
+  useApproxLocation: () => Promise<void>;
   pinCurrentCity: () => void;
 }) {
   const {
@@ -752,6 +866,7 @@ function HeaderControls(props: {
     setUnit,
     speedUnit,
     setSpeedUnit,
+    useApproxLocation,
     pinCurrentCity,
   } = props;
 
@@ -793,6 +908,13 @@ function HeaderControls(props: {
         )}
       </div>
 
+      {/* Only Approximate + Pin (works everywhere) */}
+      <button
+        onClick={useApproxLocation}
+        className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-sky-700 text-white hover:bg-sky-800 shadow"
+      >
+        <Icon.Locate /> Use approximate location
+      </button>
       <button
         onClick={pinCurrentCity}
         className="px-3 py-2 rounded-xl bg-white border border-gray-400 shadow hover:bg-gray-50 text-gray-900"

@@ -2,9 +2,22 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-/** ----------------------------------------------------------------
- * Types
- * ---------------------------------------------------------------- */
+// Emoji icons (no external deps)
+const Icon = {
+  MapPin: () => <span className="inline-block align-[-2px]">📍</span>,
+  Locate: () => <span className="inline-block align-[-2px]">📡</span>,
+  SearchIcon: () => <span className="inline-block align-[-2px]">🔍</span>,
+  Thermometer: () => <span className="inline-block align-[-2px]">🌡️</span>,
+  Wind: () => <span className="inline-block align-[-2px]">💨</span>,
+  Droplets: () => <span className="inline-block align-[-2px]">💧</span>,
+  Sun: () => <span className="inline-block align-[-2px]">🌅</span>,
+  Moon: () => <span className="inline-block align-[-2px]">🌙</span>,
+  CloudRain: () => <span className="inline-block align-[-2px]">🌧️</span>,
+  AlertTriangle: () => <span className="inline-block align-[-2px]">⚠️</span>,
+  Gauge: () => <span className="inline-block align-[-2px]">📏</span>,
+};
+
+// ===== Types =====
 interface Place {
   name: string;
   latitude: number;
@@ -62,25 +75,7 @@ interface AlertItem {
   event?: string;
 }
 
-/** ----------------------------------------------------------------
- * Small helpers (no geolocation/IP)
- * ---------------------------------------------------------------- */
-async function fetchJson(
-  url: string,
-  opts: RequestInit & { timeoutMs?: number } = {}
-) {
-  const { timeoutMs = 8000, ...rest } = opts;
-  const ctrl = new AbortController();
-  const id = setTimeout(() => ctrl.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { ...rest, signal: ctrl.signal, cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status} on ${url}`);
-    return await res.json();
-  } finally {
-    clearTimeout(id);
-  }
-}
-
+// ===== Helpers =====
 const cToF = (c: number) => (c * 9) / 5 + 32;
 const mphToKmh = (mph: number) => mph * 1.60934;
 
@@ -133,51 +128,27 @@ function useDebounced<T>(value: T, delay = 300) {
   return debounced;
 }
 
-// Tiny emoji “icons” to avoid external deps
-const Icon = {
-  MapPin: () => <span className="inline-block align-[-2px]">📍</span>,
-  Search:  () => <span className="inline-block align-[-2px]">🔍</span>,
-  Thermo:  () => <span className="inline-block align-[-2px]">🌡️</span>,
-  Wind:    () => <span className="inline-block align-[-2px]">💨</span>,
-  Drop:    () => <span className="inline-block align-[-2px]">💧</span>,
-  Sun:     () => <span className="inline-block align-[-2px]">🌅</span>,
-  Moon:    () => <span className="inline-block align-[-2px]">🌙</span>,
-  Rain:    () => <span className="inline-block align-[-2px]">🌧️</span>,
-  Alert:   () => <span className="inline-block align-[-2px]">⚠️</span>,
-  Gauge:   () => <span className="inline-block align-[-2px]">📏</span>,
-};
-
-/** ----------------------------------------------------------------
- * Defaults (no approximate location)
- * ---------------------------------------------------------------- */
-const DEFAULT_PLACE: Place = {
-  name: "Wheaton, Illinois",
-  latitude: 41.8661,
-  longitude: -88.1070,
-  country_code: "US",
-};
-
-/** ----------------------------------------------------------------
- * Component
- * ---------------------------------------------------------------- */
+// ===== Component =====
 const LiveWeatherAdvisor: React.FC = () => {
   // Core state
   const [place, setPlace] = useState<Place | null>(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Place[]>([]);
+
   const [wx, setWx] = useState<WeatherApiResponse | null>(null);
   const [aq, setAq] = useState<AirQualityResponse | null>(null);
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
+
   const [unit, setUnit] = useState<"C" | "F">(
     (typeof window !== "undefined" && (localStorage.getItem("wx:unit") as "C" | "F")) || "F"
   );
   const [speedUnit, setSpeedUnit] = useState<"mph" | "km/h">(
     (typeof window !== "undefined" && (localStorage.getItem("wx:speed") as "mph" | "km/h")) || "mph"
   );
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
-  const [infoMessage, setInfoMessage] = useState<string>("");
-
+  const [geoMessage, setGeoMessage] = useState<string>("");
   const debouncedQuery = useDebounced(query, 300);
   const suggestBoxRef = useRef<HTMLDivElement>(null);
 
@@ -196,7 +167,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   type EventType = typeof EVENT_TYPES[number];
   const [eventType, setEventType] = useState<EventType>("None");
 
-  /** Boot: use pinned city if present, else load Wheaton, IL (no IP/GPS) */
+  // ===== Boot: saved place -> geolocation -> Wheaton fallback =====
   useEffect(() => {
     const boot = async () => {
       try {
@@ -205,14 +176,11 @@ const LiveWeatherAdvisor: React.FC = () => {
         if (saved) {
           const p: Place = JSON.parse(saved);
           await loadAllForPlace(p);
-          setInfoMessage(`Loaded your pinned city: ${p.name}`);
           return;
         }
-        await loadAllForPlace(DEFAULT_PLACE);
-        setInfoMessage("Defaulting to Wheaton, IL. Search to change, then pin it.");
-        if (typeof window !== "undefined") localStorage.setItem("wx:lastPlace", JSON.stringify(DEFAULT_PLACE));
+        await tryGeoLocate();
       } catch {
-        setError("Unable to load initial city.");
+        setError("Unable to determine location.");
       } finally {
         setLoading(false);
       }
@@ -221,7 +189,7 @@ const LiveWeatherAdvisor: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /** Search suggestions */
+  // ===== Search suggestions =====
   useEffect(() => {
     const go = async () => {
       if (!debouncedQuery || debouncedQuery.trim().length < 2) {
@@ -232,7 +200,8 @@ const LiveWeatherAdvisor: React.FC = () => {
         const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
           debouncedQuery
         )}&count=7&language=en&format=json`;
-        const j = await fetchJson(url);
+        const r = await fetch(url);
+        const j = await r.json();
         const list: Place[] = (j.results || []).map((p: any) => ({
           name: [p.name, p.admin1, p.country].filter(Boolean).join(", "),
           latitude: p.latitude,
@@ -244,13 +213,13 @@ const LiveWeatherAdvisor: React.FC = () => {
         }));
         setSuggestions(list);
       } catch {
-        /* ignore */
+        // ignore
       }
     };
     go();
   }, [debouncedQuery]);
 
-  /** Click-away to close suggestions */
+  // Close suggestion list on outside click
   useEffect(() => {
     const onDocClick = (e: MouseEvent) => {
       if (suggestBoxRef.current && !suggestBoxRef.current.contains(e.target as Node)) {
@@ -261,7 +230,45 @@ const LiveWeatherAdvisor: React.FC = () => {
     return () => document.removeEventListener("click", onDocClick);
   }, []);
 
-  /** Fetchers */
+  // ===== Fetchers =====
+  const geocodeOne = async (name: string): Promise<Place> => {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+      name
+    )}&count=1&language=en&format=json`;
+    const r = await fetch(url);
+    const j = await r.json();
+    if (!j.results || !j.results.length) throw new Error("City not found");
+    const p = j.results[0];
+    return {
+      name: [p.name, p.admin1, p.country].filter(Boolean).join(", "),
+      latitude: p.latitude,
+      longitude: p.longitude,
+      country: p.country,
+      admin1: p.admin1,
+      country_code: p.country_code,
+      timezone: p.timezone,
+    } as Place;
+  };
+
+  const reverseGeocode = async ({ latitude, longitude }: { latitude: number; longitude: number }): Promise<Place> => {
+    const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${latitude}&longitude=${longitude}&language=en&format=json`;
+    const r = await fetch(url);
+    const j = await r.json();
+    const p = j.results?.[0];
+    if (!p) {
+      return { name: `Lat ${latitude.toFixed(2)}, Lon ${longitude.toFixed(2)}`, latitude, longitude } as Place;
+    }
+    return {
+      name: [p.name, p.admin1, p.country].filter(Boolean).join(", "),
+      latitude: p.latitude,
+      longitude: p.longitude,
+      country: p.country,
+      admin1: p.admin1,
+      country_code: p.country_code,
+      timezone: p.timezone,
+    } as Place;
+  };
+
   const fetchForecast = async (p: Place): Promise<WeatherApiResponse> => {
     const params = new URLSearchParams({
       latitude: String(p.latitude),
@@ -273,7 +280,8 @@ const LiveWeatherAdvisor: React.FC = () => {
       temperature_unit: "celsius",
       windspeed_unit: "mph",
     });
-    const j = (await fetchJson(`https://api.open-meteo.com/v1/forecast?${params.toString()}`)) as WeatherApiResponse;
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?${params.toString()}`);
+    const j = (await r.json()) as WeatherApiResponse;
     return j;
   };
 
@@ -285,9 +293,8 @@ const LiveWeatherAdvisor: React.FC = () => {
         hourly: "us_aqi,pm2_5",
         timezone: "auto",
       });
-      const j = (await fetchJson(
-        `https://air-quality-api.open-meteo.com/v1/air-quality?${params.toString()}`
-      )) as AirQualityResponse;
+      const r = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?${params.toString()}`);
+      const j = (await r.json()) as AirQualityResponse;
       return j;
     } catch {
       return null;
@@ -295,10 +302,10 @@ const LiveWeatherAdvisor: React.FC = () => {
   };
 
   const fetchNwsAlerts = async (p: Place): Promise<AlertItem[]> => {
-    // Only attempt NWS if US or unknown (we'll allow unknown to try)
-    if (p.country_code && p.country_code !== "US") return [];
+    if (p.country_code !== "US") return [];
     try {
-      const j = await fetchJson(`https://api.weather.gov/alerts/active?point=${p.latitude},${p.longitude}`);
+      const r = await fetch(`https://api.weather.gov/alerts/active?point=${p.latitude},${p.longitude}`);
+      const j = await r.json();
       const items: AlertItem[] = (j.features || []).slice(0, 5).map((f: any) => ({
         headline: f.properties?.headline || f.properties?.event || "Alert",
         description: f.properties?.description || "",
@@ -315,20 +322,193 @@ const LiveWeatherAdvisor: React.FC = () => {
     setError("");
     setLoading(true);
     try {
-      const [forecast, airq, usAlerts] = await Promise.all([fetchForecast(p), fetchAirQuality(p), fetchNwsAlerts(p)]);
+      const [forecast, airq, usAlerts] = await Promise.all([
+        fetchForecast(p),
+        fetchAirQuality(p),
+        fetchNwsAlerts(p),
+      ]);
       setPlace(p);
       setWx(forecast);
       setAq(airq);
       setAlerts(usAlerts);
       if (typeof window !== "undefined") localStorage.setItem("wx:lastPlace", JSON.stringify(p));
-    } catch {
+    } catch (e: any) {
       setError("Failed to fetch weather data. Try another location.");
     } finally {
       setLoading(false);
     }
   };
 
-  /** Derived data */
+  // ===== Geolocation with HTTPS/IP fallbacks =====
+  const tryGeoLocate = async () => {
+    setGeoMessage("");
+    const isLocalhost = typeof window !== 'undefined' && (
+      location.hostname === 'localhost' ||
+      location.hostname === '127.0.0.1' ||
+      location.hostname === '0.0.0.0'
+    );
+
+    const ipFallback = async (label: string) => {
+      try {
+        const r = await fetch('https://ipapi.co/json/');
+        const j = await r.json();
+        if (j && j.latitude && j.longitude) {
+          setGeoMessage(label + ' Using approximate location from IP.');
+          const p = await reverseGeocode({ latitude: j.latitude, longitude: j.longitude });
+          await loadAllForPlace(p);
+          return true;
+        }
+      } catch {}
+      return false;
+    };
+
+    if (typeof window !== 'undefined' && !window.isSecureContext && !isLocalhost) {
+      const ok = await ipFallback('Browser blocked GPS (needs HTTPS).');
+      if (!ok) {
+        setGeoMessage('Location needs HTTPS. Open this site over https:// or run on localhost. Falling back to Wheaton, IL.');
+        const fallback = await geocodeOne('Wheaton, Illinois');
+        await loadAllForPlace(fallback);
+      }
+      return;
+    }
+
+    if (!('geolocation' in navigator)) {
+      const ok = await ipFallback("This browser doesn't support geolocation.");
+      if (!ok) {
+        const fallback = await geocodeOne('Wheaton, Illinois');
+        await loadAllForPlace(fallback);
+      }
+      return;
+    }
+
+    try {
+      // @ts-ignore
+      if (navigator.permissions?.query) {
+        // @ts-ignore
+        const perm = await navigator.permissions.query({ name: 'geolocation' });
+        if (perm.state === 'denied') {
+          const ok = await ipFallback('Location permission is blocked.');
+          if (!ok) setGeoMessage('Location blocked. Enable it in site settings or use search.');
+          return;
+        }
+      }
+    } catch {}
+
+    await new Promise<void>((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const p = await reverseGeocode({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+          await loadAllForPlace(p);
+          setGeoMessage('Precise GPS location set.');
+          resolve();
+        },
+        async (err) => {
+          const ok = await ipFallback(err?.message || "Couldn't get GPS.");
+          if (!ok) {
+            setGeoMessage((err?.message || "Couldn't get GPS.") + ' Using Wheaton, IL.');
+            const fallback = await geocodeOne('Wheaton, Illinois');
+            await loadAllForPlace(fallback);
+          }
+          resolve();
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 120_000 }
+      );
+    });
+  };
+
+  // Public helper to force approximate IP location (visible button)
+  const useApproxLocation = async () => {
+    try {
+      setLoading(true);
+      setGeoMessage('Finding approximate location…');
+      const r = await fetch('https://ipapi.co/json/');
+      const j = await r.json();
+      if (j && j.latitude && j.longitude) {
+        const p = await reverseGeocode({ latitude: j.latitude, longitude: j.longitude });
+        await loadAllForPlace(p);
+        setGeoMessage('Approximate location set from IP.');
+      } else {
+        setGeoMessage('Could not determine location from IP.');
+      }
+    } catch (e) {
+      setGeoMessage('Could not determine location from IP.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const pinCurrentCity = () => {
+    if (place && typeof window !== 'undefined') {
+      localStorage.setItem('wx:lastPlace', JSON.stringify(place));
+      setGeoMessage(`${place.name} pinned as your default.`);
+    }
+  };
+
+    if (typeof window !== 'undefined' && !window.isSecureContext && !isLocalhost) {
+      const ok = await ipFallback('Browser blocked GPS (needs HTTPS).');
+      if (!ok) {
+        setGeoMessage('Location needs HTTPS. Open this site over https:// or run on localhost. Falling back to Wheaton, IL.');
+        const fallback = await geocodeOne('Wheaton, Illinois');
+        await loadAllForPlace(fallback);
+      }
+      return;
+    }
+
+    if (!('geolocation' in navigator)) {
+      const ok = await ipFallback("This browser doesn't support geolocation.");
+      if (!ok) {
+        const fallback = await geocodeOne('Wheaton, Illinois');
+        await loadAllForPlace(fallback);
+      }
+      return;
+    }
+
+    try {
+      // @ts-ignore
+      if (navigator.permissions?.query) {
+        // @ts-ignore
+        const perm = await navigator.permissions.query({ name: 'geolocation' });
+        if (perm.state === 'denied') {
+          const ok = await ipFallback('Location permission is blocked.');
+          if (!ok) setGeoMessage('Location blocked. Enable it in site settings or use search.');
+          return;
+        }
+      }
+    } catch {}
+
+    await new Promise<void>((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const p = await reverseGeocode({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+          await loadAllForPlace(p);
+          setGeoMessage('Precise GPS location set.');
+          resolve();
+        },
+        async (err) => {
+          const ok = await ipFallback(err?.message || "Couldn't get GPS.");
+          if (!ok) {
+            setGeoMessage((err?.message || "Couldn't get GPS.") + ' Using Wheaton, IL.');
+            const fallback = await geocodeOne('Wheaton, Illinois');
+            await loadAllForPlace(fallback);
+          }
+          resolve();
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 120_000 }
+      );
+    });
+  };
+
+  const onUseMyLocation = async () => {
+    try {
+      setLoading(true);
+      setGeoMessage('Requesting your current location…');
+      await tryGeoLocate();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ===== Derived data =====
   const tz = wx?.timezone || undefined;
   const fmtDate = (iso: string, opts: Intl.DateTimeFormatOptions = {}) =>
     new Intl.DateTimeFormat(undefined, { timeZone: tz, ...opts }).format(new Date(iso));
@@ -336,7 +516,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   const nowBlock = wx?.current;
   const currentTemp = nowBlock?.temperature_2m ?? undefined;
   const currentApparent = nowBlock?.apparent_temperature ?? undefined;
-  const currentWind = nowBlock?.wind_speed_10m ?? undefined;
+  const currentWind = nowBlock?.wind_speed_10m ?? undefined; // mph
   const currentHumidity = nowBlock?.relative_humidity_2m ?? undefined;
   const currentCode = nowBlock?.weathercode ?? 0;
 
@@ -363,10 +543,7 @@ const LiveWeatherAdvisor: React.FC = () => {
     let idx = 0;
     for (let i = 0; i < aq.hourly.time.length; i++) {
       const ts = new Date(aq.hourly.time[i]).getTime();
-      if (ts >= now) {
-        idx = i;
-        break;
-      }
+      if (ts >= now) { idx = i; break; }
     }
     return aq.hourly.pm2_5?.[idx];
   }, [aq]);
@@ -377,14 +554,12 @@ const LiveWeatherAdvisor: React.FC = () => {
     let idx = 0;
     for (let i = 0; i < aq.hourly.time.length; i++) {
       const ts = new Date(aq.hourly.time[i]).getTime();
-      if (ts >= now) {
-        idx = i;
-        break;
-      }
+      if (ts >= now) { idx = i; break; }
     }
     return aq.hourly.us_aqi?.[idx];
   }, [aq]);
 
+  // ===== UI helpers =====
   const showTemp = (c: number | undefined) => {
     if (typeof c !== "number" || Number.isNaN(c)) return "–";
     return unit === "F" ? `${Math.round(cToF(c))}°F` : `${Math.round(c)}°C`;
@@ -395,18 +570,17 @@ const LiveWeatherAdvisor: React.FC = () => {
     return speedUnit === "mph" ? `${Math.round(mph)} mph` : `${Math.round(mphToKmh(mph))} km/h`;
   };
 
-  /** Weather-aware tips + event checklist */
   const packingTips = useMemo(() => {
     const tips: string[] = [];
     if (typeof currentTemp === "number") {
       if (currentTemp <= -5) tips.push("Heavy parka, thermal base layers, insulated boots.");
       else if (currentTemp <= 5) tips.push("Winter coat, hat, gloves, warm socks.");
-      else if (currentTemp <= 15) tips.push("Light jacket/hoodie; jeans; closed shoes.");
-      else if (currentTemp <= 25) tips.push("T-shirt + light layers; breathable fabrics.");
+      else if (currentTemp <= 15) tips.push("Light jacket or hoodie; jeans; closed shoes.");
+      else if (currentTemp <= 25) tips.push("T‑shirt + light layers; breathable fabrics.");
       else tips.push("Tank/tee, shorts, hydrate often.");
     }
     if ((wx?.hourly?.precipitation_probability?.[0] ?? 0) >= 40) tips.push("Carry umbrella/rain shell.");
-    if ((currentWind ?? 0) >= 20) tips.push("Wind-resistant jacket; secure loose items.");
+    if ((currentWind ?? 0) >= 20) tips.push("Wind‑resistant jacket; secure loose items.");
     if ((wx?.daily?.uv_index_max?.[0] ?? 0) >= 6) tips.push("High UV: sunscreen, hat, sunglasses.");
     if ((aqiNow ?? 0) >= 101) tips.push("Air quality caution: limit strenuous outdoor activity.");
     return tips;
@@ -422,7 +596,7 @@ const LiveWeatherAdvisor: React.FC = () => {
           "Comfortable shoes (standing)",
           "Ear protection",
           "Clear bag policy? (check venue)",
-          "Cashless payment method"
+          "Cashless payment method",
         );
         break;
       case "Wedding":
@@ -430,47 +604,75 @@ const LiveWeatherAdvisor: React.FC = () => {
           "Gift/envelope and card",
           "Dress code outfit + comfortable backup shoes",
           "Itinerary/address + parking plan",
-          "Touch-up kit (mints, tissues)",
-          "Photos: phone storage freed up"
+          "Touch‑up kit (mints, tissues)",
+          "Photos: phone storage freed up",
         );
         break;
       case "Festival":
         base.push(
           "Hydration pack/water bottle",
           "Sun protection (hat, sunscreen)",
-          "Cashless band/app set-up",
+          "Cashless band/app set‑up",
           "Portable battery",
-          "Small blanket/poncho"
+          "Small blanket/poncho",
         );
         break;
       case "Sports game":
-        base.push("Tickets + team colors/jersey", "Stadium bag policy compliance", "Layered clothing (temp swings)", "Portable battery");
+        base.push(
+          "Tickets + team colors/jersey",
+          "Stadium bag policy compliance",
+          "Layered clothing (temp swings)",
+          "Portable battery",
+        );
         break;
       case "Beach day":
-        base.push("Swimwear, towel, flip-flops", "Reef-safe sunscreen", "Shade (umbrella/hat)", "Cooler with water/snacks");
+        base.push(
+          "Swimwear, towel, flip‑flops",
+          "Reef‑safe sunscreen",
+          "Shade (umbrella/hat)",
+          "Cooler with water/snacks",
+        );
         break;
       case "Hike":
-        base.push("Proper footwear + socks", "Water (0.5–1L per hour)", "Trail map/offline nav", "First-aid + blister kit", "Snacks/electrolytes");
+        base.push(
+          "Proper footwear + socks",
+          "Water (0.5–1L per hour)",
+          "Trail map/offline nav",
+          "First‑aid + blister kit",
+          "Snacks/electrolytes",
+        );
         break;
       case "Business trip":
-        base.push("Laptop + charger + hotspot", "IDs, wallet, travel docs", "Agenda + meeting addresses", "Backup outfit/shoes");
+        base.push(
+          "Laptop + charger + hotspot",
+          "IDs, wallet, travel docs",
+          "Agenda + meeting addresses",
+          "Backup outfit/shoes",
+        );
         break;
       case "Night out":
-        base.push("ID + payment", "Charged phone + ride plan", "Comfortable shoes", "Jacket/layers (late night temps)");
+        base.push(
+          "ID + payment",
+          "Charged phone + ride plan",
+          "Comfortable shoes",
+          "Jacket/layers (late night temps)",
+        );
         break;
       default:
         return base;
     }
+
     // Weather-aware tweaks
     if ((wx?.hourly?.precipitation_probability?.[0] ?? 0) >= 40) base.push("Rain layer/poncho");
     if ((wx?.daily?.uv_index_max?.[0] ?? 0) >= 6) base.push("Extra sunscreen");
     if ((currentWind ?? 0) >= 20) base.push("Windbreaker");
     if (typeof currentTemp === "number" && currentTemp < 5) base.push("Warm layers/beanie");
     if (typeof currentTemp === "number" && currentTemp > 28) base.push("Extra water/electrolytes");
+
     return Array.from(new Set(base));
   }, [eventType, wx?.hourly?.precipitation_probability, wx?.daily?.uv_index_max, currentWind, currentTemp]);
 
-  /** Simple temp sparkline (inline SVG) */
+  // ===== Sparkline =====
   const TempSparkline: React.FC<{ values: number[] }> = ({ values }) => {
     if (!values.length) return null;
     const width = 320;
@@ -479,7 +681,7 @@ const LiveWeatherAdvisor: React.FC = () => {
     const max = Math.max(...values);
     const pad = 6;
     const pts = values.map((v, i) => {
-      const x = (i / Math.max(1, values.length - 1)) * (width - pad * 2) + pad;
+      const x = (i / (values.length - 1)) * (width - pad * 2) + pad;
       const y = height - pad - ((v - min) / Math.max(1, max - min)) * (height - pad * 2);
       return `${x},${y}`;
     });
@@ -490,7 +692,7 @@ const LiveWeatherAdvisor: React.FC = () => {
     );
   };
 
-  /** UI */
+  // ===== UI =====
   return (
     <div className="max-w-7xl mx-auto p-6 md:p-8 bg-gradient-to-b from-sky-100 to-sky-300 min-h-screen text-gray-900">
       {/* Header */}
@@ -501,59 +703,111 @@ const LiveWeatherAdvisor: React.FC = () => {
           </h1>
           {wx?.daily?.sunrise?.[0] && wx?.daily?.sunset?.[0] && (
             <p className="text-sky-900 mt-1 font-medium">
-              <span className="inline-flex items-center gap-1 mr-3">
-                <Icon.Sun /> {fmtDate(wx.daily.sunrise[0], { hour: "numeric", minute: "2-digit" })}
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <Icon.Moon /> {fmtDate(wx.daily.sunset[0], { hour: "numeric", minute: "2-digit" })}
-              </span>
+              <span className="inline-flex items-center gap-1 mr-3"><Icon.Sun /> {fmtDate(wx.daily.sunrise[0], { hour: "numeric", minute: "2-digit" })}</span>
+              <span className="inline-flex items-center gap-1"><Icon.Moon /> {fmtDate(wx.daily.sunset[0], { hour: "numeric", minute: "2-digit" })}</span>
             </p>
           )}
         </div>
 
-        {/* Controls (search, pin, toggles) */}
-        <HeaderControls
-          query={query}
-          setQuery={setQuery}
-          suggestions={suggestions}
-          onChoose={(p) => {
-            setQuery("");
-            setSuggestions([]);
-            loadAllForPlace(p);
-          }}
-          suggestBoxRef={suggestBoxRef}
-          unit={unit}
-          setUnit={(u) => {
-            setUnit(u);
-            if (typeof window !== "undefined") localStorage.setItem("wx:unit", u);
-          }}
-          speedUnit={speedUnit}
-          setSpeedUnit={(s) => {
-            setSpeedUnit(s);
-            if (typeof window !== "undefined") localStorage.setItem("wx:speed", s);
-          }}
-          pinCurrentCity={() => {
-            if (place && typeof window !== "undefined") {
-              localStorage.setItem("wx:lastPlace", JSON.stringify(place));
-              alert(`${place.name} pinned as your default.`);
-            }
-          }}
-        />
+        {/* Controls */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative" ref={suggestBoxRef}>
+            <div className="flex items-center border border-gray-400 rounded-xl bg-white shadow overflow-hidden">
+              <span className="mx-2 text-gray-700"><Icon.SearchIcon /></span>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search city, state, or country"
+                className="px-2 py-2 w-64 md:w-80 outline-none text-gray-900 placeholder-gray-500"
+              />
+              {query && (
+                <button
+                  className="px-3 text-sm text-gray-700 hover:text-gray-900"
+                  onClick={() => setQuery("")}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+
+            {suggestions.length > 0 && (
+              <div className="absolute z-20 mt-2 w-full bg-white rounded-xl shadow-xl border border-gray-300 overflow-hidden text-gray-900">
+                {suggestions.map((s, i) => (
+                  <button
+                    key={`${s.latitude}-${s.longitude}-${i}`}
+                    onClick={() => { setQuery(""); setSuggestions([]); loadAllForPlace(s); }}
+                    className="w-full text-left px-3 py-2 hover:bg-sky-100 flex items-center gap-2"
+                  >
+                    <span className="text-sky-700"><Icon.MapPin /></span>
+                    <span>{s.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Location controls */}
+          { (typeof window !== 'undefined' && (window.isSecureContext || ['localhost','127.0.0.1','0.0.0.0'].includes(location.hostname))) ? (
+            <button
+              onClick={onUseMyLocation}
+              title="Use precise GPS (HTTPS or localhost required)"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-sky-700 text-white hover:bg-sky-800 shadow"
+            >
+              <Icon.Locate /> Use my location (GPS)
+            </button>
+          ) : (
+            <button
+              onClick={useApproxLocation}
+              title="Browser blocks GPS on HTTP. Use approximate location from IP instead."
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-sky-700 text-white hover:bg-sky-800 shadow"
+            >
+              <Icon.Locate /> Use approximate location
+            </button>
+          )}
+
+          {/* Optional: always offer approximate fallback */}
+          <button
+            onClick={useApproxLocation}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700 shadow"
+          >
+            ≈ Nearby (IP)
+          </button>
+
+          <button
+            onClick={() => { const next = unit === 'C' ? 'F' : 'C'; setUnit(next as any); if (typeof window !== 'undefined') localStorage.setItem('wx:unit', next); }}
+            className="px-3 py-2 rounded-xl bg-gray-100 border border-gray-400 shadow hover:bg-gray-200 text-gray-900"
+          >
+            Switch to °{unit === "C" ? "F" : "C"}
+          </button>
+          <button
+            onClick={() => { const next = speedUnit === 'mph' ? 'km/h' : 'mph'; setSpeedUnit(next as any); if (typeof window !== 'undefined') localStorage.setItem('wx:speed', next); }}
+            className="px-3 py-2 rounded-xl bg-gray-100 border border-gray-400 shadow hover:bg-gray-200 text-gray-900"
+          >
+            Wind: {speedUnit === "mph" ? "mph" : "km/h"}
+          </button>
+          <button
+            onClick={pinCurrentCity}
+            className="px-3 py-2 rounded-xl bg-white border border-gray-400 shadow hover:bg-gray-50 text-gray-900"
+          >
+            Pin this city
+          </button>
+        </div>
       </div>
 
-      {/* Info / Error */}
-      {infoMessage && (
+      {/* Geolocation hint */}
+      {geoMessage && (
         <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-2 rounded-xl">
-          {infoMessage}
+          {geoMessage}
         </div>
       )}
-      {loading && <div className="mt-8 text-center text-gray-800 animate-pulse">Loading weather data…</div>}
+
+      {/* Status */}
+      {loading && (
+        <div className="mt-8 text-center text-gray-800 animate-pulse">Loading weather data…</div>
+      )}
       {error && (
         <div className="mt-6 bg-rose-50 text-rose-800 border border-rose-200 px-4 py-3 rounded-xl flex items-center gap-2">
-          <span>
-            <Icon.Alert />
-          </span>
-          {error}
+          <span><Icon.AlertTriangle /></span> {error}
         </div>
       )}
 
@@ -564,38 +818,23 @@ const LiveWeatherAdvisor: React.FC = () => {
           <div className="bg-white text-gray-900 rounded-2xl shadow p-4 md:col-span-1 border border-gray-200">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-sky-900">Now</h2>
-              <div className="text-3xl" title={WMO_DESC[currentCode] || ""}>
-                {wmoToIcon(currentCode)}
-              </div>
+              <div className="text-3xl" title={WMO_DESC[currentCode] || ""}>{wmoToIcon(currentCode)}</div>
             </div>
             <div className="mt-2 grid grid-cols-2 gap-2 text-gray-900">
-              <div className="flex items-center gap-2">
-                <Icon.Thermo /> <span className="font-medium">{showTemp(currentTemp)}</span>
-              </div>
+              <div className="flex items-center gap-2"><Icon.Thermometer /> <span className="font-medium">{showTemp(currentTemp)}</span></div>
               {typeof currentApparent === "number" && (
-                <div className="flex items-center gap-2">
-                  <Icon.Gauge /> Feels {showTemp(currentApparent)}
-                </div>
+                <div className="flex items-center gap-2"><Icon.Gauge /> Feels {showTemp(currentApparent)}</div>
               )}
-              <div className="flex items-center gap-2">
-                <Icon.Wind /> {showSpeed(currentWind)}
-              </div>
+              <div className="flex items-center gap-2"><Icon.Wind /> {showSpeed(currentWind)}</div>
               {typeof currentHumidity === "number" && (
-                <div className="flex items-center gap-2">
-                  <Icon.Drop /> {Math.round(currentHumidity)}%
-                </div>
+                <div className="flex items-center gap-2"><Icon.Droplets /> {Math.round(currentHumidity)}%</div>
               )}
               {typeof aqiNow === "number" && (
-                <div className="col-span-2 text-sm mt-1">
-                  AQI: <span className="font-medium">{Math.round(aqiNow)}</span>
-                  {typeof pm25Now === "number" ? ` · PM2.5 ${Math.round(pm25Now)} µg/m³` : ""}
-                </div>
+                <div className="col-span-2 text-sm mt-1">AQI: <span className="font-medium">{Math.round(aqiNow)}</span>{typeof pm25Now === "number" ? ` · PM2.5 ${Math.round(pm25Now)} µg/m³` : ""}</div>
               )}
             </div>
             {wx.daily?.precipitation_probability_max?.[0] != null && (
-              <p className="mt-2 text-sm text-gray-700">
-                Chance of precip today: {wx.daily.precipitation_probability_max[0]}%
-              </p>
+              <p className="mt-2 text-sm text-gray-700">Chance of precip today: {wx.daily.precipitation_probability_max[0]}%</p>
             )}
           </div>
 
@@ -611,9 +850,7 @@ const LiveWeatherAdvisor: React.FC = () => {
 
           {/* Alerts */}
           <div className="bg-white text-gray-900 rounded-2xl shadow p-4 border border-gray-200">
-            <h2 className="text-lg font-semibold text-sky-900 flex items-center gap-2">
-              <Icon.Alert /> Weather Alerts
-            </h2>
+            <h2 className="text-lg font-semibold text-sky-900 flex items-center gap-2"><Icon.AlertTriangle /> Weather Alerts</h2>
             {alerts.length === 0 ? (
               <p className="mt-2 text-sm text-gray-700">No active alerts for this area.</p>
             ) : (
@@ -621,10 +858,7 @@ const LiveWeatherAdvisor: React.FC = () => {
                 {alerts.map((a, i) => (
                   <div key={i} className="border border-amber-200 bg-amber-50 rounded-xl p-2">
                     <p className="font-medium text-amber-900">{a.headline}</p>
-                    <p className="text-amber-900/80 text-sm whitespace-pre-wrap">
-                      {a.description?.slice(0, 280)}
-                      {a.description && a.description.length > 280 ? "…" : ""}
-                    </p>
+                    <p className="text-amber-900/80 text-sm whitespace-pre-wrap">{a.description?.slice(0, 280)}{a.description && a.description.length > 280 ? "…" : ""}</p>
                   </div>
                 ))}
               </div>
@@ -644,9 +878,7 @@ const LiveWeatherAdvisor: React.FC = () => {
                     <div className="text-xs text-gray-600">{fmtDate(h.t, { hour: "numeric" })}</div>
                     <div className="font-medium">{showTemp(h.temp)}</div>
                     {typeof h.pop === "number" && (
-                      <div className="text-xs inline-flex items-center gap-1 text-sky-800">
-                        <Icon.Rain /> {h.pop}%
-                      </div>
+                      <div className="text-xs inline-flex items-center gap-1 text-sky-800"><Icon.CloudRain /> {h.pop}%</div>
                     )}
                   </div>
                 ))}
@@ -654,16 +886,14 @@ const LiveWeatherAdvisor: React.FC = () => {
             </div>
           </div>
 
-          {/* 5-day forecast */}
+          {/* 5‑day forecast */}
           {wx.daily?.time && (
             <div className="bg-white text-gray-900 rounded-2xl shadow p-4 xl:col-span-1 border border-gray-200">
-              <h2 className="text-lg font-semibold text-sky-900">5-Day Forecast</h2>
+              <h2 className="text-lg font-semibold text-sky-900">5‑Day Forecast</h2>
               <div className="mt-2 divide-y divide-gray-200">
                 {wx.daily.time.slice(0, 5).map((d, i) => (
                   <div key={d} className="py-2 flex items-center justify-between">
-                    <div className="w-28 text-gray-800">
-                      {fmtDate(d, { weekday: "short", month: "short", day: "numeric" })}
-                    </div>
+                    <div className="w-28 text-gray-800">{fmtDate(d, { weekday: "short", month: "short", day: "numeric" })}</div>
                     <div className="text-lg" title={WMO_DESC[wx.daily?.weathercode?.[i] ?? 0] || ""}>
                       {wmoToIcon(wx.daily?.weathercode?.[i] ?? 0)}
                     </div>
@@ -683,36 +913,29 @@ const LiveWeatherAdvisor: React.FC = () => {
               <div className="md:col-span-2">
                 <h2 className="text-lg font-semibold text-sky-900 flex items-center gap-2">
                   Plan & Pack Assistant
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">
-                    new
-                  </span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-200">new</span>
                 </h2>
-                <p className="text-sm text-gray-700">
-                  Pick an event. We tailor a checklist using the current forecast for {place?.name || "your area"}.
-                </p>
+                <p className="text-sm text-gray-700">Pick an event. We tailor a checklist using the current forecast for {place?.name || 'your area'}.</p>
               </div>
               <div className="md:justify-self-end">
                 <label className="text-sm block text-gray-800 mb-1">Event type</label>
                 <select
                   aria-label="Select event type to customize checklist"
                   value={eventType}
-                  onChange={(e) => setEventType(e.target.value as EventType)}
+                  onChange={(e) => setEventType(e.target.value as any)}
                   className="px-3 py-2 rounded-xl bg-white border border-gray-400 shadow text-gray-900 w-full md:w-56"
                 >
                   {EVENT_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t === "None" ? "— Choose an event —" : t}
-                    </option>
+                    <option key={t} value={t}>{t === 'None' ? '— Choose an event —' : t}</option>
                   ))}
                 </select>
               </div>
             </div>
 
             <div className="mt-3">
-              {eventType === "None" ? (
+              {eventType === 'None' ? (
                 <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-sm text-gray-700">
-                  Select an event above to see a smart, weather-aware packing list here. Example items: tickets, layers
-                  for temp swings, rain shell if showers expected, sunscreen on high-UV days.
+                  Select an event above to see a smart, weather‑aware packing list here. Example items: tickets, layers for temp swings, rain shell if showers expected, sunscreen on high‑UV days.
                 </div>
               ) : (
                 <ul className="list-disc list-inside text-sm space-y-1">
@@ -729,98 +952,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   );
 };
 
-/** Header controls (no Approximate/GPS buttons) */
-function HeaderControls(props: {
-  query: string;
-  setQuery: (v: string) => void;
-  suggestions: Place[];
-  onChoose: (p: Place) => void;
-  suggestBoxRef: React.RefObject<HTMLDivElement>;
-  unit: "C" | "F";
-  setUnit: (u: "C" | "F") => void;
-  speedUnit: "mph" | "km/h";
-  setSpeedUnit: (s: "mph" | "km/h") => void;
-  pinCurrentCity: () => void;
-}) {
-  const {
-    query,
-    setQuery,
-    suggestions,
-    onChoose,
-    suggestBoxRef,
-    unit,
-    setUnit,
-    speedUnit,
-    setSpeedUnit,
-    pinCurrentCity,
-  } = props;
-
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      <div className="relative" ref={suggestBoxRef}>
-        <div className="flex items-center border border-gray-400 rounded-xl bg-white shadow overflow-hidden">
-          <span className="mx-2 text-gray-700">
-            <Icon.Search />
-          </span>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search city, state, or country"
-            className="px-2 py-2 w-64 md:w-80 outline-none text-gray-900 placeholder-gray-500"
-          />
-          {query && (
-            <button className="px-3 text-sm text-gray-700 hover:text-gray-900" onClick={() => setQuery("")}>
-              Clear
-            </button>
-          )}
-        </div>
-
-        {suggestions.length > 0 && (
-          <div className="absolute z-20 mt-2 w-full bg-white rounded-xl shadow-xl border border-gray-300 overflow-hidden text-gray-900">
-            {suggestions.map((s, i) => (
-              <button
-                key={`${s.latitude}-${s.longitude}-${i}`}
-                onClick={() => onChoose(s)}
-                className="w-full text-left px-3 py-2 hover:bg-sky-100 flex items-center gap-2"
-              >
-                <span className="text-sky-700">
-                  <Icon.MapPin />
-                </span>
-                <span>{s.name}</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <button
-        onClick={pinCurrentCity}
-        className="px-3 py-2 rounded-xl bg-white border border-gray-400 shadow hover:bg-gray-50 text-gray-900"
-      >
-        Pin this city
-      </button>
-
-      <button
-        onClick={() => setUnit(unit === "C" ? "F" : "C")}
-        className="px-3 py-2 rounded-xl bg-gray-100 border border-gray-400 shadow hover:bg-gray-200 text-gray-900"
-      >
-        Switch to °{unit === "C" ? "F" : "C"}
-      </button>
-      <button
-        onClick={() => setSpeedUnit(speedUnit === "mph" ? "km/h" : "mph")}
-        className="px-3 py-2 rounded-xl bg-gray-100 border border-gray-400 shadow hover:bg-gray-200 text-gray-900"
-      >
-        Wind: {speedUnit === "mph" ? "mph" : "km/h"}
-      </button>
-    </div>
-  );
-}
-
 export default LiveWeatherAdvisor;
-
-
-
-
 
 
 

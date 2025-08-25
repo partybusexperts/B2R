@@ -136,25 +136,15 @@ function useDebounced<T>(value: T, delay = 300) {
 // Tiny emoji “icons” to avoid external deps
 const Icon = {
   MapPin: () => <span className="inline-block align-[-2px]">📍</span>,
-  Search:  () => <span className="inline-block align-[-2px]">🔍</span>,
-  Thermo:  () => <span className="inline-block align-[-2px]">🌡️</span>,
-  Wind:    () => <span className="inline-block align-[-2px]">💨</span>,
-  Drop:    () => <span className="inline-block align-[-2px]">💧</span>,
-  Sun:     () => <span className="inline-block align-[-2px]">🌅</span>,
-  Moon:    () => <span className="inline-block align-[-2px]">🌙</span>,
-  Rain:    () => <span className="inline-block align-[-2px]">🌧️</span>,
-  Alert:   () => <span className="inline-block align-[-2px]">⚠️</span>,
-  Gauge:   () => <span className="inline-block align-[-2px]">📏</span>,
-};
-
-/** ----------------------------------------------------------------
- * Defaults (no approximate location)
- * ---------------------------------------------------------------- */
-const DEFAULT_PLACE: Place = {
-  name: "Wheaton, Illinois",
-  latitude: 41.8661,
-  longitude: -88.1070,
-  country_code: "US",
+  Search: () => <span className="inline-block align-[-2px]">🔍</span>,
+  Thermo: () => <span className="inline-block align-[-2px]">🌡️</span>,
+  Wind: () => <span className="inline-block align-[-2px]">💨</span>,
+  Drop: () => <span className="inline-block align-[-2px]">💧</span>,
+  Sun: () => <span className="inline-block align-[-2px]">🌅</span>,
+  Moon: () => <span className="inline-block align-[-2px]">🌙</span>,
+  Rain: () => <span className="inline-block align-[-2px]">🌧️</span>,
+  Alert: () => <span className="inline-block align-[-2px]">⚠️</span>,
+  Gauge: () => <span className="inline-block align-[-2px]">📏</span>,
 };
 
 /** ----------------------------------------------------------------
@@ -176,7 +166,6 @@ const LiveWeatherAdvisor: React.FC = () => {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
-  const [infoMessage, setInfoMessage] = useState<string>("");
 
   const debouncedQuery = useDebounced(query, 300);
   const suggestBoxRef = useRef<HTMLDivElement>(null);
@@ -196,7 +185,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   type EventType = typeof EVENT_TYPES[number];
   const [eventType, setEventType] = useState<EventType>("None");
 
-  /** Boot: use pinned city if present, else load Wheaton, IL (no IP/GPS) */
+  /** Boot: use pinned city if present, else default to Wheaton, IL (no IP/GPS) */
   useEffect(() => {
     const boot = async () => {
       try {
@@ -205,12 +194,11 @@ const LiveWeatherAdvisor: React.FC = () => {
         if (saved) {
           const p: Place = JSON.parse(saved);
           await loadAllForPlace(p);
-          setInfoMessage(`Loaded your pinned city: ${p.name}`);
           return;
         }
-        await loadAllForPlace(DEFAULT_PLACE);
-        setInfoMessage("Defaulting to Wheaton, IL. Search to change, then pin it.");
-        if (typeof window !== "undefined") localStorage.setItem("wx:lastPlace", JSON.stringify(DEFAULT_PLACE));
+        // Default city on first load
+        const fallback = await geocodeOne("Wheaton, Illinois");
+        await loadAllForPlace(fallback);
       } catch {
         setError("Unable to load initial city.");
       } finally {
@@ -262,6 +250,51 @@ const LiveWeatherAdvisor: React.FC = () => {
   }, []);
 
   /** Fetchers */
+  const geocodeOne = async (name: string): Promise<Place> => {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+      name
+    )}&count=1&language=en&format=json`;
+    const j = await fetchJson(url);
+    if (!j.results || !j.results.length) throw new Error("City not found");
+    const p = j.results[0];
+    return {
+      name: [p.name, p.admin1, p.country].filter(Boolean).join(", "),
+      latitude: p.latitude,
+      longitude: p.longitude,
+      country: p.country,
+      admin1: p.admin1,
+      country_code: p.country_code,
+      timezone: p.timezone,
+    } as Place;
+  };
+
+  const reverseGeocode = async ({
+    latitude,
+    longitude,
+  }: {
+    latitude: number;
+    longitude: number;
+  }): Promise<Place> => {
+    const url = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${latitude}&longitude=${longitude}&language=en&format=json`;
+    const j = await fetchJson(url);
+    const p = j.results?.[0];
+    if (!p)
+      return {
+        name: `Lat ${latitude.toFixed(2)}, Lon ${longitude.toFixed(2)}`,
+        latitude,
+        longitude,
+      } as Place;
+    return {
+      name: [p.name, p.admin1, p.country].filter(Boolean).join(", "),
+      latitude: p.latitude,
+      longitude: p.longitude,
+      country: p.country,
+      admin1: p.admin1,
+      country_code: p.country_code,
+      timezone: p.timezone,
+    } as Place;
+  };
+
   const fetchForecast = async (p: Place): Promise<WeatherApiResponse> => {
     const params = new URLSearchParams({
       latitude: String(p.latitude),
@@ -295,8 +328,7 @@ const LiveWeatherAdvisor: React.FC = () => {
   };
 
   const fetchNwsAlerts = async (p: Place): Promise<AlertItem[]> => {
-    // Only attempt NWS if US or unknown (we'll allow unknown to try)
-    if (p.country_code && p.country_code !== "US") return [];
+    if (p.country_code !== "US") return [];
     try {
       const j = await fetchJson(`https://api.weather.gov/alerts/active?point=${p.latitude},${p.longitude}`);
       const items: AlertItem[] = (j.features || []).slice(0, 5).map((f: any) => ({
@@ -541,12 +573,7 @@ const LiveWeatherAdvisor: React.FC = () => {
         />
       </div>
 
-      {/* Info / Error */}
-      {infoMessage && (
-        <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-2 rounded-xl">
-          {infoMessage}
-        </div>
-      )}
+      {/* Status */}
       {loading && <div className="mt-8 text-center text-gray-800 animate-pulse">Loading weather data…</div>}
       {error && (
         <div className="mt-6 bg-rose-50 text-rose-800 border border-rose-200 px-4 py-3 rounded-xl flex items-center gap-2">
@@ -817,7 +844,6 @@ function HeaderControls(props: {
 }
 
 export default LiveWeatherAdvisor;
-
 
 
 
