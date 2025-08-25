@@ -158,7 +158,7 @@ function InfoBanner({
   );
 }
 
-export default function IndustrySecretsPage() {
+export default function IndustrySecretsPage(): JSX.Element {
   const [openId, setOpenId] = React.useState<string | null>(null);
   const [q, setQ] = React.useState<string>("");
 
