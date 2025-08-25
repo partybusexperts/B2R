@@ -1,25 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-type Feature = { text: string; id: string };
-
-const features: Feature[] = [
-  { text: "Experienced Reservation Team", id: "reservation-team" },
-  { text: "Easy Online Quotes & Booking (All-Inclusive)", id: "all-in-quotes" },
-  { text: "Wide Selection of Newer Vehicles", id: "newer-vehicle-selection" },
-  { text: "Flexible Scheduling", id: "flexible-scheduling" },
+const features = [
+  { text: "Experienced, friendly reservation team", id: "reservation-team" },
+  { text: "Easy online quotes & booking", id: "online-quotes" },
+  { text: "Huge selection of vehicles for any group size", id: "vehicle-selection" },
+  { text: "1,000,000+ passengers served nationwide", id: "passengers-served" },
+  { text: "365-day customer support", id: "customer-support" },
 ];
 
 const featureContent: Record<string, string> = {
   "reservation-team":
-    "Talk with specialists who book group transportation every day. We’ll match the vehicle and timing to your plan and flag overtime risks. Clear answers fast—no pushy sales.",
-  "all-in-quotes":
-    "You get one total that already includes gratuity, taxes, fuel/admin fees, and typical tolls. We send it in writing for easy apples-to-apples comparison. No hidden line items.",
-  "newer-vehicle-selection":
-    "Late-model limos, sprinters, party buses, and coaches. Quieter rides, stronger A/C, brighter lighting, and better sound. Tell us your vibe and headcount—we’ll recommend the best fit.",
-  "flexible-scheduling":
-    "Choose exact pickup windows, split transfers, or standby returns. Off-peak times (Sun–Thu/daytime) can unlock lower minimums and better selection. We’ll build a schedule that avoids overtime rounding.",
+    "Friendly pros who know group travel. We’ll recommend the right vehicle, timing, and route so your trip is smooth from quote to drop-off.",
+  "online-quotes":
+    "Get instant, transparent pricing online. Customize pickups, stops, and amenities, then book in a few clicks—no hidden fees.",
+  "vehicle-selection":
+    "From limos and party buses to 56-passenger coaches. Clean, inspected, and matched to your headcount, itinerary, and vibe.",
+  "passengers-served":
+    "We’ve moved 1,000,000+ riders nationwide. That experience shows up in on-time pickups and stress-free events.",
+  "customer-support":
+    "Need help before or day-of? We’re available year-round for changes, special requests, and live support when it matters.",
 };
 
 export default function WhyRentWithUs() {
@@ -27,6 +28,16 @@ export default function WhyRentWithUs() {
 
   const handleOpen = (id: string) => setOpenId(id);
   const handleClose = () => setOpenId(null);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!openId) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [openId]);
 
   return (
     <>
@@ -60,10 +71,11 @@ export default function WhyRentWithUs() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           role="dialog"
           aria-modal="true"
+          aria-labelledby="why-modal-title"
           onClick={handleClose}
         >
           <div
-            className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-7 relative"
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-[92%] p-6 relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -73,14 +85,11 @@ export default function WhyRentWithUs() {
             >
               ×
             </button>
-            <h3 className="text-2xl font-bold mb-3 text-blue-900">
+            <h3 id="why-modal-title" className="text-2xl font-bold mb-3 text-blue-900">
               {features.find((f) => f.id === openId)?.text}
             </h3>
-            <div
-              className="text-blue-900/90 text-base leading-relaxed"
-              style={{ maxHeight: 280, overflowY: "auto" }}
-            >
-              {featureContent[openId]}
+            <div className="text-blue-900/90 text-base leading-relaxed">
+              {openId ? featureContent[openId] : ""}
             </div>
           </div>
         </div>
