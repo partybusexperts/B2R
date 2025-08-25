@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import PageLayout from "../../components/PageLayout";
 import Section from "../../components/Section";
+import { locations as masterLocations } from "./locationData";
 
 /* ----------------------------- DATA: States/Cities ----------------------------- */
 const locations = [

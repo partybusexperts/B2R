@@ -1,11 +1,14 @@
+
+
 "use client";
+
 
 import React, { useState } from "react";
 import Link from "next/link";
 import PageLayout from "../../components/PageLayout";
 import Section from "../../components/Section";
 
-/* ----------------------------- DATA: States/Cities ----------------------------- */
+// All states and cities as a data structure
 const locations = [
   { state: 'Alaska', cities: ['Anchorage'] },
   { state: 'Alabama', cities: ['Auburn','Birmingham','Decatur','Dothan','Hoover','Huntsville','Madison','Mobile','Montgomery','Tuscaloosa'] },
@@ -59,153 +62,109 @@ const locations = [
   { state: 'Wyoming', cities: ['Casper','Cheyenne'] },
 ];
 
-/* --------------------------------- COMPONENT -------------------------------- */
+
+
 export default function LocationsPage() {
   const [search, setSearch] = useState("");
 
+  // Filter logic: show states/cities matching search
   const filtered = locations
     .map(({ state, cities }) => {
       if (!search.trim()) return { state, cities };
       if (state.toLowerCase().includes(search.toLowerCase())) return { state, cities };
-      const matchedCities = cities.filter((city) =>
-        city.toLowerCase().includes(search.toLowerCase())
-      );
+      const matchedCities = cities.filter((city) => city.toLowerCase().includes(search.toLowerCase()));
       return matchedCities.length > 0 ? { state, cities: matchedCities } : null;
     })
-    .filter(Boolean) as { state: string; cities: string[] }[];
+    .filter(Boolean);
 
   return (
-    <PageLayout
-      gradientFrom="from-blue-950"
-      gradientVia="via-blue-900"
-      gradientTo="to-black"
-      textColor="text-white"
-    >
-      {/* ---------- HERO (matches other pages) ---------- */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
+    <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
+      {/* Hero Section */}
+      <Section className="flex flex-col items-center justify-center text-center !p-0 !py-0 relative overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
+        <div className="pt-16" />
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
           Find Your City
         </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
+        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-12 text-blue-100 font-medium">
           We serve cities and towns across the U.S. Use the search or browse below to find service in your area.
         </p>
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a
-            href="/quote"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-white/95 text-blue-900 hover:bg-white border-blue-200"
-          >
-            ⚡ Get Instant Quote
-          </a>
-          <a
-            href="/fleet"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-blue-700"
-          >
-            🚌 View Fleet
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-800 text-white hover:bg-blue-900 border-blue-900"
-          >
-            ✉️ Contact Us
-          </a>
-        </div>
-
-        {/* Decorative wave divider to match rest of site */}
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path
-              d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
-              fill="#122a56"
-              opacity="1"
-            />
-          </svg>
-        </div>
-      </section>
-
-      {/* ---------- SEARCH BAR ---------- */}
-      <Section className="max-w-2xl mx-auto -mt-2">
-        <div className="bg-[#122a56] border border-blue-800/30 rounded-3xl shadow-xl px-6 py-8">
-          <label htmlFor="location-search" className="sr-only">
-            Search for your city or state
-          </label>
-          <input
-            id="location-search"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search for your city or state…"
-            className="w-full rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            autoComplete="off"
-          />
-        </div>
+        <div className="pb-10" />
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-900/10 blur-2xl opacity-60" />
       </Section>
 
-      {/* ---------- STATE QUICK LINKS (only when no search) ---------- */}
+      {/* Search Bar Section */}
+      <Section className="max-w-2xl mx-auto flex flex-col items-center justify-center bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-12 py-10">
+        <label htmlFor="location-search" className="sr-only">Search for your city or state</label>
+        <input
+          id="location-search"
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search for your city or state..."
+          className="w-full max-w-md px-6 py-4 rounded-full border-2 border-blue-400 bg-blue-950/80 text-lg text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-xl placeholder:text-blue-400 font-sans"
+          autoComplete="off"
+        />
+      </Section>
+
+      {/* State Quick Links */}
       {!search.trim() && (
-        <Section className="max-w-6xl mx-auto">
-          <div className="bg-[#122a56] border border-blue-800/30 rounded-3xl shadow-xl px-5 md:px-8 py-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-center text-white font-serif tracking-tight mb-6">
-              Quick State Links
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {locations.map(({ state }) => {
-                const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-                return (
-                  <Link
-                    key={state}
-                    href={`/locations/${slug}`}
-                    className={
-                      state === "Alaska"
-                        ? "block text-white font-bold bg-blue-600/90 border border-blue-300/40 rounded-xl px-4 py-3 text-center hover:bg-blue-700 transition shadow"
-                        : "block text-blue-100 font-semibold bg-[#12244e] border border-blue-800/30 rounded-xl px-4 py-3 text-center hover:bg-[#143061] transition shadow"
-                    }
-                  >
-                    {state}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
+        <Section className="max-w-6xl mx-auto mb-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl py-10">
+          {locations.map(({ state }) => (
+            <Link
+              key={state}
+              href={state === "Alaska" ? "#alaska" : "#"}
+              className={
+                state === "Alaska"
+                  ? "block text-blue-100 font-bold bg-blue-700/80 border-2 border-blue-400 rounded-xl px-4 py-3 text-center hover:bg-blue-800 transition text-lg shadow"
+                  : "block text-blue-200 font-semibold bg-blue-950/70 rounded-xl px-4 py-3 text-center hover:bg-blue-900 transition text-lg shadow"
+              }
+            >
+              {state}
+            </Link>
+          ))}
         </Section>
       )}
 
-      {/* ---------- STATES & CITIES LIST ---------- */}
-      <Section className="max-w-6xl mx-auto">
-        <div className="bg-[#122a56] border border-blue-800/30 rounded-3xl shadow-xl px-5 md:px-8 py-10">
-          {filtered.length === 0 ? (
-            <div className="text-center text-blue-200 text-xl py-10">
-              No locations found.
-            </div>
-          ) : (
-            filtered.map(({ state, cities }) => {
-              const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-              return (
-              <div key={state} className="mb-10">
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white font-serif tracking-tight mb-4">
-                  <Link href={`/locations/${slug}`} className="underline decoration-blue-300/60 underline-offset-4">
-                    {state}
-                  </Link>
-                </h3>
-
-                {cities.length > 0 ? (
-                  <ul className="flex flex-wrap gap-3">
-                    {cities.map((city) => (
-                      <li key={city}>
-                        <span className="inline-block text-blue-100 bg-[#12244e] border border-blue-800/30 rounded-full px-4 py-2 shadow">
+      {/* State and City Lists */}
+      <Section className="max-w-6xl mx-auto space-y-10 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl py-10">
+        {filtered.length === 0 ? (
+          <div className="text-center text-blue-300 text-xl py-10">No locations found.</div>
+        ) : (
+          filtered.map(({ state, cities }) => (
+            <div key={state} id={state === "Alaska" ? "alaska" : undefined}>
+              <h2 className="text-3xl font-bold mb-3 text-blue-200 font-serif tracking-tight">
+                {state === "Alaska" ? (
+                  <Link href="#alaska" className="text-blue-300 underline font-bold">{state}</Link>
+                ) : (
+                  <Link href="#" className="text-blue-200 hover:underline">{state}</Link>
+                )}
+              </h2>
+              {cities.length > 0 ? (
+                <ul className="flex flex-wrap gap-3">
+                  {cities.map((city) => (
+                    <li key={city}>
+                      {state === "Alaska" && city === "Anchorage" ? (
+                        <Link
+                          href="/locations/anchorage-alaska"
+                          className="inline-block text-white bg-blue-700 border-2 border-blue-400 rounded-full px-4 py-2 hover:bg-blue-800 hover:text-white transition font-bold shadow"
+                        >
+                          {city}
+                        </Link>
+                      ) : (
+                        <span className="inline-block text-blue-100 bg-blue-950/70 rounded-full px-4 py-2 border border-blue-700/20 shadow">
                           {city}
                         </span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-blue-200/80 italic">Coming soon</p>
-                )}
-              </div>
-            );})
-          )}
-        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-blue-400 italic">Coming soon</p>
+              )}
+            </div>
+          ))
+        )}
       </Section>
     </PageLayout>
   );

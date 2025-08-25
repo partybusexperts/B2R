@@ -150,22 +150,19 @@ export default function LocationsPage() {
               Quick State Links
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {locations.map(({ state }) => {
-                const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-                return (
-                  <Link
-                    key={state}
-                    href={`/locations/${slug}`}
-                    className={
-                      state === "Alaska"
-                        ? "block text-white font-bold bg-blue-600/90 border border-blue-300/40 rounded-xl px-4 py-3 text-center hover:bg-blue-700 transition shadow"
-                        : "block text-blue-100 font-semibold bg-[#12244e] border border-blue-800/30 rounded-xl px-4 py-3 text-center hover:bg-[#143061] transition shadow"
-                    }
-                  >
-                    {state}
-                  </Link>
-                );
-              })}
+              {locations.map(({ state }) => (
+                <Link
+                  key={state}
+                  href={state === "Alaska" ? "#alaska" : "#"}
+                  className={
+                    state === "Alaska"
+                      ? "block text-white font-bold bg-blue-600/90 border border-blue-300/40 rounded-xl px-4 py-3 text-center hover:bg-blue-700 transition shadow"
+                      : "block text-blue-100 font-semibold bg-[#12244e] border border-blue-800/30 rounded-xl px-4 py-3 text-center hover:bg-[#143061] transition shadow"
+                  }
+                >
+                  {state}
+                </Link>
+              ))}
             </div>
           </div>
         </Section>
@@ -179,23 +176,34 @@ export default function LocationsPage() {
               No locations found.
             </div>
           ) : (
-            filtered.map(({ state, cities }) => {
-              const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-              return (
-              <div key={state} className="mb-10">
+            filtered.map(({ state, cities }) => (
+              <div key={state} id={state === "Alaska" ? "alaska" : undefined} className="mb-10">
                 <h3 className="text-2xl md:text-3xl font-extrabold text-white font-serif tracking-tight mb-4">
-                  <Link href={`/locations/${slug}`} className="underline decoration-blue-300/60 underline-offset-4">
-                    {state}
-                  </Link>
+                  {state === "Alaska" ? (
+                    <Link href="#alaska" className="underline decoration-blue-300/60 underline-offset-4">
+                      {state}
+                    </Link>
+                  ) : (
+                    <span>{state}</span>
+                  )}
                 </h3>
 
                 {cities.length > 0 ? (
                   <ul className="flex flex-wrap gap-3">
                     {cities.map((city) => (
                       <li key={city}>
-                        <span className="inline-block text-blue-100 bg-[#12244e] border border-blue-800/30 rounded-full px-4 py-2 shadow">
-                          {city}
-                        </span>
+                        {state === "Alaska" && city === "Anchorage" ? (
+                          <Link
+                            href="/locations/anchorage-alaska"
+                            className="inline-block text-white bg-blue-600/90 border border-blue-300/40 rounded-full px-4 py-2 hover:bg-blue-700 transition font-bold shadow"
+                          >
+                            {city}
+                          </Link>
+                        ) : (
+                          <span className="inline-block text-blue-100 bg-[#12244e] border border-blue-800/30 rounded-full px-4 py-2 shadow">
+                            {city}
+                          </span>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -203,7 +211,7 @@ export default function LocationsPage() {
                   <p className="text-blue-200/80 italic">Coming soon</p>
                 )}
               </div>
-            );})
+            ))
           )}
         </div>
       </Section>
