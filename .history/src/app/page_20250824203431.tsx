@@ -897,8 +897,9 @@ export default function Home() {
           </React.Fragment>
         ))}
   </Section>
-   {/* Did You Know (Premium Cards, 8 items, 4 per row) */}
+   {/* Did You Know (Premium Cards, Narrow & Responsive) */}
 <Section className="relative rounded-2xl border border-blue-400 bg-gradient-to-br from-blue-900/80 to-black shadow-xl my-12">
+  {/* widened a bit so 4-up fits comfortably */}
   <div className="mx-auto max-w-6xl p-6 md:p-8">
     <h3 className="text-4xl md:text-5xl font-extrabold mb-8 text-center bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
       Did You Know?
@@ -916,16 +917,12 @@ export default function Home() {
       "
     >
       {[
-        { icon: "🛋️", title: "Book by comfort, not max headcount", desc: "Most buses seat more than their ‘comfortable’ number." },
-        { icon: "🎓", title: "Prom Saturdays sell out first", desc: "Book 3–6 weeks early (Mar–May) for best selection." },
-        { icon: "🚦", title: "Gameday traffic can double travel time", desc: "Add a 30–45 min buffer for big events." },
-        { icon: "💡", title: "LED party lighting uses almost no power", desc: "Run it the whole trip for max fun." },
-        { icon: "📍", title: "Most venues require a loading zone", desc: "Ask us for the exact pin to avoid delays." },
-        { icon: "📅", title: "Weekdays book easier (and often cheaper)", desc: "If you're flexible, Tue–Thu usually have more options and better rates." },
-        // NEW
-        { icon: "🧭", title: "Each extra pickup adds time", desc: "Plan +10–15 minutes per additional stop to stay on schedule." },
-        // NEW
-        { icon: "⏰", title: "Early departures beat traffic", desc: "Leaving 30–45 minutes earlier can avoid rush + reduce overtime risk." },
+        { icon: '🛋️', title: 'Book by comfort, not max headcount', desc: 'Most buses seat more than their ‘comfortable’ number.' },
+        { icon: '🎓', title: 'Prom Saturdays sell out first', desc: 'Book 3–6 weeks early (Mar–May) for best selection.' },
+        { icon: '🚦', title: 'Gameday traffic can double travel time', desc: 'Add a 30–45 min buffer for big events.' },
+        { icon: '💡', title: 'LED party lighting uses almost no power', desc: 'Run it the whole trip for max fun.' },
+        { icon: '📍', title: 'Most venues require a loading zone', desc: 'Ask us for the exact pin to avoid delays.' },
+        { icon: '📅', title: 'Weekdays book easier (and often cheaper)', desc: "If you're flexible, Tue–Thu usually have more options and better rates." },
       ].map((fact, idx) => (
         <div
           key={idx}
@@ -964,8 +961,7 @@ export default function Home() {
 
 
 
-
-  {/* Blog Topics header (unchanged width OK; bump to max-w-6xl if you want it to match the grid width) */}
+  {/* Blog Topics header (unchanged) */}
 <div className="max-w-4xl mx-auto px-4 mb-2">
   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">
     Blog Topics
@@ -976,40 +972,34 @@ export default function Home() {
 </div>
 
 <Section className="bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl border border-blue-400 my-12">
-  {/* wider so cards are less narrow / more full */}
+  {/* widened to make boxes less narrow / more full */}
   <div className="max-w-6xl mx-auto p-6 md:p-8">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 items-stretch">
       {[
         {
-          icon: "💍",
-          title: "Wedding Shuttle Timeline: Exactly When to Book & How Many Runs",
-          desc: "A step-by-step guide to planning your wedding shuttle, including timing and logistics for stress-free transport.",
+          icon: '💍',
+          title: 'Wedding Shuttle Timeline: Exactly When to Book & How Many Runs',
+          desc: 'A step-by-step guide to planning your wedding shuttle, including timing and logistics for stress-free transport.',
         },
         {
-          icon: "🚌",
-          title: "Prom Bus Safety & Rules (Parents’ Quick Guide)",
-          desc: "Everything parents need to know about prom bus safety, rules, and peace of mind for the big night.",
+          icon: '🚌',
+          title: 'Prom Bus Safety & Rules (Parents’ Quick Guide)',
+          desc: 'Everything parents need to know about prom bus safety, rules, and peace of mind for the big night.',
         },
         {
-          icon: "🏟️",
-          title: "College Gameday Bus: Tailgate Checklist + Stadium Drop-offs (DAL/AUS/HOU/DEN)",
-          desc: "Your ultimate checklist for a winning tailgate and smooth stadium drop-off in major cities.",
+          icon: '🏟️',
+          title: 'College Gameday Bus: Tailgate Checklist + Stadium Drop-offs (DAL/AUS/HOU/DEN)',
+          desc: 'Your ultimate checklist for a winning tailgate and smooth stadium drop-off in major cities.',
         },
         {
-          icon: "💰",
-          title: "How Much Does a Party Bus Cost in [City]? (Real Ranges + Examples)",
-          desc: "See real price ranges and examples for party bus rentals in your city, so you can budget with confidence.",
+          icon: '💰',
+          title: 'How Much Does a Party Bus Cost in [City]? (Real Ranges + Examples)',
+          desc: 'See real price ranges and examples for party bus rentals in your city, so you can budget with confidence.',
         },
         {
-          icon: "🤔",
-          title: "Charter Bus vs Party Bus vs Limo: What’s Right for Your Group?",
-          desc: "Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.",
-        },
-        // NEW 6th post
-        {
-          icon: "🗺️",
-          title: "Multi-Stop Night Out: Route Planning, Safety & Timing",
-          desc: "How to pick smart routes, set time windows, and keep your group together across multiple pickups and drop-offs.",
+          icon: '🤔',
+          title: 'Charter Bus vs Party Bus vs Limo: What’s Right for Your Group?',
+          desc: 'Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.',
         },
       ].map((blog, idx) => (
         <div key={idx} className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400 h-full">
@@ -1035,7 +1025,6 @@ export default function Home() {
     </div>
   </div>
 </Section>
-
 
 
 

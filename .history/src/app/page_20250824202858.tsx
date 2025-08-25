@@ -897,17 +897,18 @@ export default function Home() {
           </React.Fragment>
         ))}
   </Section>
-   {/* Did You Know (Premium Cards, 8 items, 4 per row) */}
+     {/* Did You Know (Premium Cards, Narrow & Responsive) */}
 <Section className="relative rounded-2xl border border-blue-400 bg-gradient-to-br from-blue-900/80 to-black shadow-xl my-12">
-  <div className="mx-auto max-w-6xl p-6 md:p-8">
+  {/* inner width limiter so it's always narrow, even if Section is full-width */}
+  <div className="mx-auto max-w-4xl p-6 md:p-8">
     <h3 className="text-4xl md:text-5xl font-extrabold mb-8 text-center bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
       Did You Know?
     </h3>
 
-    {/* Mobile: horizontal snap; MD: 2 cols; LG: 4 cols */}
+    {/* Mobile: horizontal snap carousel; Desktop: tidy grid */}
     <div
       className="
-        md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6
+        md:grid md:grid-cols-3 md:gap-6
         flex gap-5 overflow-x-auto pb-2
         snap-x snap-mandatory
         -mx-4 px-4 md:m-0 md:p-0
@@ -921,11 +922,8 @@ export default function Home() {
         { icon: "🚦", title: "Gameday traffic can double travel time", desc: "Add a 30–45 min buffer for big events." },
         { icon: "💡", title: "LED party lighting uses almost no power", desc: "Run it the whole trip for max fun." },
         { icon: "📍", title: "Most venues require a loading zone", desc: "Ask us for the exact pin to avoid delays." },
+        // New #6
         { icon: "📅", title: "Weekdays book easier (and often cheaper)", desc: "If you're flexible, Tue–Thu usually have more options and better rates." },
-        // NEW
-        { icon: "🧭", title: "Each extra pickup adds time", desc: "Plan +10–15 minutes per additional stop to stay on schedule." },
-        // NEW
-        { icon: "⏰", title: "Early departures beat traffic", desc: "Leaving 30–45 minutes earlier can avoid rush + reduce overtime risk." },
       ].map((fact, idx) => (
         <div
           key={idx}
@@ -963,22 +961,16 @@ export default function Home() {
 
 
 
-
-
-  {/* Blog Topics header (unchanged width OK; bump to max-w-6xl if you want it to match the grid width) */}
-<div className="max-w-4xl mx-auto px-4 mb-2">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">
-    Blog Topics
-  </h2>
-  <p className="text-lg text-center text-blue-100 mb-8 md:mb-10 max-w-2xl mx-auto">
-    Dive into our expert blog for tips, guides, and real-world advice on planning the perfect group trip. From wedding shuttles to prom safety, cost breakdowns, and more—get the knowledge you need to book with confidence and make your event unforgettable.
-  </p>
-</div>
-
-<Section className="bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl border border-blue-400 my-12">
-  {/* wider so cards are less narrow / more full */}
-  <div className="max-w-6xl mx-auto p-6 md:p-8">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 items-stretch">
+  {/* Blog Topics */}
+  <div className="max-w-6xl mx-auto px-4 mb-2">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">Blog Topics</h2>
+    <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
+      Dive into our expert blog for tips, guides, and real-world advice on planning the perfect group trip. From wedding shuttles to prom safety, cost breakdowns, and more—get the knowledge you need to book with confidence and make your event unforgettable.
+    </p>
+  </div>
+  <Section className="bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl p-8 border border-blue-400 my-12">
+    {/* Blog grid remains unchanged */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       {[
         {
           icon: "💍",
@@ -1005,39 +997,19 @@ export default function Home() {
           title: "Charter Bus vs Party Bus vs Limo: What’s Right for Your Group?",
           desc: "Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.",
         },
-        // NEW 6th post
-        {
-          icon: "🗺️",
-          title: "Multi-Stop Night Out: Route Planning, Safety & Timing",
-          desc: "How to pick smart routes, set time windows, and keep your group together across multiple pickups and drop-offs.",
-        },
       ].map((blog, idx) => (
-        <div key={idx} className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400 h-full">
-          <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">
-            {blog.icon}
-          </div>
+        <div key={idx} className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400">
+          <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">{blog.icon}</div>
           <div className="font-bold text-lg mb-2 text-blue-900">{blog.title}</div>
-          <div className="text-blue-800 mb-3 flex-1">{blog.desc}</div>
-          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">
-            Read More
-          </button>
+          <div className="text-blue-800 mb-3">{blog.desc}</div>
+          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">Read More</button>
         </div>
       ))}
     </div>
-
-    <div className="flex justify-center mt-6 md:mt-8">
-      <a
-        href="/blog"
-        className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition inline-block text-center"
-      >
-        More Blog Posts
-      </a>
+    <div className="flex justify-center mt-8">
+  <a href="/blog" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition inline-block text-center">More Blog Posts</a>
     </div>
-  </div>
-</Section>
-
-
-
+  </Section>
 
   {/* Contact & Booking CTA */}
   <Section className="bg-blue-900 text-white">
