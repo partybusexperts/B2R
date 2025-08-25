@@ -362,11 +362,11 @@ export default function Home() {
           },
         },
         {
-          label: "Wet bar with optional ice and waters",
+          label: "Complimentary champagne & ice",
           modal: {
-          title: "Wet bar with optional ice and waters",
+          title: "Complimentary Champagne & Ice",
           content:
-            "Enjoy our wet bar in every limo. Ask us to stock it with complimentary ice and waters. Celebrate your occasion in style!",
+            "Enjoy complimentary champagne (21+) and ice in every limo rental. Celebrate your occasion in style!",
           },
         },
         {
@@ -527,11 +527,11 @@ export default function Home() {
             },
           },
           {
-            label: "Onboard restroom on some coach buses",
+            label: "Onboard restroom",
             modal: {
-            title: "Onboard Restroom available on some coach buses",
+            title: "Onboard Restroom",
             content:
-              "Enjoy the convenience of a clean, private restroom on your coach bus for longer journeys. Ask if your vehicle has a restroom",
+              "Enjoy the convenience of a clean, private restroom on your coach bus for longer journeys.",
             },
           },
           {

@@ -527,11 +527,11 @@ export default function Home() {
             },
           },
           {
-            label: "Onboard restroom on some coach buses",
+            label: "Onboard restroom",
             modal: {
-            title: "Onboard Restroom available on some coach buses",
+            title: "Onboard Restroom",
             content:
-              "Enjoy the convenience of a clean, private restroom on your coach bus for longer journeys. Ask if your vehicle has a restroom",
+              "Enjoy the convenience of a clean, private restroom on your coach bus for longer journeys.",
             },
           },
           {
