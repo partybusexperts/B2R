@@ -34,28 +34,27 @@ const eventImages = [
   "/images/14 Passenger Sprinter Van Limo Style Interior Again.png",
 ];
 
-/* Rotating informational banners (injected every 6 cards = two desktop rows)
-   Now focused on specific high-volume event scenarios. */
+/* Rotating informational banners (injected every 6 cards = two desktop rows) */
 const INFO_BANNERS = [
   {
-    title: "Wedding Timeline Tip",
-    body: "Peak Saturday weddings book 6–12 months out. Build a 15 min photo buffer after the ceremony so transport never delays your reception entrance.",
-    cta: { label: "Plan Wedding Shuttle", href: "/events/weddings" },
+    title: "Sizing Tip",
+    body: "A '30 passenger' party bus feels best at 24–26 with coolers & space. Size up one class for comfort.",
+    cta: { label: "View Fleet Sizing", href: "/fleet" },
   },
   {
-    title: "Prom & School Event Rules",
-    body: "Most prom contracts require a no‑alcohol clause, chaperone contact & fixed pickup list. Gather it early to speed dispatch approval.",
-    cta: { label: "Prom Guidelines", href: "/events/prom" },
+    title: "Save with Off‑Peak",
+    body: "Sun–Thu & daytime slots can be 10–30% less than prime Saturday evenings. Ask for an off‑peak quote.",
+    cta: { label: "Get Quote", href: "/quote#instant" },
   },
   {
-    title: "Concert / Festival Exit",
-    body: "After big shows, rideshare zones jam for 30+ minutes. Set a meet point 1–2 blocks out & give the driver a pinned map screenshot ahead of time.",
-    cta: { label: "Concert Transport Tips", href: "/events/concerts" },
+    title: "Multi‑Stop Planning",
+    body: "Extra photo or pickup stops add dwell time—pad 10–15 min each to avoid overtime rounding.",
+    cta: { label: "Planning Secrets", href: "/industry-secrets" },
   },
   {
-    title: "Game Day Tailgate",
-    body: "Stadium lots can freeze movement 45–60 min post‑game. Add post‑event buffer & early arrival if you’re unloading grills or tents.",
-    cta: { label: "Game Day Planning", href: "/events/sporting-events" },
+    title: "ADA & Accessibility",
+    body: "Need a lift equipped coach or extra load time? Request early—supply is limited on peak dates.",
+    cta: { label: "Contact Dispatch", href: "tel:8885352566" },
   },
 ];
 

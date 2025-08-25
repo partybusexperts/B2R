@@ -34,50 +34,6 @@ const eventImages = [
   "/images/14 Passenger Sprinter Van Limo Style Interior Again.png",
 ];
 
-/* Rotating informational banners (injected every 6 cards = two desktop rows)
-   Now focused on specific high-volume event scenarios. */
-const INFO_BANNERS = [
-  {
-    title: "Wedding Timeline Tip",
-    body: "Peak Saturday weddings book 6–12 months out. Build a 15 min photo buffer after the ceremony so transport never delays your reception entrance.",
-    cta: { label: "Plan Wedding Shuttle", href: "/events/weddings" },
-  },
-  {
-    title: "Prom & School Event Rules",
-    body: "Most prom contracts require a no‑alcohol clause, chaperone contact & fixed pickup list. Gather it early to speed dispatch approval.",
-    cta: { label: "Prom Guidelines", href: "/events/prom" },
-  },
-  {
-    title: "Concert / Festival Exit",
-    body: "After big shows, rideshare zones jam for 30+ minutes. Set a meet point 1–2 blocks out & give the driver a pinned map screenshot ahead of time.",
-    cta: { label: "Concert Transport Tips", href: "/events/concerts" },
-  },
-  {
-    title: "Game Day Tailgate",
-    body: "Stadium lots can freeze movement 45–60 min post‑game. Add post‑event buffer & early arrival if you’re unloading grills or tents.",
-    cta: { label: "Game Day Planning", href: "/events/sporting-events" },
-  },
-];
-
-function InfoBanner({ title, body, cta }: { title: string; body: string; cta?: { label: string; href: string } }) {
-  return (
-    <div className="sm:col-span-2 md:col-span-3 bg-gradient-to-r from-blue-700 to-indigo-800 rounded-3xl p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-5 border border-blue-400/30 shadow-[0_6px_18px_-2px_rgba(0,0,0,.4)]">
-      <div className="flex-1">
-        <h4 className="text-xl font-extrabold text-white mb-1 tracking-tight font-serif">{title}</h4>
-        <p className="text-blue-100/90 leading-relaxed text-sm md:text-base">{body}</p>
-      </div>
-      {cta && (
-        <a
-          href={cta.href}
-          className="inline-flex items-center justify-center rounded-full px-6 py-2 font-bold text-sm bg-white text-blue-900 hover:bg-blue-50 border border-blue-100 shadow"
-        >
-          {cta.label} →
-        </a>
-      )}
-    </div>
-  );
-}
-
 const EventsPage: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState("");
 
@@ -139,44 +95,34 @@ const EventsPage: React.FC = () => {
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {eventDetails.map((event, i) => {
-              const card = (
-                <a
-                  key={event.name}
-                  href={event.href || `/events/${event.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}
-                  className="bg-[#0f1f46] rounded-3xl shadow-[0_10px_28px_-4px_rgba(0,0,0,.45)] border border-blue-800/40 flex flex-col items-center p-6 hover:scale-[1.02] transition-transform group no-underline min-h-[480px]"
-                  aria-label={`Learn more about ${event.name}`}
-                >
-                  <img
-                    src={eventImages[i % eventImages.length]}
-                    alt={event.name}
-                    loading="lazy"
-                    className="rounded-2xl shadow-lg w-full h-64 object-cover object-center mb-4 border border-blue-800/40"
-                  />
-                  <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 font-serif text-center group-hover:text-blue-100 transition-colors">{event.name}</h3>
-                  <p className="text-base md:text-lg text-blue-100/90 text-center mb-6">{event.description}</p>
-                  <div className="flex flex-row flex-wrap gap-3 justify-center items-center w-full mt-auto">
-                    <a href={`tel:${PHONE_TEL}`} className="rounded-full font-bold px-5 py-2 text-sm tracking-tight shadow-md transition border flex items-center justify-center min-w-[160px] bg-white text-blue-900 border-blue-200 hover:bg-blue-50">
-                      <span className="flex items-center gap-2"><span className="text-pink-600 text-xl">📞</span><span>{PHONE_DISPLAY}</span></span>
-                    </a>
-                    <a href={`mailto:${EMAIL}`} className="rounded-full font-bold px-5 py-2 text-sm tracking-tight shadow-md transition border flex items-center justify-center min-w-[110px] bg-blue-600 text-white border-blue-700 hover:bg-blue-700">
-                      <span className="flex items-center gap-2"><span className="text-white text-xl">✉️</span><span>Email</span></span>
-                    </a>
-                    <a href="/quote#instant" className="rounded-full font-bold px-5 py-2 text-sm tracking-tight shadow-md transition border flex items-center justify-center min-w-[120px] bg-white text-blue-900 border-blue-200 hover:bg-blue-50">
-                      <span className="flex items-center gap-2"><span className="text-yellow-500 text-xl">⚡</span><span>Quote</span></span>
-                    </a>
-                  </div>
-                </a>
-              );
-              const needsBanner = (i + 1) % 6 === 0 && i !== eventDetails.length - 1; // every 6 cards except after last
-              if (!needsBanner) return card;
-              const bannerIndex = Math.floor((i + 1) / 6 - 1) % INFO_BANNERS.length;
-              const b = INFO_BANNERS[bannerIndex];
-              return [
-                card,
-                <InfoBanner key={`banner-${i}`} title={b.title} body={b.body} cta={b.cta} />,
-              ];
-            })}
+            {eventDetails.map((event, i) => (
+              <a
+                key={event.name}
+                href={event.href || `/events/${event.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}
+                className="bg-[#0f1f46] rounded-3xl shadow-[0_10px_28px_-4px_rgba(0,0,0,.45)] border border-blue-800/40 flex flex-col items-center p-6 hover:scale-[1.02] transition-transform group no-underline min-h-[480px]"
+                aria-label={`Learn more about ${event.name}`}
+              >
+                <img
+                  src={eventImages[i % eventImages.length]}
+                  alt={event.name}
+                  loading="lazy"
+                  className="rounded-2xl shadow-lg w-full h-64 object-cover object-center mb-4 border border-blue-800/40"
+                />
+                <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 font-serif text-center group-hover:text-blue-100 transition-colors">{event.name}</h3>
+                <p className="text-base md:text-lg text-blue-100/90 text-center mb-6">{event.description}</p>
+                <div className="flex flex-row flex-wrap gap-3 justify-center items-center w-full mt-auto">
+                  <a href={`tel:${PHONE_TEL}`} className="rounded-full font-bold px-5 py-2 text-sm tracking-tight shadow-md transition border flex items-center justify-center min-w-[160px] bg-white text-blue-900 border-blue-200 hover:bg-blue-50">
+                    <span className="flex items-center gap-2"><span className="text-pink-600 text-xl">📞</span><span>{PHONE_DISPLAY}</span></span>
+                  </a>
+                  <a href={`mailto:${EMAIL}`} className="rounded-full font-bold px-5 py-2 text-sm tracking-tight shadow-md transition border flex items-center justify-center min-w-[110px] bg-blue-600 text-white border-blue-700 hover:bg-blue-700">
+                    <span className="flex items-center gap-2"><span className="text-white text-xl">✉️</span><span>Email</span></span>
+                  </a>
+                  <a href="/quote#instant" className="rounded-full font-bold px-5 py-2 text-sm tracking-tight shadow-md transition border flex items-center justify-center min-w-[120px] bg-white text-blue-900 border-blue-200 hover:bg-blue-50">
+                    <span className="flex items-center gap-2"><span className="text-yellow-500 text-xl">⚡</span><span>Quote</span></span>
+                  </a>
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </div>
