@@ -536,7 +536,7 @@ export default function LimousinesPage() {
       </section>
 
       {/* ---------- HOW IT WORKS (CSS-only modals) ---------- */}
-  <section className="max-w-7xl mx-auto px-4 md:px-6 my-12">
+      <section className="max-w-7xl mx.auto px-4 md:px-6 my-12">
         <div className="bg-[#122a56] border border-blue-800/30 rounded-3xl shadow-xl px-5 md:px-8 py-8">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
             How the Bus2Ride Booking Process Works
