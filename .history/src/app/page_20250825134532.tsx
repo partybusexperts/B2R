@@ -951,7 +951,7 @@ export default function Home() {
 
     <div className="flex justify-center mt-8">
       <a
-        href="/industry-secrets"
+        href="/facts"
         className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-xl text-lg transition"
       >
         More Industry Secrets <span aria-hidden>→</span>
