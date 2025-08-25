@@ -1,3 +1,4 @@
+
 import React from "react";
 import Link from "next/link";
 
@@ -30,7 +31,7 @@ export default function Navigation() {
           <li><Link href="/events" className="hover:text-blue-200 transition">Events</Link></li>
           <li><Link href="/pricing" className="hover:text-blue-200 transition">Pricing</Link></li>
           <li><Link href="/locations" className="hover:text-blue-200 transition">Locations</Link></li>
-          <li><Link href="/polls" className="hover:text-blue-200 transition">Limo Polls & Surveys</Link></li>
+            <li><Link href="/polls" className="hover:text-blue-200 transition">Limo Polls & Surveys</Link></li>
           <li className="relative group hover:z-50 focus-within:z-50">
             <div className="hover:text-blue-200 transition flex items-center gap-1 cursor-pointer select-none">
               Resources
@@ -44,9 +45,6 @@ export default function Navigation() {
               </li>
               <li>
                 <Link href="/tools" className="block px-4 py-2 hover:bg-blue-100">Tools</Link>
-              </li>
-              <li>
-                <Link href="/industry-secrets" className="block px-4 py-2 hover:bg-blue-100">Industry Secrets</Link>
               </li>
               <li>
                 <Link href="/poll-results" className="block px-4 py-2 hover:bg-blue-100">Poll Results</Link>
