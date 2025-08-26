@@ -1336,7 +1336,7 @@ export default function Home() {
   </p>
 </div>
 
-{/* Blog Cards with photo Read More overlay + footer CTA */}
+{/* Blog Cards with Photos */}
 <Section className="bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl border border-blue-400 my-12">
   <div className="max-w-6xl mx-auto p-6 md:p-8">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
@@ -1396,11 +1396,12 @@ export default function Home() {
           tag: "Night Out",
         },
       ].map((post, idx) => (
-        <article
+        <a
           key={idx}
-          className="group bg-white rounded-2xl overflow-hidden border-2 border-blue-200/70 hover:border-blue-300 shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 focus-within:ring-4 focus-within:ring-blue-300/40"
+          href={post.href}
+          className="group bg-white rounded-2xl overflow-hidden border-2 border-blue-200/70 hover:border-blue-300 shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-blue-300/40"
         >
-          {/* Photo with overlay Read More */}
+          {/* Photo (top) */}
           <div className="relative h-56 w-full bg-blue-50">
             <img
               src={post.img}
@@ -1412,27 +1413,6 @@ export default function Home() {
             <span className="absolute top-3 left-3 rounded-full bg-blue-700/90 text-white text-xs font-bold px-3 py-1 border border-white/20 shadow">
               {post.tag}
             </span>
-
-            {/* READ MORE overlay (image-level) */}
-            <a
-              href={post.href}
-              className="absolute inset-x-0 bottom-0 p-3 md:p-4"
-              aria-label={`Read more: ${post.title}`}
-            >
-              <span className="pointer-events-auto inline-flex items-center gap-2 rounded-xl bg-black/45 backdrop-blur px-4 py-2 text-white text-sm font-bold border border-white/20 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
-                Read More
-                <svg width="16" height="16" viewBox="0 0 24 24" className="opacity-90">
-                  <path
-                    d="M13 5l7 7-7 7M5 12h14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </a>
           </div>
 
           {/* Body */}
@@ -1447,15 +1427,12 @@ export default function Home() {
               {post.desc}
             </p>
 
-            {/* Footer CTA (secondary) */}
+            {/* Footer CTA */}
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-blue-700/80">
                 Read time: 4–6 min
               </span>
-              <a
-                href={post.href}
-                className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-4 py-2 rounded-lg border border-blue-800 transition"
-              >
+              <span className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-4 py-2 rounded-lg border border-blue-800 transition">
                 Read More
                 <svg width="18" height="18" viewBox="0 0 24 24" className="opacity-90">
                   <path
@@ -1467,13 +1444,13 @@ export default function Home() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </a>
+              </span>
             </div>
           </div>
 
           {/* Soft hover glow */}
           <div className="pointer-events-none absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition duration-300 blur-sm bg-gradient-to-br from-sky-300/20 via-blue-500/20 to-indigo-400/20" />
-        </article>
+        </a>
       ))}
     </div>
 
@@ -1488,7 +1465,6 @@ export default function Home() {
     </div>
   </div>
 </Section>
-
 
 
 

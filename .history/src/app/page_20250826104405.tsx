@@ -1137,9 +1137,9 @@ export default function Home() {
         </div>
       </Section>
 
-  {/* EVENTS & OCCASIONS — 4 per row, wide cards, no image overlay */}
+  {/* EVENTS & OCCASIONS — unified, upgraded */}
 <Section className="max-w-7xl mx-auto relative overflow-hidden bg-gradient-to-br from-blue-900/80 to-black">
-  {/* (Optional) Confetti decorations — keep or remove */}
+  {/* Decorative Confetti SVGs */}
   <svg className="absolute left-0 top-0 w-48 h-48 opacity-20 pointer-events-none" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="40" cy="40" r="12" fill="#60a5fa" />
     <rect x="120" y="30" width="18" height="18" rx="4" fill="#fbbf24" />
@@ -1160,25 +1160,25 @@ export default function Home() {
     <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
       Events & Occasions
     </h2>
-    <p className="text-lg text-center text-blue-100 mb-12 max-w-2xl mx-auto">
-      Weddings, proms, concerts, sporting events, winery tours, nights out—pick your occasion and we’ll match the perfect ride.
+    <p className="text-lg text-center text-blue-100 mb-10 max-w-2xl mx-auto">
+      Weddings, proms, concerts, sporting events, winery tours, nights out—you name it. Click any event to learn more and see how Bus2Ride makes it seamless.
     </p>
 
-    {/* Grid: 1 / 2 / 3 / 4 columns */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+    {/* Grid (2 → 5 columns) */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
       {eventNames.map((event, i) => {
         const slug = event.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
         const img = eventImages[i % eventImages.length];
-        const insertCta = i === 7 || i === 15; // after 8th and 16th card (aligned with 4-per-row)
+        const insertCta = i === 9 || i === 19; // after 10th and 20th card if you have that many
         return (
           <React.Fragment key={event}>
-            {/* Event Card (no overlay on photo) */}
+            {/* Event Card */}
             <a
               href={`/events/${slug}`}
               className="group relative rounded-[24px] overflow-hidden border border-blue-800/30 bg-[#173264] shadow-[0_10px_30px_rgba(2,6,23,.35)] hover:shadow-2xl hover:-translate-y-1 transition"
             >
-              {/* Image (taller, roomy) */}
-              <div className="h-80 w-full bg-[#18356e]">
+              {/* Image */}
+              <div className="h-60 md:h-72 w-full bg-[#18356e]">
                 <img
                   src={img}
                   alt={event}
@@ -1187,32 +1187,30 @@ export default function Home() {
                 />
               </div>
 
-              {/* Body (title + subtitle, then buttons) */}
-              <div className="px-6 py-6">
-                <h3 className="text-2xl font-extrabold text-white tracking-tight mb-1">{event}</h3>
-                <p className="text-blue-100/90 text-sm mb-5">
-                  On-time pickups • Clean rides • Seamless drop-offs
-                </p>
+              {/* Title overlay */}
+              <div className="absolute inset-x-0 top-0 p-5 bg-gradient-to-b from-black/40 via-black/15 to-transparent pointer-events-none">
+                <div className="text-xl font-extrabold text-white drop-shadow">{event}</div>
+                <div className="text-blue-100/90 text-sm">Perfect for groups • On-time • Clean • Fun</div>
+              </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <a
-                    href="tel:8885352566"
-                    className="inline-flex items-center justify-center rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
-                  >
-                    Call
-                  </a>
-                  <a
-                    href="mailto:info@bus2ride.com"
-                    className="inline-flex items-center justify-center rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
-                  >
-                    Email
-                  </a>
-                  <a
-                    href="/quote#instant"
-                    className="inline-flex items-center justify-center rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
-                  >
-                    Quote
-                  </a>
+              {/* Body */}
+              <div className="px-5 pb-5 pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-blue-100/90 text-sm font-semibold">Popular Event</span>
+                  <span className="text-blue-200/80 text-sm group-hover:underline">Learn More →</span>
+                </div>
+
+                {/* Action buttons */}
+                <div className="grid grid-cols-3 gap-2">
+                  <span className="inline-flex items-center justify-center rounded-xl px-3 py-2.5 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition">
+                    <a href="tel:8885352566" className="w-full text-center">Call</a>
+                  </span>
+                  <span className="inline-flex items-center justify-center rounded-xl px-3 py-2.5 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition">
+                    <a href="mailto:info@bus2ride.com" className="w-full text-center">Email</a>
+                  </span>
+                  <span className="inline-flex items-center justify-center rounded-xl px-3 py-2.5 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition">
+                    <a href="/quote#instant" className="w-full text-center">⚡ Quote</a>
+                  </span>
                 </div>
               </div>
 
@@ -1220,14 +1218,14 @@ export default function Home() {
               <div className="pointer-events-none absolute -inset-[1px] rounded-[24px] opacity-0 group-hover:opacity-100 transition duration-300 blur-sm bg-gradient-to-br from-sky-300/20 via-blue-500/20 to-indigo-400/20" />
             </a>
 
-            {/* Mid-grid CTA bands after full rows (8th, 16th, …) */}
+            {/* Mid-grid CTA bands */}
             {insertCta && (
               <div className="col-span-full">
-                <div className="bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-2xl shadow-xl px-6 md:px-10 py-10 flex flex-col items-center w-full border-2 border-blue-400">
+                <div className="bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-2xl shadow-xl px-6 md:px-10 py-8 flex flex-col items-center w-full border-2 border-blue-400">
                   <div className="text-3xl md:text-4xl font-extrabold text-center mb-3 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
                     Ready to Book or Have Questions?
                   </div>
-                  <div className="mb-6 text-lg text-blue-100 text-center">
+                  <div className="mb-5 text-lg text-blue-100 text-center">
                     Call <a href="tel:8885352566" className="underline font-bold">888-535-2566</a> or email{" "}
                     <a href="mailto:info@bus2ride.com" className="underline font-bold">info@bus2ride.com</a>
                   </div>
@@ -1246,7 +1244,7 @@ export default function Home() {
     </div>
 
     {/* Final CTA */}
-    <div className="flex justify-center mt-12">
+    <div className="flex justify-center mt-10">
       <a
         href="/events"
         className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
@@ -1256,7 +1254,6 @@ export default function Home() {
     </div>
   </div>
 </Section>
-
 
    {/* Did You Know (Premium Cards, 8 items, 4 per row) */}
 <Section className="relative rounded-2xl border border-blue-400 bg-gradient-to-br from-blue-900/80 to-black shadow-xl my-12">
@@ -1326,9 +1323,9 @@ export default function Home() {
 
 
 
-  {/* Blog Topics header */}
-<div className="max-w-6xl mx-auto px-4 mb-2">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 md:mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">
+  {/* Blog Topics header (unchanged width OK; bump to max-w-6xl if you want it to match the grid width) */}
+<div className="max-w-4xl mx-auto px-4 mb-2">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">
     Blog Topics
   </h2>
   <p className="text-lg text-center text-blue-100 mb-8 md:mb-10 max-w-2xl mx-auto">
@@ -1336,159 +1333,66 @@ export default function Home() {
   </p>
 </div>
 
-{/* Blog Cards with photo Read More overlay + footer CTA */}
 <Section className="bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl border border-blue-400 my-12">
+  {/* wider so cards are less narrow / more full */}
   <div className="max-w-6xl mx-auto p-6 md:p-8">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 items-stretch">
       {[
         {
           icon: "💍",
           title: "Wedding Shuttle Timeline: Exactly When to Book & How Many Runs",
-          desc:
-            "A step-by-step guide to planning your wedding shuttle, including timing and logistics for stress-free transport.",
-          img: "/images/Bus-3.png",
-          href: "/blog/wedding-shuttle-timeline",
-          tag: "Weddings",
+          desc: "A step-by-step guide to planning your wedding shuttle, including timing and logistics for stress-free transport.",
         },
         {
           icon: "🚌",
           title: "Prom Bus Safety & Rules (Parents’ Quick Guide)",
-          desc:
-            "Everything parents need to know about prom bus safety, rules, and peace of mind for the big night.",
-          img: "/images/Bus-4.png",
-          href: "/blog/prom-bus-safety",
-          tag: "Prom",
+          desc: "Everything parents need to know about prom bus safety, rules, and peace of mind for the big night.",
         },
         {
           icon: "🏟️",
           title: "College Gameday Bus: Tailgate Checklist + Stadium Drop-offs (DAL/AUS/HOU/DEN)",
-          desc:
-            "Your ultimate checklist for a winning tailgate and smooth stadium drop-off in major cities.",
-          img: "/images/Bus-5.png",
-          href: "/blog/college-gameday-bus-checklist",
-          tag: "Sports",
+          desc: "Your ultimate checklist for a winning tailgate and smooth stadium drop-off in major cities.",
         },
         {
           icon: "💰",
           title: "How Much Does a Party Bus Cost in [City]? (Real Ranges + Examples)",
-          desc:
-            "See real price ranges and examples for party bus rentals in your city, so you can budget with confidence.",
-          img: "/images/Bus-2.png",
-          href: "/blog/party-bus-cost-city",
-          tag: "Pricing",
+          desc: "See real price ranges and examples for party bus rentals in your city, so you can budget with confidence.",
         },
         {
           icon: "🤔",
           title: "Charter Bus vs Party Bus vs Limo: What’s Right for Your Group?",
-          desc:
-            "Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.",
-          img: "/images/Bus-1.png",
-          href: "/blog/charter-vs-partybus-vs-limo",
-          tag: "Guides",
+          desc: "Compare the pros and cons of each vehicle type to find the perfect fit for your group and occasion.",
         },
+        // NEW 6th post
         {
           icon: "🗺️",
           title: "Multi-Stop Night Out: Route Planning, Safety & Timing",
-          desc:
-            "How to pick smart routes, set time windows, and keep your group together across multiple pickups and drop-offs.",
-          img: "/images/Bus-1.png",
-          href: "/blog/multi-stop-night-out",
-          tag: "Night Out",
+          desc: "How to pick smart routes, set time windows, and keep your group together across multiple pickups and drop-offs.",
         },
-      ].map((post, idx) => (
-        <article
-          key={idx}
-          className="group bg-white rounded-2xl overflow-hidden border-2 border-blue-200/70 hover:border-blue-300 shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 focus-within:ring-4 focus-within:ring-blue-300/40"
-        >
-          {/* Photo with overlay Read More */}
-          <div className="relative h-56 w-full bg-blue-50">
-            <img
-              src={post.img}
-              alt={post.title}
-              className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-              loading="lazy"
-            />
-            {/* Tag pill */}
-            <span className="absolute top-3 left-3 rounded-full bg-blue-700/90 text-white text-xs font-bold px-3 py-1 border border-white/20 shadow">
-              {post.tag}
-            </span>
-
-            {/* READ MORE overlay (image-level) */}
-            <a
-              href={post.href}
-              className="absolute inset-x-0 bottom-0 p-3 md:p-4"
-              aria-label={`Read more: ${post.title}`}
-            >
-              <span className="pointer-events-auto inline-flex items-center gap-2 rounded-xl bg-black/45 backdrop-blur px-4 py-2 text-white text-sm font-bold border border-white/20 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
-                Read More
-                <svg width="16" height="16" viewBox="0 0 24 24" className="opacity-90">
-                  <path
-                    d="M13 5l7 7-7 7M5 12h14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </a>
+      ].map((blog, idx) => (
+        <div key={idx} className="bg-white rounded-xl shadow p-6 flex flex-col border-2 border-blue-400 h-full">
+          <div className="w-full h-32 bg-blue-100 rounded mb-4 flex items-center justify-center text-blue-400 text-4xl">
+            {blog.icon}
           </div>
-
-          {/* Body */}
-          <div className="p-6 flex flex-col h-full">
-            <div className="flex items-center gap-2 text-2xl mb-2">
-              <span className="text-blue-500">{post.icon}</span>
-              <h3 className="text-lg font-extrabold text-blue-900 leading-snug">
-                {post.title}
-              </h3>
-            </div>
-            <p className="text-blue-800/90 mb-5 flex-1">
-              {post.desc}
-            </p>
-
-            {/* Footer CTA (secondary) */}
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-blue-700/80">
-                Read time: 4–6 min
-              </span>
-              <a
-                href={post.href}
-                className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-4 py-2 rounded-lg border border-blue-800 transition"
-              >
-                Read More
-                <svg width="18" height="18" viewBox="0 0 24 24" className="opacity-90">
-                  <path
-                    d="M13 5l7 7-7 7M5 12h14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          {/* Soft hover glow */}
-          <div className="pointer-events-none absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition duration-300 blur-sm bg-gradient-to-br from-sky-300/20 via-blue-500/20 to-indigo-400/20" />
-        </article>
+          <div className="font-bold text-lg mb-2 text-blue-900">{blog.title}</div>
+          <div className="text-blue-800 mb-3 flex-1">{blog.desc}</div>
+          <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-lg shadow transition self-start">
+            Read More
+          </button>
+        </div>
       ))}
     </div>
 
-    {/* More posts CTA */}
-    <div className="flex justify-center mt-2 md:mt-4">
+    <div className="flex justify-center mt-6 md:mt-8">
       <a
         href="/blog"
-        className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition inline-block text-center border border-blue-800"
+        className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-xl transition inline-block text-center"
       >
         More Blog Posts
       </a>
     </div>
   </div>
 </Section>
-
 
 
 
