@@ -13,6 +13,7 @@ import SlideshowMaker from "../components/SlideshowMaker";
 import { ReviewForm } from "../components/ReviewForm";
 import PollsSection from "../components/PollsSection";
 import WhyRentWithUs from "../components/WhyRentWithUs";
+import { useEffect, useState } from "react";
 import { getCategoryImages, findByFileName } from "../utils/optimizedImages";
 import { resolveVehicles } from "../data/vehicles";
 import VehicleGalleryCard from "../components/VehicleGalleryCard";
@@ -20,7 +21,8 @@ import { SmartImage } from "../components/SmartImage"; // SmartImage import
 
 // Optimized manifest categories (fallback arrays removed)
 const partyOptimizedAll = getCategoryImages('partyBuses');
-// limo & coach raw lists no longer used directly on homepage (kept party list for events image pool)
+const limoOptimizedAll = getCategoryImages('limousines');
+const coachOptimizedAll = getCategoryImages('coachBuses');
 
 
 

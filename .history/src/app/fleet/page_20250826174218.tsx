@@ -45,7 +45,27 @@ const POLLS = [
   { question: "Do you prefer all-inclusive pricing or itemized fees?", options: ["All-inclusive", "Itemized", "No preference"] },
 ];
 
-// legacy random image helper removed (using manifest/catalog now)
+/** ---------- Your images + helper (kept) ---------- */
+const randomImages = [
+  "/images/18 Passenger White Party Bus Interior.png",
+  "/images/18 Passenger White Party Bus Exterior.png",
+  "/images/20 Passenger White Party Bus Exterior.png",
+  "/images/36 Passenger Party Bus Exterior 4.png",
+  "/images/10 Passenger Black Lincoln Stretch Limo Exterior Black.png",
+  "/images/10 Passenger Chrysler 300 Limo Exterior.png",
+  "/images/10 Passenger Lincoln Stretch Limo Interior.png",
+  "/images/16_Passenger_Stretch_Excursion_Exterior_optimized.jpg",
+  "/images/18 Passenger Hummer Limo Interior.png",
+  "/images/Bus-1.png",
+  "/images/Bus-2.png",
+  "/images/Bus-3.png",
+  "/images/Bus-4.png",
+  "/images/Bus-5.png",
+];
+
+function getRandomImage() {
+  return randomImages[Math.floor(Math.random() * randomImages.length)];
+}
 
 // Use resolved vehicles and group by top-level category label for now (simple mapping)
 const topCategoryOrder: { key: string; label: string; match: (cat: string)=>boolean; href: string }[] = [
