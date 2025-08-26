@@ -1,7 +1,7 @@
 // src/components/Navigation.tsx
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,28 +11,10 @@ export default function Navigation() {
   const pathname = usePathname();
   const [open, setOpen] = useState<OpenKey>(null);
 
-  // timers to prevent flicker when moving from trigger -> submenu
-  const timers = useRef<Record<Exclude<OpenKey, null>, number | null>>({
-    fleet: null,
-    resources: null,
-  });
-
-  const clearTimer = (k: Exclude<OpenKey, null>) => {
-    if (timers.current[k]) {
-      window.clearTimeout(timers.current[k]!);
-      timers.current[k] = null;
-    }
-  };
-  const closeWithDelay = (k: Exclude<OpenKey, null>, delay = 120) => {
-    clearTimer(k);
-    timers.current[k] = window.setTimeout(() => {
-      setOpen((cur) => (cur === k ? null : cur));
-      timers.current[k] = null;
-    }, delay);
-  };
-
-  // Close on route change & on Esc
+  // Close on route change
   useEffect(() => setOpen(null), [pathname]);
+
+  // Close on Esc
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(null);
     window.addEventListener("keydown", onKey);
@@ -48,58 +30,42 @@ export default function Navigation() {
   const itemCls = "block px-4 py-2 hover:bg-blue-100";
   const closeNow: React.MouseEventHandler<HTMLAnchorElement> = () => setOpen(null);
 
-  type DropdownProps = {
+  const Dropdown: React.FC<{
     label: string;
-    k: Exclude<OpenKey, null>;
+    k: Extract<OpenKey, "fleet" | "resources">;
     children: React.ReactNode;
-  };
+  }> = ({ label, k, children }) => (
+    <li
+      className="relative"
+      onMouseEnter={() => setOpen(k)}
+      onMouseLeave={() => setOpen(null)}
+      onFocus={() => setOpen(k)} // keyboard focus anywhere inside <li> opens
+      onBlur={(e) => {
+        // only close if focus left the entire <li> (trigger + menu)
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(null);
+      }}
+    >
+      {/* Trigger (no click) */}
+      <div
+        className="hover:text-blue-200 transition flex items-center gap-1 cursor-default select-none"
+        aria-haspopup="menu"
+        aria-expanded={open === k}
+        tabIndex={0}
+      >
+        {label}
+        <Caret />
+      </div>
 
-  const Dropdown = ({ label, k, children }: DropdownProps) => {
-    return (
-      <li className="relative">
-        {/* Trigger: hover/focus opens; no click */}
-        <div
-          className="hover:text-blue-200 transition flex items-center gap-1 cursor-default select-none"
-          role="button"
-          tabIndex={0}
-          aria-haspopup="menu"
-          aria-expanded={open === k}
-          onMouseEnter={() => {
-            clearTimer(k);
-            setOpen(k);
-          }}
-          onMouseLeave={() => {
-            // start a short delay; if user enters submenu, it will cancel
-            closeWithDelay(k);
-          }}
-          onFocus={() => setOpen(k)}
-        >
-          {label}
-          <Caret />
-        </div>
-
-        {/* Submenu: it cancels the close timer on enter, closes on leave */}
-        <ul
-          role="menu"
-          className={`absolute left-0 mt-2 min-w-[14rem] bg-white text-blue-900 rounded shadow-lg border border-blue-200 z-50
-          transition ${open === k ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-1"}`}
-          onMouseEnter={() => {
-            clearTimer(k);
-            setOpen(k);
-          }}
-          onMouseLeave={() => closeWithDelay(k)}
-          // Keyboard users: keep open while focusing inside; close when leaving the whole menu
-          onFocus={() => setOpen(k)}
-          onBlur={(e) => {
-            const next = e.relatedTarget as Node | null;
-            if (!e.currentTarget.contains(next)) setOpen(null);
-          }}
-        >
-          {children}
-        </ul>
-      </li>
-    );
-  };
+      {/* Menu */}
+      <ul
+        role="menu"
+        className={`absolute left-0 mt-2 min-w-[14rem] bg-white text-blue-900 rounded shadow-lg border border-blue-200 z-50
+        transition ${open === k ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-1"}`}
+      >
+        {children}
+      </ul>
+    </li>
+  );
 
   return (
     <nav className="bg-blue-700 text-white py-4 shadow sticky top-0 z-50">
@@ -109,7 +75,7 @@ export default function Navigation() {
         <ul className="flex gap-6 text-sm md:text-base font-medium items-center">
           <li><Link href="/" className="hover:text-blue-200 transition">Home</Link></li>
 
-          {/* Fleet (hover-only, gap-safe) */}
+          {/* Fleet (hover-only) */}
           <Dropdown label="Fleet" k="fleet">
             <li><Link href="/party-buses" className={itemCls} onClick={closeNow}>Party Buses</Link></li>
             <li><Link href="/limousines" className={itemCls} onClick={closeNow}>Limousines</Link></li>
@@ -121,7 +87,7 @@ export default function Navigation() {
           <li><Link href="/locations" className="hover:text-blue-200 transition">Locations</Link></li>
           <li><Link href="/polls" className="hover:text-blue-200 transition">Limo Polls & Surveys</Link></li>
 
-          {/* Resources (hover-only, gap-safe) */}
+          {/* Resources (hover-only) */}
           <Dropdown label="Resources" k="resources">
             <li><Link href="/blog" className={itemCls} onClick={closeNow}>Blog</Link></li>
             <li><Link href="/tools" className={itemCls} onClick={closeNow}>Tools</Link></li>
