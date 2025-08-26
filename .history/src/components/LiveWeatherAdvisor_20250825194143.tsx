@@ -162,10 +162,9 @@ const DEFAULT_PLACE: Place = {
  * ---------------------------------------------------------------- */
 interface LiveWeatherAdvisorProps {
   fixedPlace?: Place; // if provided, lock to this place (no pin/search auto default switching)
-  variant?: "default" | "compact"; // compact used for embedded city pages
 }
 
-const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, variant = "default" }) => {
+const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace }) => {
   // Core state
   const [place, setPlace] = useState<Place | null>(null);
   const [query, setQuery] = useState("");
@@ -316,12 +315,12 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
       const j = await fetchJson(`https://api.weather.gov/alerts/active?point=${p.latitude},${p.longitude}`);
       interface RawAlertFeature { properties?: Record<string, unknown>; }
       const items: AlertItem[] = (j.features || []).slice(0, 5).map((raw: unknown) => {
-  const f = raw as RawAlertFeature;
-  const rawProps = f.properties || {};
-  const headline = (rawProps.headline as string) || (rawProps.event as string) || "Alert";
-  const description = (rawProps.description as string) || "";
-  const severity = rawProps.severity as string | undefined;
-  const event = rawProps.event as string | undefined;
+        const f = raw as RawAlertFeature;
+        const props = f.properties || {};
+        const headline = (props.headline as string) || (props.event as string) || "Alert";
+        const description = (props.description as string) || "";
+        const severity = props.severity as string | undefined;
+        const event = props.event as string | undefined;
         return { headline, description, severity, event };
       });
       return items;
@@ -510,22 +509,16 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
   };
 
   /** UI */
-  const rootClass =
-    variant === "compact"
-      ? "w-full p-4 bg-gradient-to-br from-sky-100 to-sky-200 rounded-2xl text-gray-900 text-[13px]"
-      : "max-w-7xl mx-auto p-6 md:p-8 bg-gradient-to-b from-sky-100 to-sky-300 min-h-screen text-gray-900";
-
   return (
-    <div className={rootClass}>
+    <div className="max-w-7xl mx-auto p-6 md:p-8 bg-gradient-to-b from-sky-100 to-sky-300 min-h-screen text-gray-900">
       {/* Header */}
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className={variant === "compact" ? "text-xl font-bold text-sky-950" : "text-3xl md:text-4xl font-bold text-sky-950 drop-shadow-sm"}>
-            Live Weather{variant === "compact" ? "" : " Advisor"}
-            {place ? ` — ${place.name}` : ""}
+          <h1 className="text-3xl md:text-4xl font-bold text-sky-950 drop-shadow-sm">
+            Live Weather Advisor{place ? ` — ${place.name}` : ""}
           </h1>
           {wx?.daily?.sunrise?.[0] && wx?.daily?.sunset?.[0] && (
-            <p className={variant === "compact" ? "text-sky-900 mt-0.5 text-xs" : "text-sky-900 mt-1 font-medium"}>
+            <p className="text-sky-900 mt-1 font-medium">
               <span className="inline-flex items-center gap-1 mr-3">
                 <Icon.Sun /> {fmtDate(wx.daily.sunrise[0], { hour: "numeric", minute: "2-digit" })}
               </span>
@@ -535,40 +528,42 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
             </p>
           )}
         </div>
-        {variant !== "compact" && (
-          <HeaderControls
-            query={query}
-            setQuery={setQuery}
-            suggestions={suggestions}
-            onChoose={(p) => {
-              setQuery("");
-              setSuggestions([]);
-              loadAllForPlace(p);
-            }}
-            suggestBoxRef={suggestBoxRef}
-            unit={unit}
-            setUnit={(u) => {
-              setUnit(u);
-              if (typeof window !== "undefined") localStorage.setItem("wx:unit", u);
-            }}
-            speedUnit={speedUnit}
-            setSpeedUnit={(s) => {
-              setSpeedUnit(s);
-              if (typeof window !== "undefined") localStorage.setItem("wx:speed", s);
-            }}
-            pinCurrentCity={() => {
-              if (place && typeof window !== "undefined") {
-                localStorage.setItem("wx:lastPlace", JSON.stringify(place));
-                alert(`${place.name} pinned as your default.`);
-              }
-            }}
-          />
-        )}
+
+        {/* Controls (search, pin, toggles) */}
+        <HeaderControls
+          query={query}
+          setQuery={setQuery}
+          suggestions={suggestions}
+          onChoose={(p) => {
+            setQuery("");
+            setSuggestions([]);
+            loadAllForPlace(p);
+          }}
+          suggestBoxRef={suggestBoxRef}
+          unit={unit}
+          setUnit={(u) => {
+            setUnit(u);
+            if (typeof window !== "undefined") localStorage.setItem("wx:unit", u);
+          }}
+          speedUnit={speedUnit}
+          setSpeedUnit={(s) => {
+            setSpeedUnit(s);
+            if (typeof window !== "undefined") localStorage.setItem("wx:speed", s);
+          }}
+          pinCurrentCity={() => {
+            if (place && typeof window !== "undefined") {
+              localStorage.setItem("wx:lastPlace", JSON.stringify(place));
+              alert(`${place.name} pinned as your default.`);
+            }
+          }}
+        />
       </div>
 
       {/* Info / Error */}
-      {variant !== "compact" && infoMessage && (
-        <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-2 rounded-xl">{infoMessage}</div>
+      {infoMessage && (
+        <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-2 rounded-xl">
+          {infoMessage}
+        </div>
       )}
       {loading && <div className="mt-8 text-center text-gray-800 animate-pulse">Loading weather data…</div>}
       {error && (
@@ -582,7 +577,7 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
 
       {/* Content */}
       {wx && !loading && !error && (
-  <div className={variant === "compact" ? "mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3" : "mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"}>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {/* Current */}
           <div className="bg-white text-gray-900 rounded-2xl shadow p-4 md:col-span-1 border border-gray-200">
             <div className="flex items-center justify-between">
@@ -655,7 +650,7 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
           </div>
 
           {/* 12h forecast */}
-          <div className={variant === "compact" ? "bg-white text-gray-900 rounded-2xl shadow p-3 sm:col-span-2 border border-gray-200" : "bg-white text-gray-900 rounded-2xl shadow p-4 md:col-span-2 border border-gray-200"}>
+          <div className="bg-white text-gray-900 rounded-2xl shadow p-4 md:col-span-2 border border-gray-200">
             <h2 className="text-lg font-semibold text-sky-900">Next 12 Hours</h2>
             <div className="mt-3 grid md:grid-cols-5 gap-4">
               <div className="md:col-span-2">
@@ -679,7 +674,7 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
 
           {/* 5-day forecast */}
           {wx.daily?.time && (
-            <div className={variant === "compact" ? "bg-white text-gray-900 rounded-2xl shadow p-3 border border-gray-200" : "bg-white text-gray-900 rounded-2xl shadow p-4 xl:col-span-1 border border-gray-200"}>
+            <div className="bg-white text-gray-900 rounded-2xl shadow p-4 xl:col-span-1 border border-gray-200">
               <h2 className="text-lg font-semibold text-sky-900">5-Day Forecast</h2>
               <div className="mt-2 divide-y divide-gray-200">
                 {wx.daily.time.slice(0, 5).map((d, i) => (
@@ -701,7 +696,6 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
           )}
 
           {/* Bottom: Plan & Pack Assistant */}
-          {variant !== "compact" && (
           <div className="bg-white text-gray-900 rounded-2xl shadow p-4 border border-gray-200 md:col-span-2 xl:col-span-3">
             <div className="grid gap-2 md:grid-cols-3 md:gap-4 items-end">
               <div className="md:col-span-2">
@@ -747,7 +741,6 @@ const LiveWeatherAdvisor: React.FC<LiveWeatherAdvisorProps> = ({ fixedPlace, var
               )}
             </div>
           </div>
-          )}
         </div>
       )}
     </div>

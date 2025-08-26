@@ -4,14 +4,16 @@ import React, { useState, useEffect, useMemo } from "react";
 import PageLayout from "../../components/PageLayout";
 import Section from "../../components/Section";
 
-// ---------------------------------------------------------------------------
-// Base manually curated categories (existing content)
-// ---------------------------------------------------------------------------
-interface PollCategory { title: string; parent: string; polls: string[] }
+// Base (manually curated) categories ---------------------------------------
+interface PollCategory {
+  title: string;
+  parent: string; // grouping header
+  polls: string[];
+}
 
 const basePollCategories: PollCategory[] = [
   // Party Bus, Limousine, Coach/Charter Bus already filled above
-  // (Existing arrays retained below)
+  // Now fill out all remaining categories with 10+ polls each
   {
     title: 'Black Car / Luxury Sedan Polls',
     parent: 'Transportation Service Types',
@@ -354,16 +356,14 @@ const basePollCategories: PollCategory[] = [
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Dynamic taxonomy generation (States, Cities, Event Types)
-// To prevent huge bundle, we generate programmatically & optionally filter.
-// ---------------------------------------------------------------------------
+// Dynamic taxonomy lists ----------------------------------------------------
+// Full 50 US states list for dynamic generation.
 const US_STATES = [
   "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"
 ];
 
-// Representative set of major US cities. TODO: expand or fetch from API.
-const MAJOR_CITIES: { city: string; state: string }[] = [
+// A focused list of major US cities (can be expanded). Keeping list moderate for bundle size.
+const MAJOR_US_CITIES: { city: string; state: string }[] = [
   { city: "New York", state: "New York" },
   { city: "Los Angeles", state: "California" },
   { city: "Chicago", state: "Illinois" },
@@ -376,68 +376,50 @@ const MAJOR_CITIES: { city: string; state: string }[] = [
   { city: "San Jose", state: "California" },
   { city: "Austin", state: "Texas" },
   { city: "Jacksonville", state: "Florida" },
+  { city: "Fort Worth", state: "Texas" },
+  { city: "Columbus", state: "Ohio" },
+  { city: "Charlotte", state: "North Carolina" },
   { city: "San Francisco", state: "California" },
+  { city: "Indianapolis", state: "Indiana" },
   { city: "Seattle", state: "Washington" },
   { city: "Denver", state: "Colorado" },
-];
-
-const EVENT_TYPES = [
-  "Wedding","Prom","Airport Transfer","Corporate Event","Concert","Festival","Sporting Event","Birthday","Bachelor Party","Bachelorette Party","Casino Trip","Wine Tour","Brewery Tour","Holiday / NYE","Quinceañera","Homecoming","Graduation","Shuttle Loop","City Tour","Night Out"
+  { city: "Washington", state: "District of Columbia" }
 ];
 
 function buildStateCategories(): PollCategory[] {
-  return US_STATES.map(state => ({
+  return US_STATES.map((state) => ({
     title: `${state} Transportation Polls`,
     parent: "US States",
     polls: [
-      `Have you booked group transport in ${state}? (Yes/No)`,
-      `Most popular vehicle in ${state}? (A: Limo, B: Party Bus, C: Shuttle, D: SUV)`,
-      `True or False: Local ${state} operators provide better service than national brands.`,
-      `Would you recommend a company you used in ${state}? (Yes/No)`,
-      `Primary booking reason in ${state}? (A: Wedding, B: Event, C: Airport, D: Night Out)`,
-      `Top amenity demand in ${state}? (A: WiFi, B: Sound, C: Lighting, D: USB)`,
-      `True or False: Pricing transparency is a challenge in ${state}.`,
-      `Do you compare 3+ quotes in ${state}? (Yes/No)`,
-      `Lead time usually needed in ${state}? (A: <1wk, B: 1–4wks, C: 1–3mo, D: 3mo+)`,
-      `True or False: Weather impacts booking decisions in ${state}.`
+      `Have you booked a party bus in ${state}? (Yes/No)`,
+      `Which vehicle is most popular in ${state}? (A: Limo, B: Party Bus, C: Shuttle, D: SUV)`,
+      `True or False: Local companies in ${state} give better service than national brands.`,
+      `Would you recommend a local limo company in ${state}? (Yes/No)`,
+      `Best event to book transportation for in ${state}? (A: Wedding, B: Prom, C: Sports, D: Concert)`,
+      `Top onboard amenity demand in ${state}? (A: WiFi, B: Sound, C: Lighting, D: Bar)`,
+      `True or False: Pricing is the main barrier to booking in ${state}.`,
+      `Do you compare 3+ quotes when booking in ${state}? (Yes/No)`,
+      `Which booking lead time is most common in ${state}? (A: <1wk, B: 1–4wks, C: 1–3mo, D: 3mo+)`,
+      `True or False: Safety ratings drive your choice in ${state}.`
     ],
   }));
 }
 
 function buildCityCategories(): PollCategory[] {
-  return MAJOR_CITIES.map(({ city, state }) => ({
+  return MAJOR_US_CITIES.map(({ city, state }) => ({
     title: `${city}, ${state} Rider Polls`,
     parent: "US Cities",
     polls: [
-      `Booked transportation in ${city}? (Yes/No)`,
-      `Primary purpose in ${city}? (A: Event, B: Airport, C: Night Out, D: Tourism)`,
-      `True or False: Traffic strongly affects pickup planning in ${city}.`,
-      `Would you pay for guaranteed on‑time pickup in ${city}? (Yes/No)`,
+      `Have you booked group transport in ${city}? (Yes/No)`,
+      `Primary booking reason in ${city}? (A: Event, B: Airport, C: Night Out, D: Tourism)`,
+      `True or False: Traffic significantly changes your pickup planning in ${city}.`,
+      `Would you pay extra for a punctuality guarantee in ${city}? (Yes/No)`,
       `Most desired upgrade in ${city}? (A: Newer Vehicle, B: Premium Sound, C: WiFi, D: Lighting)`,
-      `True or False: Reviews drive selection in ${city}.`,
-      `Average group size in ${city}? (A: 1–6, B: 7–14, C: 15–24, D: 25+)`,
-      `Do you split cost digitally in ${city}? (Yes/No)`,
-      `True or False: Earlier booking would happen with clearer pricing in ${city}.`,
-      `Carbon‑offset option interest in ${city}? (Yes/No)`
-    ],
-  }));
-}
-
-function buildEventCategories(): PollCategory[] {
-  return EVENT_TYPES.map(evt => ({
-    title: `${evt} Polls (General)`,
-    parent: "Event Types",
-    polls: [
-      `Have you booked a vehicle for a ${evt}? (Yes/No)`,
-      `Preferred vehicle for ${evt}? (A: Limo, B: Party Bus, C: Shuttle, D: SUV)`,
-      `True or False: ${evt} planning starts 2+ months out.`,
-      `Would you pay extra for upgraded interior on a ${evt}? (Yes/No)`,
-      `Most critical factor for ${evt}? (A: Price, B: Capacity, C: Luxury, D: Safety)`,
-      `True or False: Amenities influence ${evt} booking.`,
-      `Lead time for ${evt}? (A: <2wks, B: 2–6wks, C: 2–3mo, D: 4mo+)`,
-      `Add-ons most valued for ${evt}? (A: Lighting, B: Sound, C: Drinks, D: WiFi)`,
-      `Would you bundle return trip for ${evt}? (Yes/No)`,
-      `True or False: You consult multiple reviews before ${evt} booking.`
+      `True or False: You check driver reviews before booking in ${city}.`,
+      `Average group size you book for in ${city}? (A: 1–6, B: 7–14, C: 15–24, D: 25+)`,
+      `Do you split cost digitally for ${city} trips? (Yes/No)`,
+      `True or False: You’d book earlier if pricing transparency improved in ${city}.`,
+      `Would you use a carbon-offset transport option in ${city}? (Yes/No)`
     ],
   }));
 }
@@ -463,19 +445,16 @@ export default function Page() {
   const [openModal, setOpenModal] = useState<string | null>(null);
   const [filterGroup, setFilterGroup] = useState<string>("All");
   const [search, setSearch] = useState("");
-  const [showStates, setShowStates] = useState(false); // lazy toggle to avoid initial bundle weight
-  const [showCities, setShowCities] = useState(false);
-  const [showEvents, setShowEvents] = useState(false);
 
-  // Build dynamic sets only when toggled ON or when specifically filtered to those groups.
-  const stateCategories = useMemo(() => (showStates || filterGroup === "US States") ? buildStateCategories() : [], [showStates, filterGroup]);
-  const cityCategories = useMemo(() => (showCities || filterGroup === "US Cities") ? buildCityCategories() : [], [showCities, filterGroup]);
-  const eventCategories = useMemo(() => (showEvents || filterGroup === "Event Types") ? buildEventCategories() : [], [showEvents, filterGroup]);
+  // Build dynamic categories on demand to avoid huge initial render
+  const dynamicStateCategories = useMemo(() => (filterGroup === "All" || filterGroup === "US States") ? buildStateCategories() : [], [filterGroup]);
+  const dynamicCityCategories = useMemo(() => (filterGroup === "All" || filterGroup === "US Cities") ? buildCityCategories() : [], [filterGroup]);
 
   const allCategories: PollCategory[] = useMemo(
-    () => [...basePollCategories, ...stateCategories, ...cityCategories, ...eventCategories],
-    [stateCategories, cityCategories, eventCategories]
+    () => [...basePollCategories, ...dynamicStateCategories, ...dynamicCityCategories],
+    [dynamicStateCategories, dynamicCityCategories]
   );
+
   // Group by parent category for section headers
   const grouped = useMemo(() => {
     const filtered = allCategories.filter(cat => {
@@ -486,7 +465,8 @@ export default function Page() {
       return cat.polls.some(p => p.toLowerCase().includes(q));
     });
     return filtered.reduce((acc, cat) => {
-      (acc[cat.parent] ||= []).push(cat);
+      if (!acc[cat.parent]) acc[cat.parent] = [] as PollCategory[];
+      acc[cat.parent].push(cat);
       return acc;
     }, {} as Record<string, PollCategory[]>);
   }, [allCategories, filterGroup, search]);
@@ -511,41 +491,43 @@ export default function Page() {
         <h1 className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
           Industry Polls & Data
         </h1>
-        <p className="text-2xl md:text-3xl max-w-4xl mx-auto mb-8 text-blue-100/90 font-medium">
-          Browse industry, event, state, and city transportation sentiment. Use filters & search to drill into what riders care about—pricing, amenities, timing, reliability, and more.
+        <p className="text-2xl md:text-3xl max-w-3xl mx-auto mb-12 text-blue-100 font-medium">
+          Bus2Ride.com offers the most comprehensive, up-to-date data and poll results in the global limo and group transportation industry.<br className="hidden md:block" />
+          Explore real customer opinions, trends, and insights to make smarter travel decisions!
         </p>
-        {/* Controls */}
-        <div className="w-full max-w-6xl mx-auto px-6 mb-10">
-          <div className="flex flex-col md:flex-row md:items-end gap-4">
-            <div className="flex flex-col sm:flex-row gap-3 w-full">
+        {/* Filter / Search Bar */}
+        <div className="w-full max-w-5xl mx-auto px-6 mb-10">
+          <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-center">
+            <div className="flex items-stretch gap-2 w-full md:w-auto">
               <select
-                aria-label="Filter poll groups"
+                aria-label="Filter poll categories"
                 value={filterGroup}
-                onChange={e => setFilterGroup(e.target.value)}
-                className="bg-blue-950/60 border border-blue-600/40 rounded-xl px-4 py-3 text-sm text-blue-100 shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60 w-full sm:w-60"
+                onChange={(e) => setFilterGroup(e.target.value)}
+                className="bg-blue-950/60 backdrop-blur-sm border border-blue-600/40 text-blue-100 rounded-xl px-4 py-3 text-sm shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60 w-full md:w-56"
               >
-                {['All','Transportation Service Types','Event-Based Transportation','Regional & City-Based Transportation','Travel & Experience','US States','US Cities','Event Types'].map(opt => <option key={opt}>{opt}</option>)}
+                {['All','Transportation Service Types','Event-Based Transportation','Regional & City-Based Transportation','Travel & Experience','US States','US Cities'].map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
               </select>
-              <div className="relative flex-1">
+              <div className="relative flex-1 md:w-80">
                 <input
-                  type="text"
                   aria-label="Search polls"
+                  type="text"
                   value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search polls (e.g. pricing, wedding, Dallas, WiFi)"
-                  className="w-full bg-blue-950/60 border border-blue-600/40 rounded-xl px-4 py-3 pr-9 text-sm text-blue-100 placeholder-blue-300/60 shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search polls, e.g. pricing, wedding, Seattle…"
+                  className="w-full bg-blue-950/60 backdrop-blur-sm border border-blue-600/40 text-blue-100 placeholder-blue-300/60 rounded-xl px-4 py-3 pr-10 text-sm shadow focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 />
-                {search && <button onClick={()=>setSearch("")} aria-label="Clear search" className="absolute right-2 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white text-base">×</button>}
+                {search && (
+                  <button
+                    aria-label="Clear search"
+                    onClick={() => setSearch("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white text-sm"
+                  >×</button>
+                )}
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 text-[11px] uppercase tracking-wider font-semibold text-blue-300/60">
-              <button onClick={()=>setShowStates(s=>!s)} className={`px-3 py-1 rounded-full border ${showStates? 'border-blue-400 text-blue-200 bg-blue-900/60':'border-blue-600/40 hover:border-blue-400'}`}>States {showStates? '−':'+'}</button>
-              <button onClick={()=>setShowCities(s=>!s)} className={`px-3 py-1 rounded-full border ${showCities? 'border-blue-400 text-blue-200 bg-blue-900/60':'border-blue-600/40 hover:border-blue-400'}`}>Cities {showCities? '−':'+'}</button>
-              <button onClick={()=>setShowEvents(s=>!s)} className={`px-3 py-1 rounded-full border ${showEvents? 'border-blue-400 text-blue-200 bg-blue-900/60':'border-blue-600/40 hover:border-blue-400'}`}>Event Types {showEvents? '−':'+'}</button>
-            </div>
-          </div>
-          <div className="mt-3 text-center md:text-left text-xs text-blue-300/70 font-medium">
-            {Object.values(grouped).reduce((sum, cats)=> sum + cats.length, 0)} categories • {Object.values(grouped).reduce((sum,cats)=> sum + cats.reduce((ps,c)=> ps + c.polls.length,0),0)} polls visible
+            <p className="text-[11px] uppercase tracking-wider text-blue-300/60 font-semibold text-center md:text-left md:ml-2">{Object.values(grouped).reduce((sum, cats) => sum + cats.length, 0)} Categories • {Object.values(grouped).reduce((sum, cats) => sum + cats.reduce((s,c)=> s + c.polls.length,0), 0)} Polls</p>
           </div>
         </div>
         <div className="pb-10" />

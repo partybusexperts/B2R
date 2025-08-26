@@ -1,14 +1,17 @@
 "use client";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import PageLayout from "../../../components/PageLayout";
-import Section from "../../../components/Section";
-import WhyRentWithUs from "../../../components/WhyRentWithUs";
-import ToolsSlider from "../../../components/ToolsSlider";
-import LiveWeatherAdvisor from "../../../components/LiveWeatherAdvisor"; // will wrap & constrain
-import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
-import { ReviewForm } from "../../../components/ReviewForm";
-import SlideshowMaker from "../../../components/SlideshowMaker";
+import PageLayout from "@/components/PageLayout";
+import Section from "@/components/Section";
+import WhyRentWithUs from "@/components/WhyRentWithUs";
+import ToolsSlider from "@/components/ToolsSlider";
+import LiveWeatherAdvisor from "@/components/LiveWeatherAdvisor";
+import { ReviewForm } from "@/components/ReviewForm";
+import SlideshowMaker from "@/components/SlideshowMaker";
+
+// Anchorage baseline sample rates (illustrative)
+const BASE_RATES = { "20p Party Bus": 235, "30p Party Bus": 285, "10p Limo": 175, "14p Sprinter": 210, "56p Coach": 345 } as const;
+const SEASON_MULTIPLIER: Record<string, number> = { Winter: 0.95, Shoulder: 1.0, Summer: 1.15, Holiday: 1.25 };
 
 const anchorageNeighborhoods = [
   "Downtown","Midtown","South Anchorage","Hillside","Airport / Spenard","Turnagain","Government Hill","University / UMed","Muldoon","Eagle River (extension)"
@@ -21,6 +24,16 @@ const auroraTips = [
   "Bring spare battery packs—cold drains phones & DSLR batteries quickly."
 ];
 
+interface RateRow { name: string; hours: number; pax: number; total: number; per: number }
+function buildSamplePricing(): RateRow[] {
+  return Object.entries(BASE_RATES).flatMap(([name, base]) => [4,5,6].map(hours => {
+    const pax = parseInt(name.split(/[^0-9]/).filter(Boolean)[0] || "20", 10);
+    const total = base * hours;
+    return { name, hours, pax, total, per: Math.round((total / pax) * 100) / 100 };
+  }));
+}
+const samplePricing = buildSamplePricing();
+
 const localReviews = [
   { name: "Kara M.", rating: 5, text: "Winter corporate shuttle—driver pre‑heated the bus & tracked our delayed ANC flight." },
   { name: "Brian S.", rating: 5, text: "Cruise transfer ANC hotel → Whittier with glacier photo stop. Flawless timing." },
@@ -32,16 +45,58 @@ const localReviews = [
 const localPolls = [
   { q: "Primary reason you book in Anchorage?", a: ["Cruise","Corporate","Wedding","Aurora","Sports / Event"] },
   { q: "Most challenging planning variable?", a: ["Weather","Distance","Timing","Costs","Group Changes"] },
-  { q: "Favorite summer side trip?", a: ["Whittier","Seward","Alyeska","Matanuska Glacier","Portage Glacier"] },
-  { q: "Ideal aurora start window?", a: ["9–10 PM","10–11 PM","11–Midnight","After Midnight"] },
-  { q: "Winter outing most likely?", a: ["Aurora","Ski Alyeska","Corporate Retreat","Museum / Culture","Brewery Tour"] },
-  { q: "Must-have onboard amenity?", a: ["Heat Fast","USB Power","Lighting","Luggage Space","Wi‑Fi"] },
-  { q: "Cruise port transfer preference?", a: ["Direct","Photo Stop","Tunnel Timing Help","Glacier Stop"] },
-  { q: "How far in advance do you book?", a: ["< 2 Weeks","1–2 Months","3–4 Months","5+ Months"] }
+  { q: "Favorite summer side trip?", a: ["Whittier","Seward","Alyeska","Matanuska Glacier"] },
+  { q: "Ideal aurora start window?", a: ["9–10 PM","10–11 PM","11–Midnight","After Midnight"] }
 ];
 
+function SeasonRateEstimator() {
+  const [vehicle, setVehicle] = useState<keyof typeof BASE_RATES>("20p Party Bus");
+  const [hours, setHours] = useState(5);
+  const [season, setSeason] = useState<keyof typeof SEASON_MULTIPLIER>("Shoulder");
+  const [pax, setPax] = useState(20);
+  const est = Math.round(BASE_RATES[vehicle] * hours * SEASON_MULTIPLIER[season]);
+  const per = Math.round((est / pax) * 100) / 100;
+  return (
+    <div className="bg-white/95 rounded-3xl shadow-xl border border-blue-200 p-6 w-full max-w-xl mx-auto">
+      <h3 className="text-xl font-extrabold text-blue-900 mb-4">Anchorage Smart Cost Snapshot</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <label className="flex flex-col gap-1 text-sm font-semibold text-blue-900">Vehicle
+          <select value={vehicle} onChange={e=>{const v=e.target.value as keyof typeof BASE_RATES; setVehicle(v); setPax(parseInt(v.split(/[^0-9]/).filter(Boolean)[0]||"20",10));}} className="rounded-lg border border-blue-300 px-3 py-2 bg-white">
+            {Object.keys(BASE_RATES).map(v => <option key={v}>{v}</option>)}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-sm font-semibold text-blue-900">Hours
+          <input type="range" min={3} max={10} value={hours} onChange={e=>setHours(parseInt(e.target.value,10))} />
+          <span className="text-xs">{hours} hour block</span>
+        </label>
+        <label className="flex flex-col gap-1 text-sm font-semibold text-blue-900">Season
+          <select value={season} onChange={e=>setSeason(e.target.value as keyof typeof SEASON_MULTIPLIER)} className="rounded-lg border border-blue-300 px-3 py-2 bg-white">
+            {Object.keys(SEASON_MULTIPLIER).map(s => <option key={s}>{s}</option>)}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-sm font-semibold text-blue-900">Passengers (for per-person)
+          <input type="number" min={1} max={60} value={pax} onChange={e=>setPax(parseInt(e.target.value,10)||1)} className="rounded-lg border border-blue-300 px-3 py-2 bg-white" />
+        </label>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mt-2">
+        <div className="rounded-xl bg-blue-50 p-4 text-center">
+          <div className="text-xs font-semibold text-blue-600 tracking-wide">EST. TOTAL</div>
+          <div className="text-2xl font-extrabold text-blue-900">${est.toLocaleString()}</div>
+          <div className="text-[11px] text-blue-500 mt-1">Includes season adj.</div>
+        </div>
+        <div className="rounded-xl bg-blue-50 p-4 text-center">
+          <div className="text-xs font-semibold text-blue-600 tracking-wide">PER PERSON</div>
+          <div className="text-2xl font-extrabold text-blue-900">${per}</div>
+          <div className="text-[11px] text-blue-500 mt-1">Rounded 2 decimals</div>
+        </div>
+      </div>
+      <p className="text-xs text-blue-700 mt-4 leading-relaxed">Illustrative only. Use the <Link href="/quote" className="underline font-semibold">instant quote tool</Link> for live numbers.</p>
+    </div>
+  );
+}
 
 export default function AnchoragePage() {
+  const pricingCols = useMemo(() => samplePricing.reduce<Record<string, RateRow[]>>((acc, row) => { (acc[row.name] = acc[row.name] || []).push(row); return acc; }, {}), []);
   return (
     <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
       {/* HERO */}
@@ -71,7 +126,7 @@ export default function AnchoragePage() {
         <WhyRentWithUs />
       </Section>
 
-  {/* OVERVIEW & STRATEGY (pricing estimator removed) */}
+      {/* OVERVIEW & STRATEGY */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
@@ -93,11 +148,32 @@ export default function AnchoragePage() {
               <li><span className="font-semibold text-blue-50">Aurora windows:</span> Flexible standby after midnight—routing adapts to KP & cloud cover.</li>
               <li><span className="font-semibold text-blue-50">Wildlife:</span> Moose / Dall sheep slowdowns modeled with conservative mph.</li>
             </ul>
-    {/* Pricing estimator removed per request */}
+            <div className="mt-8"><SeasonRateEstimator /></div>
           </div>
         </div>
       </Section>
-  {/* Pricing table removed per request */}
+
+      {/* PRICING TABLE */}
+      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Illustrative Anchorage Charter Ranges</h2>
+        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Representative 4–6 hour blocks. Real quotes vary by pickup window, mileage, season demand, deadhead positioning & events.</p>
+        <div className="overflow-x-auto rounded-2xl border border-blue-700/40 bg-[#132a55] shadow-inner">
+          <table className="w-full text-left text-sm md:text-base">
+            <thead><tr className="text-blue-200/80 border-b border-blue-700/60"><th className="py-3 px-4 font-semibold">Vehicle</th><th className="py-3 px-4 font-semibold">Hours</th><th className="py-3 px-4 font-semibold">Est. Block</th><th className="py-3 px-4 font-semibold">Est. / Person*</th></tr></thead>
+            <tbody>
+              {Object.keys(pricingCols).map(v => pricingCols[v].map((r,i) => (
+                <tr key={v+"-"+r.hours} className="border-b border-blue-800/30 last:border-0 hover:bg-blue-800/20">
+                  {i===0 && <td rowSpan={pricingCols[v].length} className="py-3 px-4 align-top font-bold text-blue-50 w-[160px]">{r.name}</td>}
+                  <td className="py-3 px-4">{r.hours} hr</td>
+                  <td className="py-3 px-4">${r.total.toLocaleString()}</td>
+                  <td className="py-3 px-4">${r.per}</td>
+                </tr>
+              )))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-[11px] text-blue-300 mt-4">*Per-person assumes comfortable capacity. Use <Link href="/quote" className="underline">instant quote</Link> for live pricing.</p>
+      </Section>
 
       {/* ROUTES */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
@@ -135,41 +211,11 @@ export default function AnchoragePage() {
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Aurora / Winter Comfort Checklist</h2>
         <div className="grid md:grid-cols-2 gap-10">
-          <div className="space-y-4 flex flex-col">
-            {auroraTips.map(t => (
-              <div key={t} className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40 text-blue-100/90 text-sm leading-relaxed">{t}</div>
-            ))}
-            {/* Large vehicle slider to fill lower left space */}
-            <div className="mt-6">
-              <AnchorageVehicleSlider />
-            </div>
-            {/* Descriptive copy to utilize lower vertical space */}
-            <div className="mt-6 bg-[#132a55] p-5 rounded-2xl border border-blue-700/40 text-blue-100/90 text-[13px] leading-relaxed shadow">
-              <h4 className="font-semibold text-blue-50 mb-2 text-sm tracking-wide">Anchorage Fleet Readiness</h4>
-              <p className="mb-2">Vehicles allocated for Anchorage + Southcentral runs are prepped for rapid weather shifts—heated interiors, winter‑rated tires in season, and space allocation for layered gear & camera packs during aurora charters.</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Block heater + cold start checklist below 20°F.</li>
-                <li>Extra time baked into Seward / Whittier turns during storm advisories.</li>
-                <li>Night charters carry reflective cones for safe photo stop staging.</li>
-                <li>Sprinter & party bus USB power verified pre‑dispatch for battery‑intensive DSLR sessions.</li>
-                <li>Flexible overage policy on aurora nights—extend in 30 min increments if KP spikes.</li>
-              </ul>
-              <p className="mt-3 text-blue-200/80 italic">Include special cargo (skis, coolers, tripods) in your quote request so we reserve the right interior layout.</p>
-            </div>
-            {/* subtle aurora accent behind slider (decorative) */}
-            <div className="relative hidden">
-              <img src="/images/aurora-anchorage.svg" alt="Aurora decorative" className="opacity-40"/>
-            </div>
-          </div>
-          <div className="bg-[#132a55] p-4 md:p-6 rounded-2xl border border-blue-700/40 flex flex-col gap-4">
+          <div className="space-y-4">{auroraTips.map(t => <div key={t} className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40 text-blue-100/90 text-sm leading-relaxed">{t}</div>)}</div>
+          <div className="bg-[#132a55] p-6 rounded-2xl border border-blue-700/40 flex flex-col gap-4">
             <h3 className="text-2xl font-bold font-serif">Live Weather & Comfort</h3>
-            <p className="text-blue-100/90 text-sm leading-relaxed">Anchorage-focused forecast snapshot to plan layers, hydration & timing.</p>
-            <div className="rounded-2xl overflow-hidden border border-blue-600/40 bg-blue-900/40 p-2 md:p-3 text-white text-sm">
-              {/* Compact weather (anchored to Anchorage) */}
-              <div className="[&_*]:!text-[13px] [&_h1]:!text-base [&_h2]:!text-sm [&_.min-h-screen]:min-h-0 [&_.min-h-screen]:bg-transparent [&_.max-w-7xl]:max-w-full [&_.grid]:gap-3">
-                <LiveWeatherAdvisor variant="compact" fixedPlace={{ name: 'Anchorage, Alaska', latitude: 61.2181, longitude: -149.9003, country_code: 'US' }} />
-              </div>
-            </div>
+            <p className="text-blue-100/90 text-sm leading-relaxed">Use our smart advisory to plan clothing layers, hydration, and timing.</p>
+            <LiveWeatherAdvisor />
           </div>
         </div>
       </Section>
@@ -218,72 +264,10 @@ export default function AnchoragePage() {
       </Section>
 
       {/* TOOLS */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
+      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Planning Tools</h2>
-        <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-8">Compare capacities, split costs, plan multi‑stop routes, and check weather without losing dark theme contrast.</p>
-        <div className="rounded-3xl shadow-xl border border-blue-600/30 p-2 sm:p-4 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
-          <ToolsSlider />
-        </div>
-      </Section>
-
-      {/* LOCAL EVENTS */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl py-14 px-6 mb-16 border border-blue-800/40">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Seasonal Events & Trip Builders</h2>
-        <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-10 text-sm md:text-base">Anchor your itinerary to high‑impact local events—use these to justify early vehicle blocks, plan layered packing, or extend a cruise stay. (Dates approximate—confirm annually.)</p>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[ 
-            { season:'Jan–Mar', name:'Aurora Peak Windows', desc:'Dark skies + cold clarity. Flexible late‑night charter loops north of city.' },
-            { season:'Feb', name:'Fur Rendezvous', desc:'Winter festival downtown—parades and marketplace increase traffic staging.' },
-            { season:'Early Mar', name:'Iditarod Ceremonial Start', desc:'Crowds + media. Stage earlier hotel departures and downtown detours.' },
-            { season:'May–Sept', name:'Cruise Transfer Surge', desc:'High weekend demand to Whittier/Seward—lock charter blocks 90+ days out.' },
-            { season:'June', name:'Summer Solstice', desc:'Extended daylight enables multi‑stop scenic loops and late returns.' },
-            { season:'July', name:'Mount Marathon (Seward)', desc:'Add buffer for highway flow + Seward harbor congestion if day‑tripping.' },
-            { season:'Aug', name:'State Fair (Palmer)', desc:'Evening return surges; plan staggered pickup windows & cooler storage.' },
-            { season:'Sept', name:'Fall Colors & Shoulder Deals', desc:'Slight rate relief; combine glacier + brewery loops with earlier dusk.' },
-            { season:'Nov–Dec', name:'Holiday Lights & Early Aurora', desc:'Short daylight; integrate warming stops + photo pauses.' }
-          ].map(e => (
-            <div key={e.name} className="bg-[#132a55] rounded-2xl p-5 border border-blue-700/40 shadow flex flex-col">
-              <div className="text-xs uppercase tracking-wider text-blue-300 font-semibold mb-1">{e.season}</div>
-              <div className="font-bold text-blue-50 mb-1 leading-snug">{e.name}</div>
-              <p className="text-[12px] text-blue-100/90 leading-relaxed flex-1">{e.desc}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {e.name.includes('Aurora') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Night Charter</span>}
-                {e.name.includes('Cruise') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Port Transfer</span>}
-                {e.name.includes('Fair') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Staggered Return</span>}
-                {e.name.includes('Marathon') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Highway Buffer</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Cruise Transfer Builder</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Hotel staging & luggage manifest</li>
-              <li>Glacier / photo optional stop</li>
-              <li>Tunnel timing (Whittier)</li>
-              <li>Secondary driver fallback</li>
-            </ul>
-          </div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Aurora Flex Charter</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Dynamic cloud gap routing</li>
-              <li>Thermal gear & hot drinks staging</li>
-              <li>Flexible 60–90 min extension</li>
-              <li>Photo stop light discipline</li>
-            </ul>
-          </div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Multi‑Stop Brewery Loop</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Pre‑route crowd timing</li>
-              <li>ID / age verification flow</li>
-              <li>Hydration + snack reminder</li>
-              <li>Safe return & final headcount</li>
-            </ul>
-          </div>
-        </div>
+        <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-8">Compare capacities, split costs, plan multi‑stop routes, and check real‑time weather.</p>
+        <div className="bg-white rounded-3xl shadow-xl border-2 border-blue-100 p-6"><ToolsSlider /></div>
       </Section>
 
       {/* FINAL CTA */}

@@ -6,7 +6,6 @@ import Section from "../../../components/Section";
 import WhyRentWithUs from "../../../components/WhyRentWithUs";
 import ToolsSlider from "../../../components/ToolsSlider";
 import LiveWeatherAdvisor from "../../../components/LiveWeatherAdvisor"; // will wrap & constrain
-import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
 import { ReviewForm } from "../../../components/ReviewForm";
 import SlideshowMaker from "../../../components/SlideshowMaker";
 
@@ -139,26 +138,15 @@ export default function AnchoragePage() {
             {auroraTips.map(t => (
               <div key={t} className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40 text-blue-100/90 text-sm leading-relaxed">{t}</div>
             ))}
-            {/* Large vehicle slider to fill lower left space */}
-            <div className="mt-6">
-              <AnchorageVehicleSlider />
-            </div>
-            {/* Descriptive copy to utilize lower vertical space */}
-            <div className="mt-6 bg-[#132a55] p-5 rounded-2xl border border-blue-700/40 text-blue-100/90 text-[13px] leading-relaxed shadow">
-              <h4 className="font-semibold text-blue-50 mb-2 text-sm tracking-wide">Anchorage Fleet Readiness</h4>
-              <p className="mb-2">Vehicles allocated for Anchorage + Southcentral runs are prepped for rapid weather shifts—heated interiors, winter‑rated tires in season, and space allocation for layered gear & camera packs during aurora charters.</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Block heater + cold start checklist below 20°F.</li>
-                <li>Extra time baked into Seward / Whittier turns during storm advisories.</li>
-                <li>Night charters carry reflective cones for safe photo stop staging.</li>
-                <li>Sprinter & party bus USB power verified pre‑dispatch for battery‑intensive DSLR sessions.</li>
-                <li>Flexible overage policy on aurora nights—extend in 30 min increments if KP spikes.</li>
-              </ul>
-              <p className="mt-3 text-blue-200/80 italic">Include special cargo (skis, coolers, tripods) in your quote request so we reserve the right interior layout.</p>
-            </div>
-            {/* subtle aurora accent behind slider (decorative) */}
-            <div className="relative hidden">
-              <img src="/images/aurora-anchorage.svg" alt="Aurora decorative" className="opacity-40"/>
+            {/* Illustration fill for left column visual balance */}
+            <div className="mt-4 relative group rounded-2xl overflow-hidden border border-blue-700/40 shadow-inner">
+              <img
+                src="/images/aurora-anchorage.svg"
+                alt="Stylized aurora over Anchorage mountains"
+                loading="lazy"
+                className="w-full h-64 object-cover opacity-90 group-hover:opacity-100 transition"/>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0b1730] via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-3 left-4 text-xs text-blue-100/80 font-medium tracking-wide backdrop-blur-sm bg-blue-900/40 px-3 py-1 rounded-full border border-blue-600/40">Aurora Season • Flexible Night Routing</div>
             </div>
           </div>
           <div className="bg-[#132a55] p-4 md:p-6 rounded-2xl border border-blue-700/40 flex flex-col gap-4">

@@ -1,12 +1,11 @@
 "use client";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import PageLayout from "../../../components/PageLayout";
 import Section from "../../../components/Section";
 import WhyRentWithUs from "../../../components/WhyRentWithUs";
 import ToolsSlider from "../../../components/ToolsSlider";
-import LiveWeatherAdvisor from "../../../components/LiveWeatherAdvisor"; // will wrap & constrain
-import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
+import LiveWeatherAdvisor from "../../../components/LiveWeatherAdvisor";
 import { ReviewForm } from "../../../components/ReviewForm";
 import SlideshowMaker from "../../../components/SlideshowMaker";
 
@@ -39,7 +38,6 @@ const localPolls = [
   { q: "Cruise port transfer preference?", a: ["Direct","Photo Stop","Tunnel Timing Help","Glacier Stop"] },
   { q: "How far in advance do you book?", a: ["< 2 Weeks","1–2 Months","3–4 Months","5+ Months"] }
 ];
-
 
 export default function AnchoragePage() {
   return (
@@ -135,39 +133,14 @@ export default function AnchoragePage() {
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Aurora / Winter Comfort Checklist</h2>
         <div className="grid md:grid-cols-2 gap-10">
-          <div className="space-y-4 flex flex-col">
-            {auroraTips.map(t => (
-              <div key={t} className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40 text-blue-100/90 text-sm leading-relaxed">{t}</div>
-            ))}
-            {/* Large vehicle slider to fill lower left space */}
-            <div className="mt-6">
-              <AnchorageVehicleSlider />
-            </div>
-            {/* Descriptive copy to utilize lower vertical space */}
-            <div className="mt-6 bg-[#132a55] p-5 rounded-2xl border border-blue-700/40 text-blue-100/90 text-[13px] leading-relaxed shadow">
-              <h4 className="font-semibold text-blue-50 mb-2 text-sm tracking-wide">Anchorage Fleet Readiness</h4>
-              <p className="mb-2">Vehicles allocated for Anchorage + Southcentral runs are prepped for rapid weather shifts—heated interiors, winter‑rated tires in season, and space allocation for layered gear & camera packs during aurora charters.</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Block heater + cold start checklist below 20°F.</li>
-                <li>Extra time baked into Seward / Whittier turns during storm advisories.</li>
-                <li>Night charters carry reflective cones for safe photo stop staging.</li>
-                <li>Sprinter & party bus USB power verified pre‑dispatch for battery‑intensive DSLR sessions.</li>
-                <li>Flexible overage policy on aurora nights—extend in 30 min increments if KP spikes.</li>
-              </ul>
-              <p className="mt-3 text-blue-200/80 italic">Include special cargo (skis, coolers, tripods) in your quote request so we reserve the right interior layout.</p>
-            </div>
-            {/* subtle aurora accent behind slider (decorative) */}
-            <div className="relative hidden">
-              <img src="/images/aurora-anchorage.svg" alt="Aurora decorative" className="opacity-40"/>
-            </div>
-          </div>
+          <div className="space-y-4">{auroraTips.map(t => <div key={t} className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40 text-blue-100/90 text-sm leading-relaxed">{t}</div>)}</div>
           <div className="bg-[#132a55] p-4 md:p-6 rounded-2xl border border-blue-700/40 flex flex-col gap-4">
             <h3 className="text-2xl font-bold font-serif">Live Weather & Comfort</h3>
             <p className="text-blue-100/90 text-sm leading-relaxed">Anchorage-focused forecast snapshot to plan layers, hydration & timing.</p>
-            <div className="rounded-2xl overflow-hidden border border-blue-600/40 bg-blue-900/40 p-2 md:p-3 text-white text-sm">
-              {/* Compact weather (anchored to Anchorage) */}
-              <div className="[&_*]:!text-[13px] [&_h1]:!text-base [&_h2]:!text-sm [&_.min-h-screen]:min-h-0 [&_.min-h-screen]:bg-transparent [&_.max-w-7xl]:max-w-full [&_.grid]:gap-3">
-                <LiveWeatherAdvisor variant="compact" fixedPlace={{ name: 'Anchorage, Alaska', latitude: 61.2181, longitude: -149.9003, country_code: 'US' }} />
+            <div className="rounded-xl overflow-hidden border border-blue-600/30 bg-blue-950/40 p-2 md:p-3 text-white text-sm">
+              {/* Scaled-down weather component (CSS override wrapper) */}
+              <div className="[&_*]:text-[13px] [&_h1]:text-xl [&_h2]:text-base [&_.min-h-screen]:min-h-0 [&_.min-h-screen]:bg-transparent [&_.max-w-7xl]:max-w-full">
+                <AnchorageWeatherEmbed />
               </div>
             </div>
           </div>
@@ -223,66 +196,6 @@ export default function AnchoragePage() {
         <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-8">Compare capacities, split costs, plan multi‑stop routes, and check weather without losing dark theme contrast.</p>
         <div className="rounded-3xl shadow-xl border border-blue-600/30 p-2 sm:p-4 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
           <ToolsSlider />
-        </div>
-      </Section>
-
-      {/* LOCAL EVENTS */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl py-14 px-6 mb-16 border border-blue-800/40">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Seasonal Events & Trip Builders</h2>
-        <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-10 text-sm md:text-base">Anchor your itinerary to high‑impact local events—use these to justify early vehicle blocks, plan layered packing, or extend a cruise stay. (Dates approximate—confirm annually.)</p>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[ 
-            { season:'Jan–Mar', name:'Aurora Peak Windows', desc:'Dark skies + cold clarity. Flexible late‑night charter loops north of city.' },
-            { season:'Feb', name:'Fur Rendezvous', desc:'Winter festival downtown—parades and marketplace increase traffic staging.' },
-            { season:'Early Mar', name:'Iditarod Ceremonial Start', desc:'Crowds + media. Stage earlier hotel departures and downtown detours.' },
-            { season:'May–Sept', name:'Cruise Transfer Surge', desc:'High weekend demand to Whittier/Seward—lock charter blocks 90+ days out.' },
-            { season:'June', name:'Summer Solstice', desc:'Extended daylight enables multi‑stop scenic loops and late returns.' },
-            { season:'July', name:'Mount Marathon (Seward)', desc:'Add buffer for highway flow + Seward harbor congestion if day‑tripping.' },
-            { season:'Aug', name:'State Fair (Palmer)', desc:'Evening return surges; plan staggered pickup windows & cooler storage.' },
-            { season:'Sept', name:'Fall Colors & Shoulder Deals', desc:'Slight rate relief; combine glacier + brewery loops with earlier dusk.' },
-            { season:'Nov–Dec', name:'Holiday Lights & Early Aurora', desc:'Short daylight; integrate warming stops + photo pauses.' }
-          ].map(e => (
-            <div key={e.name} className="bg-[#132a55] rounded-2xl p-5 border border-blue-700/40 shadow flex flex-col">
-              <div className="text-xs uppercase tracking-wider text-blue-300 font-semibold mb-1">{e.season}</div>
-              <div className="font-bold text-blue-50 mb-1 leading-snug">{e.name}</div>
-              <p className="text-[12px] text-blue-100/90 leading-relaxed flex-1">{e.desc}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {e.name.includes('Aurora') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Night Charter</span>}
-                {e.name.includes('Cruise') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Port Transfer</span>}
-                {e.name.includes('Fair') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Staggered Return</span>}
-                {e.name.includes('Marathon') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Highway Buffer</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Cruise Transfer Builder</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Hotel staging & luggage manifest</li>
-              <li>Glacier / photo optional stop</li>
-              <li>Tunnel timing (Whittier)</li>
-              <li>Secondary driver fallback</li>
-            </ul>
-          </div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Aurora Flex Charter</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Dynamic cloud gap routing</li>
-              <li>Thermal gear & hot drinks staging</li>
-              <li>Flexible 60–90 min extension</li>
-              <li>Photo stop light discipline</li>
-            </ul>
-          </div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Multi‑Stop Brewery Loop</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Pre‑route crowd timing</li>
-              <li>ID / age verification flow</li>
-              <li>Hydration + snack reminder</li>
-              <li>Safe return & final headcount</li>
-            </ul>
-          </div>
         </div>
       </Section>
 

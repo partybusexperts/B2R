@@ -6,7 +6,6 @@ import Section from "../../../components/Section";
 import WhyRentWithUs from "../../../components/WhyRentWithUs";
 import ToolsSlider from "../../../components/ToolsSlider";
 import LiveWeatherAdvisor from "../../../components/LiveWeatherAdvisor"; // will wrap & constrain
-import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
 import { ReviewForm } from "../../../components/ReviewForm";
 import SlideshowMaker from "../../../components/SlideshowMaker";
 
@@ -40,6 +39,12 @@ const localPolls = [
   { q: "How far in advance do you book?", a: ["< 2 Weeks","1–2 Months","3–4 Months","5+ Months"] }
 ];
 
+// Lightweight wrapper forcing Anchorage defaults & reduced layout.
+function AnchorageWeatherEmbed() {
+  // We reuse LiveWeatherAdvisor but visually constrain via parent CSS.
+  // In future could create a prop-driven slim variant; for now we just render it.
+  return <LiveWeatherAdvisor />;
+}
 
 export default function AnchoragePage() {
   return (
@@ -135,32 +140,7 @@ export default function AnchoragePage() {
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Aurora / Winter Comfort Checklist</h2>
         <div className="grid md:grid-cols-2 gap-10">
-          <div className="space-y-4 flex flex-col">
-            {auroraTips.map(t => (
-              <div key={t} className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40 text-blue-100/90 text-sm leading-relaxed">{t}</div>
-            ))}
-            {/* Large vehicle slider to fill lower left space */}
-            <div className="mt-6">
-              <AnchorageVehicleSlider />
-            </div>
-            {/* Descriptive copy to utilize lower vertical space */}
-            <div className="mt-6 bg-[#132a55] p-5 rounded-2xl border border-blue-700/40 text-blue-100/90 text-[13px] leading-relaxed shadow">
-              <h4 className="font-semibold text-blue-50 mb-2 text-sm tracking-wide">Anchorage Fleet Readiness</h4>
-              <p className="mb-2">Vehicles allocated for Anchorage + Southcentral runs are prepped for rapid weather shifts—heated interiors, winter‑rated tires in season, and space allocation for layered gear & camera packs during aurora charters.</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Block heater + cold start checklist below 20°F.</li>
-                <li>Extra time baked into Seward / Whittier turns during storm advisories.</li>
-                <li>Night charters carry reflective cones for safe photo stop staging.</li>
-                <li>Sprinter & party bus USB power verified pre‑dispatch for battery‑intensive DSLR sessions.</li>
-                <li>Flexible overage policy on aurora nights—extend in 30 min increments if KP spikes.</li>
-              </ul>
-              <p className="mt-3 text-blue-200/80 italic">Include special cargo (skis, coolers, tripods) in your quote request so we reserve the right interior layout.</p>
-            </div>
-            {/* subtle aurora accent behind slider (decorative) */}
-            <div className="relative hidden">
-              <img src="/images/aurora-anchorage.svg" alt="Aurora decorative" className="opacity-40"/>
-            </div>
-          </div>
+          <div className="space-y-4">{auroraTips.map(t => <div key={t} className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40 text-blue-100/90 text-sm leading-relaxed">{t}</div>)}</div>
           <div className="bg-[#132a55] p-4 md:p-6 rounded-2xl border border-blue-700/40 flex flex-col gap-4">
             <h3 className="text-2xl font-bold font-serif">Live Weather & Comfort</h3>
             <p className="text-blue-100/90 text-sm leading-relaxed">Anchorage-focused forecast snapshot to plan layers, hydration & timing.</p>

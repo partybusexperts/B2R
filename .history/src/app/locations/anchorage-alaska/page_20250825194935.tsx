@@ -143,19 +143,6 @@ export default function AnchoragePage() {
             <div className="mt-6">
               <AnchorageVehicleSlider />
             </div>
-            {/* Descriptive copy to utilize lower vertical space */}
-            <div className="mt-6 bg-[#132a55] p-5 rounded-2xl border border-blue-700/40 text-blue-100/90 text-[13px] leading-relaxed shadow">
-              <h4 className="font-semibold text-blue-50 mb-2 text-sm tracking-wide">Anchorage Fleet Readiness</h4>
-              <p className="mb-2">Vehicles allocated for Anchorage + Southcentral runs are prepped for rapid weather shifts—heated interiors, winter‑rated tires in season, and space allocation for layered gear & camera packs during aurora charters.</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Block heater + cold start checklist below 20°F.</li>
-                <li>Extra time baked into Seward / Whittier turns during storm advisories.</li>
-                <li>Night charters carry reflective cones for safe photo stop staging.</li>
-                <li>Sprinter & party bus USB power verified pre‑dispatch for battery‑intensive DSLR sessions.</li>
-                <li>Flexible overage policy on aurora nights—extend in 30 min increments if KP spikes.</li>
-              </ul>
-              <p className="mt-3 text-blue-200/80 italic">Include special cargo (skis, coolers, tripods) in your quote request so we reserve the right interior layout.</p>
-            </div>
             {/* subtle aurora accent behind slider (decorative) */}
             <div className="relative hidden">
               <img src="/images/aurora-anchorage.svg" alt="Aurora decorative" className="opacity-40"/>
