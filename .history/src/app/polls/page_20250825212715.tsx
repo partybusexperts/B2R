@@ -25,13 +25,6 @@ interface PollCategory {
 }
 
 /* ---------------------------------------------------------------------------
-   CONTACT (for header CTAs)
---------------------------------------------------------------------------- */
-const PHONE_DISPLAY = "(888) 535-2566";
-const PHONE_TEL = "8885352566";
-const EMAIL = "info@bus2ride.com";
-
-/* ---------------------------------------------------------------------------
    TAXONOMY
 --------------------------------------------------------------------------- */
 const VEHICLES = [
@@ -238,17 +231,20 @@ type AnswerStore = Record<string, number | null>; // "catKey::idx" -> optionInde
 
 function useAnswerStore(storageKey = "polls-answers") {
   const [answers, setAnswers] = useState<AnswerStore>({});
+  // load once
   useEffect(() => {
     try {
       const raw = localStorage.getItem(storageKey);
       if (raw) setAnswers(JSON.parse(raw));
     } catch {}
   }, [storageKey]);
+  // persist
   useEffect(() => {
     try {
       localStorage.setItem(storageKey, JSON.stringify(answers));
     } catch {}
   }, [answers, storageKey]);
+  // helpers
   const set = (id: string, idx: number) =>
     setAnswers((a) => ({ ...a, [id]: idx }));
   const resetCat = (catKey: string) =>
@@ -397,48 +393,26 @@ export default function Page() {
 
   return (
     <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
-      {/* ---------- HERO / HEADER (matches the bright one you liked) ---------- */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        {/* Primary bright gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        {/* Sheen overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          Nationwide Rider Polls
-        </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-8 text-blue-50 font-medium drop-shadow">
-          Explore sentiment by city, state, event, and vehicle. Vote and see what others prefer.
-        </p>
+      {/* HEADER (compact, matches rest of site) */}
+      <Section className="max-w-7xl mx-auto py-8 px-6">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-extrabold font-serif tracking-tight">
+              Nationwide Rider Polls
+            </h1>
+            <p className="text-sm md:text-base text-blue-100/80 mt-1">
+              Explore sentiment by <span className="font-semibold">city</span>, <span className="font-semibold">state</span>, <span className="font-semibold">event</span>, and <span className="font-semibold">vehicle</span>. Vote and see what others prefer.
+            </p>
+            <div className="mt-2 text-xs text-blue-300/80">
+              {all.length} categories visible • {all.reduce((n, c) => n + c.polls.length, 0)} polls (30 each)
+            </div>
+          </div>
 
-        {/* CTAs */}
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a
-            href={`tel:${PHONE_TEL}`}
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-white/95 text-blue-900 hover:bg-white border-blue-200"
-          >
-            Call {PHONE_DISPLAY}
-          </a>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-blue-700"
-          >
-            Email Us
-          </a>
-          <a
-            href="/quote#instant"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-800 text-white hover:bg-blue-900 border-blue-900"
-          >
-            ⚡ Instant Live Quote
-          </a>
-        </div>
-
-        {/* Controls row (scope + search) */}
-        <div className="relative z-10 w-full max-w-5xl mt-8 px-4">
-          <div className="flex flex-col md:flex-row gap-3 items-stretch justify-center">
+          <div className="w-full md:w-auto flex flex-col sm:flex-row gap-3 md:items-center">
             <select
               value={scope}
               onChange={(e) => setScope(e.target.value as ScopeFilter)}
-              className="bg-white/90 text-blue-900 border border-white/60 rounded-full px-5 py-3 shadow focus:outline-none focus:ring-2 focus:ring-white/70 w-full md:w-56"
+              className="bg-blue-950/70 border border-blue-600/40 rounded-xl px-4 py-3 text-blue-100 w-full sm:w-56 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
               aria-label="Scope"
             >
               {["All","US Cities","US States","Event Transportation","Vehicles","Travel & Experience"].map((s) => (
@@ -446,12 +420,12 @@ export default function Page() {
               ))}
             </select>
 
-            <div className="relative flex-1">
+            <div className="relative flex-1 md:w-[28rem]">
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search (e.g., Anchorage, Alaska, Wedding, Party Bus)…"
-                className="w-full bg-white/90 text-blue-900 border border-white/60 rounded-full px-5 py-3 placeholder-blue-900/60 shadow focus:outline-none focus:ring-2 focus:ring-white/70"
+                className="w-full bg-blue-950/70 border border-blue-600/40 rounded-xl px-4 py-3 text-blue-100 placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 aria-label="Search polls"
               />
               {q && suggestions.length > 0 && (
@@ -470,25 +444,10 @@ export default function Page() {
               )}
             </div>
           </div>
-
-          <div className="mt-3 text-sm text-blue-50/90">
-            {all.length} categories visible • {all.reduce((n, c) => n + c.polls.length, 0)} polls (30 each)
-          </div>
         </div>
+      </Section>
 
-        {/* Decorative wave divider */}
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path
-              d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
-              fill="#0b1934"
-              opacity="1"
-            />
-          </svg>
-        </div>
-      </section>
-
-      {/* ---------- GROUPS (unchanged) ---------- */}
+      {/* GROUPS */}
       {groups.map(({ parent, items }) => (
         <Section key={parent} className="max-w-7xl mx-auto mb-16 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl py-10 px-6">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-8 font-serif tracking-tight text-center bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">
@@ -504,9 +463,9 @@ export default function Page() {
 
               return (
                 <div
-                  id={anchor}
-                  key={cat.key}
-                  className="relative bg-blue-950/90 rounded-2xl shadow-2xl p-6 border border-blue-700/20 text-white hover:scale-[1.015] transition-transform"
+                    id={anchor}
+                    key={cat.key}
+                    className="relative bg-blue-950/90 rounded-2xl shadow-2xl p-6 border border-blue-700/20 text-white hover:scale-[1.015] transition-transform"
                 >
                   {/* Header + progress */}
                   <div className="flex items-start gap-3 mb-4">
