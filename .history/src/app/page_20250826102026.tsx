@@ -1044,7 +1044,7 @@ export default function Home() {
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
         </div>
         <span className="ml-2 text-blue-100/90 text-sm">
-          Bus2Ride Tools • <span className="opacity-70">To Help Our Customers Make Decisions</span>
+          Bus2Ride Tools • <span className="opacity-70">tap any card</span>
         </span>
         <span className="ml-auto text-[11px] font-semibold text-emerald-300/90 bg-emerald-500/10 border border-emerald-400/20 px-2 py-0.5 rounded-full">
           New tools added weekly
