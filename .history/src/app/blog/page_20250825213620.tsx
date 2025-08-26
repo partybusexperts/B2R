@@ -336,58 +336,33 @@ export default function Page() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredPosts.map((post) => {
-              const slug = post.title.startsWith("Party Bus Pricing 101")
-                ? "/blog/party-bus-pricing-101"
-                : undefined; // only first post has a dedicated page now
-              const content = (
-                <>
-                  <div className="aspect-[4/2.2] w-full rounded-xl overflow-hidden mb-5 bg-blue-900/60">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h2 className="text-2xl font-bold mb-2 text-blue-100 font-serif tracking-wide">
-                    {post.title}
-                  </h2>
-                  <p className="text-blue-200 mb-4 text-base font-sans min-h-[64px]">
-                    {post.excerpt}
-                  </p>
-                  <div className="mt-auto flex items-center justify-between text-blue-400 text-sm">
-                    <span>{post.author}</span>
-                    <time dateTime={post.date}>
-                      {new Date(post.date).toLocaleDateString()}
-                    </time>
-                  </div>
-                  {slug && (
-                    <div className="mt-4 text-right">
-                      <span className="inline-block text-sm font-semibold text-blue-300 group-hover:text-blue-200">
-                        Read Article →
-                      </span>
-                    </div>
-                  )}
-                </>
-              );
-              return slug ? (
-                <a
-                  key={`${post.title}-${post.date}`}
-                  href={slug}
-                  className="group bg-blue-950/90 rounded-2xl shadow-2xl p-6 flex flex-col border border-blue-700/20 hover:scale-[1.015] hover:shadow-2xl transition-all duration-200 overflow-hidden text-white"
-                >
-                  {content}
-                </a>
-              ) : (
-                <article
-                  key={`${post.title}-${post.date}`}
-                  className="group bg-blue-950/90 rounded-2xl shadow-2xl p-6 flex flex-col border border-blue-700/20 hover:scale-[1.015] hover:shadow-2xl transition-all duration-200 overflow-hidden text-white"
-                >
-                  {content}
-                </article>
-              );
-            })}
+            {filteredPosts.map((post) => (
+              <article
+                key={`${post.title}-${post.date}`}
+                className="group bg-blue-950/90 rounded-2xl shadow-2xl p-6 flex flex-col border border-blue-700/20 hover:scale-[1.015] hover:shadow-2xl transition-all duration-200 overflow-hidden text-white"
+              >
+                <div className="aspect-[4/2.2] w-full rounded-xl overflow-hidden mb-5 bg-blue-900/60">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                    loading="lazy"
+                  />
+                </div>
+                <h2 className="text-2xl font-bold mb-2 text-blue-100 font-serif tracking-wide">
+                  {post.title}
+                </h2>
+                <p className="text-blue-200 mb-4 text-base font-sans min-h-[64px]">
+                  {post.excerpt}
+                </p>
+                <div className="mt-auto flex items-center justify-between text-blue-400 text-sm">
+                  <span>{post.author}</span>
+                  <time dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString()}
+                  </time>
+                </div>
+              </article>
+            ))}
           </div>
         )}
       </Section>
