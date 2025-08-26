@@ -1,7 +1,8 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import Section from "../../../components/Section";
+import PageLayout from "../../components/PageLayout";
+import Section from "../../components/Section";
 import { findState } from "../locationData";
 
 interface Props {
@@ -105,15 +106,24 @@ const POLLS = [
   },
 ];
 
+/* helpers */
 const slugify = (s: string) =>
-  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 
 export default function StatePage({ params }: Props) {
   const entry = findState(params.state);
 
   if (!entry) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black text-white">
+      <PageLayout
+        gradientFrom="from-blue-950"
+        gradientVia="via-blue-900"
+        gradientTo="to-black"
+        textColor="text-white"
+      >
         <Section className="text-center">
           <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
             State Not Found
@@ -128,12 +138,13 @@ export default function StatePage({ params }: Props) {
             Back to Locations
           </Link>
         </Section>
-      </main>
+      </PageLayout>
     );
   }
 
   const isAlaska = entry.state === "Alaska";
   const [reviewSearch, setReviewSearch] = useState("");
+
   const filteredReviews = useMemo(() => {
     const q = reviewSearch.trim().toLowerCase();
     if (!q) return REVIEWS;
@@ -145,13 +156,18 @@ export default function StatePage({ params }: Props) {
     );
   }, [reviewSearch]);
 
+  /* quick color accents by state initial (keeps it fun + subtle) */
   const stateInitial = entry.state[0].toUpperCase();
-  const accent = isAlaska
-    ? "from-cyan-300 via-blue-500 to-indigo-700"
-    : "from-blue-300 via-sky-500 to-indigo-700";
+  const accent =
+    isAlaska ? "from-cyan-300 via-blue-500 to-indigo-700" : "from-blue-300 via-sky-500 to-indigo-700";
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black text-white">
+    <PageLayout
+      gradientFrom="from-blue-950"
+      gradientVia="via-blue-900"
+      gradientTo="to-black"
+      textColor="text-white"
+    >
       {/* HERO */}
       <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
         <div className={`absolute inset-0 bg-gradient-to-b ${accent}`} />
@@ -215,7 +231,7 @@ export default function StatePage({ params }: Props) {
           </ol>
         </nav>
 
-        {/* CITIES */}
+        {/* CITIES – stunning grid with deep links */}
         <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-10 px-6 mb-16">
           <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
             <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
@@ -228,9 +244,13 @@ export default function StatePage({ params }: Props) {
             </div>
           </div>
 
+          {/* Alaska: link each city to its dedicated page */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {entry.cities.map((city) => {
-              const href = `/locations/${slugify(city)}-${slugify(entry.state)}`;
+              const href =
+                isAlaska
+                  ? `/locations/${slugify(city)}-${slugify(entry.state)}`
+                  : `/locations/${slugify(city)}-${slugify(entry.state)}`;
               return (
                 <Link
                   key={city}
@@ -247,7 +267,9 @@ export default function StatePage({ params }: Props) {
                         →
                       </span>
                     </div>
-                    <div className="text-blue-700/80 text-sm">{entry.state}</div>
+                    <div className="text-blue-700/80 text-sm">
+                      {entry.state}
+                    </div>
                     <div className="mt-4 flex gap-2">
                       <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold border border-blue-200">
                         Guides
@@ -260,12 +282,14 @@ export default function StatePage({ params }: Props) {
                       </span>
                     </div>
                   </div>
+                  {/* glow band */}
                   <div className="absolute -bottom-6 left-6 right-6 h-10 rounded-full blur-2xl bg-gradient-to-r from-blue-400/30 via-blue-500/30 to-indigo-500/30" />
                 </Link>
               );
             })}
           </div>
 
+          {/* CTA strip */}
           <div className="mt-10 flex justify-center">
             <div className="bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-2xl shadow-xl px-8 py-6 flex flex-col md:flex-row items-center gap-4 border-2 border-blue-400/60">
               <div className="text-xl font-extrabold text-center md:text-left">
@@ -344,7 +368,7 @@ export default function StatePage({ params }: Props) {
           </Section>
         )}
 
-        {/* REVIEWS */}
+        {/* REVIEWS — match global style */}
         <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-12 px-6 mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
             What Customers Say in {entry.state}
@@ -377,7 +401,9 @@ export default function StatePage({ params }: Props) {
                     {"★".repeat(r.rating)}
                   </span>
                 </div>
-                <p className="text-blue-800 italic">“{r.text}”</p>
+                <p className="text-blue-800 italic">
+                  “{r.text}”
+                </p>
                 <svg
                   className="absolute right-0 bottom-0 opacity-10 w-24 h-24 pointer-events-none"
                   viewBox="0 0 100 100"
@@ -404,7 +430,7 @@ export default function StatePage({ params }: Props) {
           </div>
         </Section>
 
-        {/* POLLS */}
+        {/* POLLS — match other poll sections */}
         <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-12 px-6 mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
             {isAlaska ? "Alaska Polls" : "Local Polls"}
@@ -462,7 +488,7 @@ export default function StatePage({ params }: Props) {
           </div>
         </Section>
 
-        {/* TOOLS */}
+        {/* TOOLS — match “Helpful Tools” layout */}
         <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-12 px-6 mb-20">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
             Helpful Tools
@@ -533,6 +559,6 @@ export default function StatePage({ params }: Props) {
           </div>
         </Section>
       </main>
-    </main>
+    </PageLayout>
   );
 }

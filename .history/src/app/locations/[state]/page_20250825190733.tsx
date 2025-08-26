@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import Section from "../../../components/Section";
+import Section from "../../components/Section";
 import { findState } from "../locationData";
 
 interface Props {
