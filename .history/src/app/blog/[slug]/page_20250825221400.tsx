@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import PageLayout from "../../../components/PageLayout";
 import Section from "../../../components/Section";
@@ -92,7 +94,7 @@ const POSTS: PostContentBase[] = [
     date: "2025-07-20",
     author: "Bus2Ride Editors",
     related: [
-  "airport-meet-and-greet-what-it-includes-when-its-worth-it",
+      "airport-meet-and-greet-what-it-includes-when-worth-it",
       "how-to-read-a-quote-hourly-vs-flat-rate-vs-fuel-service-fees",
       "accessible-group-travel-ada-options-to-request",
       "city-traffic-101-building-realistic-timelines",

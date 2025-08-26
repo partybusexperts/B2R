@@ -46,7 +46,7 @@ export default function PollResultsPage() {
       <Section className="relative overflow-hidden text-center !pt-20 !pb-16">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,#2563eb_0%,#0b1934_55%,#030712_100%)]" />
         <div className="relative z-10 max-w-5xl mx-auto px-6">
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight font-serif bg-gradient-to-r from-blue-200 via-blue-300 to-blue-500 bg-clip-text text-transparent drop-shadow">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-green-400 bg-clip-text text-transparent drop-shadow">
             Limo Industry Poll Results
           </h1>
           <p className="text-xl md:text-2xl text-blue-100/90 mt-6">
@@ -76,7 +76,7 @@ export default function PollResultsPage() {
           <span className="font-bold text-blue-200 text-lg">or</span>
           <Link
             href="/poll-results"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg text-lg transition focus:outline-none focus:ring-2 focus:ring-blue-400 text-center"
+            className="bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg text-lg transition focus:outline-none focus:ring-2 focus:ring-green-400 text-center"
           >
             See Limo Industry Data
           </Link>
