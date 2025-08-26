@@ -934,70 +934,96 @@ export default function Home() {
 
 
 
- {/* Testimonials */}
-<Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-14 px-6 border border-blue-800/30">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
+  {/* Testimonials */}
+<Section className="relative max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl border border-blue-800/30 overflow-hidden">
+  {/* soft deco glows */}
+  <div className="pointer-events-none absolute -top-24 -left-16 w-[28rem] h-[28rem] bg-sky-400/20 blur-3xl rounded-full" />
+  <div className="pointer-events-none absolute -bottom-24 -right-16 w-[28rem] h-[28rem] bg-indigo-500/20 blur-3xl rounded-full" />
+
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] tracking-tight">
     What Our Customers Say
   </h2>
+  <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">
+    Real trips. Real people. Five-star nights out—every time.
+  </p>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-    {[
+  {(() => {
+    const TESTIMONIALS = [
       {
         name: "Paul P.",
-        text: "Absolutely excellent! Great customer service! We changed drop off points several times and they were so accommodating. Gail in the office is top notch and on top of everything! The price was very good. The driver was so nice and professional. The limo looked pristine, inside and out. Use them, you won’t regret it!! Used for my son's wedding on August 11.",
+        text:
+          "Absolutely excellent! Great customer service! We changed drop off points several times and they were so accommodating. Gail in the office is top notch and on top of everything! The price was very good. The driver was so nice and professional. The limo looked pristine, inside and out. Use them, you wont regret it!! Used for my son's wedding on August 11.",
       },
       {
         name: "Jessie A.",
-        text: "The limo company that you need to call when you have an event. Prices and limos and party buses are like no other limo company.",
+        text:
+          "The limo company that you need to call when u have an event. Prices and limos and party bus are like no other limo company.",
       },
       {
         name: "Dee C.",
-        text: "Definitely lives up to their name! We used them for our bachelorette/bachelor parties and our wedding and will be using them again. They were absolutely great! Even let me extend an hour when I decided my bachelorette party was too much fun and I wasn't ready to go yet!! I would absolutely recommend them and do to everyone!!",
+        text:
+          "Definitely lives up to their name! We used them for our bachelorette/bachelor parties and our wedding and will be using them again. They were absolutely great! Even let me extend an hour when I decided my bachelorette party was too much fun and I wasn't ready to go yet!! :) I would absolutely recommend them and do to everyone!!",
       },
       {
         name: "Halee H.",
-        text: "The price is great, inside is very clean, driver was very friendly and accommodating! Will never use another company besides this one!",
+        text:
+          "The price is great, inside is very clean, driver was very friendly and accommodating! Will never use another company besides this one!",
       },
-    ].map((review, idx) => (
-      <div
-        key={idx}
-        className="relative bg-[#12244e] border border-blue-800/40 rounded-2xl shadow-xl p-8 flex flex-col justify-between hover:scale-[1.02] transition-transform"
-      >
-        {/* Quote Icon */}
-        <div className="absolute -top-4 -left-4 bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-md text-2xl">
-          “
-        </div>
+    ];
 
-        {/* Review Text */}
-        <p className="text-blue-100 italic mb-6 leading-relaxed text-lg">
-          {review.text}
-        </p>
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 px-5 md:px-8 pb-8">
+        {TESTIMONIALS.map((t, i) => (
+          <div key={i} className="group relative">
+            {/* outer glow on hover */}
+            <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-sky-300/40 via-blue-500/30 to-indigo-400/40 opacity-60 blur-sm transition duration-300 group-hover:opacity-100 group-hover:blur" />
 
-        {/* Reviewer Info */}
-        <div className="flex items-center gap-3 mt-auto">
-          <div className="bg-blue-600 rounded-full w-11 h-11 flex items-center justify-center text-white font-bold shadow-md">
-            {review.name[0]}
+            {/* glass card */}
+            <div className="relative h-full rounded-2xl bg-[#12244e]/80 backdrop-blur border border-blue-800/40 shadow-[0_10px_30px_rgba(2,6,23,.35)] p-7 md:p-8 text-blue-50 flex flex-col">
+              {/* quote badge */}
+              <div className="absolute -top-4 -left-4 h-12 w-12 rounded-xl bg-white/10 border border-blue-300/30 flex items-center justify-center text-3xl text-white/80 shadow-lg">
+                “
+              </div>
+
+              {/* text */}
+              <p className="italic leading-relaxed text-[1.05rem] md:text-lg mb-5 text-blue-50/95">
+                {t.text}
+              </p>
+
+              {/* footer */}
+              <div className="mt-auto flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center font-bold">
+                  {t.name.slice(0, 1)}
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-white">{t.name}</span>
+                  <span className="text-yellow-300" aria-label="5 out of 5 stars" role="img">
+                    ★★★★★
+                  </span>
+                </div>
+
+                {/* subtle sheen meter */}
+                <div className="ml-auto w-16 h-6 rounded-full bg-white/10 border border-white/10 overflow-hidden relative">
+                  <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-white">{review.name}</span>
-            <span className="text-yellow-400 text-sm">★★★★★</span>
-          </div>
-        </div>
+        ))}
       </div>
-    ))}
-  </div>
+    );
+  })()}
 
-  {/* More Reviews Button */}
-  <div className="flex justify-center">
-    <a
+  {/* CTA */}
+  <div className="flex justify-center mt-2 mb-10 px-5">
+    <Link
       href="/reviews"
       className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
     >
       MORE REVIEWS
-    </a>
+    </Link>
   </div>
 </Section>
-
 
  {/* Tools Section (original slider version) */}
       <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">

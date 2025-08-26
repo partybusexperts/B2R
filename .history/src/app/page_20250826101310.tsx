@@ -934,71 +934,73 @@ export default function Home() {
 
 
 
- {/* Testimonials */}
-<Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-14 px-6 border border-blue-800/30">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
-    What Our Customers Say
-  </h2>
-
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-    {[
-      {
-        name: "Paul P.",
-        text: "Absolutely excellent! Great customer service! We changed drop off points several times and they were so accommodating. Gail in the office is top notch and on top of everything! The price was very good. The driver was so nice and professional. The limo looked pristine, inside and out. Use them, you won’t regret it!! Used for my son's wedding on August 11.",
-      },
-      {
-        name: "Jessie A.",
-        text: "The limo company that you need to call when you have an event. Prices and limos and party buses are like no other limo company.",
-      },
-      {
-        name: "Dee C.",
-        text: "Definitely lives up to their name! We used them for our bachelorette/bachelor parties and our wedding and will be using them again. They were absolutely great! Even let me extend an hour when I decided my bachelorette party was too much fun and I wasn't ready to go yet!! I would absolutely recommend them and do to everyone!!",
-      },
-      {
-        name: "Halee H.",
-        text: "The price is great, inside is very clean, driver was very friendly and accommodating! Will never use another company besides this one!",
-      },
-    ].map((review, idx) => (
-      <div
-        key={idx}
-        className="relative bg-[#12244e] border border-blue-800/40 rounded-2xl shadow-xl p-8 flex flex-col justify-between hover:scale-[1.02] transition-transform"
-      >
-        {/* Quote Icon */}
-        <div className="absolute -top-4 -left-4 bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-md text-2xl">
-          “
-        </div>
-
-        {/* Review Text */}
-        <p className="text-blue-100 italic mb-6 leading-relaxed text-lg">
-          {review.text}
-        </p>
-
-        {/* Reviewer Info */}
-        <div className="flex items-center gap-3 mt-auto">
-          <div className="bg-blue-600 rounded-full w-11 h-11 flex items-center justify-center text-white font-bold shadow-md">
-            {review.name[0]}
+    {/* Testimonials */}
+    <Section className="max-w-5xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2 tracking-tight">
+          What Our Customers Say
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10 max-w-4xl mx-auto">
+          {/* First row of 4 reviews */}
+          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+            <p className="text-gray-700 italic mb-4 text-lg">
+              “Absolutely excellent! Great customer service! We changed drop off
+              points several times and they were so accommodating. Gail in the
+              office is top notch and on top of everything! The price was very
+              good. The driver was so nice and professional. The limo looked
+              pristine, inside and out. Use them, you wont regret it!! Used for
+              my son&apos;s wedding on August 11.”
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-blue-700">— Paul P.</span>
+              <span className="text-yellow-400">★★★★★</span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-white">{review.name}</span>
-            <span className="text-yellow-400 text-sm">★★★★★</span>
+          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+            <p className="text-gray-700 italic mb-4 text-lg">
+              “The limo company that you need to call when u have an event.
+              Prices and limos and party bus are like no other limo company.”
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-blue-700">— Jessie A.</span>
+              <span className="text-yellow-400">★★★★★</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+            <p className="text-gray-700 italic mb-4 text-lg">
+              “Definitely lives up to their name! We used them for our
+              bachelorette/bachelor parties and our wedding and will be using
+              them again. They were absolutely great! Even let me extend an hour
+              when I decided my bachelorette party was too much fun and I wasn&apos;t
+              ready to go yet!! :) I would absolutely recommend them and do to
+              everyone!!”
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-blue-700">— Dee C.</span>
+              <span className="text-yellow-400">★★★★★</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between min-h-[220px]">
+            <p className="text-gray-700 italic mb-4 text-lg">
+              “The price is great, inside is very clean, driver was very friendly
+              and accommodating! Will never use another company besides this
+              one!”
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-blue-700">— Halee H.</span>
+              <span className="text-yellow-400">★★★★★</span>
+            </div>
           </div>
         </div>
-      </div>
-    ))}
-  </div>
-
-  {/* More Reviews Button */}
-  <div className="flex justify-center">
-    <a
-      href="/reviews"
-      className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
-    >
-      MORE REVIEWS
-    </a>
-  </div>
-</Section>
-
-
+        {/* MORE REVIEWS button after first 4 reviews */}
+        <div className="flex justify-center my-8">
+          <Link
+            href="/reviews"
+            className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-lg text-lg"
+          >
+            MORE REVIEWS
+          </Link>
+        </div>
+      </Section>
  {/* Tools Section (original slider version) */}
       <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black">
   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight">
