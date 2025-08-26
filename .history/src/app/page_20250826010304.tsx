@@ -141,11 +141,11 @@ export default function Home() {
       </div>
 
       {/* Micro trust pills (visual, not new copy) */}
-  <div className="mt-6 flex flex-wrap md:flex-nowrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-2">
         {["4.9★ Avg", "On-Time Promise", "Clean Vehicle", "Transparent Pricing"].map((t) => (
           <span
             key={t}
-    className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs md:text-sm backdrop-blur whitespace-nowrap"
+            className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs md:text-sm backdrop-blur"
           >
             {t}
           </span>

@@ -113,9 +113,13 @@ export default function Home() {
         <HeroSlideshow />
       </Section>
       <div className="h-10 md:h-16" />
-  <Section className="max-w-6xl mx-auto">
-    {/* WHY RENT WITH BUS2RIDE — award-level makeover (styling only, same content) */}
-    <Section className="relative isolate overflow-hidden rounded-[28px] border border-blue-800/30 bg-gradient-to-br from-[#122a5c] via-[#112352] to-[#0e1b3c] shadow-[0_20px_60px_rgba(2,6,23,.45)]">
+      <Section className="max-w-6xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 items-center bg-gradient-to-r from-white via-blue-50 to-white rounded-3xl shadow-xl">
+        <div>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 mt-8 bg-gradient-to-r from-blue-200 via-blue-500 to-blue-800 bg-clip-text text-transparent drop-shadow-lg">
+            Why Rent With Bus2Ride?
+          </h2>
+          {/* WHY RENT WITH BUS2RIDE — award-level makeover (styling only, same content) */}
+          <Section className="relative isolate overflow-hidden rounded-[28px] border border-blue-800/30 bg-gradient-to-br from-[#122a5c] via-[#112352] to-[#0e1b3c] shadow-[0_20px_60px_rgba(2,6,23,.45)]">
   {/* Ambient glow accents (no dots) */}
   <div className="pointer-events-none absolute -top-24 -left-20 h-[26rem] w-[26rem] rounded-full bg-sky-400/20 blur-3xl" />
   <div className="pointer-events-none absolute -bottom-24 -right-20 h-[26rem] w-[26rem] rounded-full bg-indigo-500/20 blur-3xl" />
@@ -141,11 +145,11 @@ export default function Home() {
       </div>
 
       {/* Micro trust pills (visual, not new copy) */}
-  <div className="mt-6 flex flex-wrap md:flex-nowrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-2">
         {["4.9★ Avg", "On-Time Promise", "Clean Vehicle", "Transparent Pricing"].map((t) => (
           <span
             key={t}
-    className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs md:text-sm backdrop-blur whitespace-nowrap"
+            className="px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs md:text-sm backdrop-blur"
           >
             {t}
           </span>
@@ -212,10 +216,10 @@ export default function Home() {
       </div>
     </div>
   </div>
-    </Section>
-  </Section>
-  {/* Party Buses Section */}
-  <Section className="max-w-6xl mx-auto">
+          </Section>
+
+      {/* Party Buses Section */}
+      <Section className="max-w-6xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
           Party Buses
         </h2>
