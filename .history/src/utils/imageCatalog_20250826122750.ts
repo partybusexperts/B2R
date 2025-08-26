@@ -13,6 +13,7 @@ export type VehicleCategory =
   | "partyBuses"
   | "limousines"
   | "coachBuses"
+  | "sprinters"
   | "executiveSprinters"
   | "sprinterLimoStyle"
   | "shuttleBuses";
@@ -52,6 +53,9 @@ export const imageCatalog: Record<VehicleCategory, VehicleImage[]> = {
   { file: "/images/coach-buses/Bus-None2.png", alt: "Coach bus placeholder 2" },
   { file: "/images/coach-buses/Bus-None3.png", alt: "Coach bus placeholder 3" },
   { file: "/images/coach-buses/Bus-None4.png", alt: "Coach bus placeholder 4" }
+  ],
+  sprinters: [
+    // Standard cargo / passenger sprinter images would go here (none yet)
   ],
   executiveSprinters: [
     { file: "/images/executive-sprinters/12 Passenger Executive Style Sprinter Van Exterior.png", alt: "12 passenger executive sprinter exterior" }
