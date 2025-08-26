@@ -442,11 +442,10 @@ export default function Page() {
                 <img src={img} alt="Party Bus" className="w-full h-60 object-cover rounded-2xl mb-4 group-hover:opacity-90 transition" />
                 <h4 className="text-base font-bold mb-2 text-blue-800">Party Bus {i + 1}</h4>
               </a>
-               <div className="flex flex-col gap-2 w-full mt-auto">
-                 <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg text-center text-base font-serif">888-535-2566</a>
-                 <a href="mailto:info@bus2ride.com" className="w-full bg-blue-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-blue-600">Email Us</a>
-                 <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-green-600">Instant Live Quote</a>
-               </div>
+              <div className="flex flex-col gap-2 w-full mt-auto">
+                <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg text-center text-base font-serif">888-535-2566</a>
+                <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-green-600">Instant Live Quote</a>
+              </div>
             </div>
           ))}
           </div>
@@ -484,11 +483,10 @@ export default function Page() {
                 <img src={img} alt="Limo" className="w-full h-60 object-cover rounded-2xl mb-4 group-hover:opacity-90 transition" />
                 <h4 className="text-base font-bold mb-2 text-blue-800">Limo {i + 1}</h4>
               </a>
-               <div className="flex flex-col gap-2 w-full mt-auto">
-                 <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg text-center text-base font-serif">888-535-2566</a>
-                 <a href="mailto:info@bus2ride.com" className="w-full bg-blue-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-blue-600">Email Us</a>
-                 <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-green-600">Instant Live Quote</a>
-               </div>
+              <div className="flex flex-col gap-2 w-full mt-auto">
+                <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg text-center text-base font-serif">888-535-2566</a>
+                <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-green-600">Instant Live Quote</a>
+              </div>
             </div>
           ))}
           </div>
@@ -526,11 +524,10 @@ export default function Page() {
                 <img src={img} alt="Coach Bus" className="w-full h-72 object-cover rounded-2xl mb-5 group-hover:opacity-90 transition" />
                 <h4 className="text-base font-bold mb-2 text-blue-800">Coach Bus {i + 1}</h4>
               </a>
-               <div className="flex flex-col gap-2 w-full mt-auto">
-                 <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg text-center text-sm">888-535-2566</a>
-                 <a href="mailto:info@bus2ride.com" className="w-full bg-blue-500 text-white font-bold py-1.5 rounded-lg text-center text-sm hover:bg-blue-600">Email Us</a>
-                 <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg text-center text-sm hover:bg-green-600">Instant Live Quote</a>
-               </div>
+              <div className="flex flex-col gap-2 w-full mt-auto">
+                <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg text-center text-sm">888-535-2566</a>
+                <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg text-center text-sm hover:bg-green-600">Instant Live Quote</a>
+              </div>
             </div>
           ))}
           </div>
