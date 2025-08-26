@@ -171,7 +171,11 @@ export default function Home() {
           </span>
 
           {/* spec bar (visual only) */}
-          {/* Removed in-image spec bar (Seats / Premium Sound / LED Ambience) per request to remove overlay */}
+          <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/35 backdrop-blur px-4 py-2 text-sm text-blue-50 flex items-center justify-between border border-white/10">
+            <span>💺 Seats 20–36</span>
+            <span>🎶 Premium Sound</span>
+            <span>✨ LED Ambience</span>
+          </div>
         </div>
 
         {/* bottom action strip (keeps users moving without new copy) */}
@@ -192,7 +196,7 @@ export default function Home() {
             href="/quote#instant"
             className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
           >
-            Quote
+            ⚡ Quote
           </a>
         </div>
       </div>
@@ -254,7 +258,12 @@ export default function Home() {
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image overlay bar (Seats / Premium Sound / LED) per request */}
+              {/* overlay bar — roomier spacing */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/40 backdrop-blur px-5 py-2 text-sm text-blue-50 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border border-white/10">
+                <span>💺 Seats 20–36</span>
+                <span>🎶 Premium Sound</span>
+                <span>✨ LED</span>
+              </div>
             </div>
           </div>
 
@@ -291,7 +300,7 @@ export default function Home() {
                 href="/quote"
                 className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
               >
-                Quote
+                ⚡ Quote
               </a>
             </div>
           </div>
@@ -434,7 +443,11 @@ export default function Home() {
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image feature overlay (Leather Seating / Mood Lighting / Premium Sound) to avoid duplicate text below */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/40 backdrop-blur px-5 py-2 text-sm text-blue-50 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border border-white/10">
+                <span>🛋️ Leather Seating</span>
+                <span>✨ Mood Lighting</span>
+                <span>🎶 Premium Sound</span>
+              </div>
             </div>
           </div>
 
@@ -471,7 +484,7 @@ export default function Home() {
                 href="/quote"
                 className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
               >
-                Quote
+                ⚡ Quote
               </a>
             </div>
           </div>
@@ -608,7 +621,11 @@ export default function Home() {
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image feature overlay (Reclining Seats / Wi-Fi / Luggage Bays) to eliminate text over photo */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/40 backdrop-blur px-5 py-2 text-sm text-blue-50 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border border-white/10">
+                <span>🪑 Reclining Seats</span>
+                <span>📶 Wi-Fi/Charging</span>
+                <span>🧳 Luggage Bays</span>
+              </div>
             </div>
           </div>
 
@@ -645,7 +662,7 @@ export default function Home() {
                 href="/quote"
                 className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
               >
-                Quote
+                ⚡ Quote
               </a>
             </div>
           </div>
@@ -1213,7 +1230,7 @@ export default function Home() {
       <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight leading-[1.15] pb-2">Book Your Party Bus or Limo Today!</h2>
       <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
         <a href="tel:8885352566" className="rounded-xl font-bold px-6 py-3 bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 shadow">Call (888) 535-2566</a>
-  <a href="/quote#instant" className="rounded-xl font-bold px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white border border-emerald-600 shadow">Get Instant Quote</a>
+        <a href="/quote#instant" className="rounded-xl font-bold px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white border border-emerald-600 shadow">⚡ Get Instant Quote</a>
         <a href="mailto:info@bus2ride.com" className="rounded-xl font-bold px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white border border-blue-800 shadow">Email Us</a>
       </div>
     </div>

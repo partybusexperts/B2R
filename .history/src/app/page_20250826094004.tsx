@@ -171,7 +171,11 @@ export default function Home() {
           </span>
 
           {/* spec bar (visual only) */}
-          {/* Removed in-image spec bar (Seats / Premium Sound / LED Ambience) per request to remove overlay */}
+          <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/35 backdrop-blur px-4 py-2 text-sm text-blue-50 flex items-center justify-between border border-white/10">
+            <span>💺 Seats 20–36</span>
+            <span>🎶 Premium Sound</span>
+            <span>✨ LED Ambience</span>
+          </div>
         </div>
 
         {/* bottom action strip (keeps users moving without new copy) */}
@@ -192,7 +196,7 @@ export default function Home() {
             href="/quote#instant"
             className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
           >
-            Quote
+            ⚡ Quote
           </a>
         </div>
       </div>
@@ -210,25 +214,21 @@ export default function Home() {
   </div>
     </Section>
   </Section>
-  {/* Party Buses Section */}
+  {/* ===================== PARTY BUSES (fleet-style cards) ===================== */}
 <Section className="max-w-6xl mx-auto">
   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
     Party Buses
   </h2>
 
-  {/* 3 Image Boxes with left/right arrows, all clickable to /fleet */}
+  {/* Card rail with fleet styling + arrows */}
   <div className="relative flex items-center justify-center mb-8 mt-6" style={{ minHeight: "260px" }}>
     {/* Left Arrow */}
     <a
       href="/party-buses"
       aria-label="View previous party buses"
-      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-white/15 hover:bg-white/25 text-white text-2xl transition shadow-lg absolute z-20 border border-white/20"
       tabIndex={0}
-      style={{
-        boxShadow: "0 2px 12px 0 rgba(30,64,175,0.10)",
-        top: "calc(50% - 44px)",
-        left: "-68px",
-      }}
+      style={{ top: "calc(50% - 44px)", left: "-68px" }}
     >
       &#8592;
     </a>
@@ -239,26 +239,31 @@ export default function Home() {
           key={img}
           className="bg-[#15305f]/90 border border-blue-800/40 rounded-[24px] shadow-[0_10px_30px_rgba(2,6,23,.35)] overflow-hidden"
         >
-          {/* header strip */}
+          {/* header strip (matches fleet) */}
           <div className="flex items-center justify-between px-6 pt-5 min-h-[28px]">
             <span className="text-xs font-semibold text-blue-100/90">Party Bus</span>
             <span className="h-[18px]" />
           </div>
 
-          {/* bigger image with overlay */}
+          {/* image (same height as fleet) */}
           <div className="px-6 mt-3">
-            <div className="relative h-[25rem] w-full overflow-hidden rounded-2xl border border-blue-800/30 bg-[#18356e]">
+            <div className="relative h-96 md:h-[26rem] w-full overflow-hidden rounded-2xl border border-blue-800/30 bg-[#18356e]">
               <img
                 src={img}
                 alt="Party Bus"
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image overlay bar (Seats / Premium Sound / LED) per request */}
+              {/* quick spec bar (fleet-style overlay) */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/35 backdrop-blur px-4 py-2 text-sm text-blue-50 flex items-center justify-between border border-white/10">
+                <span>💺 Seats 20–36</span>
+                <span>🎶 Premium Sound</span>
+                <span>✨ LED</span>
+              </div>
             </div>
           </div>
 
-          {/* title + bullets */}
+          {/* title + bullets (centered like fleet) */}
           <div className="px-6 mt-5">
             <h4 className="text-2xl font-extrabold text-white tracking-tight text-center">Party Bus {idx + 1}</h4>
             <div className="mt-1 mb-4 text-sm font-semibold text-blue-200 text-center">Clubs • Concerts • Birthdays</div>
@@ -272,26 +277,26 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* bottom buttons — single row, no wrap */}
+          {/* buttons (identical to fleet) */}
           <div className="px-6 pb-6 pt-4">
-            <div className="flex justify-between gap-3">
+            <div className="grid grid-cols-3 gap-2">
               <a
                 href="tel:8885352566"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
               >
                 Call
               </a>
               <a
                 href="mailto:info@bus2ride.com"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
               >
                 Email
               </a>
               <a
                 href="/quote"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
               >
-                Quote
+                ⚡ Quote
               </a>
             </div>
           </div>
@@ -303,19 +308,15 @@ export default function Home() {
     <a
       href="/party-buses"
       aria-label="View next party buses"
-      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-white/15 hover:bg-white/25 text-white text-2xl transition shadow-lg absolute z-20 border border-white/20"
       tabIndex={0}
-      style={{
-        boxShadow: "0 2px 12px 0 rgba(30,64,175,0.10)",
-        top: "calc(50% - 44px)",
-        right: "-68px",
-      }}
+      style={{ top: "calc(50% - 44px)", right: "-68px" }}
     >
       &#8594;
     </a>
   </div>
 
-  {/* Features BELOW the 3 boxes — like “Why Rent With” buttons */}
+  {/* Features — tightened to match chip rhythm used elsewhere */}
   <div className="max-w-6xl mx-auto px-4">
     <div className="flex flex-col md:flex-row md:items-center gap-6">
       <h2 className="text-3xl md:text-4xl font-extrabold mb-6 mt-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg md:w-1/4">
@@ -374,14 +375,17 @@ export default function Home() {
         ].map((feature, idx) => (
           <li
             key={idx}
-            className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+            className="group relative flex items-center bg-white/95 rounded-xl shadow border border-blue-200 px-4 py-3 hover:bg-white transition"
           >
             <PartyBusFeatureModalButton
               title={feature.modal.title}
               content={feature.modal.content}
               label={feature.text}
             />
-            <span className="text-blue-500 text-lg ml-2">→</span>
+            <span className="text-blue-600 text-lg ml-auto">
+              <span className="inline-block group-hover:translate-x-0.5 transition">→</span>
+            </span>
+            <span className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-blue-400/0 group-hover:ring-blue-400/30 transition" />
           </li>
         ))}
       </ul>
@@ -389,26 +393,20 @@ export default function Home() {
   </div>
 </Section>
 
-
-{/* Limos Section */}
+{/* ===================== LIMOS (fleet-style cards) ===================== */}
 <Section className="max-w-6xl mx-auto">
   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
     Limousines
   </h2>
 
-  {/* 3 Image Boxes with left/right arrows */}
   <div className="relative flex items-center justify-center mb-8" style={{ minHeight: "260px" }}>
     {/* Left Arrow */}
     <a
       href="/limousines"
       aria-label="View previous limos"
-      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-white/15 hover:bg-white/25 text-white text-2xl transition shadow-lg absolute z-20 border border-white/20"
       tabIndex={0}
-      style={{
-        boxShadow: "0 2px 12px 0 rgba(30,64,175,0.10)",
-        top: "calc(50% - 44px)",
-        left: "-68px",
-      }}
+      style={{ top: "calc(50% - 44px)", left: "-68px" }}
     >
       &#8592;
     </a>
@@ -419,26 +417,26 @@ export default function Home() {
           key={img}
           className="bg-[#15305f]/90 border border-blue-800/40 rounded-[24px] shadow-[0_10px_30px_rgba(2,6,23,.35)] overflow-hidden"
         >
-          {/* header strip */}
           <div className="flex items-center justify-between px-6 pt-5 min-h-[28px]">
             <span className="text-xs font-semibold text-blue-100/90">Limo</span>
             <span className="h-[18px]" />
           </div>
 
-          {/* bigger image with overlay */}
           <div className="px-6 mt-3">
-            <div className="relative h-[25rem] w-full overflow-hidden rounded-2xl border border-blue-800/30 bg-[#18356e]">
+            <div className="relative h-96 md:h-[26rem] w-full overflow-hidden rounded-2xl border border-blue-800/30 bg-[#18356e]">
               <img
                 src={img}
                 alt="Limo"
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image feature overlay (Leather Seating / Mood Lighting / Premium Sound) to avoid duplicate text below */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/35 backdrop-blur px-4 py-2 text-sm text-blue-50 flex items-center justify-between border border-white/10">
+                <span>🛋️ Leather Seating</span>
+                <span>✨ Mood Lighting</span>
+              </div>
             </div>
           </div>
 
-          {/* title + bullets */}
           <div className="px-6 mt-5">
             <h4 className="text-2xl font-extrabold text-white tracking-tight text-center">Limo {idx + 1}</h4>
             <div className="mt-1 mb-4 text-sm font-semibold text-blue-200 text-center">Seats up to 10–18</div>
@@ -452,26 +450,25 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* bottom buttons */}
           <div className="px-6 pb-6 pt-4">
-            <div className="flex justify-between gap-3">
+            <div className="grid grid-cols-3 gap-2">
               <a
                 href="tel:8885352566"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
               >
                 Call
               </a>
               <a
                 href="mailto:info@bus2ride.com"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
               >
                 Email
               </a>
               <a
                 href="/quote"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
               >
-                Quote
+                ⚡ Quote
               </a>
             </div>
           </div>
@@ -483,19 +480,15 @@ export default function Home() {
     <a
       href="/limousines"
       aria-label="View next limos"
-      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-white/15 hover:bg-white/25 text-white text-2xl transition shadow-lg absolute z-20 border border-white/20"
       tabIndex={0}
-      style={{
-        boxShadow: "0 2px 12px 0 rgba(30,64,175,0.10)",
-        top: "calc(50% - 44px)",
-        right: "-68px",
-      }}
+      style={{ top: "calc(50% - 44px)", right: "-68px" }}
     >
       &#8594;
     </a>
   </div>
 
-  {/* Features BELOW the 3 boxes */}
+  {/* Features */}
   <div className="max-w-6xl mx-auto px-4">
     <div className="flex flex-col md:flex-row md:items-center gap-6">
       <h2 className="text-3xl md:text-4xl font-extrabold mb-6 mt-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg md:w-1/4">
@@ -531,7 +524,8 @@ export default function Home() {
             label: "Mood lighting for any occasion",
             modal: {
               title: "Mood Lighting",
-              content: "Set the perfect vibe with customizable mood lighting, from romantic to party-ready.",
+              content:
+                "Set the perfect vibe with customizable mood lighting, from romantic to party-ready.",
             },
           },
           {
@@ -553,36 +547,38 @@ export default function Home() {
         ].map((feature, idx) => (
           <li
             key={idx}
-            className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+            className="group relative flex items-center bg-white/95 rounded-xl shadow border border-blue-200 px-4 py-3 hover:bg-white transition"
           >
-            <PartyBusFeatureModalButton title={feature.modal.title} content={feature.modal.content} label={feature.label} />
-            <span className="text-blue-500 text-lg ml-2">→</span>
+            <PartyBusFeatureModalButton
+              title={feature.modal.title}
+              content={feature.modal.content}
+              label={feature.label}
+            />
+            <span className="text-blue-600 text-lg ml-auto">
+              <span className="inline-block group-hover:translate-x-0.5 transition">→</span>
+            </span>
+            <span className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-blue-400/0 group-hover:ring-blue-400/30 transition" />
           </li>
         ))}
       </ul>
     </div>
   </div>
 </Section>
-        
-{/* Coach Buses Section */}
+
+{/* ===================== COACH BUSES (fleet-style cards) ===================== */}
 <Section className="max-w-6xl mx-auto">
   <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 mt-0 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg leading-[1.15] pb-2">
     Coach Buses
   </h2>
 
-  {/* 3 Image Boxes with left/right arrows */}
   <div className="relative flex items-center justify-center mb-10" style={{ minHeight: "288px" }}>
     {/* Left Arrow */}
     <a
       href="/coach-buses"
       aria-label="View previous coach buses"
-      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-white/15 hover:bg-white/25 text-white text-2xl transition shadow-lg absolute z-20 border border-white/20"
       tabIndex={0}
-      style={{
-        boxShadow: "0 2px 12px 0 rgba(30,64,175,0.10)",
-        top: "calc(50% - 56px)",
-        left: "-68px",
-      }}
+      style={{ top: "calc(50% - 56px)", left: "-68px" }}
     >
       &#8592;
     </a>
@@ -593,26 +589,27 @@ export default function Home() {
           key={img}
           className="bg-[#15305f]/90 border border-blue-800/40 rounded-[24px] shadow-[0_10px_30px_rgba(2,6,23,.35)] overflow-hidden"
         >
-          {/* header strip */}
           <div className="flex items-center justify-between px-6 pt-5 min-h-[28px]">
             <span className="text-xs font-semibold text-blue-100/90">Coach</span>
             <span className="h-[18px]" />
           </div>
 
-          {/* bigger image with overlay */}
           <div className="px-6 mt-3">
-            <div className="relative h-[25rem] w-full overflow-hidden rounded-2xl border border-blue-800/30 bg-[#18356e]">
+            <div className="relative h-96 md:h-[26rem] w-full overflow-hidden rounded-2xl border border-blue-800/30 bg-[#18356e]">
               <img
                 src={img}
                 alt="Coach Bus"
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image feature overlay (Reclining Seats / Wi-Fi / Luggage Bays) to eliminate text over photo */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/35 backdrop-blur px-4 py-2 text-sm text-blue-50 flex items-center justify-between border border-white/10">
+                <span>🪑 Reclining Seats</span>
+                <span>📶 Wi-Fi/Charging</span>
+                <span>🧳 Luggage Bays</span>
+              </div>
             </div>
           </div>
 
-          {/* title + bullets */}
           <div className="px-6 mt-5">
             <h4 className="text-2xl font-extrabold text-white tracking-tight text-center">Coach Bus {idx + 1}</h4>
             <div className="mt-1 mb-4 text-sm font-semibold text-blue-200 text-center">Seats up to 40–55</div>
@@ -626,26 +623,25 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* bottom buttons */}
           <div className="px-6 pb-6 pt-4">
-            <div className="flex justify-between gap-3">
+            <div className="grid grid-cols-3 gap-2">
               <a
                 href="tel:8885352566"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
               >
                 Call
               </a>
               <a
                 href="mailto:info@bus2ride.com"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
               >
                 Email
               </a>
               <a
                 href="/quote"
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
               >
-                Quote
+                ⚡ Quote
               </a>
             </div>
           </div>
@@ -657,19 +653,15 @@ export default function Home() {
     <a
       href="/coach-buses"
       aria-label="View next coach buses"
-      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute z-20 border-2 border-blue-200"
+      className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-white/15 hover:bg-white/25 text-white text-2xl transition shadow-lg absolute z-20 border border-white/20"
       tabIndex={0}
-      style={{
-        boxShadow: "0 2px 12px 0 rgba(30,64,175,0.10)",
-        top: "calc(50% - 56px)",
-        right: "-68px",
-      }}
+      style={{ top: "calc(50% - 56px)", right: "-68px" }}
     >
       &#8594;
     </a>
   </div>
 
-  {/* Features BELOW the 3 boxes */}
+  {/* Features */}
   <div className="max-w-6xl mx-auto px-4">
     <div className="flex flex-col md:flex-row md:items-center gap-6">
       <h2 className="text-3xl md:text-4xl font-extrabold mb-6 mt-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg md:w-1/4">
@@ -681,21 +673,24 @@ export default function Home() {
             label: "Comfortable reclining seats",
             modal: {
               title: "Comfortable Reclining Seats",
-              content: "Relax on long trips with plush, reclining seats designed for maximum comfort.",
+              content:
+                "Relax on long trips with plush, reclining seats designed for maximum comfort.",
             },
           },
           {
             label: "Wi-Fi & charging ports",
             modal: {
               title: "Wi-Fi & Charging Ports",
-              content: "Stay connected on the road with onboard Wi-Fi and convenient charging ports at every seat.",
+              content:
+                "Stay connected on the road with onboard Wi-Fi and convenient charging ports at every seat.",
             },
           },
           {
             label: "Large luggage compartments",
             modal: {
               title: "Large Luggage Compartments",
-              content: "Bring everything you need—our coach buses have spacious luggage bays for all your gear.",
+              content:
+                "Bring everything you need—our coach buses have spacious luggage bays for all your gear.",
             },
           },
           {
@@ -710,7 +705,8 @@ export default function Home() {
             label: "TVs & entertainment system",
             modal: {
               title: "TVs & Entertainment System",
-              content: "Watch movies or presentations on flat-screen TVs with a premium entertainment system.",
+              content:
+                "Watch movies or presentations on flat-screen TVs with a premium entertainment system.",
             },
           },
           {
@@ -724,10 +720,17 @@ export default function Home() {
         ].map((feature, idx) => (
           <li
             key={idx}
-            className="flex items-center bg-white rounded-lg shadow px-4 py-3 hover:bg-blue-50 transition border border-blue-200"
+            className="group relative flex items-center bg-white/95 rounded-xl shadow border border-blue-200 px-4 py-3 hover:bg-white transition"
           >
-            <PartyBusFeatureModalButton title={feature.modal.title} content={feature.modal.content} label={feature.label} />
-            <span className="text-blue-500 text-lg ml-2">→</span>
+            <PartyBusFeatureModalButton
+              title={feature.modal.title}
+              content={feature.modal.content}
+              label={feature.label}
+            />
+            <span className="text-blue-600 text-lg ml-auto">
+              <span className="inline-block group-hover:translate-x-0.5 transition">→</span>
+            </span>
+            <span className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-blue-400/0 group-hover:ring-blue-400/30 transition" />
           </li>
         ))}
       </ul>
@@ -1213,7 +1216,7 @@ export default function Home() {
       <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight leading-[1.15] pb-2">Book Your Party Bus or Limo Today!</h2>
       <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
         <a href="tel:8885352566" className="rounded-xl font-bold px-6 py-3 bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 shadow">Call (888) 535-2566</a>
-  <a href="/quote#instant" className="rounded-xl font-bold px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white border border-emerald-600 shadow">Get Instant Quote</a>
+        <a href="/quote#instant" className="rounded-xl font-bold px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white border border-emerald-600 shadow">⚡ Get Instant Quote</a>
         <a href="mailto:info@bus2ride.com" className="rounded-xl font-bold px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white border border-blue-800 shadow">Email Us</a>
       </div>
     </div>

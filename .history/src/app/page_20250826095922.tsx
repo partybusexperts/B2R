@@ -171,7 +171,11 @@ export default function Home() {
           </span>
 
           {/* spec bar (visual only) */}
-          {/* Removed in-image spec bar (Seats / Premium Sound / LED Ambience) per request to remove overlay */}
+          <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/35 backdrop-blur px-4 py-2 text-sm text-blue-50 flex items-center justify-between border border-white/10">
+            <span>💺 Seats 20–36</span>
+            <span>🎶 Premium Sound</span>
+            <span>✨ LED Ambience</span>
+          </div>
         </div>
 
         {/* bottom action strip (keeps users moving without new copy) */}
@@ -254,7 +258,12 @@ export default function Home() {
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image overlay bar (Seats / Premium Sound / LED) per request */}
+              {/* overlay bar — roomier spacing */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/40 backdrop-blur px-5 py-2 text-sm text-blue-50 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border border-white/10">
+                <span>💺 Seats 20–36</span>
+                <span>🎶 Premium Sound</span>
+                <span>✨ LED</span>
+              </div>
             </div>
           </div>
 
@@ -434,7 +443,11 @@ export default function Home() {
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image feature overlay (Leather Seating / Mood Lighting / Premium Sound) to avoid duplicate text below */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/40 backdrop-blur px-5 py-2 text-sm text-blue-50 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border border-white/10">
+                <span>🛋️ Leather Seating</span>
+                <span>✨ Mood Lighting</span>
+                <span>🎶 Premium Sound</span>
+              </div>
             </div>
           </div>
 
@@ -608,7 +621,11 @@ export default function Home() {
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image feature overlay (Reclining Seats / Wi-Fi / Luggage Bays) to eliminate text over photo */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/40 backdrop-blur px-5 py-2 text-sm text-blue-50 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border border-white/10">
+                <span>🪑 Reclining Seats</span>
+                <span>📶 Wi-Fi/Charging</span>
+                <span>🧳 Luggage Bays</span>
+              </div>
             </div>
           </div>
 
@@ -645,7 +662,7 @@ export default function Home() {
                 href="/quote"
                 className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
               >
-                Quote
+                ⚡ Quote
               </a>
             </div>
           </div>

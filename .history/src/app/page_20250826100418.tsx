@@ -254,7 +254,12 @@ export default function Home() {
                 className="w-full h-full object-cover transition duration-700 ease-out hover:scale-[1.02]"
                 loading="lazy"
               />
-              {/* Removed in-image overlay bar (Seats / Premium Sound / LED) per request */}
+              {/* overlay bar — roomier spacing */}
+              <div className="absolute inset-x-3 bottom-3 rounded-xl bg-black/40 backdrop-blur px-5 py-2 text-sm text-blue-50 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 border border-white/10">
+                <span>💺 Seats 20–36</span>
+                <span>🎶 Premium Sound</span>
+                <span>✨ LED</span>
+              </div>
             </div>
           </div>
 
