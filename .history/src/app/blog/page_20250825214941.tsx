@@ -256,9 +256,6 @@ export default function Page() {
     );
   }, [search]);
 
-  // Static selection of 6 follow-up posts (skip the first which already has a dedicated page link)
-  const continueReading = useMemo(() => POSTS.slice(1, 7), []);
-
   return (
     <PageLayout
       gradientFrom="from-blue-950"
@@ -393,69 +390,6 @@ export default function Page() {
             })}
           </div>
         )}
-      </Section>
-      {/* ---------- CONTINUE READING (6 more posts) ---------- */}
-      <Section className="max-w-7xl mx-auto mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow leading-[1.15]">
-          Continue Reading
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {continueReading.map((post) => (
-            <article
-              key={`cont-${post.title}-${post.date}`}
-              className="group bg-gradient-to-br from-blue-900/70 to-blue-950/90 backdrop-blur rounded-2xl shadow-xl p-5 flex flex-col border border-blue-700/30 hover:border-blue-500/50 hover:shadow-2xl transition-all duration-200 overflow-hidden"
-            >
-              <div className="aspect-[4/2.2] w-full rounded-xl overflow-hidden mb-4 bg-blue-900/40">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-blue-100 font-serif tracking-wide leading-snug">
-                {post.title}
-              </h3>
-              <p className="text-blue-200 mb-3 text-sm leading-relaxed line-clamp-4">
-                {post.excerpt}
-              </p>
-              <div className="mt-auto flex items-center justify-between text-blue-400 text-xs">
-                <span>{post.author}</span>
-                <time dateTime={post.date} className="tracking-wide">
-                  {new Date(post.date).toLocaleDateString()}
-                </time>
-              </div>
-            </article>
-          ))}
-        </div>
-      </Section>
-      {/* ---------- FLEET CROSS-LINK CALLOUT ---------- */}
-      <Section className="max-w-6xl mx-auto -mt-4 mb-8">
-        <div className="relative overflow-hidden rounded-3xl p-8 md:p-10 bg-gradient-to-br from-blue-800 via-blue-900 to-black border border-blue-600/30 shadow-2xl">
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,rgba(96,165,250,0.35),transparent_60%)]" />
-          <div className="relative">
-            <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-white font-serif tracking-tight">
-              Explore the Fleet
-            </h3>
-            <p className="text-blue-200 text-base md:text-lg max-w-3xl leading-relaxed mb-5">
-              Ready to compare vehicles? Jump straight into our core categories: {" "}
-              <a href="/party-buses" className="font-semibold text-blue-300 hover:text-white underline decoration-blue-400/60 decoration-2 underline-offset-4 transition-colors">Party Buses</a>, {" "}
-              <a href="/limousines" className="font-semibold text-blue-300 hover:text-white underline decoration-blue-400/60 decoration-2 underline-offset-4 transition-colors">Limousines</a>, and {" "}
-              <a href="/coach-buses" className="font-semibold text-blue-300 hover:text-white underline decoration-blue-400/60 decoration-2 underline-offset-4 transition-colors">Coach Buses</a>. Browse interiors, capacities, comfort features, and get a feel for pricing.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <a href="/party-buses" className="px-5 py-2.5 rounded-full bg-white text-blue-900 font-bold text-sm shadow hover:shadow-lg transition">
-                View Party Buses →
-              </a>
-              <a href="/limousines" className="px-5 py-2.5 rounded-full bg-blue-600 text-white font-bold text-sm shadow hover:bg-blue-500 hover:shadow-lg transition">
-                View Limousines →
-              </a>
-              <a href="/coach-buses" className="px-5 py-2.5 rounded-full bg-blue-950 text-white font-bold text-sm border border-blue-500/40 shadow hover:bg-blue-900 transition">
-                View Coach Buses →
-              </a>
-            </div>
-          </div>
-        </div>
       </Section>
       {/* ------------ VEHICLE PREVIEW SECTIONS (added) ------------ */}
       {/** Reuse a small local image list for each vehicle type */}
