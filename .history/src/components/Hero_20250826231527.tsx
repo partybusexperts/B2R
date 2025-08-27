@@ -12,7 +12,7 @@ const fallbackImages: { src: string; alt: string }[] = [
   { src: "/images/party-buses/Bus-2.png", alt: "Party bus exterior" },
   { src: "/images/party-buses/Bus-3.png", alt: "Party bus interior" },
   { src: "/images/party-buses/Bus-4.png", alt: "Party bus lighting" },
-  { src: "/images/party-buses/Bus-6.png", alt: "Party bus seating" },
+  { src: "/images/party-buses/Bus-5.png", alt: "Party bus seating" },
 ];
 // Build initial slides
 let slides = heroImages.length

@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
-import { heroSet, bestSrc, findByFileName } from "../utils/optimizedImages";
+import { heroSet, bestSrc } from "../utils/optimizedImages";
 
 // Pull top large party bus images for hero (fallback to default array if empty)
 const heroImages = heroSet("partyBuses", 5);
@@ -12,10 +12,9 @@ const fallbackImages: { src: string; alt: string }[] = [
   { src: "/images/party-buses/Bus-2.png", alt: "Party bus exterior" },
   { src: "/images/party-buses/Bus-3.png", alt: "Party bus interior" },
   { src: "/images/party-buses/Bus-4.png", alt: "Party bus lighting" },
-  { src: "/images/party-buses/Bus-6.png", alt: "Party bus seating" },
+  { src: "/images/party-buses/Bus-5.png", alt: "Party bus seating" },
 ];
-// Build initial slides
-let slides = heroImages.length
+const slides = heroImages.length
   ? heroImages.map(h => ({
       key: h.original,
       src: bestSrc(h),
@@ -25,30 +24,6 @@ let slides = heroImages.length
       blur: h.blurDataURL,
     }))
   : fallbackImages.map(f => ({ key: f.src, src: f.src, alt: f.alt, width: 1920, height: 1080 }));
-
-// Explicit override: ensure final slide uses the requested image if available
-const OVERRIDE_FINAL = '30 Passenger Party Bus.png';
-const overrideEntry = findByFileName?.(OVERRIDE_FINAL);
-if (overrideEntry) {
-  const overrideSlide = {
-    key: overrideEntry.original + '-forced',
-    src: bestSrc(overrideEntry),
-    alt: overrideEntry.alt || '30 passenger party bus interior',
-    width: overrideEntry.width,
-    height: overrideEntry.height,
-    blur: overrideEntry.blurDataURL
-  };
-  // If it's already among slides, move it to end; else replace last
-  const existingIdx = slides.findIndex(s => s.key === overrideEntry.original);
-  if (existingIdx >= 0) {
-    slides = slides.filter((_,i)=>i!==existingIdx);
-    slides.push(overrideSlide);
-  } else if (slides.length) {
-    slides[slides.length - 1] = overrideSlide;
-  } else {
-    slides.push(overrideSlide);
-  }
-}
 
 type Slide = {
   key: string;

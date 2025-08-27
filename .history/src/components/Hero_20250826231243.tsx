@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
-import { heroSet, bestSrc, findByFileName } from "../utils/optimizedImages";
+import { heroSet, bestSrc } from "../utils/optimizedImages";
 
 // Pull top large party bus images for hero (fallback to default array if empty)
 const heroImages = heroSet("partyBuses", 5);
@@ -12,10 +12,9 @@ const fallbackImages: { src: string; alt: string }[] = [
   { src: "/images/party-buses/Bus-2.png", alt: "Party bus exterior" },
   { src: "/images/party-buses/Bus-3.png", alt: "Party bus interior" },
   { src: "/images/party-buses/Bus-4.png", alt: "Party bus lighting" },
-  { src: "/images/party-buses/Bus-6.png", alt: "Party bus seating" },
+  { src: "/images/party-buses/Bus-5.png", alt: "Party bus seating" },
 ];
-// Build initial slides
-let slides = heroImages.length
+const slides = heroImages.length
   ? heroImages.map(h => ({
       key: h.original,
       src: bestSrc(h),
@@ -25,30 +24,6 @@ let slides = heroImages.length
       blur: h.blurDataURL,
     }))
   : fallbackImages.map(f => ({ key: f.src, src: f.src, alt: f.alt, width: 1920, height: 1080 }));
-
-// Explicit override: ensure final slide uses the requested image if available
-const OVERRIDE_FINAL = '30 Passenger Party Bus.png';
-const overrideEntry = findByFileName?.(OVERRIDE_FINAL);
-if (overrideEntry) {
-  const overrideSlide = {
-    key: overrideEntry.original + '-forced',
-    src: bestSrc(overrideEntry),
-    alt: overrideEntry.alt || '30 passenger party bus interior',
-    width: overrideEntry.width,
-    height: overrideEntry.height,
-    blur: overrideEntry.blurDataURL
-  };
-  // If it's already among slides, move it to end; else replace last
-  const existingIdx = slides.findIndex(s => s.key === overrideEntry.original);
-  if (existingIdx >= 0) {
-    slides = slides.filter((_,i)=>i!==existingIdx);
-    slides.push(overrideSlide);
-  } else if (slides.length) {
-    slides[slides.length - 1] = overrideSlide;
-  } else {
-    slides.push(overrideSlide);
-  }
-}
 
 type Slide = {
   key: string;
@@ -169,32 +144,26 @@ export default function HeroSlideshow() {
   const buttonBase =
     "rounded-full font-bold px-8 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[220px] text-center";
 
-  // Optional: replace last slide if last two look similar (pink) with a non-pink party bus image not already used
-  useEffect(() => {
-    if (slidesTyped.length < 2) return;
+  // Optional: replace last slide if visually too similar to previous (e.g., two pink images)
+  if (slidesTyped.length >= 2) {
     const last = slidesTyped[slidesTyped.length - 1];
     const prev = slidesTyped[slidesTyped.length - 2];
-    const looksPink = (s: Slide) => /pink/i.test(s.alt || '') || /pink/i.test(s.src);
-    if (!(looksPink(last) && looksPink(prev))) return;
-    (async () => {
-      try {
-        const mod = await import('../utils/optimizedImages');
-        const allParty = mod.getCategoryImages('partyBuses');
-        const existingKeys = new Set(slidesTyped.map(s => s.key));
-        const replacement = allParty.find(e => !/pink/i.test(e.alt) && !existingKeys.has(e.original));
-        if (replacement) {
-          slidesTyped[slidesTyped.length - 1] = {
-            key: replacement.original + '-replacement',
-            src: bestSrc(replacement),
-            alt: replacement.alt,
-            width: replacement.width,
-            height: replacement.height,
-            blurDataURL: replacement.blurDataURL
-          };
-        }
-      } catch {/* ignore */}
-    })();
-  }, [slidesTyped]);
+    const looksPink = (s: Slide) => /pink/i.test(s.alt || '') || /Pink/i.test(s.src);
+    if (looksPink(last) && looksPink(prev)) {
+      // swap final slide with a fallback that is less pink-toned if available
+      const altCandidate = fallbackImages.find(f => !/pink/i.test(f.alt));
+      if (altCandidate) {
+        slidesTyped[slidesTyped.length - 1] = {
+          key: altCandidate.src + '-replacement',
+            src: altCandidate.src,
+          alt: altCandidate.alt + ' (alt replacement)',
+          width: 1920,
+          height: 1080,
+          blurDataURL: undefined
+        };
+      }
+    }
+  }
 
   return (
     <section
