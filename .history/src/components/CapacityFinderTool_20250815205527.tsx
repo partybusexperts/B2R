@@ -2,14 +2,11 @@
 import React, { useState } from "react";
 
 const VEHICLE_OPTIONS = [
-  { name: "Party Bus (Small)", min: 1, max: 18, description: "Great for small groups, birthdays, and nights out." },
+  { name: "Party Bus (Small)", min: 10, max: 18, description: "Great for small groups, birthdays, and nights out." },
   { name: "Party Bus (Medium)", min: 19, max: 28, description: "Perfect for mid-size groups, proms, and bachelor/bachelorette parties." },
   { name: "Party Bus (Large)", min: 29, max: 36, description: "Ideal for big celebrations, weddings, and large events." },
-  { name: "Limousine (Small)", min: 1, max: 8, description: "Classic luxury for 1-8 passengers and special occasions." },
-  { name: "Limousine (Large)", min: 9, max: 20, description: "Spacious limo for 9-20 passengers and upscale events." },
-  { name: "Shuttle Bus", min: 1, max: 20, description: "Comfortable shuttle for small to mid-size groups and airport transfers." },
-  { name: "Large Shuttle Bus", min: 20, max: 40, description: "Spacious shuttle for larger groups, events, and tours." },
-  { name: "Coach Bus", min: 1, max: 56, description: "Best for large groups, corporate events, and long trips." },
+  { name: "Limousine", min: 6, max: 14, description: "Classic luxury for smaller groups and special occasions." },
+  { name: "Coach Bus", min: 37, max: 56, description: "Best for large groups, corporate events, and long trips." },
 ];
 
 export default function CapacityFinderTool() {

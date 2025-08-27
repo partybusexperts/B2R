@@ -4,15 +4,15 @@ import React, { useState } from "react";
 const vehicles = [
   {
     name: "Party Bus",
-    capacity: "1-36 passengers",
+    capacity: "18-36 passengers",
     features: ["LED Lighting", "Premium Sound", "Dance Pole", "Wet Bar"],
     price: "$$$",
-    luggage: "Low",
+    luggage: "Medium",
     bestFor: "Parties, Events, Night Out"
   },
   {
     name: "Limousine",
-    capacity: "1-20 passengers",
+    capacity: "8-18 passengers",
     features: ["Leather Seating", "Champagne", "Mood Lighting"],
     price: "$$",
     luggage: "Small",
@@ -20,7 +20,7 @@ const vehicles = [
   },
   {
     name: "Coach Bus",
-    capacity: "1-56 passengers",
+    capacity: "40-56 passengers",
     features: ["Reclining Seats", "Wi-Fi", "Restroom", "TVs"],
     price: "$$$$",
     luggage: "Large",
