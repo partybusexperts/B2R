@@ -45,9 +45,8 @@ export default function SlideshowMaker() {
       const data = await res.json();
   // Always use absolute URL for video to avoid CORS issues
   setVideoUrl(`http://127.0.0.1:8000${data.video_url}`);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error generating slideshow.';
-      setError(msg);
+    } catch (err: any) {
+      setError(err.message || "Error generating slideshow.");
     } finally {
       setLoading(false);
     }
@@ -135,7 +134,6 @@ export default function SlideshowMaker() {
                   document.body.removeChild(link);
                   window.URL.revokeObjectURL(url);
                 } catch (err) {
-                  console.error('Download failed', err);
                   alert('Failed to download video.');
                 }
               }
