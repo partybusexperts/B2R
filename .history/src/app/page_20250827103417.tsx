@@ -541,8 +541,8 @@ export default function Home() {
   <div className="pointer-events-none absolute -bottom-28 -right-16 w-[32rem] h-[32rem] bg-indigo-500/20 blur-3xl rounded-full" />
 
   <div className="max-w-5xl mx-auto px-4 text-center relative">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 mt-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight leading-[1.08] pb-2 relative [overflow-wrap:break-word]">
-      The Most Trusted Limo &amp; Party Bus Rental Company
+  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 mt-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight leading-[1.08] pb-2 relative [overflow-wrap:break-word]">
+      The Most Trusted Limo &amp; Bus Rental Company
     </h2>
     <p className="text-xl text-blue-100/90 mb-8 font-semibold">
       Trusted by thousands, booked in minutes, driven by a passion for making every ride unforgettable.
