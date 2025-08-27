@@ -4,8 +4,7 @@ import OptimizedImage from './OptimizedImage';
 import Image from 'next/image';
 import { findByFileName, OptimizedImageEntry } from '../utils/optimizedImages';
 
-type ImgLikeProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src' | 'width' | 'height'>;
-interface SmartImageProps extends ImgLikeProps {
+interface SmartImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src'> {
   src: string;
   alt: string;
   className?: string;
@@ -41,8 +40,8 @@ export const SmartImage: React.FC<SmartImageProps> = ({ src, alt, className, pri
           src={src}
           alt={alt}
           className={className}
-          width={400 as number}
-          height={400 as number}
+          width={400}
+          height={400}
           sizes={sizes || "(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"}
           {...rest}
         />

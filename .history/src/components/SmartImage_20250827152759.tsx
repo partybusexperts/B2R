@@ -4,8 +4,7 @@ import OptimizedImage from './OptimizedImage';
 import Image from 'next/image';
 import { findByFileName, OptimizedImageEntry } from '../utils/optimizedImages';
 
-type ImgLikeProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src' | 'width' | 'height'>;
-interface SmartImageProps extends ImgLikeProps {
+interface SmartImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src'> {
   src: string;
   alt: string;
   className?: string;

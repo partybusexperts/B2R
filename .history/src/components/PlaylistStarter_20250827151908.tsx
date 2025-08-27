@@ -3,37 +3,15 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SmartImage } from "./SmartImage";
 
 // ---- constants & helpers ----
-interface PresetDef { id: string; fallbackLabel: string; fallbackImage: string; fallbackDescription: string }
-// Curated stable Spotify editorial playlists (high likelihood of images) + Unsplash fallback imagery
-const PLAYLIST_PRESETS: PresetDef[] = [
-  {
-    id: "37i9dQZF1DXcBWIGoYBM5M", // Today's Top Hits
-    fallbackLabel: "Today's Top Hits",
-    fallbackImage: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=400&q=60",
-    fallbackDescription: "Chart‑topping fresh hits updated frequently.",
-  },
-  {
-    id: "37i9dQZF1DX0XUsuxWHRQd", // RapCaviar
-    fallbackLabel: "RapCaviar",
-    fallbackImage: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=400&q=60",
-    fallbackDescription: "Premier hip‑hop bangers & rising stars.",
-  },
-  {
-    id: "37i9dQZF1DX4UtSsGT1Sbe", // All Out 80s
-    fallbackLabel: "All Out 80s",
-    fallbackImage: "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=400&q=60",
-    fallbackDescription: "Iconic 80s anthems & neon energy throwbacks.",
-  },
-  {
-    id: "37i9dQZF1DX4dyzvuaRJ0n", // mint
-    fallbackLabel: "mint",
-    fallbackImage: "https://images.unsplash.com/photo-1518972559570-0bde6a760b4e?auto=format&fit=crop&w=400&q=60",
-    fallbackDescription: "Global dance & electronic essentials.",
-  },
+const PLAYLIST_PRESETS: { id: string; fallbackLabel: string }[] = [
+  { id: "37i9dQZF1DX0BcQWzuB7ZO", fallbackLabel: "Bachelorette Party" },
+  { id: "37i9dQZF1DX1tW4VlEfDSS", fallbackLabel: "Gameday Hype" },
+  { id: "37i9dQZF1DXaXB8fQg7xif", fallbackLabel: "Prom Night" },
+  { id: "37i9dQZF1DXaKIA8E7WcJj", fallbackLabel: "Classic Party" },
 ];
-const FALLBACK_LABEL_MAP: Record<string, string> = Object.fromEntries(PLAYLIST_PRESETS.map((p) => [p.id, p.fallbackLabel]));
-const FALLBACK_IMG_MAP: Record<string, string> = Object.fromEntries(PLAYLIST_PRESETS.map((p) => [p.id, p.fallbackImage]));
-const FALLBACK_DESC_MAP: Record<string, string> = Object.fromEntries(PLAYLIST_PRESETS.map((p) => [p.id, p.fallbackDescription]));
+const FALLBACK_LABEL_MAP: Record<string, string> = Object.fromEntries(
+  PLAYLIST_PRESETS.map((p) => [p.id, p.fallbackLabel])
+);
 const looksLikeId = (s?: string) => !!s && /^[A-Za-z0-9]{22}$/.test(s);
 
 interface PlaylistMeta {
@@ -58,16 +36,17 @@ const STORAGE_KEY = "playlist_starter_custom_v1";
 
 const PlaylistStarter: React.FC = () => {
   // ---- state ----
-  const [playlists, setPlaylists] = useState<PlaylistMeta[]>(PLAYLIST_PRESETS.map(p => ({
-    id: p.id,
-    name: p.fallbackLabel,
-    description: p.fallbackDescription,
-    image: p.fallbackImage,
-    url: `https://open.spotify.com/playlist/${p.id}`,
-    live: false,
-    custom: false,
-    liveAttempted: false,
-  })));
+  const [playlists, setPlaylists] = useState<PlaylistMeta[]>(
+    PLAYLIST_PRESETS.map((p) => ({
+      id: p.id,
+      name: p.fallbackLabel,
+      description: "Loading…",
+      url: `https://open.spotify.com/playlist/${p.id}`,
+      live: false,
+      custom: false,
+      liveAttempted: false,
+    }))
+  );
   const [showForm, setShowForm] = useState(false);
   const [newPlaylist, setNewPlaylist] = useState({ label: "", url: "", cover: "", description: "" });
   const [error, setError] = useState("");
@@ -112,15 +91,29 @@ const PlaylistStarter: React.FC = () => {
         return;
       }
 
-      const mapped: PlaylistMeta[] = PLAYLIST_PRESETS.map(p => {
+      const mapped: PlaylistMeta[] = PLAYLIST_PRESETS.map((p) => {
         const raw = json.playlists?.[p.id];
         const fetched = !!raw?.fetched;
-        const safeName = !raw?.name || looksLikeId(raw.name) ? p.fallbackLabel : raw.name;
+        // Use human label if API returns a name that looks like an ID
+        const safeName =
+          !raw?.name || looksLikeId(raw.name) ? p.fallbackLabel : raw.name;
+
+        // Build description (if API failed, show concise reason)
+        let desc = fetched ? raw?.description || "" : "";
+        if (!fetched && raw?.reason) {
+          const reasonMap: Record<string, string> = {
+            not_found_or_private: "Playlist is private or not found.",
+            forbidden: "Access forbidden (possibly region locked).",
+            exception: "Temporary error contacting Spotify.",
+          };
+          desc = reasonMap[raw.reason] || "Unavailable via API (link still works).";
+        }
+
         return {
           id: p.id,
           name: safeName,
-          description: fetched ? (raw?.description || FALLBACK_DESC_MAP[p.id]) : FALLBACK_DESC_MAP[p.id],
-          image: fetched ? (raw?.image || FALLBACK_IMG_MAP[p.id]) : FALLBACK_IMG_MAP[p.id],
+          description: desc,
+          image: fetched ? raw?.image : undefined,
           url: raw?.url || `https://open.spotify.com/playlist/${p.id}`,
           live: fetched,
           custom: false,
@@ -235,14 +228,13 @@ const PlaylistStarter: React.FC = () => {
           setSearchResults([]);
         } else {
           // Filter only valid items with a real 22-char id
-          interface RawSearchItem { id?: string; name?: string; description?: string; images?: { url?: string }[]; image?: string; url?: string; }
-          const items: SearchResult[] = (json.items as RawSearchItem[] || [])
-            .filter(it => looksLikeId(it?.id))
-            .map(it => ({
-              id: it.id as string,
-              name: looksLikeId(it.name) ? (FALLBACK_LABEL_MAP[it.id as string] || it.name!) : (it.name || "Untitled"),
+          const items: SearchResult[] = (json.items || [])
+            .filter((it: any) => looksLikeId(it?.id))
+            .map((it: any) => ({
+              id: it.id,
+              name: looksLikeId(it.name) ? (FALLBACK_LABEL_MAP[it.id] || it.name) : (it.name || "Untitled"),
               description: it.description || "",
-              image: (Array.isArray(it.images) && it.images[0]?.url) ? it.images[0].url : (it.image || undefined),
+              image: Array.isArray(it.images) && it.images[0]?.url ? it.images[0].url : (it.image || undefined),
               url: it.url || (it.id ? `https://open.spotify.com/playlist/${it.id}` : undefined),
             }));
           setSearchResults(items);
@@ -323,7 +315,31 @@ const PlaylistStarter: React.FC = () => {
     setPlaylists((prev) => prev.filter((p) => !(p.id === id && p.custom)));
   };
 
-  // Reordering & toggle helper removed; preview handled inline via previewId state.
+  const handleMove = (id: string, dir: -1 | 1) => {
+    setPlaylists((prev) => {
+      const idx = prev.findIndex((p) => p.id === id);
+      if (idx === -1 || !prev[idx].custom) return prev;
+      const dest = idx + dir;
+      if (dest < 0 || dest >= prev.length) return prev;
+      // don't move into preset region
+      const presetIds = new Set(PLAYLIST_PRESETS.map((p) => p.id));
+      if (dir === -1 && presetIds.has(prev[dest].id)) return prev;
+      const copy = [...prev];
+      const [item] = copy.splice(idx, 1);
+      copy.splice(dest, 0, item);
+      return copy;
+    });
+  };
+
+  const togglePreview = (id: string) => {
+    setPlaylists((prev) => {
+      // handled via separate state earlier, but we can keep simple UI:
+      return prev; // preview handled by a simple local state below if needed
+    });
+    // we’ll keep the same preview pattern you had:
+    // (preserve behavior: single preview at a time)
+    setPreviewId((p) => (p === id ? null : id));
+  };
   const [previewId, setPreviewId] = useState<string | null>(null);
 
   // ---- visuals: resilient image ----
@@ -448,7 +464,12 @@ const PlaylistStarter: React.FC = () => {
                 >
                   {r.name}
                 </div>
-                <div className="text-blue-800 text-center text-xs mb-1 line-clamp-3 min-h-[3.3rem]" title={r.description}>{r.description}</div>
+                <div
+                  className="text-blue-800 text-center text-xs mb-1 line-clamp-2 min-h-[2.25rem]"
+                  title={r.description}
+                >
+                  {r.description}
+                </div>
                 <div className="flex gap-2 w-full">
                   {r.url ? (
                     <>
@@ -528,7 +549,12 @@ const PlaylistStarter: React.FC = () => {
               >
                 {displayName}
               </div>
-              <div className="text-blue-800 text-center text-xs mb-1 line-clamp-4 min-h-[4.5rem]" title={pl.description}>{pl.description || ""}</div>
+              <div
+                className="text-blue-800 text-center text-xs mb-1 line-clamp-2 min-h-[2.25rem]"
+                title={pl.description}
+              >
+                {pl.description || ""}
+              </div>
 
               <div className="flex flex-col w-full gap-1">
                 <div className="flex gap-2 w-full">
@@ -563,7 +589,13 @@ const PlaylistStarter: React.FC = () => {
                   </div>
                 )}
 
-                {isPreset && pl.live && <div className="text-[10px] text-green-700 text-center">Live ✓</div>}
+                {/* Fallback badge: show ONLY for presets after a live attempt that returned no live data */}
+                {isPreset && pl.liveAttempted && !pl.live && (
+                  <div className="text-[10px] text-amber-700 text-center">Fallback (API data unavailable)</div>
+                )}
+                {isPreset && pl.live && (
+                  <div className="text-[10px] text-green-700 text-center">Live ✓</div>
+                )}
               </div>
             </div>
           );
