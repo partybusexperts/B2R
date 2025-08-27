@@ -82,7 +82,7 @@ export const VEHICLES: VehicleSpec[] = [
   // Limo style sprinters added into party-buses grouping
   {
     id: 'party-sprinter-limo-10',
-    name: '10 Passenger Limo Style Sprinter (10 Pass)',
+    name: '10 Passenger Limo Style Sprinter',
     category: 'party-buses',
     capacityMin: 10,
     capacityMax: 10,
@@ -95,7 +95,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'party-sprinter-limo-12',
-    name: '12 Passenger Limo Style Sprinter (12 Pass)',
+    name: '12 Passenger Limo Style Sprinter',
     category: 'party-buses',
     capacityMin: 12,
     capacityMax: 12,
@@ -109,7 +109,7 @@ export const VEHICLES: VehicleSpec[] = [
   // Newly added party bus variants (assumption: one vehicle per distinct capacity group)
   {
     id: 'party-17',
-    name: '17 Passenger Party Bus (17 Pass)',
+    name: '17 Passenger Party Bus',
     category: 'party-buses',
     capacityMin: 17,
     capacityMax: 17,
@@ -122,7 +122,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'party-20',
-    name: '20 Passenger Party Bus (20 Pass) ',
+    name: '20 Passenger Party Bus',
     category: 'party-buses',
     capacityMin: 20,
     capacityMax: 20,
@@ -134,11 +134,11 @@ export const VEHICLES: VehicleSpec[] = [
     order: 60
   },
   {
-    id: 'party-20',
-    name: '20 Passenger Party Bus (20 Pass)',
+    id: 'party-24',
+    name: '24 Passenger Party Bus',
     category: 'party-buses',
-    capacityMin: 20,
-    capacityMax: 20,
+    capacityMin: 22,
+    capacityMax: 24,
     highlights: ['Spacious layout', 'Dance lighting', 'Ice / cooler area'],
     images: [
       { file: '20 Passenger Party Bus Exterior.png', role: 'exterior', primary: true, alt: '20 passenger party bus exterior' },
@@ -148,7 +148,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'party-18',
-    name: '18 Passenger Party Bus (18 Pass)',
+    name: '18 Passenger Party Bus',
     category: 'party-buses',
     capacityMin: 18,
     capacityMax: 18,
@@ -161,7 +161,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'party-16-18',
-    name: '18 Passenger Party Bus (18 Pass)',
+    name: '18 Passenger Party Bus',
     category: 'party-buses',
     capacityMin: 18,
     capacityMax: 18,
@@ -189,7 +189,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'limo-esc-10-chrysler',
-    name: '10 Passenger Chrysler Limousine (10 Pass)',
+    name: '10 Passenger Chrysler Limousine (10 Pax)',
     category: 'limousines',
     capacityMin: 10,
     capacityMax: 10,
@@ -202,7 +202,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'limo-chrysler-300-10',
-    name: 'Chrysler 300 Limo (10 Pass)',
+    name: 'Chrysler 300 Limo (10 Pax)',
     category: 'limousines',
     capacityMin: 10,
     capacityMax: 10,
@@ -216,7 +216,7 @@ export const VEHICLES: VehicleSpec[] = [
   // Newly added limousine variants
   {
     id: 'limo-lincoln-10',
-    name: 'Lincoln Stretch Limo (10 Pass)',
+    name: 'Lincoln Stretch Limo (10 Pax)',
     category: 'limousines',
     capacityMin: 10,
     capacityMax: 10,
@@ -242,7 +242,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'limo-chrysler-12',
-    name: '12 Passenger Chrysler Limo (12 Pass)',
+    name: '12 Passenger Chrysler Limo (12 Pax)',
     category: 'limousines',
     capacityMin: 12,
     capacityMax: 12,
@@ -322,7 +322,7 @@ export const VEHICLES: VehicleSpec[] = [
   // Executive Sprinters (grouped under coach-buses for now per request)
   {
     id: 'coach-exec-sprinter-8',
-    name: '8 Passenger Executive Sprinter (8 Pass) ',
+    name: '8 Passenger Executive Sprinter',
     category: 'coach-buses',
     capacityMin: 8,
     capacityMax: 8,
@@ -335,7 +335,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-exec-sprinter-10',
-    name: '10 Passenger Executive Sprinter (10 Pass)',
+    name: '10 Passenger Executive Sprinter',
     category: 'coach-buses',
     capacityMin: 10,
     capacityMax: 10,
@@ -347,7 +347,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-exec-sprinter-12',
-    name: '12 Passenger Executive Sprinter (12 Pass)',
+    name: '12 Passenger Executive Sprinter',
     category: 'coach-buses',
     capacityMin: 12,
     capacityMax: 12,
@@ -360,7 +360,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-exec-sprinter-13',
-    name: '13 Passenger Executive Sprinter (13 Pass) ',
+    name: '13 Passenger Executive Sprinter',
     category: 'coach-buses',
     capacityMin: 13,
     capacityMax: 13,
@@ -373,9 +373,9 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-mini-28',
-    name: 'Mini Coach (28 Pass)',
+    name: 'Mini Coach (22–28 Pax)',
     category: 'coach-buses',
-    capacityMin: 28,
+    capacityMin: 22,
     capacityMax: 28,
     highlights: ['Forward seating', 'Comfort ride', 'Great for tours'],
     images: [
@@ -386,9 +386,9 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-standard-40',
-    name: 'Coach Bus (40 Pass)',
+    name: 'Coach Bus (40 Pax)',
     category: 'coach-buses',
-    capacityMin: 40,
+    capacityMin: 38,
     capacityMax: 40,
     highlights: ['Reclining seats', 'Overhead storage', 'A/C climate'],
     images: [
@@ -399,9 +399,9 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-full-56',
-    name: 'Full Size Coach (56 Pass)',
+    name: 'Full Size Coach (56 Pax)',
     category: 'coach-buses',
-    capacityMin: 56,
+    capacityMin: 50,
     capacityMax: 56,
     highlights: ['Restroom', 'Luggage bays', 'PA system'],
     images: [
@@ -414,9 +414,9 @@ export const VEHICLES: VehicleSpec[] = [
   // Newly added coach bus capacity variants (ascending by size; order values fill gaps)
   {
     id: 'coach-47',
-    name: 'Coach Bus (47 Pass)',
+    name: 'Coach Bus (47 Pax)',
     category: 'coach-buses',
-    capacityMin: 47,
+    capacityMin: 45,
     capacityMax: 47,
     highlights: ['Reclining seats', 'Climate control', 'Overhead storage'],
     images: [
@@ -427,9 +427,9 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-50',
-    name: 'Coach Bus (50 Pass)',
+    name: 'Coach Bus (50 Pax)',
     category: 'coach-buses',
-    capacityMin: 50,
+    capacityMin: 48,
     capacityMax: 50,
     highlights: ['Comfort seating', 'Luggage bays', 'A/C climate'],
     images: [
@@ -440,7 +440,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-54',
-    name: 'Coach Bus (54 Pass)',
+    name: 'Coach Bus (54 Pax)',
     category: 'coach-buses',
     capacityMin: 52,
     capacityMax: 54,
@@ -453,9 +453,9 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-55',
-    name: 'Coach Bus (55 Pass)',
+    name: 'Coach Bus (55 Pax)',
     category: 'coach-buses',
-    capacityMin: 55,
+    capacityMin: 53,
     capacityMax: 55,
     highlights: ['Large luggage bays', 'High back seats', 'PA system'],
     images: [
