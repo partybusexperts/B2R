@@ -32,8 +32,7 @@ export async function POST(req: Request) {
 
     const playlists = Object.fromEntries(entries);
     return NextResponse.json({ ok: true, playlists });
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({ ok: false, error: "server_error", detail: msg }, { status: 500 });
+  } catch (e: any) {
+    return NextResponse.json({ ok: false, error: "server_error", detail: String(e?.message || e) }, { status: 500 });
   }
 }

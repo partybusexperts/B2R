@@ -19,8 +19,7 @@ export async function POST(req: Request) {
     }
 
     const json = await res.json();
-  type RawPlaylist = { id?: string; name?: string; description?: string; images?: { url?: string }[]; external_urls?: { spotify?: string } };
-  const items = (json?.playlists?.items || []).map((p: RawPlaylist) => ({
+    const items = (json?.playlists?.items || []).map((p: any) => ({
       id: p?.id,
       name: p?.name ?? "",
       description: p?.description ?? "",
@@ -29,8 +28,7 @@ export async function POST(req: Request) {
     }));
 
     return NextResponse.json({ ok: true, items });
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({ ok: false, error: "server_error", detail: msg }, { status: 500 });
+  } catch (e: any) {
+    return NextResponse.json({ ok: false, error: "server_error", detail: String(e?.message || e) }, { status: 500 });
   }
 }

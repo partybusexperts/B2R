@@ -23,7 +23,9 @@ interface PlaylistMeta {
   description: string;
   image?: string;
   url?: string;
+  /** true if loaded from API */
   live?: boolean;
+  /** user-added custom playlist */
   custom?: boolean;
 }
 
@@ -41,7 +43,8 @@ const PlaylistStarter: React.FC = () => {
       id: p.id,
       name: p.fallbackLabel,
       description: "Loading…",
-      url: `https://open.spotify.com/playlist/${p.id}`, // always usable
+      // IMPORTANT: always provide a usable URL even when live data is missing
+      url: `https://open.spotify.com/playlist/${p.id}`,
     }))
   );
 
@@ -67,27 +70,31 @@ const PlaylistStarter: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids: PLAYLIST_PRESETS.map((p) => p.id) }),
       });
+
       if (!res.ok) {
-        setFetchError(`Playlist metadata request failed (${res.status}).`);
+        setFetchError("Playlist metadata request failed (" + res.status + "). Check credentials.");
+        // Keep fallbacks; do not blank URLs
         return;
       }
+
       const json = await res.json();
       if (!json.ok) {
-        setFetchError(json.error || "Spotify metadata error.");
+        setFetchError(json.error || "Spotify metadata error. Add SPOTIFY_CLIENT_ID/SECRET and restart.");
         return;
       }
 
       const mapped: PlaylistMeta[] = PLAYLIST_PRESETS.map((p) => {
         const raw = json.playlists?.[p.id];
-        const fetched = !!raw?.fetched;
+        const fetched = !!raw?.fetched || raw?.status === 200 || false;
+        // Build a synthetic description if we have a failure reason and no fetched data.
         let desc = fetched ? (raw?.description || "") : "";
         if (!fetched && raw?.reason) {
-          const reasonMap: Record<string, string> = {
-            not_found_or_private: "Playlist is private or not found.",
-            forbidden: "Access forbidden (possibly region locked).",
-            exception: "Temporary error contacting Spotify.",
+          const reasonMap: Record<string,string> = {
+            not_found_or_private: 'Playlist is private or not found.',
+            forbidden: 'Access forbidden (possibly region locked).',
+            exception: 'Temporary error contacting Spotify.',
           };
-          desc = reasonMap[raw.reason] || "Unavailable via API (fallback link still works).";
+            desc = reasonMap[raw.reason] || 'Unavailable via API (fallback link still works).';
         }
         return {
           id: p.id,
@@ -99,19 +106,23 @@ const PlaylistStarter: React.FC = () => {
         };
       });
 
+      // Preserve custom playlists (and order) when updating presets
       setPlaylists((prev) => {
         const customs = prev.filter((p) => p.custom);
         return [...mapped, ...customs];
       });
       setFetchError("");
     } catch {
+      // Network/other — keep fallbacks
       setFetchError("Could not reach Spotify metadata endpoint.");
     }
   }, []);
 
-  useEffect(() => { fetchLive(); }, [fetchLive]);
+  useEffect(() => {
+    fetchLive();
+  }, [fetchLive]);
 
-  // Health check once
+  // Health check once (tells us if server creds exist)
   useEffect(() => {
     type HealthShape = { ok?: boolean; auth?: string } | undefined;
     let cancelled = false;
@@ -119,15 +130,23 @@ const PlaylistStarter: React.FC = () => {
       .then((r) => r.json().catch(() => ({})))
       .then((j: HealthShape) => {
         if (cancelled) return;
-        if (j?.ok) setHealth("ok");
-        else if (j?.auth === "missing") setHealth("missing");
-        else setHealth("failed");
+        if (j?.ok) {
+          setHealth("ok");
+        } else if (j?.auth === "missing") {
+          setHealth("missing");
+        } else {
+          setHealth("failed");
+        }
       })
-      .catch(() => { if (!cancelled) setHealth("failed"); });
-    return () => { cancelled = true; };
+      .catch(() => {
+        if (!cancelled) setHealth("failed");
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Load custom playlists from localStorage (once)
+  // Load custom playlists from localStorage (once on mount)
   useEffect(() => {
     try {
       const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
@@ -138,31 +157,45 @@ const PlaylistStarter: React.FC = () => {
             const existing = new Set(prev.map((p) => p.id));
             const toAdd = parsed
               .filter((p) => p && p.id && !existing.has(p.id))
-              .map((p) => ({ ...p, custom: true, url: p.url || `https://open.spotify.com/playlist/${p.id}` }));
+              .map((p) => ({
+                ...p,
+                custom: true,
+                // ensure url fallback exists
+                url: p.url || `https://open.spotify.com/playlist/${p.id}`,
+              }));
             return [...prev, ...toAdd];
           });
         }
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, []);
 
-  // Persist custom playlists
+  // Persist custom playlists when they change
   useEffect(() => {
     try {
       const customs = playlists.filter((p) => p.custom);
       if (typeof window !== "undefined") {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(customs));
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, [playlists]);
 
-  // Debounced search (only when health ok)
+  // Debounced search (runs when user types and health is ok)
   useEffect(() => {
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
 
+    // If creds are missing/failed, disable server search gracefully
     if (health !== "ok") {
       setSearchResults(null);
-      setSearchError(health === "checking" ? "" : "Search disabled: server is missing Spotify credentials.");
+      setSearchError(
+        health === "checking"
+          ? ""
+          : "Search disabled: server is missing Spotify credentials (SPOTIFY_CLIENT_ID/SECRET)."
+      );
       return;
     }
 
@@ -184,19 +217,33 @@ const PlaylistStarter: React.FC = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ q }),
         });
-        const json = await res.json().catch(() => null);
-        if (!res.ok || !json?.ok) {
-          setSearchError(json?.error || `Search failed (${res.status}).`);
+        const status = res.status;
+        let json: unknown = null;
+        try {
+          json = await res.json();
+        } catch {
+          /* ignore parse */
+        }
+        const obj = json as { ok?: boolean; error?: string } | null;
+        if (!res.ok || !obj?.ok) {
+          if (obj?.error === "spotify_auth_failed") {
+            setSearchError("Server missing Spotify credentials. Add SPOTIFY_CLIENT_ID + SECRET and restart.");
+          } else if (status === 502) {
+            setSearchError("Spotify search service error (502). Try again.");
+          } else if (status === 400) {
+            setSearchError("Query too short.");
+          } else {
+            setSearchError(obj?.error || "Search failed.");
+          }
           setSearchResults([]);
         } else {
-          const items: SearchResult[] = (json.items || []).map((it: any) => ({
-            id: it.id,
-            name: looksLikeRawId(it.name) ? (FALLBACK_LABEL_MAP[it.id] || it.name) : it.name,
-            description: it.description || "",
-            image: it.image,
+          const success = json as { items?: SearchResult[] };
+          const mapped = (success.items || []).map((it) => ({
+            ...it,
+            name: looksLikeRawId(it.name) ? FALLBACK_LABEL_MAP[it.id] || it.name : it.name,
             url: it.url || (it.id ? `https://open.spotify.com/playlist/${it.id}` : undefined),
           }));
-          setSearchResults(items);
+          setSearchResults(mapped);
         }
       } catch {
         setSearchError("Network error contacting search endpoint.");
@@ -206,14 +253,17 @@ const PlaylistStarter: React.FC = () => {
       }
     }, 420);
 
-    return () => { if (debounceRef.current) window.clearTimeout(debounceRef.current); };
+    return () => {
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
   }, [search, health]);
 
-  // Rerun search when health becomes ok
+  // If health flips to ok and user already has a query typed (>=2 chars) re-run search automatically.
   useEffect(() => {
-    if (health === "ok" && search.trim().length >= 2) {
-      lastQueryRef.current = "";
-      setSearch((s) => s + "");
+    if (health === 'ok' && search.trim().length >= 2) {
+      // force re-run by clearing lastQueryRef then setting search again (or directly invoking fetch logic quickly)
+      lastQueryRef.current = '';
+      setSearch(s => s + ''); // trigger effect
     }
   }, [health]);
 
@@ -223,6 +273,7 @@ const PlaylistStarter: React.FC = () => {
       setError("Playlist name and link are required.");
       return;
     }
+    // Strict 22-char base62 ID if present in a link
     const idMatch = newPlaylist.url.match(/playlist\/([A-Za-z0-9]{22})/);
     const id = idMatch?.[1] || newPlaylist.url;
     setPlaylists((prev) => [
@@ -232,6 +283,7 @@ const PlaylistStarter: React.FC = () => {
         name: newPlaylist.label,
         description: newPlaylist.description || "User submitted playlist.",
         image: newPlaylist.cover || undefined,
+        // ALWAYS create a working url
         url: `https://open.spotify.com/playlist/${id}`,
         custom: true,
       },
@@ -242,6 +294,7 @@ const PlaylistStarter: React.FC = () => {
   };
 
   const handleAddFromSearch = (res: SearchResult) => {
+    // Prevent duplicates
     if (playlists.some((p) => p.id === res.id)) return;
     setPlaylists((prev) => [
       ...prev,
@@ -274,9 +327,10 @@ const PlaylistStarter: React.FC = () => {
       const idx = prev.findIndex((p) => p.id === id);
       if (idx === -1) return prev;
       const item = prev[idx];
-      if (!item.custom) return prev;
+      if (!item.custom) return prev; // only allow reordering custom items
       const targetIdx = idx + dir;
       if (targetIdx < 0 || targetIdx >= prev.length) return prev;
+      // disallow swapping into preset zone if moving up
       const presetIds = new Set(PLAYLIST_PRESETS.map((p) => p.id));
       if (dir === -1 && presetIds.has(prev[targetIdx].id)) return prev;
       const copy = [...prev];
@@ -286,7 +340,9 @@ const PlaylistStarter: React.FC = () => {
     });
   };
 
-  const togglePreview = (id: string) => setPreviewId((p) => (p === id ? null : id));
+  const togglePreview = (id: string) => {
+    setPreviewId((p) => (p === id ? null : id));
+  };
 
   const FallbackSmartImage: React.FC<{ src?: string; alt: string; className?: string; initials: string }> = ({
     src,
@@ -320,15 +376,23 @@ const PlaylistStarter: React.FC = () => {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-4 border-2 border-blue-400 w-full text-sm">
       <h3 className="text-xl font-extrabold mb-2 text-blue-900 tracking-tight drop-shadow text-center">Playlist Starter</h3>
-      <p className="text-blue-900 mb-3 text-center">One-click Spotify playlists for every occasion. Search, play, or add your own!</p>
+      <p className="text-blue-900 mb-3 text-center">
+        One-click Spotify playlists for every occasion. Search, play, or add your own!
+      </p>
 
+      {/* Health & error banners */}
       {fetchError && (
-        <div className="mb-4 text-xs bg-rose-100 border border-rose-300 text-rose-800 px-3 py-2 rounded-lg">
-          {fetchError}
+        <div className="mb-4 text-xs bg-rose-100 border border-rose-300 text-rose-800 px-3 py-2 rounded-lg flex flex-col gap-1">
+          <span>{fetchError}</span>
+          <div>
+            <button onClick={fetchLive} className="px-2 py-1 bg-rose-200 hover:bg-rose-300 rounded font-semibold mr-2">Retry</button>
+            <button onClick={()=>window.location.reload()} className="px-2 py-1 bg-rose-200 hover:bg-rose-300 rounded font-semibold">Reload Page</button>
+          </div>
         </div>
       )}
 
       {SPOTIFY_ENABLED ? (
+        // Search UI (enabled when creds OK)
         <div className="flex flex-col md:flex-row gap-2 mb-4 items-stretch md:items-end">
           <div className="flex-1">
             <label className="block text-xs font-semibold text-blue-800 mb-1">Search Spotify Playlists</label>
@@ -363,8 +427,10 @@ const PlaylistStarter: React.FC = () => {
           </div>
         </div>
       ) : (
+        // Degraded mode hint
         <div className="mb-4 text-xs bg-amber-50 border border-amber-300 text-amber-800 px-3 py-2 rounded-lg">
-          Search is disabled because Spotify credentials are missing or invalid.
+          Search is disabled because Spotify credentials are missing. You can still open/play or add your own playlists
+          by URL. Add <code className="font-mono">SPOTIFY_CLIENT_ID</code> & <code className="font-mono">SPOTIFY_CLIENT_SECRET</code> and restart to enable live search.
         </div>
       )}
 
@@ -397,7 +463,10 @@ const PlaylistStarter: React.FC = () => {
                       Play
                     </a>
                   )}
-                  <button onClick={() => handleAddFromSearch(r)} className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow text-xs mb-1">
+                  <button
+                    onClick={() => handleAddFromSearch(r)}
+                    className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow text-xs mb-1"
+                  >
                     Add
                   </button>
                 </div>
@@ -411,26 +480,64 @@ const PlaylistStarter: React.FC = () => {
         {playlists.map((pl) => {
           const isCustom = !!pl.custom;
           const isPreset = PLAYLIST_PRESETS.some((p) => p.id === pl.id);
-          const displayName = looksLikeRawId(pl.name) ? (FALLBACK_LABEL_MAP[pl.id] || pl.name) : pl.name;
+          // If the "name" is just the 22-char base62 ID, prefer our friendly fallback label.
+          const displayName = looksLikeRawId(pl.name) ? FALLBACK_LABEL_MAP[pl.id] || pl.name : pl.name;
 
           return (
             <div key={pl.id} className="bg-white rounded-xl shadow p-3 flex flex-col items-center border border-blue-200 relative">
               {isCustom && (
                 <div className="absolute top-1 right-1 flex gap-1">
-                  <button aria-label="Move up" onClick={() => handleMove(pl.id, -1)} className="text-[10px] px-1 py-0.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded" title="Move Up">▲</button>
-                  <button aria-label="Move down" onClick={() => handleMove(pl.id, 1)} className="text-[10px] px-1 py-0.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded" title="Move Down">▼</button>
-                  <button aria-label="Remove" onClick={() => handleRemove(pl.id)} className="text-[10px] px-1 py-0.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded" title="Remove">✕</button>
+                  <button
+                    aria-label="Move up"
+                    onClick={() => handleMove(pl.id, -1)}
+                    className="text-[10px] px-1 py-0.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded"
+                    title="Move Up"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    aria-label="Move down"
+                    onClick={() => handleMove(pl.id, 1)}
+                    className="text-[10px] px-1 py-0.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded"
+                    title="Move Down"
+                  >
+                    ▼
+                  </button>
+                  <button
+                    aria-label="Remove"
+                    onClick={() => handleRemove(pl.id)}
+                    className="text-[10px] px-1 py-0.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded"
+                    title="Remove"
+                  >
+                    ✕
+                  </button>
                 </div>
               )}
 
               <FallbackSmartImage src={pl.image} alt={displayName} initials={displayName.slice(0, 2).toUpperCase()} />
-              <div className="font-bold text-base text-blue-900 mb-1 text-center line-clamp-1" title={displayName}>{displayName}</div>
-              <div className="text-blue-800 text-center text-xs mb-1 line-clamp-2 min-h-[2.25rem]" title={pl.description}>{pl.description || ""}</div>
+              <div className="font-bold text-base text-blue-900 mb-1 text-center line-clamp-1" title={displayName}>
+                {displayName}
+              </div>
+              <div className="text-blue-800 text-center text-xs mb-1 line-clamp-2 min-h-[2.25rem]" title={pl.description}>
+                {pl.description || ""}
+              </div>
 
               <div className="flex flex-col w-full gap-1">
+                {/* url is now ALWAYS present */}
                 <div className="flex gap-2 w-full">
-                  <a href={pl.url!} target="_blank" rel="noopener noreferrer" className="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow transition text-center text-xs" title="Open in Spotify">Open</a>
-                  <button onClick={() => togglePreview(pl.id)} className="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow text-xs">
+                  <a
+                    href={pl.url!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow transition text-center text-xs"
+                    title="Open in Spotify"
+                  >
+                    Open
+                  </a>
+                  <button
+                    onClick={() => togglePreview(pl.id)}
+                    className="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow text-xs"
+                  >
                     {previewId === pl.id ? "Hide" : "Preview"}
                   </button>
                 </div>
@@ -460,31 +567,65 @@ const PlaylistStarter: React.FC = () => {
       <div className="text-[10px] text-center text-blue-700 mb-2">Spotify status: {health === "checking" ? "…" : health}</div>
 
       <div className="flex justify-center mb-2">
-        <button onClick={() => setShowForm((v) => !v)} className="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1 rounded-lg shadow transition text-xs">
+        <button
+          onClick={() => setShowForm((v) => !v)}
+          className="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-1 rounded-lg shadow transition text-xs"
+        >
           {showForm ? "Cancel" : "Suggest a Playlist"}
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleAdd} className="bg-white rounded-xl shadow p-3 border border-blue-200 max-w-lg mx-auto flex flex-col gap-2 text-xs">
+        <form
+          onSubmit={handleAdd}
+          className="bg-white rounded-xl shadow p-3 border border-blue-200 max-w-lg mx-auto flex flex-col gap-2 text-xs"
+        >
           <div>
             <label className="font-semibold text-blue-800">Playlist Name</label>
-            <input type="text" className="border rounded px-2 py-1 w-full" value={newPlaylist.label} onChange={(e) => setNewPlaylist({ ...newPlaylist, label: e.target.value })} required />
+            <input
+              type="text"
+              className="border rounded px-2 py-1 w-full"
+              value={newPlaylist.label}
+              onChange={(e) => setNewPlaylist({ ...newPlaylist, label: e.target.value })}
+              required
+            />
           </div>
           <div>
             <label className="font-semibold text-blue-800">Spotify Link</label>
-            <input type="url" className="border rounded px-2 py-1 w-full" value={newPlaylist.url} onChange={(e) => setNewPlaylist({ ...newPlaylist, url: e.target.value })} required placeholder="https://open.spotify.com/playlist/…" />
+            <input
+              type="url"
+              className="border rounded px-2 py-1 w-full"
+              value={newPlaylist.url}
+              onChange={(e) => setNewPlaylist({ ...newPlaylist, url: e.target.value })}
+              required
+              placeholder="https://open.spotify.com/playlist/…"
+            />
           </div>
           <div>
             <label className="font-semibold text-blue-800">Cover Image URL (optional)</label>
-            <input type="url" className="border rounded px-2 py-1 w-full" value={newPlaylist.cover} onChange={(e) => setNewPlaylist({ ...newPlaylist, cover: e.target.value })} />
+            <input
+              type="url"
+              className="border rounded px-2 py-1 w-full"
+              value={newPlaylist.cover}
+              onChange={(e) => setNewPlaylist({ ...newPlaylist, cover: e.target.value })}
+            />
           </div>
           <div>
             <label className="font-semibold text-blue-800">Description (optional)</label>
-            <input type="text" className="border rounded px-2 py-1 w-full" value={newPlaylist.description} onChange={(e) => setNewPlaylist({ ...newPlaylist, description: e.target.value })} />
+            <input
+              type="text"
+              className="border rounded px-2 py-1 w-full"
+              value={newPlaylist.description}
+              onChange={(e) => setNewPlaylist({ ...newPlaylist, description: e.target.value })}
+            />
           </div>
           {error && <div className="text-red-600 text-xs mb-1">{error}</div>}
-          <button type="submit" className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow transition mt-1 text-xs">Add Playlist</button>
+          <button
+            type="submit"
+            className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow transition mt-1 text-xs"
+          >
+            Add Playlist
+          </button>
         </form>
       )}
     </div>

@@ -12,8 +12,8 @@ export async function GET() {
     }
     await getAccessToken(); // throws if bad
     return NextResponse.json({ ok: true });
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
+  } catch (e: any) {
+    const msg = String(e?.message || e);
     if (msg.includes("missing_credentials")) {
       return NextResponse.json({ ok: false, auth: "missing" });
     }
