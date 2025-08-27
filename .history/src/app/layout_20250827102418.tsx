@@ -7,8 +7,10 @@ import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
 import Footer from "../components/footer";
 import StructuredData from "../components/StructuredData";
-// Client component (has 'use client' internally) can be imported directly
-import ScrollUtilities from '../components/ScrollUtilities';
+import dynamic from 'next/dynamic';
+
+// Lazy load scroll utilities client-only (no SSR impact)
+const ScrollUtilities = dynamic(()=>import('../components/ScrollUtilities'), { ssr:false });
 
 export const metadata: Metadata = {
   title: "Bus2Ride | Party Bus, Limo & Coach Rentals",
