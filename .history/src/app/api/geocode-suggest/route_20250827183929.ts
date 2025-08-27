@@ -59,11 +59,7 @@ export async function GET(req: NextRequest) {
     const features = Array.isArray(j.features) ? j.features : [];
     interface PhotonFeature { properties?: Record<string, unknown> }
     const scored = (features as PhotonFeature[]).map((f) => {
-      let p: Record<string, unknown> = {};
-      if (f && typeof f === 'object' && 'properties' in f) {
-        const props = (f as { properties?: unknown }).properties;
-        if (props && typeof props === 'object') p = props as Record<string, unknown>;
-      }
+      const p = (f && typeof f === 'object' && 'properties' in f && (f as any).properties) ? (f as any).properties as Record<string, unknown> : {};
       // Prefer explicit 'house' or 'address' from Photon (when present)
       const rawLayer = String(p?.osm_value || p?.type || p?.type || "").toLowerCase();
 

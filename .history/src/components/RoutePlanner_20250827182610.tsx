@@ -81,19 +81,6 @@ export default function RoutePlanner(): React.ReactElement {
     setLoading(false);
   }
 
-  function formatDurationMinutes(minutes: number) {
-    // minutes -> days/hours/minutes
-    const mins = Math.round(minutes);
-    const days = Math.floor(mins / 1440);
-    const hours = Math.floor((mins % 1440) / 60);
-    const rem = mins % 60;
-    const parts = [] as string[];
-    if (days) parts.push(`${days}d`);
-    if (hours) parts.push(`${hours}h`);
-    if (rem || parts.length === 0) parts.push(`${rem}m`);
-    return parts.join(' ');
-  }
-
   return (
     <div className="p-4 max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Route Planner</h2>
@@ -138,7 +125,7 @@ export default function RoutePlanner(): React.ReactElement {
       {route && (
         <div className="mt-4 border rounded p-3 bg-blue-50">
           <div className="font-semibold">Distance: {route.distanceMiles.toFixed(2)} miles</div>
-          <div>Duration: {formatDurationMinutes(route.durationMinutes)}</div>
+          <div>Duration: {route.durationMinutes.toFixed(1)} min</div>
           <ol className="list-decimal list-inside mt-2">
             {route.addresses.map((a, idx) => <li key={idx} title={a}>{a}</li>)}
           </ol>

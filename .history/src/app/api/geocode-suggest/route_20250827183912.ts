@@ -32,9 +32,9 @@ export async function GET(req: NextRequest) {
       if (!r.ok) throw new Error(`Mapbox error ${r.status}`);
       const j = await r.json();
 
-  interface MapboxFeature { place_name?: string }
-  const featuresArr: MapboxFeature[] = Array.isArray(j.features) ? j.features : [];
-  const suggestions = featuresArr.map((f) => f.place_name).filter(Boolean) as string[];
+      const suggestions = (j.features || [])
+        .map((f: unknown) => (f && typeof f === "object" && "place_name" in f ? (f as any).place_name : undefined))
+        .filter(Boolean) as string[];
 
       return Response.json({ ok: true, suggestions } as SuggestResponse, {
         headers: { "Cache-Control": "s-maxage=60, stale-while-revalidate=300" },
@@ -57,13 +57,8 @@ export async function GET(req: NextRequest) {
 
     // Rank: house > address > street > others; build readable lines with housenumber when present.
     const features = Array.isArray(j.features) ? j.features : [];
-    interface PhotonFeature { properties?: Record<string, unknown> }
-    const scored = (features as PhotonFeature[]).map((f) => {
-      let p: Record<string, unknown> = {};
-      if (f && typeof f === 'object' && 'properties' in f) {
-        const props = (f as { properties?: unknown }).properties;
-        if (props && typeof props === 'object') p = props as Record<string, unknown>;
-      }
+    const scored = features.map((f: any) => {
+      const p = f?.properties || {};
       // Prefer explicit 'house' or 'address' from Photon (when present)
       const rawLayer = String(p?.osm_value || p?.type || p?.type || "").toLowerCase();
 
@@ -76,13 +71,13 @@ export async function GET(req: NextRequest) {
       const line =
         [
           // if we have housenumber+street, start with that
-          (typeof p.housenumber === 'string' || typeof p.housenumber === 'number') && typeof p.street === 'string' ? `${p.housenumber} ${p.street}` : null,
+          p.housenumber && p.street ? `${p.housenumber} ${p.street}` : null,
           // else fall back to name or street
-          (!(typeof p.housenumber === 'string' || typeof p.housenumber === 'number') || typeof p.street !== 'string') ? ((typeof p.name === 'string' && p.name) || (typeof p.street === 'string' && p.street) || null) : null,
-          (typeof p.city === 'string' && p.city) || (typeof p.district === 'string' && p.district) || (typeof p.county === 'string' && p.county) || null,
-          typeof p.state === 'string' ? p.state : null,
-          typeof p.postcode === 'string' ? p.postcode : null,
-          typeof p.country === 'string' ? p.country : null,
+          !p.housenumber || !p.street ? (p.name || p.street || null) : null,
+          p.city || p.district || p.county || null,
+          p.state || null,
+          p.postcode || null,
+          p.country || null,
         ]
           .filter(Boolean)
           .join(", ");

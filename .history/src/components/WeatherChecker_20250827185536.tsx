@@ -330,29 +330,6 @@ export default function WeatherChecker() {
           <p id="city-help" className="text-[11px] text-slate-600 mt-1">
             Start typing to see suggestions. Press Enter to search.
           </p>
-          {/* If we prefetched a city from IP but the user hasn't searched yet, offer a one-tap show button */}
-          {!hasSearched && pendingCity.trim() && (
-            <div className="mt-2">
-              <button
-                type="button"
-                className="text-sm px-3 py-1 rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
-                onClick={() => {
-                  const q = pendingCity.trim();
-                  if (!q) return;
-                  setCity(q);
-                  setHasSearched(true);
-                  setShowSuggestions(false);
-                  setSuggestions([]);
-                  setHighlightIndex(-1);
-                  userTypedRef.current = false;
-                  inputRef.current?.blur();
-                  fetchWeather(q);
-                }}
-              >
-                Show weather for {shortPlace(pendingCity)}
-              </button>
-            </div>
-          )}
         </div>
 
         <button
@@ -373,9 +350,9 @@ export default function WeatherChecker() {
           Clear
         </button>
 
-        {hasSearched && city && (
-          <div className="ml-0 md:ml-2 text-blue-900 font-semibold whitespace-nowrap text-xs">
-            Forecast for {shortPlace(city)}{region ? `, ${region}` : ""}
+        {city && (
+          <div className="text-blue-900 font-semibold whitespace-nowrap text-xs">
+            Forecast for {city}{region ? `, ${region}` : ""}
           </div>
         )}
       </form>
@@ -383,8 +360,8 @@ export default function WeatherChecker() {
       {loading && <div className="text-blue-700 font-semibold text-sm">Loading weather...</div>}
       {error && <div className="text-red-600 font-semibold text-sm">{error}</div>}
 
-  {/* Current */}
-  {hasSearched && currentWeather?.nws ? (
+      {/* Current */}
+      {currentWeather?.nws ? (
         <div className="mb-2">
           <div className="font-bold text-blue-900 mb-1 text-sm">
             Current: {String((currentWeather as Record<string, unknown>)["name"] ?? (currentWeather as Record<string, unknown>)["shortForecast"] ?? "")}
@@ -394,15 +371,15 @@ export default function WeatherChecker() {
             Wind: {String((currentWeather as Record<string, unknown>)["windSpeed"] ?? "")} {String((currentWeather as Record<string, unknown>)["windDirection"] ?? "")}
           </div>
         </div>
-  ) : hasSearched && currentWeather ? (
+      ) : currentWeather ? (
         <div className="mb-2">
           <div className="font-bold text-blue-900 mb-1 text-sm">Current: {String((currentWeather as Record<string, unknown>)["temperature"] ?? "")}°F</div>
           <div className="text-slate-800 text-xs">Wind: {String((currentWeather as Record<string, unknown>)["windspeed"] ?? "")} mph</div>
         </div>
       ) : null}
 
-  {/* Forecast tables */}
-  {hasSearched && forecast && (forecast as ForecastNWS).nws && (
+      {/* Forecast tables */}
+      {forecast && (forecast as ForecastNWS).nws && (
         <div className="overflow-x-auto">
           <table className="min-w-[320px] w-full text-xs mt-1 bg-white">
             <thead>
@@ -431,7 +408,7 @@ export default function WeatherChecker() {
         </div>
       )}
 
-  {hasSearched && forecast && !(forecast as ForecastNWS).nws && (
+      {forecast && !(forecast as ForecastNWS).nws && (
         <div className="overflow-x-auto">
           <table className="min-w-[320px] w-full text-xs mt-1 bg-white">
             <thead>

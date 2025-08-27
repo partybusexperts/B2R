@@ -330,29 +330,6 @@ export default function WeatherChecker() {
           <p id="city-help" className="text-[11px] text-slate-600 mt-1">
             Start typing to see suggestions. Press Enter to search.
           </p>
-          {/* If we prefetched a city from IP but the user hasn't searched yet, offer a one-tap show button */}
-          {!hasSearched && pendingCity.trim() && (
-            <div className="mt-2">
-              <button
-                type="button"
-                className="text-sm px-3 py-1 rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
-                onClick={() => {
-                  const q = pendingCity.trim();
-                  if (!q) return;
-                  setCity(q);
-                  setHasSearched(true);
-                  setShowSuggestions(false);
-                  setSuggestions([]);
-                  setHighlightIndex(-1);
-                  userTypedRef.current = false;
-                  inputRef.current?.blur();
-                  fetchWeather(q);
-                }}
-              >
-                Show weather for {shortPlace(pendingCity)}
-              </button>
-            </div>
-          )}
         </div>
 
         <button

@@ -35,8 +35,6 @@ async function geocodeOne(addr: string): Promise<[number, number]> {
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(addr)}.json`
     );
     url.searchParams.set("limit", "1");
-    url.searchParams.set("types", "address,poi"); // <- prefer house-number addresses
-    url.searchParams.set("country", "US");
     url.searchParams.set("access_token", token);
     const r = await fetch(url.toString(), { cache: "no-store" });
     if (!r.ok) throw new Error(`Mapbox geocode ${r.status}`);
@@ -112,19 +110,21 @@ export async function POST(req: NextRequest) {
     // Geocode all addresses
     const coords: [number, number][] = [];
     for (const a of inputAddrs) {
-      // serial geocoding to be gentle on free-tier services
+      // You can parallelize if desired; serial helps respect free-tier rate limits
+      // eslint-disable-next-line no-await-in-loop
       const c = await geocodeOne(a);
       coords.push(c);
     }
 
     // Build pairwise segments in-order (no TSP optimization)
-  const segments: Segment[] = [];
-  let totalDistance = 0;
-  let totalDuration = 0;
-  const rawChunks: unknown[] = [];
+    const segments: Segment[] = [];
+    let totalDistance = 0;
+    let totalDuration = 0;
+    const rawChunks: any[] = [];
 
     for (let i = 0; i < coords.length - 1; i++) {
-  const seg = await routePair(coords[i], coords[i + 1]);
+      // eslint-disable-next-line no-await-in-loop
+      const seg = await routePair(coords[i], coords[i + 1]);
       segments.push({ distance: seg.distance, duration: seg.duration });
       totalDistance += seg.distance;
       totalDuration += seg.duration;
@@ -143,9 +143,16 @@ export async function POST(req: NextRequest) {
     };
 
     return Response.json({ ok: true, data } satisfies PlanRouteResponse);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
+  } catch (err: any) {
     // Normalize as a 200 with ok:false so your UI shows the message (and not a 502)
-    return Response.json({ ok: false, error: (message.includes("Mapbox") || message.includes("OSRM") || message.includes("Photon")) ? `Directions provider error: ${message}` : (message || "Route planning failed") } satisfies PlanRouteResponse);
+    return Response.json(
+      {
+        ok: false,
+        error:
+          err?.message?.includes("Mapbox") || err?.message?.includes("OSRM") || err?.message?.includes("Photon")
+            ? `Directions provider error: ${err.message}`
+            : (err?.message || "Route planning failed"),
+      } satisfies PlanRouteResponse
+    );
   }
 }

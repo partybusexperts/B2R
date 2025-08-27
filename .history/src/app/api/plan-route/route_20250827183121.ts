@@ -35,8 +35,6 @@ async function geocodeOne(addr: string): Promise<[number, number]> {
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(addr)}.json`
     );
     url.searchParams.set("limit", "1");
-    url.searchParams.set("types", "address,poi"); // <- prefer house-number addresses
-    url.searchParams.set("country", "US");
     url.searchParams.set("access_token", token);
     const r = await fetch(url.toString(), { cache: "no-store" });
     if (!r.ok) throw new Error(`Mapbox geocode ${r.status}`);
