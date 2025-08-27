@@ -414,7 +414,7 @@ export const VEHICLES: VehicleSpec[] = [
   // Newly added coach bus capacity variants (ascending by size; order values fill gaps)
   {
     id: 'coach-47',
-    name: '47 Passenger Coach Bus',
+    name: 'Coach Bus',
     category: 'coach-buses',
     capacityMin: 47,
     capacityMax: 47,
@@ -427,7 +427,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-50',
-    name: '50 Passenger Coach Bus',
+    name: 'Coach Bus',
     category: 'coach-buses',
     capacityMin: 50,
     capacityMax: 50,
@@ -440,7 +440,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-54',
-    name: '54 Passenger Coach Bus',
+    name: 'Coach Bus',
     category: 'coach-buses',
     capacityMin: 52,
     capacityMax: 54,
@@ -453,7 +453,7 @@ export const VEHICLES: VehicleSpec[] = [
   },
   {
     id: 'coach-55',
-    name: '55 Passenger Coach Bus',
+    name: 'Coach Bus',
     category: 'coach-buses',
     capacityMin: 55,
     capacityMax: 55,
