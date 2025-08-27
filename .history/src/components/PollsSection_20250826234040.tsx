@@ -79,58 +79,45 @@ function Poll({ poll }: { poll: PollType }) {
   const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
 
-  // Build list of base URL candidates: env override -> same origin -> localhost fallbacks
-  const primaryBase = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_BASE) ? process.env.NEXT_PUBLIC_API_BASE : '';
-  const baseCandidates = Array.from(new Set([
-    primaryBase,
-    '', // same-origin
-    'http://127.0.0.1:8000',
-    'http://localhost:8000'
-  ])).filter(b => b !== undefined);
-  const buildUrl = (base: string, path: string) => `${base}${path}`.replace(/([^:]?)\/\//g, '$1/');
-  const [activeBase, setActiveBase] = useState<string | null>(null);
+  // Derive API base: allow NEXT_PUBLIC_API_BASE override, else same-origin relative.
+  const API_BASE = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_BASE) ? process.env.NEXT_PUBLIC_API_BASE : '';
+  const resultsUrl = `${API_BASE}/api/poll/results/${poll.id}`.replace(/([^:]?)\/\//g, '$1/');
+  const voteUrl = `${API_BASE}/api/poll/vote`.replace(/([^:]?)\/\//g, '$1/');
 
   useEffect(() => {
     let aborted = false;
     const controller = new AbortController();
     (async () => {
-      setInitialLoading(true);
-      setError(null);
-      let success = false;
-      const list = activeBase ? [activeBase] : baseCandidates;
-      for (const candidate of list) {
-        try {
-          const url = buildUrl(candidate, `/api/poll/results/${poll.id}`);
-          const resp = await fetch(url, { signal: controller.signal });
-          if (!resp.ok) throw new Error('bad');
-          const data = await resp.json();
-          if (!aborted) {
-            setResults(data.results || {});
-            if (!activeBase) setActiveBase(candidate);
-          }
-          success = true;
-          break;
-        } catch { /* try next */ }
+      try {
+        setInitialLoading(true);
+        setError(null);
+        const resp = await fetch(resultsUrl, { signal: controller.signal });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        if (!aborted) setResults(data.results || {});
+      } catch (e: any) {
+        if (!aborted && e.name !== 'AbortError') {
+          setError('unavailable');
+        }
+      } finally {
+        if (!aborted) setInitialLoading(false);
       }
-      if (!success && !aborted) setError('unavailable');
-      if (!aborted) setInitialLoading(false);
     })();
     return () => { aborted = true; controller.abort(); };
-  }, [poll.id, voted, activeBase]);
+  }, [resultsUrl, voted]);
 
   const handleVote = async (option: string) => {
     try {
       setLoading(true);
       setError(null);
-  const base = activeBase || baseCandidates[0] || '';
-  const resp = await fetch(buildUrl(base, '/api/poll/vote'), {
+      const resp = await fetch(voteUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ poll_id: poll.id, option })
       });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       setVoted(true);
-  } catch {
+    } catch (e) {
       setError('vote');
     } finally {
       setLoading(false);

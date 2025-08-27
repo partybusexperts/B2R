@@ -13,6 +13,7 @@ import SlideshowMaker from "../components/SlideshowMaker";
 import { ReviewForm } from "../components/ReviewForm";
 import PollsSection from "../components/PollsSection";
 import WhyRentWithUs from "../components/WhyRentWithUs";
+import TrustSection from "../components/TrustSection";
 import { getCategoryImages, findByFileName } from "../utils/optimizedImages";
 import { resolveVehicles } from "../data/vehicles";
 import VehicleGalleryCard from "../components/VehicleGalleryCard";
@@ -29,41 +30,6 @@ const partyOptimizedAll = getCategoryImages('partyBuses');
 // coachBusImages legacy array removed (using manifest)
 
 // random subset helpers removed; homepage now uses deterministic catalog-driven vehicles
-
-// Reusable inline component for trust statistic modal cards
-function TrustStatModalCard({ stat, label, title, content }: { stat: string; label: string; title: string; content: React.ReactNode }) {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <>
-      <button
-        type="button"
-        className="bg-white/95 text-blue-900 rounded-2xl border border-blue-200 shadow p-4 hover:-translate-y-0.5 transition will-change-transform text-left"
-        aria-label={`${label} details`}
-        onClick={() => setOpen(true)}
-      >
-        <div className="text-2xl font-extrabold tracking-tight">{stat}</div>
-        <div className="text-blue-700 text-xs font-semibold uppercase tracking-wide">{label}</div>
-      </button>
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative animate-fade-in">
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-blue-700 text-2xl font-bold focus:outline-none"
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <h3 className="text-2xl font-bold mb-4 text-blue-900">{title}</h3>
-            <div className="text-gray-800 text-base leading-relaxed space-y-3 max-h-[400px] overflow-y-auto">
-              {content}
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
 
 export default function Home() {
   // For demo: assign a random party bus image to each event card
@@ -535,95 +501,7 @@ export default function Home() {
 
 
   {/* Trust & Reputation */}
-<Section className="relative bg-gradient-to-br from-blue-900/80 to-black overflow-visible">
-  {/* soft glow orbs */}
-  <div className="pointer-events-none absolute -top-24 -left-20 w-[28rem] h-[28rem] bg-sky-400/20 blur-3xl rounded-full" />
-  <div className="pointer-events-none absolute -bottom-28 -right-16 w-[32rem] h-[32rem] bg-indigo-500/20 blur-3xl rounded-full" />
-
-  <div className="max-w-5xl mx-auto px-4 text-center relative">
-    <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 mt-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight leading-[1.08] pb-1">
-      The Most Trusted Limo &amp; Bus Rental Company
-    </h2>
-    <p className="text-xl text-blue-100/90 mb-8 font-semibold">
-      Trusted by thousands, booked in minutes, driven by a passion for making every ride unforgettable.
-    </p>
-
-    {/* trust stats strip with modals */}
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-      {[
-        {
-          stat: "4.9★",
-          label: "Average Rating",
-          title: "4.9★ Average Rating Across Platforms",
-          content: (
-            <>
-              <p><strong>Consistently Excellent.</strong> Our blended rating across Google, event, and transportation review platforms averages 4.9 out of 5 stars.</p>
-              <ul className="list-disc ml-5 mt-3 space-y-1 text-sm">
-                <li>No bait‑and‑switch vehicles.</li>
-                <li>Responsive communication before & during your trip.</li>
-                <li>Clean, well‑maintained fleet with documented inspections.</li>
-                <li>Professional, courteous, background‑checked drivers.</li>
-              </ul>
-              <p className="mt-3 text-sm text-blue-800/80">We continuously audit feedback to improve—every comment is reviewed.</p>
-            </>
-          ),
-        },
-        {
-          stat: "10,000+",
-          label: "Happy Riders",
-          title: "10,000+ Happy Riders & Counting",
-          content: (
-            <>
-              <p>We’ve moved thousands of guests for weddings, wine tours, corporate shuttles, prom, concerts, bachelor / bachelorette parties, and game days.</p>
-              <ul className="list-disc ml-5 mt-3 space-y-1 text-sm">
-                <li>Diverse fleet covers 6–56 passengers.</li>
-                <li>Repeat groups rebook year after year.</li>
-                <li>Dedicated coordination for multi-vehicle events.</li>
-              </ul>
-              <p className="mt-3 text-sm text-blue-800/80">Volume lets us keep pricing fair while investing in safer, newer vehicles.</p>
-            </>
-          ),
-        },
-        {
-          stat: "On-Time",
-          label: "Promise",
-          title: "Our On‑Time Pickup Promise",
-          content: (
-            <>
-              <p>Reliability matters. We target early arrival (10–15 min) so you’re never waiting curbside.</p>
-              <ul className="list-disc ml-5 mt-3 space-y-1 text-sm">
-                <li>Live dispatch tracking & proactive communication.</li>
-                <li>Redundant routing & traffic monitoring.</li>
-                <li>Backup vehicles on-call for peak periods.</li>
-              </ul>
-              <p className="mt-3 text-sm text-blue-800/80">If we’re late due to an operational miss, we make it right—every time.</p>
-            </>
-          ),
-        },
-        {
-          stat: "100%",
-          label: "Upfront Pricing",
-          title: "100% Upfront, Transparent Pricing",
-          content: (
-            <>
-              <p>No hidden mileage, fuel, or “weekend demand” add‑ons after you book.</p>
-              <ul className="list-disc ml-5 mt-3 space-y-1 text-sm">
-                <li>All mandatory fees disclosed before you pay.</li>
-                <li>Clear overtime, cleaning, & cancellation terms.</li>
-                <li>Instant quotes reflect current market + vehicle class.</li>
-              </ul>
-              <p className="mt-3 text-sm text-blue-800/80">You control the spend—what you see is what you pay.</p>
-            </>
-          ),
-        },
-      ].map((item) => (
-        <TrustStatModalCard key={item.title} {...item} />
-      ))}
-    </div>
-
-  {/* inline component defs are at top */}
-    
-    
+  <TrustSection />
 
     {/* features */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
@@ -736,7 +614,34 @@ export default function Home() {
           body: <p>Balance is billed 7–14 days before. On trip day, just relax—we handle the rest.</p>,
         },
       ].map((s, i) => (
-        <StepCard key={i} icon={s.icon} label={s.label} title={s.title} body={s.body} stepIndex={i} />
+        <div key={i} className="relative">
+          {/* connector dots (desktop) */}
+          <div className="hidden md:block absolute -top-[11px] left-1/2 -translate-x-1/2 h-5 w-5 rounded-full bg-white border-2 border-blue-300 shadow" />
+          {/* card */}
+          <div className="group bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative h-full">
+            {/* shimmering edge */}
+            <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-blue-400/0 group-hover:ring-blue-400/30 transition" />
+            {/* icon */}
+            <span className="text-4xl mb-3">{s.icon}</span>
+            {/* modal trigger */}
+            <PartyBusFeatureModalButton
+              label={s.label}
+              title={s.title}
+              content={<div className="text-gray-700 text-left">{s.body}</div>}
+            />
+            {/* arrow */}
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">
+              →
+            </span>
+
+            {/* step badge */}
+            <div className="absolute -top-3 left-3">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-600 text-white border border-blue-300/40 tracking-wide">
+                STEP {i + 1}
+              </span>
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   </div>
@@ -1336,53 +1241,5 @@ export default function Home() {
     </div>
   </Section>
   </PageLayout>
-  );
-}
-
-// Step card for "How It Works" section (entire card clickable including icon)
-function StepCard({ icon, label, title, body, stepIndex }: { icon: string; label: string; title: string; body: React.ReactNode; stepIndex: number }) {
-  const [open, setOpen] = React.useState(false);
-  const openModal = () => setOpen(true);
-  const closeModal = () => setOpen(false);
-  return (
-    <div className="relative">
-      {/* connector dot (desktop) */}
-      <div className="hidden md:block absolute -top-[11px] left-1/2 -translate-x-1/2 h-5 w-5 rounded-full bg-white border-2 border-blue-300 shadow" />
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label={`${label} details`}
-        onClick={openModal}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); } }}
-        className="group cursor-pointer bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative h-full focus:outline-none focus:ring-4 focus:ring-blue-400/40"
-      >
-        <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-blue-400/0 group-hover:ring-blue-400/30 transition" />
-        <span className="text-4xl mb-3 select-none" aria-hidden="true">{icon}</span>
-        <span className="text-blue-900 font-bold text-base tracking-tight mb-1 text-center">{label}</span>
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
-        <div className="absolute -top-3 left-3">
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-600 text-white border border-blue-300/40 tracking-wide">
-            STEP {stepIndex + 1}
-          </span>
-        </div>
-      </div>
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative animate-fade-in">
-            <button
-              onClick={closeModal}
-              className="absolute top-3 right-3 text-gray-500 hover:text-blue-700 text-2xl font-bold focus:outline-none"
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <h3 className="text-2xl font-bold mb-4 text-blue-900">{title}</h3>
-            <div className="text-gray-800 text-base leading-relaxed space-y-3">
-              {body}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
   );
 }

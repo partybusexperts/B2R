@@ -736,7 +736,34 @@ export default function Home() {
           body: <p>Balance is billed 7–14 days before. On trip day, just relax—we handle the rest.</p>,
         },
       ].map((s, i) => (
-        <StepCard key={i} icon={s.icon} label={s.label} title={s.title} body={s.body} stepIndex={i} />
+        <div key={i} className="relative">
+          {/* connector dots (desktop) */}
+          <div className="hidden md:block absolute -top-[11px] left-1/2 -translate-x-1/2 h-5 w-5 rounded-full bg-white border-2 border-blue-300 shadow" />
+          {/* card */}
+          <div className="group bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative h-full">
+            {/* shimmering edge */}
+            <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-blue-400/0 group-hover:ring-blue-400/30 transition" />
+            {/* icon */}
+            <span className="text-4xl mb-3">{s.icon}</span>
+            {/* modal trigger */}
+            <PartyBusFeatureModalButton
+              label={s.label}
+              title={s.title}
+              content={<div className="text-gray-700 text-left">{s.body}</div>}
+            />
+            {/* arrow */}
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">
+              →
+            </span>
+
+            {/* step badge */}
+            <div className="absolute -top-3 left-3">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-600 text-white border border-blue-300/40 tracking-wide">
+                STEP {i + 1}
+              </span>
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   </div>

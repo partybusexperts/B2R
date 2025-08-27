@@ -196,15 +196,26 @@ export default function HeroSlideshow() {
     })();
   }, [slidesTyped]);
 
+  const onBackgroundClick = (e: React.MouseEvent) => {
+    // If click is inside an explicitly interactive element, ignore
+    const target = e.target as HTMLElement;
+    if (target.closest('[data-hero-interactive="true"]')) return;
+    // Navigate to fleet
+    window.location.href = '/fleet';
+  };
+
   return (
     <section
-  className="relative h-[88vh] min-h-[600px] w-full overflow-hidden"
+      className="relative h-[88vh] min-h-[600px] w-full overflow-hidden cursor-pointer"
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
+      onClick={onBackgroundClick}
       aria-roledescription="carousel"
-  aria-label="Featured vehicles hero preview"
+      aria-label="Featured vehicles (click background to view full fleet)"
+      tabIndex={0}
+      onKeyDown={(e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.location.href='/fleet'; } }}
     >
       {/* Slides */}
       <div className="absolute inset-0">
@@ -254,12 +265,6 @@ export default function HeroSlideshow() {
 
       {/* Content */}
       <div className="relative z-10 h-full w-full flex items-center justify-center px-6 md:px-10 lg:px-16">
-        {/* Floating fleet preview badge */}
-        <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/40 backdrop-blur rounded-full px-4 py-1.5 text-xs md:text-sm font-semibold text-white border border-white/20 shadow-lg">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          Fleet Preview
-          <a href="/fleet" className="ml-2 text-blue-200 hover:text-white underline decoration-dotted" data-hero-interactive="true">View All →</a>
-        </div>
         <div className="backdrop-blur-xl bg-black/35 rounded-3xl shadow-2xl px-8 py-10 md:px-16 md:py-14 w-full max-w-4xl border border-white/15 ring-1 ring-white/10">
           <div className="flex items-center justify-center gap-3 mb-6">
             <span className="relative flex h-3 w-3">
@@ -320,11 +325,6 @@ export default function HeroSlideshow() {
                   {t}
                 </span>
               ))}
-            </div>
-            {/* Hero footnote to clarify preview */}
-            <div className="mt-6 text-center text-[13px] md:text-sm text-white/75">
-              Showing a rotating preview of vehicles. For full searchable list visit
-              {' '}<a href="/fleet" className="text-blue-200 hover:text-white underline" data-hero-interactive="true">the fleet page</a>.
             </div>
           </div>
         </div>
