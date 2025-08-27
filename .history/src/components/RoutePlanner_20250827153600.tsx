@@ -88,41 +88,19 @@ export default function RoutePlanner() {
           const isStart = idx === 0;
             const isEnd = idx === addresses.length - 1;
           const label = isStart ? 'Start' : isEnd ? 'End' : `Stop ${idx}`;
-          const isActive = activeInput === idx;
-          const activeSuggestion = isActive && suggestions.length > 0 && addr
-            ? suggestions.find(s => s.toLowerCase().startsWith(addr.toLowerCase())) || null
-            : null;
           return (
             <div key={idx} className="relative">
               <label className="block font-semibold mb-1">{label} Address:</label>
-              <div className="relative">
-                {/* Ghost suggestion overlay */}
-                {activeSuggestion && activeSuggestion.toLowerCase() !== addr.toLowerCase() && (
-                  <div className="pointer-events-none absolute inset-0 flex items-center px-3 py-2 text-gray-400 font-normal whitespace-nowrap overflow-hidden">
-                    <span className="invisible">{addr}</span>
-                    <span>{activeSuggestion.slice(addr.length)}</span>
-                  </div>
-                )}
-                <input
-                  type="text"
-                  value={addr}
-                  onFocus={() => setActiveInput(idx)}
-                  onBlur={() => setTimeout(()=>{ setActiveInput(p=> p===idx ? null : p); }, 180)}
-                  onChange={e => updateAddress(idx, e.target.value)}
-                  onKeyDown={e => {
-                    if ((e.key === 'Tab' || e.key === 'ArrowRight') && activeSuggestion && activeSuggestion.toLowerCase() !== addr.toLowerCase()) {
-                      // Accept suggestion
-                      e.preventDefault();
-                      updateAddress(idx, activeSuggestion);
-                      setSuggestions([]);
-                    }
-                  }}
-                  aria-autocomplete="both"
-                  placeholder={isStart ? "Starting address" : isEnd ? "Destination address" : "Optional stop"}
-                  className="w-full border rounded px-3 py-2 pr-20 bg-white"
-                  required={isStart || isEnd}
-                />
-              </div>
+              <input
+                type="text"
+                value={addr}
+                onFocus={() => setActiveInput(idx)}
+                onBlur={() => setTimeout(()=>{ setActiveInput(p=> p===idx ? null : p); }, 180)}
+                onChange={e => updateAddress(idx, e.target.value)}
+                placeholder={isStart ? "Starting address" : isEnd ? "Destination address" : "Optional stop"}
+                className="w-full border rounded px-3 py-2 pr-20"
+                required={isStart || isEnd}
+              />
               {!isStart && !isEnd && (
                 <button type="button" onClick={()=>removeStop(idx)} className="absolute top-7 right-2 text-xs bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded">Remove</button>
               )}

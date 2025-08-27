@@ -4,8 +4,35 @@ import React, { useEffect, useRef, useState } from "react";
 // Client now talks only to our internal Next.js API route so the ORS key stays server-side.
 // We keep this component purely UI + internal API orchestration.
 
-interface PlanRouteResponse { ok: boolean; error?: string; data?: { addresses: string[]; coordinates: [number, number][]; distanceMeters: number; durationSeconds: number; distanceMiles: number; durationMinutes: number; segments?: { distance: number; duration: number }[]; raw: unknown; }; }
+interface PlanRouteResponse { ok: boolean; error?: string; data?: {
+  addresses: string[];
+  coordinates: [number, number][];
+  distanceMeters: number;
+  durationSeconds: number;
+  distanceMiles: number;
+  durationMinutes: number;
+  segments?: { distance: number; duration: number }[];
+  raw: unknown;
+}; }
+
 interface SuggestResponse { ok: boolean; suggestions?: string[]; error?: string; }
+
+const TAILGATE_ESSENTIALS: { label: string; tip?: string }[] = [
+  { label: 'Cooler with ice' },
+  { label: 'Drinks (water + favorites)' },
+  { label: 'Snacks / finger foods' },
+  { label: 'Main grill item (burgers / dogs / wings)' },
+  { label: 'Grill + fuel (propane/charcoal)' },
+  { label: 'Tongs / spatula / foil' },
+  { label: 'Plates, cups, napkins' },
+  { label: 'Trash bags' },
+  { label: 'Portable chairs' },
+  { label: 'Pop-up tent / shade' },
+  { label: 'Team gear / flags' },
+  { label: 'Bluetooth speaker' },
+  { label: 'Phone chargers / battery pack' },
+  { label: 'Wet wipes / hand sanitizer' },
+];
 
 export default function RoutePlanner() {
   const [addresses, setAddresses] = useState<string[]>(["", ""]); // at least start + end
@@ -88,41 +115,19 @@ export default function RoutePlanner() {
           const isStart = idx === 0;
             const isEnd = idx === addresses.length - 1;
           const label = isStart ? 'Start' : isEnd ? 'End' : `Stop ${idx}`;
-          const isActive = activeInput === idx;
-          const activeSuggestion = isActive && suggestions.length > 0 && addr
-            ? suggestions.find(s => s.toLowerCase().startsWith(addr.toLowerCase())) || null
-            : null;
           return (
             <div key={idx} className="relative">
               <label className="block font-semibold mb-1">{label} Address:</label>
-              <div className="relative">
-                {/* Ghost suggestion overlay */}
-                {activeSuggestion && activeSuggestion.toLowerCase() !== addr.toLowerCase() && (
-                  <div className="pointer-events-none absolute inset-0 flex items-center px-3 py-2 text-gray-400 font-normal whitespace-nowrap overflow-hidden">
-                    <span className="invisible">{addr}</span>
-                    <span>{activeSuggestion.slice(addr.length)}</span>
-                  </div>
-                )}
-                <input
-                  type="text"
-                  value={addr}
-                  onFocus={() => setActiveInput(idx)}
-                  onBlur={() => setTimeout(()=>{ setActiveInput(p=> p===idx ? null : p); }, 180)}
-                  onChange={e => updateAddress(idx, e.target.value)}
-                  onKeyDown={e => {
-                    if ((e.key === 'Tab' || e.key === 'ArrowRight') && activeSuggestion && activeSuggestion.toLowerCase() !== addr.toLowerCase()) {
-                      // Accept suggestion
-                      e.preventDefault();
-                      updateAddress(idx, activeSuggestion);
-                      setSuggestions([]);
-                    }
-                  }}
-                  aria-autocomplete="both"
-                  placeholder={isStart ? "Starting address" : isEnd ? "Destination address" : "Optional stop"}
-                  className="w-full border rounded px-3 py-2 pr-20 bg-white"
-                  required={isStart || isEnd}
-                />
-              </div>
+              <input
+                type="text"
+                value={addr}
+                onFocus={() => setActiveInput(idx)}
+                onBlur={() => setTimeout(()=>{ setActiveInput(p=> p===idx ? null : p); }, 180)}
+                onChange={e => updateAddress(idx, e.target.value)}
+                placeholder={isStart ? "Tailgate meet point" : isEnd ? "Stadium / final destination" : "Optional stop"}
+                className="w-full border rounded px-3 py-2 pr-20"
+                required={isStart || isEnd}
+              />
               {!isStart && !isEnd && (
                 <button type="button" onClick={()=>removeStop(idx)} className="absolute top-7 right-2 text-xs bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded">Remove</button>
               )}
@@ -165,6 +170,17 @@ export default function RoutePlanner() {
             </details>
         </div>
       )}
+      <div className="mt-8 bg-white border border-blue-200 rounded-lg p-4">
+        <h3 className="font-bold mb-2 text-blue-900">Tailgate Essentials Checklist</h3>
+        <ul className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+          {TAILGATE_ESSENTIALS.map(item => (
+            <li key={item.label} className="flex items-start gap-2">
+              <input type="checkbox" className="mt-0.5 accent-blue-700" aria-label={`Check ${item.label}`} />
+              <span className="text-blue-900">{item.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="text-xs text-gray-500 mt-4">
         Powered by <a href="https://openrouteservice.org/" className="underline" target="_blank" rel="noopener noreferrer">OpenRouteService</a> (free tier)
       </div>

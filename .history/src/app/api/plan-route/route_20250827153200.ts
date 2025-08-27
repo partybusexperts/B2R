@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     let segments: ORSSegment[] | undefined;
     const rawSegments = data?.features?.[0]?.properties?.segments || data?.routes?.[0]?.segments;
     if (Array.isArray(rawSegments)) {
-      segments = rawSegments.map((s: { distance: number; duration: number }) => ({ distance: s.distance, duration: s.duration }));
+      segments = rawSegments.map((s: any) => ({ distance: s.distance, duration: s.duration }));
     }
 
     return NextResponse.json({
