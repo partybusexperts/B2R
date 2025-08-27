@@ -28,54 +28,54 @@ export const VEHICLES: VehicleSpec[] = [
   // Party Buses (choose higher‑res exterior/interior reps; replace / expand as real inventory grows)
   {
     id: 'party-sprinter-14',
-    name: 'Mercedes Sprinter Party Bus (14 Pass)',
+    name: 'Mercedes Sprinter Party Bus (14 Pax)',
     category: 'party-buses',
-    capacityMin: 14,
+    capacityMin: 12,
     capacityMax: 14,
-    highlights: ['Wrap-around seating', 'Bluetooth Audio', 'Laser Light Show'],
+    highlights: ['Wrap-around seating', 'Bluetooth sound', 'LED ceiling'],
     images: [
-      { file: '14 Passenger Limo Style Sprinter White.png', role: 'exterior', primary: true },
-      { file: '14 Passenger Sprinter Van Limo Style Inside.png', role: 'interior' }
+      { file: '18 Passenger Party Bus Interior.png', role: 'interior', primary: true },
+      { file: '18 Passenger White Party Bus Interior.png', role: 'interior' }
     ],
     badge: 'Popular',
     order: 10
   },
   {
-    id: 'party-lux-24',
-    name: 'Luxury Party Bus (24 Pass)',
+    id: 'party-lux-26',
+    name: 'Luxury Party Bus (24–26 Pax)',
     category: 'party-buses',
     capacityMin: 24,
-    capacityMax: 24,
-    highlights: ['Dance lighting', 'BYOB-friendly', 'Wet Bar'],
+    capacityMax: 26,
+    highlights: ['Dance lighting', 'BYOB-friendly', 'Dual coolers'],
     images: [
-      { file: '24 Passenger Party Bus Exterior.jpg', role: 'exterior', primary: true },
-      { file: '24 Passenger Party Bus Pink Interior.png', role: 'interior' }
+      { file: '18 Passenger Party Bus White Exterior.png', role: 'exterior', primary: true },
+      { file: '18 Passenger Party Bus Interior 2.png', role: 'interior' }
     ],
     order: 20
   },
   {
-    id: 'party-exec-36',
-    name: '36 Passenger Party Bus (36 Pass)',
+    id: 'party-exec-34',
+    name: 'Executive Party Bus (30–34 Pax)',
     category: 'party-buses',
-    capacityMin: 36,
-    capacityMax: 36,
-    highlights: ['Wrap Around Seating', 'Spacious interior', 'TV screens'],
+    capacityMin: 30,
+    capacityMax: 34,
+    highlights: ['USB charging', 'Spacious interior', 'TV screens'],
     images: [
       { file: '36 Passenger Party Bus Exterior 4.png', role: 'exterior', primary: true },
-      { file: '36 Passenger Party Bus Inside.png', role: 'interior' }
+      { file: '18 Passenger Party Bus Interior.png', role: 'interior' }
     ],
     order: 30
   },
   {
-    id: 'party-mega-30',
-    name: '30 Passenger Party Bus (30 Pass)',
+    id: 'party-mega-45',
+    name: 'Mega Party Bus (40–45 Pax)',
     category: 'party-buses',
-    capacityMin: 30,
-    capacityMax: 30,
-    highlights: ['Laser Light Show', 'Subwoofer system', 'Wrap Around Seating'],
+    capacityMin: 40,
+    capacityMax: 45,
+    highlights: ['Restroom (select)', 'Subwoofer system', 'Ambient LEDs'],
     images: [
-      { file: '30 Passenger Party Bus Exterior.png', role: 'exterior', primary: true },
-      { file: '30 Passenger Party Bus.png', role: 'interior' }
+      { file: 'Bus-4.png', role: 'exterior', primary: true },
+      { file: 'Bus-5.png', role: 'exterior' }
     ],
     order: 40
   },
@@ -84,7 +84,7 @@ export const VEHICLES: VehicleSpec[] = [
     id: 'party-17',
     name: '17 Passenger Party Bus',
     category: 'party-buses',
-    capacityMin: 17,
+    capacityMin: 15,
     capacityMax: 17,
     highlights: ['Compact group size', 'LED party lighting', 'Bluetooth sound'],
     images: [
@@ -97,12 +97,14 @@ export const VEHICLES: VehicleSpec[] = [
     id: 'party-20',
     name: '20 Passenger Party Bus',
     category: 'party-buses',
-    capacityMin: 20,
+    capacityMin: 18,
     capacityMax: 20,
-    highlights: ['Color LED lights', 'Premium sound', 'Cooler station'],
+    highlights: ['Color LED ceiling', 'Premium sound', 'Cooler station'],
     images: [
-      { file: '20 Passenger Party Bus Black.png', role: 'exterior', primary: true, alt: '20 passenger party bus exterior' },
+      { file: '20 Passenger Party Bus Exterior.png', role: 'exterior', primary: true, alt: '20 passenger party bus exterior' },
       { file: '20 Passenger Party Bus Interior 4.png', role: 'interior', alt: '20 passenger party bus interior lighting and seating' },
+      { file: '20 Passenger Party Bus Black.png', role: 'exterior', alt: '20 passenger black party bus side profile' },
+      { file: '20 Passenger Party Bus Pink.png', role: 'exterior', alt: '20 passenger pink party bus exterior' }
     ],
     order: 60
   },
@@ -114,62 +116,62 @@ export const VEHICLES: VehicleSpec[] = [
     capacityMax: 24,
     highlights: ['Spacious layout', 'Dance lighting', 'Ice / cooler area'],
     images: [
-      { file: '20 Passenger Party Bus Exterior.png', role: 'exterior', primary: true, alt: '20 passenger party bus exterior' },
-      { file: '20 Passenger Party Bus Pink.png', role: 'interior', alt: '20 passenger party bus interior pink LED lighting' }
+      { file: '24 Passenger Party Bus Exterior.jpg', role: 'exterior', primary: true, alt: '24 passenger party bus exterior' },
+      { file: '24 Passenger Party Bus Pink Interior.png', role: 'interior', alt: '24 passenger party bus interior pink LED lighting' }
     ],
     order: 70
   },
   {
-    id: 'party-18',
-    name: '18 Passenger Party Bus',
+    id: 'party-30',
+    name: '30 Passenger Party Bus',
     category: 'party-buses',
-    capacityMin: 18,
-    capacityMax: 18,
-    highlights: ['Wrap Around seating', 'Wet Bar', 'LED ceiling'],
+    capacityMin: 28,
+    capacityMax: 30,
+    highlights: ['Wrap seating', 'Multiple TV screens', 'LED ceiling'],
     images: [
-      { file: '18 Passenger White Party Bus Exterior.png', role: 'exterior', primary: true, alt: '18 passenger party bus exterior' },
-      { file: '18 Passenger White Party Bus Interior.png', role: 'interior', alt: '18 passenger party bus alternate interior angle' }
+      { file: '30 Passenger Party Bus Exterior.png', role: 'exterior', primary: true, alt: '30 passenger party bus exterior' },
+      { file: '30 Passenger Party Bus.png', role: 'exterior', alt: '30 passenger party bus alternate exterior angle' }
     ],
     order: 80
   },
   {
-    id: 'party-16-18',
-    name: '18 Passenger Party Bus',
+    id: 'party-36',
+    name: '36 Passenger Party Bus',
     category: 'party-buses',
-    capacityMin: 18,
-    capacityMax: 18,
+    capacityMin: 34,
+    capacityMax: 36,
     highlights: ['Large cabin', 'Subwoofer audio', 'Color wash LEDs'],
     images: [
-      { file: '18 Passenger Party Bus White Exterior.png', role: 'exterior', primary: true, alt: '18 passenger party bus exterior' },
-      { file: '18 Passenger Party Bus Interior 2.png', role: 'interior', alt: '18 passenger party bus interior seating and lighting' }
+      { file: '36 Passenger Party Bus Exterior 4.png', role: 'exterior', primary: true, alt: '36 passenger party bus exterior' },
+      { file: '36 Passenger Party Bus Inside.png', role: 'interior', alt: '36 passenger party bus interior seating and lighting' }
     ],
     order: 90
   },
   // Limousines
   {
-    id: 'limo-lincoln-10',
-    name: '10 Passenger Lincoln Stretch Limousine (10 Pass)',
+    id: 'limo-hummer-18',
+    name: 'H2 Hummer Stretch Limousine (18 Pax)',
     category: 'limousines',
-    capacityMin: 10,
-    capacityMax: 10,
+    capacityMin: 16,
+    capacityMax: 18,
     highlights: ['Premium sound', 'Bar setup', 'Disco lighting'],
     images: [
-      { file: '10 Passenger Black Lincoln Stretch Limo Exterior Black.png', role: 'exterior', primary: true },
-      { file: '10 Passenger Lincoln Stretch Limo Interior Black.png', role: 'interior' }
+      { file: '18 Passenger Hummer Limo Exterior.png', role: 'exterior', primary: true },
+      { file: '18 Passenger Hummer Limo Interior.png', role: 'interior' }
     ],
     badge: 'Iconic',
     order: 10
   },
   {
-    id: 'limo-esc-10-chrysler',
-    name: '10 Passenger Chrysler Limousine (10 Pax)',
+    id: 'limo-esc-18',
+    name: 'Cadillac Escalade Limo (18 Pax)',
     category: 'limousines',
-    capacityMin: 10,
-    capacityMax: 10,
+    capacityMin: 16,
+    capacityMax: 18,
     highlights: ['Leather seating', 'Mood lighting', 'Premium sound'],
     images: [
-      { file: '10 Passenger Chrysler 300 Limo Exterior.png', role: 'exterior', primary: true },
-      { file: '10 Passenger Chrysler Limo Interior.png', role: 'interior' }
+      { file: '18 Passenger Cadillac Escalade Limo Exterior.png', role: 'exterior', primary: true },
+      { file: '18 Passenger Hummer Limo Inside.png', role: 'interior' }
     ],
     order: 20
   },
@@ -177,12 +179,12 @@ export const VEHICLES: VehicleSpec[] = [
     id: 'limo-chrysler-300-10',
     name: 'Chrysler 300 Limo (10 Pax)',
     category: 'limousines',
-    capacityMin: 10,
+    capacityMin: 8,
     capacityMax: 10,
     highlights: ['Elegant interior', 'Bar area', 'LED accents'],
     images: [
-      { file: '10 Passenger Chrysler Limo White.png', role: 'exterior', primary: true },
-      { file: '10 Passenger Chrysler Stretch Limousine.png', role: 'interior' }
+      { file: '10 Passenger Chrysler 300 Limo Exterior.png', role: 'exterior', primary: true },
+      { file: '10 Passenger Lincoln Stretch Limo Interior.png', role: 'interior' }
     ],
     order: 30
   },
@@ -191,103 +193,68 @@ export const VEHICLES: VehicleSpec[] = [
     id: 'limo-lincoln-10',
     name: 'Lincoln Stretch Limo (10 Pax)',
     category: 'limousines',
-    capacityMin: 10,
+    capacityMin: 8,
     capacityMax: 10,
     highlights: ['Classic style', 'Bar setup', 'Mood lighting'],
     images: [
-      { file: '10 Passenger Lincoln Stretch Limo Exterior 2.png', role: 'exterior', primary: true, alt: '10 passenger black Lincoln stretch limo exterior' },
-      { file: '10 Passenger Lincoln Stretch Inside.png', role: 'interior', alt: '10 passenger Lincoln stretch limo interior black leather' },
+      { file: '10 Passenger Black Lincoln Stretch Limo Exterior Black.png', role: 'exterior', primary: true, alt: '10 passenger black Lincoln stretch limo exterior' },
+      { file: '10 Passenger Lincoln Stretch Limo Interior Black.png', role: 'interior', alt: '10 passenger Lincoln stretch limo interior black leather' },
+      { file: '10 Passenger Lincoln Stretch Limo Interior Very Clean.png', role: 'interior', alt: '10 passenger Lincoln stretch limo interior clean leather seating' }
     ],
     order: 40
   },
   {
-    id: 'lincoln-limo-8',
-    name: '8 Passenger Lincoln Limo (8 Pass)',
+    id: 'limo-chrysler-12',
+    name: 'Chrysler Limo (12 Pax)',
     category: 'limousines',
-    capacityMin: 8,
-    capacityMax: 8,
-    highlights: ['Jet Black Finish', 'Leather seating', 'LED ceiling'],
+    capacityMin: 10,
+    capacityMax: 12,
+    highlights: ['Pearl white finish', 'Leather seating', 'LED ceiling'],
     images: [
-      { file: '10 Passenger Lincoln Stretch Limo Exterior 3.png', role: 'exterior', primary: true, alt: '8 passenger Lincoln limousine exterior' },
-      { file: '10 Passenger Lincoln Stretch Limo Interior Very Clean.png', role: 'interior', alt: '8 passenger Lincoln limousine interior seating and bar' }
+      { file: '12 Passenger Chrysler Limo White.png', role: 'exterior', primary: true, alt: '12 passenger white Chrysler limousine exterior' },
+      { file: '12 Passenger Chrysler Limousine Interior.png', role: 'interior', alt: '12 passenger Chrysler limousine interior seating and bar' }
     ],
     order: 50
   },
   {
-    id: 'limo-chrysler-12',
-    name: '12 Passenger Chrysler Limo (12 Pax)',
+    id: 'limo-excursion-16',
+    name: 'Ford Excursion Limo (16 Pax)',
     category: 'limousines',
-    capacityMin: 12,
-    capacityMax: 12,
+    capacityMin: 14,
+    capacityMax: 16,
     highlights: ['High ceiling feel', 'Party lighting', 'Premium sound'],
     images: [
-      { file: '12 Passenger Chrysler Limo White.png', role: 'exterior', primary: true, alt: '16 passenger stretch Ford Excursion limo exterior' },
-      { file: '12 Passenger Chrysler Limousine Interior.png', role: 'interior', alt: '16 passenger Ford Excursion stretch limo interior seating' },
+      { file: '16_Passenger_Stretch_Excursion_Exterior_optimized.jpg', role: 'exterior', primary: true, alt: '16 passenger stretch Ford Excursion limo exterior' },
+      { file: '16 Passenger Ford Excursion Stretch Limo Interior.png', role: 'interior', alt: '16 passenger Ford Excursion stretch limo interior seating' },
+      { file: '16 Passenger Ford Excursion Limousine Interior.png', role: 'interior', alt: '16 passenger Ford Excursion limousine interior alternate angle' }
     ],
     order: 60
   },
   {
-    id: 'limo-excursion-16',
-    name: 'Ford Excursion Limo (16 Pass)',
+    id: 'limo-excursion-18',
+    name: 'Ford Excursion Limo (18 Pax)',
     category: 'limousines',
     capacityMin: 16,
-    capacityMax: 16,
+    capacityMax: 18,
     highlights: ['Spacious cabin', 'LED lighting', 'Bar & glassware'],
     images: [
-      { file: '16_Passenger_Stretch_Excursion_Exterior_optimized.jpg', role: 'exterior', primary: true, alt: '18 passenger Ford Excursion limo exterior' },
-      { file: '16 Passenger Ford Excursion Stretch Limo Interior.png', role: 'interior', alt: '18 passenger Ford Excursion limo interior seating and lighting' }
+      { file: '18 Passenger Ford Excursion Limo Exterior 2.png', role: 'exterior', primary: true, alt: '18 passenger Ford Excursion limo exterior' },
+      { file: '18 Passenger Ford Excursion Limo Inside.png', role: 'interior', alt: '18 passenger Ford Excursion limo interior seating and lighting' }
     ],
     order: 70
   },
   {
-    id: 'limo-escalade-18',
-    name: '18 Passenger Escalade Limo (18 Pass)',
-    category: 'limousines',
-    capacityMin: 18,
-    capacityMax: 18,
-    highlights: ['Maximum wow factor', 'Disco ceiling', 'Ice Wells'],
-    images: [
-      { file: '18 Passenger Cadillac Escalade Limo Exterior.png', role: 'exterior', primary: true, alt: '18 passenger white Escalade limo exterior' },
-      { file: '18 Passenger Cadillac Escalade Limousine Interior.png', role: 'interior', alt: '20-22 passenger black Hummer limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-excursion-18',
-    name: '18 Passenger Excursion Limo (18 Pass)',
-    category: 'limousines',
-    capacityMin: 18,
-    capacityMax: 18,
-    highlights: ['Maximum wow factor', 'Disco ceiling', 'Ice Wells'],
-    images: [
-      { file: '18 Passenger Ford Excursion Limo Exterior 2.png', role: 'exterior', primary: true, alt: '18 passenger white Excursion limo exterior' },
-      { file: '18 Passenger Ford Excursion Limo Inside.png', role: 'interior', alt: '18 passenger Excursion limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-hummer-20',
-    name: '20 Passenger Hummer Limo (20 Pass)',
+    id: 'limo-hummer-20-22',
+    name: 'Hummer Limo (20–22 Pax)',
     category: 'limousines',
     capacityMin: 20,
-    capacityMax: 20,
-    highlights: ['BYOB', 'Laser Light Show', 'Wet Bar'],
-    images: [
-      { file: '20 Passenger Hummer Limousine.png', role: 'exterior', primary: true, alt: '20 passenger white Hummer limo exterior' },
-      { file: '20 Passenger Hummer Limousine Interior.png', role: 'interior', alt: '20 passenger Hummer limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-hummer-22',
-    name: '22 Passenger Hummer Limo (22 Pass)',
-    category: 'limousines',
-    capacityMin: 22,
     capacityMax: 22,
-    highlights: ['Large Limo', 'Unlimited Stops', 'Ice Wells'],
+    highlights: ['Maximum wow factor', 'Disco ceiling', 'Multiple ice wells'],
     images: [
-      { file: '20-22 Passenger Hummer Limo Black Exterior.png', role: 'exterior', primary: true, alt: '22 passenger white Hummer limo exterior' },
-      { file: '20-22 Passenger Black Hummer Interior.png', role: 'interior', alt: '22 passenger Hummer limo interior lighting' },
+      { file: '20-22 Passenger Hummer Limo Black Exterior.png', role: 'exterior', primary: true, alt: '20-22 passenger black Hummer limo exterior' },
+      { file: '20-22 Passenger Black Hummer Interior.png', role: 'interior', alt: '20-22 passenger black Hummer limo interior lighting' },
+      { file: '20 Passenger Hummer Limousine.png', role: 'exterior', alt: '20 passenger Hummer limousine exterior alternate' },
+      { file: '20 Passenger Hummer Limousine Interior.png', role: 'interior', alt: '20 passenger Hummer limousine interior seating and bar' }
     ],
     order: 80
   },
@@ -416,4 +383,3 @@ export function resolveVehicles(findByFileName: (f: string)=>OptimizedImageEntry
 export function getPrimaryImageEntry(vehicle: ResolvedVehicle): OptimizedImageEntry | undefined {
   return vehicle.primary?.entry;
 }
- 

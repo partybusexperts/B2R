@@ -252,45 +252,6 @@ export const VEHICLES: VehicleSpec[] = [
     ],
     order: 80
   },
-  {
-    id: 'limo-excursion-18',
-    name: '18 Passenger Excursion Limo (18 Pass)',
-    category: 'limousines',
-    capacityMin: 18,
-    capacityMax: 18,
-    highlights: ['Maximum wow factor', 'Disco ceiling', 'Ice Wells'],
-    images: [
-      { file: '18 Passenger Ford Excursion Limo Exterior 2.png', role: 'exterior', primary: true, alt: '18 passenger white Excursion limo exterior' },
-      { file: '18 Passenger Ford Excursion Limo Inside.png', role: 'interior', alt: '18 passenger Excursion limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-hummer-20',
-    name: '20 Passenger Hummer Limo (20 Pass)',
-    category: 'limousines',
-    capacityMin: 20,
-    capacityMax: 20,
-    highlights: ['BYOB', 'Laser Light Show', 'Wet Bar'],
-    images: [
-      { file: '20 Passenger Hummer Limousine.png', role: 'exterior', primary: true, alt: '20 passenger white Hummer limo exterior' },
-      { file: '20 Passenger Hummer Limousine Interior.png', role: 'interior', alt: '20 passenger Hummer limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-hummer-22',
-    name: '22 Passenger Hummer Limo (22 Pass)',
-    category: 'limousines',
-    capacityMin: 22,
-    capacityMax: 22,
-    highlights: ['Large Limo', 'Unlimited Stops', 'Ice Wells'],
-    images: [
-      { file: '20-22 Passenger Hummer Limo Black Exterior.png', role: 'exterior', primary: true, alt: '22 passenger white Hummer limo exterior' },
-      { file: '20-22 Passenger Black Hummer Interior.png', role: 'interior', alt: '22 passenger Hummer limo interior lighting' },
-    ],
-    order: 80
-  },
   // Coach Buses
   {
     id: 'coach-mini-28',
@@ -416,4 +377,3 @@ export function resolveVehicles(findByFileName: (f: string)=>OptimizedImageEntry
 export function getPrimaryImageEntry(vehicle: ResolvedVehicle): OptimizedImageEntry | undefined {
   return vehicle.primary?.entry;
 }
- 

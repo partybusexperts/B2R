@@ -214,80 +214,44 @@ export const VEHICLES: VehicleSpec[] = [
     order: 50
   },
   {
-    id: 'limo-chrysler-12',
-    name: '12 Passenger Chrysler Limo (12 Pax)',
+    id: 'limo-excursion-16',
+    name: 'Ford Excursion Limo (16 Pax)',
     category: 'limousines',
-    capacityMin: 12,
-    capacityMax: 12,
+    capacityMin: 14,
+    capacityMax: 16,
     highlights: ['High ceiling feel', 'Party lighting', 'Premium sound'],
     images: [
-      { file: '12 Passenger Chrysler Limo White.png', role: 'exterior', primary: true, alt: '16 passenger stretch Ford Excursion limo exterior' },
-      { file: '12 Passenger Chrysler Limousine Interior.png', role: 'interior', alt: '16 passenger Ford Excursion stretch limo interior seating' },
+      { file: '16_Passenger_Stretch_Excursion_Exterior_optimized.jpg', role: 'exterior', primary: true, alt: '16 passenger stretch Ford Excursion limo exterior' },
+      { file: '16 Passenger Ford Excursion Stretch Limo Interior.png', role: 'interior', alt: '16 passenger Ford Excursion stretch limo interior seating' },
+      { file: '16 Passenger Ford Excursion Limousine Interior.png', role: 'interior', alt: '16 passenger Ford Excursion limousine interior alternate angle' }
     ],
     order: 60
   },
   {
-    id: 'limo-excursion-16',
-    name: 'Ford Excursion Limo (16 Pass)',
+    id: 'limo-excursion-18',
+    name: 'Ford Excursion Limo (18 Pax)',
     category: 'limousines',
     capacityMin: 16,
-    capacityMax: 16,
+    capacityMax: 18,
     highlights: ['Spacious cabin', 'LED lighting', 'Bar & glassware'],
     images: [
-      { file: '16_Passenger_Stretch_Excursion_Exterior_optimized.jpg', role: 'exterior', primary: true, alt: '18 passenger Ford Excursion limo exterior' },
-      { file: '16 Passenger Ford Excursion Stretch Limo Interior.png', role: 'interior', alt: '18 passenger Ford Excursion limo interior seating and lighting' }
+      { file: '18 Passenger Ford Excursion Limo Exterior 2.png', role: 'exterior', primary: true, alt: '18 passenger Ford Excursion limo exterior' },
+      { file: '18 Passenger Ford Excursion Limo Inside.png', role: 'interior', alt: '18 passenger Ford Excursion limo interior seating and lighting' }
     ],
     order: 70
   },
   {
-    id: 'limo-escalade-18',
-    name: '18 Passenger Escalade Limo (18 Pass)',
-    category: 'limousines',
-    capacityMin: 18,
-    capacityMax: 18,
-    highlights: ['Maximum wow factor', 'Disco ceiling', 'Ice Wells'],
-    images: [
-      { file: '18 Passenger Cadillac Escalade Limo Exterior.png', role: 'exterior', primary: true, alt: '18 passenger white Escalade limo exterior' },
-      { file: '18 Passenger Cadillac Escalade Limousine Interior.png', role: 'interior', alt: '20-22 passenger black Hummer limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-excursion-18',
-    name: '18 Passenger Excursion Limo (18 Pass)',
-    category: 'limousines',
-    capacityMin: 18,
-    capacityMax: 18,
-    highlights: ['Maximum wow factor', 'Disco ceiling', 'Ice Wells'],
-    images: [
-      { file: '18 Passenger Ford Excursion Limo Exterior 2.png', role: 'exterior', primary: true, alt: '18 passenger white Excursion limo exterior' },
-      { file: '18 Passenger Ford Excursion Limo Inside.png', role: 'interior', alt: '18 passenger Excursion limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-hummer-20',
-    name: '20 Passenger Hummer Limo (20 Pass)',
+    id: 'limo-hummer-20-22',
+    name: 'Hummer Limo (20–22 Pax)',
     category: 'limousines',
     capacityMin: 20,
-    capacityMax: 20,
-    highlights: ['BYOB', 'Laser Light Show', 'Wet Bar'],
-    images: [
-      { file: '20 Passenger Hummer Limousine.png', role: 'exterior', primary: true, alt: '20 passenger white Hummer limo exterior' },
-      { file: '20 Passenger Hummer Limousine Interior.png', role: 'interior', alt: '20 passenger Hummer limo interior lighting' },
-    ],
-    order: 80
-  },
-  {
-    id: 'limo-hummer-22',
-    name: '22 Passenger Hummer Limo (22 Pass)',
-    category: 'limousines',
-    capacityMin: 22,
     capacityMax: 22,
-    highlights: ['Large Limo', 'Unlimited Stops', 'Ice Wells'],
+    highlights: ['Maximum wow factor', 'Disco ceiling', 'Multiple ice wells'],
     images: [
-      { file: '20-22 Passenger Hummer Limo Black Exterior.png', role: 'exterior', primary: true, alt: '22 passenger white Hummer limo exterior' },
-      { file: '20-22 Passenger Black Hummer Interior.png', role: 'interior', alt: '22 passenger Hummer limo interior lighting' },
+      { file: '20-22 Passenger Hummer Limo Black Exterior.png', role: 'exterior', primary: true, alt: '20-22 passenger black Hummer limo exterior' },
+      { file: '20-22 Passenger Black Hummer Interior.png', role: 'interior', alt: '20-22 passenger black Hummer limo interior lighting' },
+      { file: '20 Passenger Hummer Limousine.png', role: 'exterior', alt: '20 passenger Hummer limousine exterior alternate' },
+      { file: '20 Passenger Hummer Limousine Interior.png', role: 'interior', alt: '20 passenger Hummer limousine interior seating and bar' }
     ],
     order: 80
   },
@@ -416,4 +380,3 @@ export function resolveVehicles(findByFileName: (f: string)=>OptimizedImageEntry
 export function getPrimaryImageEntry(vehicle: ResolvedVehicle): OptimizedImageEntry | undefined {
   return vehicle.primary?.entry;
 }
- 
