@@ -12,11 +12,10 @@ interface TocSection { id: string; label: string; }
 
 // Deterministic slug generator (no Math.random) so SSR/CSR match if headings present server-side
 function slugify(base: string, index: number): string {
-  const core = base
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') || 'section';
-  return `${core}-${index}`;
+  return (
+    base.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')</n+      .replace(/^-+|-+$/g, '') || 'section'
+  ) + '-' + index;
 }
 
 // Helper to find candidate sections (data-section-title or h2 elements)
@@ -125,8 +124,13 @@ const ScrollUtilities: React.FC = () => {
     }
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
-  
+        );
+        const core = base
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '') || 'section';
+        return core + '-' + index;
+
   // Adaptive dock: hide if footer visible
   useEffect(() => {
     const footer = document.querySelector('footer');

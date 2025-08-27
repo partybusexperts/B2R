@@ -7,8 +7,7 @@ function toDateTimeLocal(dt: Date) {
   return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
 }
 
-interface IcsOptions { title: string; description: string; location: string; start: string; end: string; }
-function toICS({ title, description, location, start, end }: IcsOptions) {
+function toICS({ title, description, location, start, end }: any) {
   // start/end: ISO string
   return `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${title}\nDESCRIPTION:${description}\nLOCATION:${location}\nDTSTART:${start.replace(/[-:]/g,"").slice(0,15)}Z\nDTEND:${end.replace(/[-:]/g,"").slice(0,15)}Z\nEND:VEVENT\nEND:VCALENDAR`;
 }

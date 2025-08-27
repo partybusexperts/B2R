@@ -16,7 +16,7 @@ interface PlanRouteResponse {
     durationSeconds: number;
     distanceMiles: number;
     durationMinutes: number;
-  raw: unknown; // full provider payload (may be trimmed in future)
+    raw: any; // full provider payload (may be trimmed in future)
   };
 }
 
