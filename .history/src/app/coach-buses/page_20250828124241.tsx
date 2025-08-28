@@ -368,45 +368,23 @@ export default function CoachBusesPage() {
           Need a different style? Explore stretch limousines for formal events or party buses for social energy and wrap-around seating.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <a href="/limousines" className="group block rounded-2xl overflow-hidden border border-blue-800/30 shadow-lg bg-[#173264] hover:scale-[1.02] transition-transform">
-            <div className="h-44 md:h-56 w-full relative">
-              {(() => {
-                const entry = getFirst("limousines");
-                return entry ? (
-                  <OptimizedImage
-                    entry={entry}
-                    alt={entry.alt || "Limousine"}
-                    className="h-full w-full object-cover"
-                    fillParent
-                    priorityIfAbove={1400}
-                  />
-                ) : null;
-              })()}
-            </div>
-            <div className="px-6 py-5">
-              <h3 className="text-2xl font-extrabold text-white text-center">Limousines</h3>
-              <p className="text-blue-200 text-center">Classic stretch and modern limo options for formal events and VIP transport.</p>
-            </div>
-          </a>
-
-          <a href="/party-buses" className="group block rounded-2xl overflow-hidden border border-blue-800/30 shadow-lg bg-[#173264] hover:scale-[1.02] transition-transform">
-            <div className="h-44 md:h-56 w-full relative">
-              {(() => {
-                const entry = getFirst("partyBuses");
-                return entry ? (
-                  <OptimizedImage
-                    entry={entry}
-                    alt={entry.alt || "Party Bus"}
-                    className="h-full w-full object-cover"
-                    fillParent
-                    priorityIfAbove={1400}
-                  />
-                ) : null;
-              })()}
-            </div>
-            <div className="px-6 py-5">
-              <h3 className="text-2xl font-extrabold text-white text-center">Party Buses</h3>
-              <p className="text-blue-200 text-center">Social interiors, lighting & premium sound.</p>
+      <ToolsModal activeToolIdx={activeToolIdx} toolList={TOOL_LIST} onClose={closeModal} />
+                  const entry = getFirst('partyBuses');
+                  return entry ? (
+                    <OptimizedImage
+                      entry={entry}
+                      alt={entry.alt || 'Party Bus'}
+                      className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform"
+                      fillParent
+                      priorityIfAbove={1400}
+                    />
+                  ) : null;
+                })()}
+              </div>
+              <div className="px-6 py-5">
+        <h3 className="text-2xl font-extrabold text-white text-center">Party Buses</h3>
+        <p className="text-blue-200 text-center">Social interiors, lighting & premium sound.</p>
+              </div>
             </div>
           </a>
         </div>

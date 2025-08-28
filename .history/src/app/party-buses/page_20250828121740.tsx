@@ -3,27 +3,25 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { getCategoryImages, getFirst, toImageObject, findByFileName } from "../../utils/optimizedImages";
 import { resolveVehicles } from "../../data/vehicles";
-import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
 import OptimizedImage from "../../components/OptimizedImage";
 import { SmartImage } from "../../components/SmartImage";
 
 type Feature = { label: string; icon: string; description: string };
 type Tool = { name: string; icon: string; desc: string; size: "sm" | "md" | "lg" };
-// legacy Bus type removed (using catalog vehicles)
 
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
 const EMAIL = "info@bus2ride.com";
 
-/* ---------------- Coach Bus Features ---------------- */
-const COACH_BUS_FEATURES: Feature[] = [
-  { label: "Reclining High-Back Seats", icon: "💺", description: "Comfortable forward-facing reclining seats keep everyone relaxed on long trips." },
-  { label: "Professional Charter Driver", icon: "🧑‍✈️", description: "Experienced, licensed drivers focused on safety, punctuality and smooth travel." },
-  { label: "Wi‑Fi & Power (Many Coaches)", icon: "📶", description: "Stay productive or entertained with available onboard Wi‑Fi and individual power / USB outlets.*" },
-  { label: "Large Underbody Luggage", icon: "🧳", description: "Store suitcases, equipment and gear easily in spacious undercarriage bays." },
-  { label: "Overhead Parcel Racks", icon: "🧷", description: "Keep small bags & personal items within reach in open overhead racks." },
-  { label: "Onboard Restroom (Most 40+)", icon: "🚻", description: "Mid & full size motorcoaches typically include a clean restroom for longer travel." },
+/* ---------------- Features ---------------- */
+const PARTY_BUS_FEATURES: Feature[] = [
+  { label: "More Space to Move Around", icon: "🕺", description: "Spacious interiors let you dance, mingle, and move around safely—no cramped seating here!" },
+  { label: "Better for Socializing, Less Claustrophobic", icon: "🫂", description: "Wrap-around seating means everyone faces each other and can actually talk; great group energy." },
+  { label: "Wet bars with ice & bottled water", icon: "🧊", description: "Built-in wet bars with ice and complimentary bottled water. Bring your own drinks (21+ where legal)." },
+  { label: "Easy to Get In and Out Of", icon: "🚪", description: "Wide doors and low steps make boarding and exiting the bus a breeze for all guests." },
+  { label: "BYOB Friendly", icon: "🍾", description: "Bring your own beverages and keep the party going your way. Just no glass bottles, please!" },
+  { label: "Some Restrooms on Big Party Buses", icon: "🚻", description: "Select larger party buses include onboard restrooms for maximum comfort and convenience during your trip." },
 ];
 
 /* ---------------- Tools (with modal sizes) ---------------- */
@@ -36,24 +34,26 @@ const TOOL_LIST: Tool[] = [
   { name: "Stop Timing Planner", icon: "⏱️", desc: "Map time per stop so you’re never rushed.", size: "md" },
 ];
 
-const TOOL_SIZE_CLASS: Record<Tool["size"], string> = {
+  const TOOL_SIZE_CLASS: Record<Tool["size"], string> = {
   sm: "max-w-md min-h-[300px]",
   md: "max-w-2xl min-h-[420px]",
   lg: "max-w-5xl min-h-[540px]",
 };
 
-/* ---------------- Legacy placeholder constants removed; using optimized manifest lookups ---------------- */
+/* ---------------- Placeholder legacy constants removed; now using optimized manifest lookups ---------------- */
 
-/* ---------------- Coach Fleet via catalog ---------------- */
+// Derive deterministic set of party bus vehicles from catalog with resolved image entries
+// (multi-image aware: picks primary or first exterior / first)
+// We memoize inside component so findByFileName (runtime) can be provided.
 
 /* ---------------- Polls & Reviews ---------------- */
 const POLLS = [
-  { question: "Top factor in coach bus pricing?", options: ["Mileage", "Date/season", "Vehicle size", "Amenities"] },
-  { question: "Is onboard Wi‑Fi important to you?", options: ["Must have", "Nice extra", "Don’t need"] },
-  { question: "Do you require a restroom for your trip?", options: ["Yes", "No", "Depends on length"] },
-  { question: "Preferred trip type?", options: ["Corporate", "School / Team", "Tour / Sightseeing", "Event Shuttle"] },
-  { question: "Need outlet / charging at seats?", options: ["Yes", "No", "Only for long trips"] },
-  { question: "How soon do you usually book?", options: ["< 1 week", "1–3 weeks", "1–2 months", "> 2 months"] },
+  { question: "What’s the most important factor in party bus pricing?", options: ["Group size", "Date/season", "Trip length", "Vehicle type"] },
+  { question: "Would you pay more for a newer party bus?", options: ["Yes", "No"] },
+  { question: "How much extra would you pay for a party bus with a restroom?", options: ["$0", "$50", "$100", "$200+"] },
+  { question: "What’s a fair hourly rate for a 20-passenger limo?", options: ["$100", "$150", "$200", "$250+"] },
+  { question: "Would you split the cost of a party bus with friends?", options: ["Always", "Sometimes", "Never"] },
+  { question: "Do you prefer all-inclusive pricing or itemized fees?", options: ["All-inclusive", "Itemized", "No preference"] },
 ];
 
 const REVIEWS = [
@@ -67,35 +67,35 @@ const REVIEWS = [
 
 /* ---------------- Events ---------------- */
 const POPULAR_EVENT_TITLES = [
-  "Corporate Conferences",
-  "Team Travel",
-  "Airport Transfers",
-  "Sporting Events",
-  "School Trips",
-  "Tours & Excursions",
-  "Conventions",
   "Weddings",
-  "Retreats",
-  "Shuttle Circuits",
-  "Church Groups",
-  "Band / Performance Tours",
+  "Proms",
+  "Birthday Parties",
+  "Concerts",
+  "Sporting Events",
+  "Bachelorette Parties",
+  "Bachelor Parties",
+  "Night Out on the Town",
+  "Wine Tours",
+  "Brewery Tours",
+  "Corporate Events",
+  "Quinceañeras",
 ];
 
 const EVENT_IMAGES = [
+  "/images/Bus-3.png",
   "/images/Bus-4.png",
   "/images/Bus-5.png",
+  "/images/Bus-3.png",
   "/images/Bus-2.png",
+  "/images/Bus-5.png",
   "/images/Bus-3.png",
   "/images/Bus-1.png",
-  "/images/Bus-3.png",
-  "/images/Bus-5.png",
-  "/images/Bus-4.png",
 ];
 
 const eventBlurb = (title: string) =>
-  `Reliable, comfortable coach transportation tailored for ${title.toLowerCase()}.`;
+  `Perfect for ${title.toLowerCase()}—on-time pickups, clean rides, and a vibe your group will love.`;
 
-export default function CoachBusesPage() {
+export default function PartyBusesPage() {
   const [toolSearch, setToolSearch] = useState("");
   const [activeToolIdx, setActiveToolIdx] = useState<number | null>(null);
   const [reviewSearch, setReviewSearch] = useState("");
@@ -130,92 +130,83 @@ export default function CoachBusesPage() {
     );
   }, [pollSearch]);
 
-  const coachOptimized = useMemo(() => getCategoryImages("coachBuses"), []);
-  const catalogCoaches = useMemo(() => {
-    return resolveVehicles(findByFileName)
-      .filter((v) => v.category === 'coach-buses')
-      .sort((a, b) => ((a.capacityMax ?? 0) - (b.capacityMax ?? 0)));
-  }, []);
+  const partyOptimized = useMemo(() => getCategoryImages("partyBuses"), []);
+  const catalogPartyBuses = useMemo(() => {
+  <ToolsModal activeToolIdx={activeToolIdx} toolList={TOOL_LIST} onClose={closeModal} />
+                            return (
+                              <button
+                                key={img.file + i}
+                                type="button"
+                                onClick={() => setVehicleIdx(v.id, i)}
+                                className={`relative h-10 w-14 overflow-hidden rounded-md border ${i === selectedIdx ? 'border-blue-300 ring-2 ring-blue-400' : 'border-blue-800/50'}`}
+                                aria-label={`Show ${img.role || 'image'} ${i+1} for ${v.name}`}
+                              >
+                                {smallEntry && (
+                                  <OptimizedImage entry={smallEntry} alt="" className="h-full w-full object-cover" minDesiredWidth={300} />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-  const eventsWithImages = useMemo(
-    () => {
-      const coachImgs = coachOptimized;
-      return POPULAR_EVENT_TITLES.map((title, i) => ({
-        title,
-        image: EVENT_IMAGES[i % EVENT_IMAGES.length],
-        desc: eventBlurb(title),
-        optimizedEntry: coachImgs[i % (coachImgs.length || 1)]
-      }));
-    },
-    [coachOptimized]
-  );
+                  {/* title + capacity */}
+                  <div className="px-6 mt-5">
+                    <h3 className="text-2xl font-extrabold text-white tracking-tight text-center">{v.name}</h3>
+                    <div className="mt-1 mb-4 text-sm font-semibold text-blue-200 text-center">Seats up to {v.capacityMax}</div>
+                    <ul className="text-blue-100/95 text-[0.95rem] space-y-1 min-h-[72px]">
+                      {v.highlights.slice(0, 3).map(h => (
+                        <li key={h} className="flex items-start gap-2">
+                          <span className="mt-[2px]">•</span>
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-  const filteredEvents = useMemo(() => {
-    const q = eventSearch.trim().toLowerCase();
-    if (!q) return eventsWithImages;
-    return eventsWithImages.filter(
-      (e) => e.title.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q)
-    );
-  }, [eventSearch, eventsWithImages]);
-
-  const closeModal = useCallback(() => setActiveToolIdx(null), []);
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActiveToolIdx(null);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  return (
-    <main className="text-slate-100 bg-[#0f1f46]">
-      <StructuredData
-        id="coach-buses-schema"
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'CollectionPage',
-          name: 'Coach & Charter Bus Fleet',
-          description: 'View charter coach and motorcoach options including mini, mid, full size and specialty accessible vehicles.',
-          mainEntity: catalogCoaches.slice(0,12).map(v => ({
-            '@type': 'Product',
-            name: v.name,
-            description: v.highlights.join(', '),
-            additionalProperty: [{ '@type': 'PropertyValue', name: 'Capacity', value: v.capacityMax }],
-            offers: { '@type': 'Offer', availability: 'https://schema.org/InStock', priceCurrency: 'USD' },
-            image: v.images.map(i => i.entry?.original).filter(Boolean)
-          })),
-          image: coachOptimized.slice(0,6).map(toImageObject)
-        }}
-      />
-  {/* HERO removed - page now begins at fleet */}
-
-  {/* ---------- COACH FLEET ---------- */}
-      <section className="bg-[#122a56] pt-8 pb-14">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
-            Choose Your Coach Bus
-          </h2>
-          <p className="text-blue-100/90 text-center max-w-3xl mx-auto mt-3 mb-10">
-            From mini coaches to full-size luxury motorcoaches—get the right capacity, amenities and comfort level for your itinerary.
-          </p>
-
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {catalogCoaches.map(v => (
-              <VehicleGalleryCard key={v.id} vehicle={v} />
-            ))}
+                  {/* bottom buttons */}
+                  <div className="px-6 pb-6 pt-4">
+                    <div className="grid grid-cols-3 gap-2">
+                      <a
+                        href={`tel:${PHONE_TEL}`}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
+                      >
+                        Call
+                      </a>
+                      <a
+                        href={`mailto:${EMAIL}`}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition"
+                      >
+                        Email
+                      </a>
+                      <a
+                        href="/quote#instant"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
+                      >
+                        Quote
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-  {/* ---------- WHY COACH BUSES (lightened) ---------- */}
+      {/* ---------- WHY PARTY BUSES ROCK (lightened) ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
-          Why Coach Buses Work Best
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
+          Why Party Buses Rock
         </h2>
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">
-          Charter coaches deliver reliable long-distance comfort, organized boarding, luggage capacity and amenities groups rely on.
+          It’s the ultimate rolling venue—room to move, easy boarding, wrap-around seating, and the vibe dialed just right.
         </p>
 
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {COACH_BUS_FEATURES.map((f, idx) => (
+          {PARTY_BUS_FEATURES.map((f, idx) => (
             <li key={f.label} className="relative">
               {/* Checkbox controls the modal purely with CSS (no React state) */}
               <input
@@ -316,10 +307,10 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* ---------- COACH POLLS ---------- */}
+      {/* ---------- POLLS ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
-          Coach Bus Polls
+          Party Bus Polls
         </h2>
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-6">
           Real riders. Real opinions. Compare trends and get honest insights to plan the perfect night.
@@ -359,54 +350,61 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* ---------- OTHER VEHICLE TYPES PROMO ---------- */}
+      {/* ---------- LIMOS & SHUTTLES PROMO ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
-          We Also Offer Limousines & Party Buses
+          We Also Have Limousines & Shuttle Buses
         </h2>
         <p className="text-blue-100 text-center max-w-3xl mx-auto mb-8">
-          Need a different style? Explore stretch limousines for formal events or party buses for social energy and wrap-around seating.
+          Need something different? Explore classic limos for smaller groups—or jump into a spacious shuttle bus for simple, comfy transport.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <a href="/limousines" className="group block rounded-2xl overflow-hidden border border-blue-800/30 shadow-lg bg-[#173264] hover:scale-[1.02] transition-transform">
-            <div className="h-44 md:h-56 w-full relative">
-              {(() => {
-                const entry = getFirst("limousines");
-                return entry ? (
-                  <OptimizedImage
-                    entry={entry}
-                    alt={entry.alt || "Limousine"}
-                    className="h-full w-full object-cover"
-                    fillParent
-                    priorityIfAbove={1400}
-                  />
-                ) : null;
-              })()}
-            </div>
-            <div className="px-6 py-5">
-              <h3 className="text-2xl font-extrabold text-white text-center">Limousines</h3>
-              <p className="text-blue-200 text-center">Classic stretch and modern limo options for formal events and VIP transport.</p>
+          {/* Limo */}
+          <a href="/limos" className="group">
+            <div className="rounded-2xl border border-blue-800/30 bg-[#12244e] overflow-hidden shadow-xl">
+              <div className="h-96 w-full bg-[#173264] relative">
+                {/* Optimized limousine image */}
+                {(() => {
+                  const entry = getFirst('limousines');
+                  return entry ? (
+                    <OptimizedImage
+                      entry={entry}
+                      alt={entry.alt || 'Limousine'}
+                      className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform"
+                      fillParent
+                      priorityIfAbove={1400}
+                    />
+                  ) : null;
+                })()}
+              </div>
+              <div className="px-6 py-5">
+                <h3 className="text-2xl font-extrabold text-white text-center">Limousines</h3>
+                <p className="text-blue-200 text-center">Elegant rides for 6–20 passengers.</p>
+              </div>
             </div>
           </a>
-
-          <a href="/party-buses" className="group block rounded-2xl overflow-hidden border border-blue-800/30 shadow-lg bg-[#173264] hover:scale-[1.02] transition-transform">
-            <div className="h-44 md:h-56 w-full relative">
-              {(() => {
-                const entry = getFirst("partyBuses");
-                return entry ? (
-                  <OptimizedImage
-                    entry={entry}
-                    alt={entry.alt || "Party Bus"}
-                    className="h-full w-full object-cover"
-                    fillParent
-                    priorityIfAbove={1400}
-                  />
-                ) : null;
-              })()}
-            </div>
-            <div className="px-6 py-5">
-              <h3 className="text-2xl font-extrabold text-white text-center">Party Buses</h3>
-              <p className="text-blue-200 text-center">Social interiors, lighting & premium sound.</p>
+          {/* Shuttle */}
+          <a href="/shuttles" className="group">
+            <div className="rounded-2xl border border-blue-800/30 bg-[#12244e] overflow-hidden shadow-xl">
+              <div className="h-96 w-full bg-[#173264] relative">
+                {/* Optimized shuttle image */}
+                {(() => {
+                  const entry = getFirst('shuttleBuses');
+                  return entry ? (
+                    <OptimizedImage
+                      entry={entry}
+                      alt={entry.alt || 'Shuttle Bus'}
+                      className="h-full w-full object-cover group-hover:scale-[1.02] transition-transform"
+                      fillParent
+                      priorityIfAbove={1400}
+                    />
+                  ) : null;
+                })()}
+              </div>
+              <div className="px-6 py-5">
+                <h3 className="text-2xl font-extrabold text-white text-center">Shuttle Buses</h3>
+                <p className="text-blue-200 text-center">Simple & comfy transport for larger groups.</p>
+              </div>
             </div>
           </a>
         </div>
@@ -421,10 +419,10 @@ export default function CoachBusesPage() {
 
           <div className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
             {[
-              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact", body: (<p>Tell us origin, destination(s), dates, passenger count and any amenities (Wi‑Fi, restroom, outlets, ADA, luggage needs).</p>) },
-              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant", body: (<p>We price based on mileage, hours on the road, coach size, date/season and special requirements. Transparent. No hidden fees.</p>) },
-              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve", body: (<p>Approve the itinerary & pricing, sign charter agreement, and place deposit to lock in your vehicle & driver.</p>) },
-              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary", body: (<p>Finalize pickup times, passenger list & last‑minute adjustments. We dispatch, track, and keep you updated day-of.</p>) },
+              { step: "★1", label: "Contact Us", icon: "📞", href: "/contact" },
+              { step: "★2", label: "Get a Quote", icon: "💬", href: "/quote#instant" },
+              { step: "★3", label: "Reserve Your Ride", icon: "📝", href: "/reserve" },
+              { step: "★4", label: "Finalize & Ride", icon: "🎉", href: "/itinerary" },
             ].map((s, idx) => (
               <div key={s.step} className="relative flex-1">
                 {/* Hidden checkbox controls the modal with CSS only */}
@@ -471,7 +469,7 @@ export default function CoachBusesPage() {
                       ×
                     </label>
 
-                    {/* Modal content */}
+                    {/* Modal content (detailed per-step) */}
                     <div className="px-6 py-7 text-left">
                       <div className="mx-auto w-14 h-14 rounded-full bg-blue-900/20 border border-blue-700/40 flex items-center justify-center text-3xl mb-4">
                         {s.icon}
@@ -493,7 +491,7 @@ export default function CoachBusesPage() {
                         </div>
                       )}
 
-                      {/* Get a Quote (request-based) */}
+                      {/* Get a Quote (request-based, not instant) */}
                       {s.label === "Get a Quote" && (
                         <div className="text-blue-100/90">
                           <p className="mb-3">Request a written quote — our team reviews your trip details and replies with a confirmed price and available vehicles.</p>
@@ -639,13 +637,15 @@ export default function CoachBusesPage() {
                       className="w-full h-full object-cover"
                       fillParent
                       priorityIfAbove={2000}
+                      sizesOverride="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+                      minDesiredWidth={900}
                     />
                   ) : (
                     <SmartImage
-                      src={ev.image}
-                      alt={ev.title}
-                      className="w-full h-full object-cover"
-                    />
+                        src={ev.image}
+                        alt={ev.title}
+                        className="w-full h-full object-cover"
+                      />
                   )}
                 </div>
 
@@ -721,83 +721,76 @@ export default function CoachBusesPage() {
               {/* Placeholder tool bodies */}
               {TOOL_LIST[activeToolIdx].name === "Per Person Splitter" && (
                 <div className="grid gap-3 max-w-md">
-                  <label className="text-blue-100 text-sm font-semibold">Total Trip Cost ($)</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="1200" />
-                  <label className="text-blue-100 text-sm font-semibold mt-3">Passenger Count</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="48" />
-                  <label className="text-blue-100 text-sm font-semibold mt-3">Gratuity % (optional)</label>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="10" />
-                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Split Cost</button>
+                  <label className="text-blue-100 text-sm font-semibold">Total Price ($)</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="e.g., 800" />
+                  <label className="text-blue-100 text-sm font-semibold mt-3">People</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="e.g., 16" />
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Calculate
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "BYOB Pack & Ice Calculator" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Estimate total beverages & ice volume to keep everyone supplied.</p>
-                  <div className="grid md:grid-cols-4 gap-3">
+                  <p className="text-blue-100">Estimate drinks/ice for your group.</p>
+                  <div className="grid md:grid-cols-3 gap-3">
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="People" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Hours" />
                     <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                      <option>Balanced Mix</option>
-                      <option>Light Drinks</option>
-                      <option>Heavy Drinks</option>
-                    </select>
-                    <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                      <option>Coolers?</option>
-                      <option>1 Small</option>
-                      <option>2 Medium</option>
-                      <option>Large</option>
+                      <option>Mixed</option>
+                      <option>Mostly Beer</option>
+                      <option>Mostly Spirits</option>
                     </select>
                   </div>
-                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Estimate</button>
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Estimate
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Seat Space Fit Advisor" && (
                 <div className="grid gap-3 max-w-md">
-                  <p className="text-blue-100">Will this group fit one coach or need two?</p>
-                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Passengers (e.g. 72)" />
-                  <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
-                    <option>Coach Size Planned</option>
-                    <option>40</option>
-                    <option>50</option>
-                    <option>56</option>
-                  </select>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Check Fit</button>
+                  <p className="text-blue-100">Check comfort based on passengers.</p>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Passengers" />
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Check Fit
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Bar Hop Route Builder" && (
                 <div className="grid gap-3 max-w-5xl">
-                  <p className="text-blue-100">Build a multi-stop itinerary (use for tours, shuttles, or campus loops).</p>
-                  <div className="grid md:grid-cols-3 gap-3">
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 1" />
+                  <p className="text-blue-100">Add stops, set durations, and build your route.</p>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 1 (address/name)" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 2" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 3" />
                     <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 4" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Layover (min)" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Avg Drive (min)" />
                   </div>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Build Route</button>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Build Route
+                  </button>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Vibe Selector" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Pick a travel atmosphere for curated playlist + amenity suggestions.</p>
+                  <p className="text-blue-100">Choose your vibe and we’ll suggest playlists.</p>
                   <div className="grid md:grid-cols-3 gap-3">
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Relaxed</button>
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Productive</button>
-                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Social</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Chill</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Club</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Throwback</button>
                   </div>
                 </div>
               )}
               {TOOL_LIST[activeToolIdx].name === "Stop Timing Planner" && (
                 <div className="grid gap-3 max-w-2xl">
-                  <p className="text-blue-100">Distribute total charter hours across planned stops efficiently.</p>
-                  <div className="grid md:grid-cols-4 gap-3">
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Total Hrs" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="# Stops" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Drive Avg" />
-                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Buffer %" />
+                  <p className="text-blue-100">Map your stop durations.</p>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Total hours" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="# of stops" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Avg drive (min)" />
                   </div>
-                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Plan</button>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">
+                    Plan
+                  </button>
                 </div>
               )}
             </div>

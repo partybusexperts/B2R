@@ -7,6 +7,7 @@ import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
 import OptimizedImage from "../../components/OptimizedImage";
 import { SmartImage } from "../../components/SmartImage";
+import ToolsModal from "../../components/ToolsModal";
 
 type Feature = { label: string; icon: string; description: string };
 type Tool = { name: string; icon: string; desc: string; size: "sm" | "md" | "lg" };
