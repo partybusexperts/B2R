@@ -386,8 +386,8 @@ export default function Page() {
     ];
     const map = new Map<string, PollCategory[]>();
     for (const c of all) map.set(c.parent, [...(map.get(c.parent) || []), c]);
-  map.forEach((arr) => arr.sort((a, b) => a.title.localeCompare(b.title)));
-  return order.filter((key) => map.has(key)).map((key) => ({ parent: key, items: map.get(key)! }));
+    for (const [k, arr] of map) arr.sort((a, b) => a.title.localeCompare(b.title));
+    return order.filter((k) => map.has(k)).map((k) => ({ parent: k, items: map.get(k)! }));
   }, [all]);
 
   // suggestions for the input dropdown

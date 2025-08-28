@@ -138,6 +138,7 @@ function Poll({ poll }: { poll: PollType }) {
   };
 
   const totalVotes = Object.values(results).reduce((a, b) => (Number(a) + Number(b)), 0);
+
   return (
     <div className="bg-white rounded-xl shadow p-6 flex flex-col items-start border-l-4 border-blue-400 w-full">
       <div className="font-bold mb-2 text-blue-900">{poll.question}</div>
@@ -187,35 +188,27 @@ function Poll({ poll }: { poll: PollType }) {
       {!initialLoading && error === 'vote' && (
         <div className="text-xs text-red-600 mt-2">Vote failed. Try again.</div>
       )}
-      <div className="w-full flex items-center justify-center mt-3">
-        <PollShareLink pollId={poll.id} />
-      </div>
     </div>
   );
 }
 
-function PollShareLink({ pollId }: { pollId: string }) {
-  const [copied, setCopied] = useState(false);
-  const handleShare = (e?: React.MouseEvent) => {
-    if (e) { e.preventDefault(); e.stopPropagation(); }
-    try {
-      const url = typeof window !== 'undefined' ? `${window.location.origin}/poll-results#${pollId}` : `https://yourdomain.com/poll-results#${pollId}`;
-      navigator.clipboard?.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-  } catch { /* ignore */ }
-  };
-  return (
-    <>
-      <a href={`#${pollId}`} onClick={handleShare} className="text-sm text-blue-600 underline hover:text-blue-500">
-        Share This Poll On Your Website!
-      </a>
-      {copied && <span className="text-green-600 text-sm ml-2">Copied!</span>}
-    </>
-  );
-}
-
 export default function PollsSection() {
+  const [shareCopiedMap, setShareCopiedMap] = useState<Record<string, boolean>>({});
+
+  const pollAnchor = (catKey: string, idx: number) => `${catKey}__${idx}`;
+
+  const handleSharePoll = (anchorId: string) => (e?: React.MouseEvent) => {
+    if (e) { e.stopPropagation(); e.preventDefault(); }
+    try {
+      const url = typeof window !== 'undefined' ? `${window.location.origin}/polls#${anchorId}` : `https://yourdomain.com/polls#${anchorId}`;
+      navigator.clipboard?.writeText(url);
+      setShareCopiedMap((m) => ({ ...m, [anchorId]: true }));
+      setTimeout(() => setShareCopiedMap((m) => ({ ...m, [anchorId]: false })), 1500);
+    } catch {
+      // ignore
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-blue-200 rounded-2xl shadow-xl p-8 border border-blue-400">
   {/* Removed duplicate 'Limo Industry Polls' header to avoid double rendering */}

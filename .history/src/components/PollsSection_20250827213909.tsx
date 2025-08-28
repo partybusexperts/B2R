@@ -203,7 +203,7 @@ function PollShareLink({ pollId }: { pollId: string }) {
       navigator.clipboard?.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-  } catch { /* ignore */ }
+    } catch {}
   };
   return (
     <>

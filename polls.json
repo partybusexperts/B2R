@@ -11,5 +11,9 @@
   },
   "partybus_safer": {
     "True": 1
+  },
+  "matters_most": {
+    "Price": 1,
+    "Luggage": 1
   }
 }

@@ -6,26 +6,6 @@ import Section from "../../components/Section";
 // Adjust this path if your locations file is elsewhere:
 import { locations as LOCATIONS } from "../locations/locationData";
 
-function PollShare({ anchor, labelOnly }: { anchor: string; labelOnly?: boolean }) {
-  const [copied, setCopied] = useState(false);
-  const handle = (e?: React.MouseEvent) => {
-    if (e) { e.preventDefault(); e.stopPropagation(); }
-    try {
-      const url = typeof window !== 'undefined' ? `${window.location.origin}${anchor}` : `https://yourdomain.com${anchor}`;
-      navigator.clipboard?.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch { /* ignore */ }
-  };
-  if (labelOnly) return <a href={anchor} onClick={handle} className="text-xs text-blue-200 underline hover:text-blue-100">Share</a>;
-  return (
-    <>
-      <a href={anchor} onClick={handle} className="text-xs text-blue-200 underline hover:text-blue-100">Share This Poll On Your Website!</a>
-      {copied && <div className="text-green-400 text-xs">Copied!</div>}
-    </>
-  );
-}
-
 /* ---------------------------------------------------------------------------
    TYPES
 --------------------------------------------------------------------------- */
@@ -262,12 +242,12 @@ function useAnswerStore(storageKey = "polls-answers") {
     try {
       const raw = localStorage.getItem(storageKey);
       if (raw) setAnswers(JSON.parse(raw));
-    } catch { /* ignore */ }
+    } catch {}
   }, [storageKey]);
   useEffect(() => {
     try {
       localStorage.setItem(storageKey, JSON.stringify(answers));
-    } catch { /* ignore */ }
+    } catch {}
   }, [answers, storageKey]);
   const set = (id: string, idx: number) =>
     setAnswers((a) => ({ ...a, [id]: idx }));
@@ -386,8 +366,8 @@ export default function Page() {
     ];
     const map = new Map<string, PollCategory[]>();
     for (const c of all) map.set(c.parent, [...(map.get(c.parent) || []), c]);
-  map.forEach((arr) => arr.sort((a, b) => a.title.localeCompare(b.title)));
-  return order.filter((key) => map.has(key)).map((key) => ({ parent: key, items: map.get(key)! }));
+    for (const [k, arr] of map) arr.sort((a, b) => a.title.localeCompare(b.title));
+    return order.filter((k) => map.has(k)).map((k) => ({ parent: k, items: map.get(k)! }));
   }, [all]);
 
   // suggestions for the input dropdown
