@@ -131,11 +131,7 @@ export default function PartyBusesPage() {
   }, [pollSearch]);
 
   const partyOptimized = useMemo(() => getCategoryImages("partyBuses"), []);
-  const catalogPartyBuses = useMemo(() => {
-    return resolveVehicles(findByFileName)
-      .filter((v) => v.category === 'party-buses')
-      .sort((a, b) => ( (a.capacityMax ?? 0) - (b.capacityMax ?? 0) ));
-  }, []);
+  const catalogPartyBuses = useMemo(() => resolveVehicles(findByFileName).filter(v => v.category === 'party-buses'), []);
   const [vehicleImageIdx, setVehicleImageIdx] = useState<Record<string, number>>({});
   const setVehicleIdx = useCallback((id: string, idx: number) => setVehicleImageIdx(prev => ({ ...prev, [id]: idx })), []);
 
