@@ -767,7 +767,7 @@ function HeaderControls(props: {
   setQuery: (v: string) => void;
   suggestions: Place[];
   onChoose: (p: Place) => void;
-  suggestBoxRef: React.RefObject<HTMLDivElement | null>;
+  suggestBoxRef: React.RefObject<HTMLDivElement>;
   unit: "C" | "F";
   setUnit: (u: "C" | "F") => void;
   speedUnit: "mph" | "km/h";

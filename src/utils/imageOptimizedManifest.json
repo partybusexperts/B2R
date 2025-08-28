@@ -1,4 +1,222 @@
 {
+  "blog": [
+    {
+      "original": "/images/blog/college gameday.jpg",
+      "width": 5184,
+      "height": 3456,
+      "formats": {
+        "originalExt": "jpg",
+        "full": {
+          "webp": "/images/_optimized/blog/college gameday.webp",
+          "avif": "/images/_optimized/blog/college gameday.avif"
+        },
+        "responsive": [
+          {
+            "width": 480,
+            "webp": "/images/_optimized/blog/college gameday-w480.webp",
+            "avif": "/images/_optimized/blog/college gameday-w480.avif"
+          },
+          {
+            "width": 768,
+            "webp": "/images/_optimized/blog/college gameday-w768.webp",
+            "avif": "/images/_optimized/blog/college gameday-w768.avif"
+          },
+          {
+            "width": 1080,
+            "webp": "/images/_optimized/blog/college gameday-w1080.webp",
+            "avif": "/images/_optimized/blog/college gameday-w1080.avif"
+          },
+          {
+            "width": 1600,
+            "webp": "/images/_optimized/blog/college gameday-w1600.webp",
+            "avif": "/images/_optimized/blog/college gameday-w1600.avif"
+          }
+        ]
+      },
+      "blurDataURL": "data:image/webp;base64,UklGRvgAAABXRUJQVlA4IOwAAADwBACdASoYABAAPtFUo0uoJKMhsAgBABoJbAC06Ys99VGdd/EX9EeJjV5qLG3hdwAA/PvvTa5jmoa7Tz+N0V/ou+weysrWil+1R5rX87j02OMR0bnGlJgnOAXdL5K5PfsyhSoW2DCe0E9ujCYeDuFRMmSKF7kMbqwleU8UQ+On7hTgockLe8zW3WfvuZvxUAURQXveJKjMNS1NqRXhOu6EnUsvKnLMKTJKABWNseVtDMGHaN031LeLIzVjvrE8gCNV7xNn/z+DQn7DhHj6/D11aD+Vq8VS9i+i79WZpviE7Ibn1jKYV8wNf6AAAA==",
+      "alt": "College gameday blog"
+    },
+    {
+      "original": "/images/blog/limo versus party bus.jpg",
+      "width": 3910,
+      "height": 2603,
+      "formats": {
+        "originalExt": "jpg",
+        "full": {
+          "webp": "/images/_optimized/blog/limo versus party bus.webp",
+          "avif": "/images/_optimized/blog/limo versus party bus.avif"
+        },
+        "responsive": [
+          {
+            "width": 480,
+            "webp": "/images/_optimized/blog/limo versus party bus-w480.webp",
+            "avif": "/images/_optimized/blog/limo versus party bus-w480.avif"
+          },
+          {
+            "width": 768,
+            "webp": "/images/_optimized/blog/limo versus party bus-w768.webp",
+            "avif": "/images/_optimized/blog/limo versus party bus-w768.avif"
+          },
+          {
+            "width": 1080,
+            "webp": "/images/_optimized/blog/limo versus party bus-w1080.webp",
+            "avif": "/images/_optimized/blog/limo versus party bus-w1080.avif"
+          },
+          {
+            "width": 1600,
+            "webp": "/images/_optimized/blog/limo versus party bus-w1600.webp",
+            "avif": "/images/_optimized/blog/limo versus party bus-w1600.avif"
+          }
+        ]
+      },
+      "blurDataURL": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAADQBACdASoYABAAPtFUo0uoJKMhsAgBABoJbACw+BRCvAGECvSSTvhP75DV+VfeAAD+qhofiBbYypEirHO1uoUbDZZQtI+5BLjg8EoRzO0v7FtLm8tUSL0Pb8C43y8BOJVEZ58MsP/LgfNlsao5jirk/Bckpgkjfu6f5y9yKRdxTfHv3HNN6PmpYpACsPXQ6AJnLFyZUc8Tgro7b/5ZPrv8wHXI7R5/VztP7OKugmQAAA==",
+      "alt": "Limo versus party bus"
+    },
+    {
+      "original": "/images/blog/multi stop night out.jpg",
+      "width": 4928,
+      "height": 3264,
+      "formats": {
+        "originalExt": "jpg",
+        "full": {
+          "webp": "/images/_optimized/blog/multi stop night out.webp",
+          "avif": "/images/_optimized/blog/multi stop night out.avif"
+        },
+        "responsive": [
+          {
+            "width": 480,
+            "webp": "/images/_optimized/blog/multi stop night out-w480.webp",
+            "avif": "/images/_optimized/blog/multi stop night out-w480.avif"
+          },
+          {
+            "width": 768,
+            "webp": "/images/_optimized/blog/multi stop night out-w768.webp",
+            "avif": "/images/_optimized/blog/multi stop night out-w768.avif"
+          },
+          {
+            "width": 1080,
+            "webp": "/images/_optimized/blog/multi stop night out-w1080.webp",
+            "avif": "/images/_optimized/blog/multi stop night out-w1080.avif"
+          },
+          {
+            "width": 1600,
+            "webp": "/images/_optimized/blog/multi stop night out-w1600.webp",
+            "avif": "/images/_optimized/blog/multi stop night out-w1600.avif"
+          }
+        ]
+      },
+      "blurDataURL": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAACQBACdASoYABAAPtFUo0uoJKMhsAgBABoJQBXFv/xa5CocApe0kvfl6leU4AAA/XfMj74XOcQ3+isbyCMIXQaYKCwCpPai+9ZfP96m4tUj/SFc02skLvpEs1RDfMNCC/gHLm86Q+1r74iCXkL1j5f46tsy6V2uJh+vsHf0YdtcZif54DujhSpykfucEVd11d9f/YU2nrYzOo8txu0ln7EKu7CxPG4Ul/v3DKvAe2+sRg8UbsAAAA==",
+      "alt": "Multi stop night out blog"
+    },
+    {
+      "original": "/images/blog/pricing.jpg",
+      "width": 4480,
+      "height": 6720,
+      "formats": {
+        "originalExt": "jpg",
+        "full": {
+          "webp": "/images/_optimized/blog/pricing.webp",
+          "avif": "/images/_optimized/blog/pricing.avif"
+        },
+        "responsive": [
+          {
+            "width": 480,
+            "webp": "/images/_optimized/blog/pricing-w480.webp",
+            "avif": "/images/_optimized/blog/pricing-w480.avif"
+          },
+          {
+            "width": 768,
+            "webp": "/images/_optimized/blog/pricing-w768.webp",
+            "avif": "/images/_optimized/blog/pricing-w768.avif"
+          },
+          {
+            "width": 1080,
+            "webp": "/images/_optimized/blog/pricing-w1080.webp",
+            "avif": "/images/_optimized/blog/pricing-w1080.avif"
+          },
+          {
+            "width": 1600,
+            "webp": "/images/_optimized/blog/pricing-w1600.webp",
+            "avif": "/images/_optimized/blog/pricing-w1600.avif"
+          }
+        ]
+      },
+      "blurDataURL": "data:image/webp;base64,UklGRkQBAABXRUJQVlA4IDgBAABwBwCdASoYACQAPtFYo0yoJSMiMBVaqQAaCUAZBIEDsBrAt8iUrsMjMIajqZBBCp9OKWB5r5LrTeF7w9HZf2WWeqgawAD+6lvNbHIZJn9Z5gqHR5euadmrwvD7taENTbjW+6VNVsWXYqQOTKzBHGanYEfNL8i77a/2xflv9A9Zsn09L2R4Eiu3elrrguuQPa8V3zFil1NU1bwn6Ga2C3GF74aQuL6WOeWvUCx139cADEwiC8yabORrMbkBgu/4PSrKN1lf8Fh/2Lkak62spSSvbCnuCFy07rauBmLzXK7hc4LyCr4bd6Nc8b9o7ev5OMuN03oFhkXW6j9XTt+N7tEekg4Ius+BqG0j9MfkDV33G5dMF6oWhwXJGlritb/LdKwrgqLVcbYa/2oMDhaSKtbZcaJVeqfgAAA=",
+      "alt": "Pricing blog"
+    },
+    {
+      "original": "/images/blog/prom.jpg",
+      "width": 6000,
+      "height": 4000,
+      "formats": {
+        "originalExt": "jpg",
+        "full": {
+          "webp": "/images/_optimized/blog/prom.webp",
+          "avif": "/images/_optimized/blog/prom.avif"
+        },
+        "responsive": [
+          {
+            "width": 480,
+            "webp": "/images/_optimized/blog/prom-w480.webp",
+            "avif": "/images/_optimized/blog/prom-w480.avif"
+          },
+          {
+            "width": 768,
+            "webp": "/images/_optimized/blog/prom-w768.webp",
+            "avif": "/images/_optimized/blog/prom-w768.avif"
+          },
+          {
+            "width": 1080,
+            "webp": "/images/_optimized/blog/prom-w1080.webp",
+            "avif": "/images/_optimized/blog/prom-w1080.avif"
+          },
+          {
+            "width": 1600,
+            "webp": "/images/_optimized/blog/prom-w1600.webp",
+            "avif": "/images/_optimized/blog/prom-w1600.avif"
+          }
+        ]
+      },
+      "blurDataURL": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBACdASoYABAAPtFUpEuoJKOhsAgBABoJZwDG9CHPoHSHzjFb0xPQZ1P+AAD+7wurw1KI0wWfHI0jpdy2zYTMRDwg65Aw5gQVCbsYcI9+ohlfYtX8/NcMi26OrB2bXD4Qxo2KYhx9MX+FK7Lsn2HX/oqbOMWyMy8EXfD8WOzhIOuAAAA=",
+      "alt": "Prom blog"
+    },
+    {
+      "original": "/images/blog/wedding shuttle.jpg",
+      "width": 2705,
+      "height": 1803,
+      "formats": {
+        "originalExt": "jpg",
+        "full": {
+          "webp": "/images/_optimized/blog/wedding shuttle.webp",
+          "avif": "/images/_optimized/blog/wedding shuttle.avif"
+        },
+        "responsive": [
+          {
+            "width": 480,
+            "webp": "/images/_optimized/blog/wedding shuttle-w480.webp",
+            "avif": "/images/_optimized/blog/wedding shuttle-w480.avif"
+          },
+          {
+            "width": 768,
+            "webp": "/images/_optimized/blog/wedding shuttle-w768.webp",
+            "avif": "/images/_optimized/blog/wedding shuttle-w768.avif"
+          },
+          {
+            "width": 1080,
+            "webp": "/images/_optimized/blog/wedding shuttle-w1080.webp",
+            "avif": "/images/_optimized/blog/wedding shuttle-w1080.avif"
+          },
+          {
+            "width": 1600,
+            "webp": "/images/_optimized/blog/wedding shuttle-w1600.webp",
+            "avif": "/images/_optimized/blog/wedding shuttle-w1600.avif"
+          }
+        ]
+      },
+      "blurDataURL": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAABwBACdASoYABAAPtFUo0uoJKMhsAgBABoJaQAD5boOHuhkSrAL7n+4m9sFAAD+g7/lN0owi+pA8rcgObvjFYvCdtZsmPwFYe2h2c2LWzFrlAMrnjAPvJXFDEoX7bZc3Ri6NCsV0wjir34WCSHQ2w+0hHEiUWMNNTX9+Ov2kSW8+FzFrwyEWS10yDFZg+Fh7vuHVJ5dNSslTJ7JdX/zuYGRVXy23sg/3AA=",
+      "alt": "Wedding shuttle blog"
+    }
+  ],
   "coach-buses": [
     {
       "original": "/images/coach-buses/47 Passenger Coach Bus Interior.png",
@@ -3413,34 +3631,5 @@
       "blurDataURL": "data:image/webp;base64,UklGRv4AAABXRUJQVlA4IPIAAAAQBgCdASoYACQAPtFiqVAoJSOipWmZABoJQBadARJH1SykZishkfxH54Th2Y4ekyovpqt9/ALoe6gA4n6+vPjwNgZCJzBP72zRg+gvbwaH573ZgdHsfb25yEWVFvmiAnxX44Hc5YJfzfniYoDZ6c2Qn5x9C3BaT3vVqPmBWwdsJaAVkIi3DKU0FP4BXbq6CVQ0HmAlUBJrKvdOuOP5IWYSqcgak5BtAKnzbNBLl8ZmRKI7a9HLp/38fTlccFXn2D9DBREheID0lnfkTMAmERdmjC2W9lKYqQh27w65JtOlewtlIzhxcpJlYd+ybTZkEvAAAA==",
       "alt": "14 passengerenger Sprinter Van Limo Style Interior Again"
     }
-  ],
-  "event-images": [
-    { "original": "/images/events/haunted houses.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/haunted houses.webp", "avif": "/images/_optimized/events/haunted houses.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/haunted houses-w480.webp", "avif": "/images/_optimized/events/haunted houses-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/haunted houses-w768.webp", "avif": "/images/_optimized/events/haunted houses-w768.avif" } ] }, "blurDataURL": "", "alt": "Haunted House Tours event" },
-    { "original": "/images/events/thanksgiving.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/thanksgiving.webp", "avif": "/images/_optimized/events/thanksgiving.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/thanksgiving-w480.webp", "avif": "/images/_optimized/events/thanksgiving-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/thanksgiving-w768.webp", "avif": "/images/_optimized/events/thanksgiving-w768.avif" } ] }, "blurDataURL": "", "alt": "Thanksgiving Parties event" },
-    { "original": "/images/events/christmas.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/christmas.webp", "avif": "/images/_optimized/events/christmas.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/christmas-w480.webp", "avif": "/images/_optimized/events/christmas-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/christmas-w768.webp", "avif": "/images/_optimized/events/christmas-w768.avif" } ] }, "blurDataURL": "", "alt": "Christmas Parties event" },
-    { "original": "/images/events/ski resort.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/ski resort.webp", "avif": "/images/_optimized/events/ski resort.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/ski resort-w480.webp", "avif": "/images/_optimized/events/ski resort-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/ski resort-w768.webp", "avif": "/images/_optimized/events/ski resort-w768.avif" } ] }, "blurDataURL": "", "alt": "Ski Resort Tours event" },
-    { "original": "/images/events/new years eve.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/new years eve.webp", "avif": "/images/_optimized/events/new years eve.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/new years eve-w480.webp", "avif": "/images/_optimized/events/new years eve-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/new years eve-w768.webp", "avif": "/images/_optimized/events/new years eve-w768.avif" } ] }, "blurDataURL": "", "alt": "New Year’s Eve event" },
-    { "original": "/images/events/sporting events.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/sporting events.webp", "avif": "/images/_optimized/events/sporting events.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/sporting events-w480.webp", "avif": "/images/_optimized/events/sporting events-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/sporting events-w768.webp", "avif": "/images/_optimized/events/sporting events-w768.avif" } ] }, "blurDataURL": "", "alt": "Sporting Events event" },
-    { "original": "/images/events/weddings.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/weddings.webp", "avif": "/images/_optimized/events/weddings.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/weddings-w480.webp", "avif": "/images/_optimized/events/weddings-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/weddings-w768.webp", "avif": "/images/_optimized/events/weddings-w768.avif" } ] }, "blurDataURL": "", "alt": "Weddings event" },
-    { "original": "/images/events/prom.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/prom.webp", "avif": "/images/_optimized/events/prom.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/prom-w480.webp", "avif": "/images/_optimized/events/prom-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/prom-w768.webp", "avif": "/images/_optimized/events/prom-w768.avif" } ] }, "blurDataURL": "", "alt": "Prom event" },
-    { "original": "/images/events/graduation.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/graduation.webp", "avif": "/images/_optimized/events/graduation.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/graduation-w480.webp", "avif": "/images/_optimized/events/graduation-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/graduation-w768.webp", "avif": "/images/_optimized/events/graduation-w768.avif" } ] }, "blurDataURL": "", "alt": "Graduation event" },
-    { "original": "/images/events/concerts.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/concerts.webp", "avif": "/images/_optimized/events/concerts.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/concerts-w480.webp", "avif": "/images/_optimized/events/concerts-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/concerts-w768.webp", "avif": "/images/_optimized/events/concerts-w768.avif" } ] }, "blurDataURL": "", "alt": "Concerts / Events event" },
-    { "original": "/images/events/bachelor parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/bachelor parties.webp", "avif": "/images/_optimized/events/bachelor parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/bachelor parties-w480.webp", "avif": "/images/_optimized/events/bachelor parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/bachelor parties-w768.webp", "avif": "/images/_optimized/events/bachelor parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Bachelor Parties event" },
-    { "original": "/images/events/bachelorette parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/bachelorette parties.webp", "avif": "/images/_optimized/events/bachelorette parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/bachelorette parties-w480.webp", "avif": "/images/_optimized/events/bachelorette parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/bachelorette parties-w768.webp", "avif": "/images/_optimized/events/bachelorette parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Bachelorette Parties event" },
-    { "original": "/images/events/brewery tours.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/brewery tours.webp", "avif": "/images/_optimized/events/brewery tours.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/brewery tours-w480.webp", "avif": "/images/_optimized/events/brewery tours-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/brewery tours-w768.webp", "avif": "/images/_optimized/events/brewery tours-w768.avif" } ] }, "blurDataURL": "", "alt": "Brewery Tours event" },
-  { "original": "/images/events/girls nights out.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/girls nights out.webp", "avif": "/images/_optimized/events/girls nights out.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/girls nights out-w480.webp", "avif": "/images/_optimized/events/girls nights out-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/girls nights out-w768.webp", "avif": "/images/_optimized/events/girls nights out-w768.avif" } ] }, "blurDataURL": "", "alt": "Girl’s Night Out event" },
-  { "original": "/images/events/guys nights out.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/guys nights out.webp", "avif": "/images/_optimized/events/guys nights out.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/guys nights out-w480.webp", "avif": "/images/_optimized/events/guys nights out-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/guys nights out-w768.webp", "avif": "/images/_optimized/events/guys nights out-w768.avif" } ] }, "blurDataURL": "", "alt": "Guys Night Out event" },
-  { "original": "/images/events/retirement parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/retirement parties.webp", "avif": "/images/_optimized/events/retirement parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/retirement parties-w480.webp", "avif": "/images/_optimized/events/retirement parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/retirement parties-w768.webp", "avif": "/images/_optimized/events/retirement parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Retirement event" },
-  { "original": "/images/events/casino tours.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/casino tours.webp", "avif": "/images/_optimized/events/casino tours.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/casino tours-w480.webp", "avif": "/images/_optimized/events/casino tours-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/casino tours-w768.webp", "avif": "/images/_optimized/events/casino tours-w768.avif" } ] }, "blurDataURL": "", "alt": "Casinos event" },
-  { "original": "/images/events/corporate parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/corporate parties.webp", "avif": "/images/_optimized/events/corporate parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/corporate parties-w480.webp", "avif": "/images/_optimized/events/corporate parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/corporate parties-w768.webp", "avif": "/images/_optimized/events/corporate parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Corporate Parties event" },
-  { "original": "/images/events/birthday parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/birthday parties.webp", "avif": "/images/_optimized/events/birthday parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/birthday parties-w480.webp", "avif": "/images/_optimized/events/birthday parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/birthday parties-w768.webp", "avif": "/images/_optimized/events/birthday parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Birthday Parties event" },
-  { "original": "/images/events/kids parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/kids parties.webp", "avif": "/images/_optimized/events/kids parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/kids parties-w480.webp", "avif": "/images/_optimized/events/kids parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/kids parties-w768.webp", "avif": "/images/_optimized/events/kids parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Kid’s Parties event" },
-  { "original": "/images/events/entertainment tours.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/entertainment tours.webp", "avif": "/images/_optimized/events/entertainment tours.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/entertainment tours-w480.webp", "avif": "/images/_optimized/events/entertainment tours-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/entertainment tours-w768.webp", "avif": "/images/_optimized/events/entertainment tours-w768.avif" } ] }, "blurDataURL": "", "alt": "Entertainment Tours event" },
-  { "original": "/images/events/charter services.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/charter services.webp", "avif": "/images/_optimized/events/charter services.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/charter services-w480.webp", "avif": "/images/_optimized/events/charter services-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/charter services-w768.webp", "avif": "/images/_optimized/events/charter services-w768.avif" } ] }, "blurDataURL": "", "alt": "Charter Services event" },
-  { "original": "/images/events/airport shuttle.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/airport shuttle.webp", "avif": "/images/_optimized/events/airport shuttle.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/airport shuttle-w480.webp", "avif": "/images/_optimized/events/airport shuttle-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/airport shuttle-w768.webp", "avif": "/images/_optimized/events/airport shuttle-w768.avif" } ] }, "blurDataURL": "", "alt": "Airport Shuttle event" },
-  { "original": "/images/events/quinceanera parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/quinceanera parties.webp", "avif": "/images/_optimized/events/quinceanera parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/quinceanera parties-w480.webp", "avif": "/images/_optimized/events/quinceanera parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/quinceanera parties-w768.webp", "avif": "/images/_optimized/events/quinceanera parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Quinceanera Parties event" },
-  { "original": "/images/events/anniveraries parties.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/anniveraries parties.webp", "avif": "/images/_optimized/events/anniveraries parties.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/anniveraries parties-w480.webp", "avif": "/images/_optimized/events/anniveraries parties-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/anniveraries parties-w768.webp", "avif": "/images/_optimized/events/anniveraries parties-w768.avif" } ] }, "blurDataURL": "", "alt": "Anniversaries event" },
-  { "original": "/images/events/dinners out.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/dinners out.webp", "avif": "/images/_optimized/events/dinners out.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/dinners out-w480.webp", "avif": "/images/_optimized/events/dinners out-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/dinners out-w768.webp", "avif": "/images/_optimized/events/dinners out-w768.avif" } ] }, "blurDataURL": "", "alt": "Special Dinners Out event" },
-  { "original": "/images/events/concerts.jpg", "width": 1200, "height": 800, "formats": { "originalExt": "jpg", "full": { "webp": "/images/_optimized/events/concerts.webp", "avif": "/images/_optimized/events/concerts.avif" }, "responsive": [ { "width": 480, "webp": "/images/_optimized/events/concerts-w480.webp", "avif": "/images/_optimized/events/concerts-w480.avif" }, { "width": 768, "webp": "/images/_optimized/events/concerts-w768.webp", "avif": "/images/_optimized/events/concerts-w768.avif" } ] }, "blurDataURL": "", "alt": "Concerts event" }
   ]
 }

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 
-export default function Header() {
+export default function Header(): JSX.Element {
   return (
     <header className="bg-gradient-to-r from-blue-700 to-blue-400 text-white py-12 px-4 text-center rounded-b-3xl shadow-lg">
       <div className="max-w-4xl mx-auto">

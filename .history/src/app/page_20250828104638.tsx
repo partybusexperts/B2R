@@ -82,7 +82,7 @@ export default function Home() {
   ];
 
   // Map event names to manifest image alt or file name (lowercase, no punctuation)
-  const eventImageMap: Record<string, string> = {
+  const eventImageMap = {
     "Haunted House Tours": "haunted houses.jpg",
     "Thanksgiving Parties": "thanksgiving.jpg",
     "Christmas Parties": "christmas.jpg",
@@ -1062,8 +1062,11 @@ export default function Home() {
                   <SmartImage
                     src={img.original}
                     alt={img.alt || event}
+                    width={img.width}
+                    height={img.height}
+                    blurDataURL={img.blurDataURL}
+                    srcSet={img.formats.responsive?.map(r => `${r.webp} ${r.width}w`).join(', ')}
                     className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                    sizes="(max-width:768px) 100vw, 540px"
                     loading="lazy"
                   />
                 ) : (
