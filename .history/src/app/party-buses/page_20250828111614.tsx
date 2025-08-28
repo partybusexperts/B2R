@@ -591,16 +591,16 @@ export default function PartyBusesPage() {
                         </div>
                       )}
 
-                      {/* Get a Quote (request-based, not instant) */}
+                      {/* Get a Quote */}
                       {s.label === "Get a Quote" && (
                         <div className="text-blue-100/90">
-                          <p className="mb-3">Request a written quote — our team reviews your trip details and replies with a confirmed price and available vehicles.</p>
+                          <p className="mb-3">Use our instant quote tool to get an estimated price based on your group size, hours, and route.</p>
                           <ol className="list-decimal ml-6 space-y-2 mb-3">
-                            <li>Provide pickup city/ZIP, date, approximate passenger count, and estimated hours.</li>
-                            <li>List any must-have amenities (restroom, wheelchair lift, BYOB, extra stops).</li>
-                            <li>We’ll review availability and email a firm quote (usually within 1 business day; faster by phone).</li>
+                            <li>Enter pickup city/ZIP, number of passengers, and trip hours.</li>
+                            <li>Choose a vehicle size — we’ll show hourly estimates and common add-ons.</li>
+                            <li>Quotes are live; select a preferred option to move to reservation.</li>
                           </ol>
-                          <p className="text-sm text-blue-200">Quotes are written and time-limited (commonly 24–72 hours). If you need a faster turnaround, call us and we’ll prioritize your request.</p>
+                          <p className="text-sm text-blue-200">Tip: Add your event date to see peak pricing — summertime and weekend nights fill up fastest.</p>
                         </div>
                       )}
 
