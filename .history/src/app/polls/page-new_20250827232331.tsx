@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import dynamic from "next/dynamic";
 
 const PollsSection = dynamic(() => import("../../components/PollsSection"), { ssr: false });
