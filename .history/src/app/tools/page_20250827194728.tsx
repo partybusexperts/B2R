@@ -209,13 +209,13 @@ function ToolCard({ tool }: { tool: Tool }) {
           </div>
         )}
         {/* Inline share link inside the modal (hyperlink but copies URL) */}
-        <div className="w-full mb-2 flex items-center justify-center">
+        <div className="w-full mb-2 flex items-center justify-between">
           <a
             href={shareUrl}
             onClick={e => { e.preventDefault(); handleShare(); }}
-            className="text-sm text-blue-200 underline hover:text-blue-100 text-center"
+            className="text-sm text-blue-200 underline hover:text-blue-100"
           >
-            Share This Tool On Your Website!
+            Share this tool on your website
           </a>
           {shareCopied && <span className="text-green-400 text-sm ml-2">Copied!</span>}
         </div>
@@ -274,16 +274,14 @@ function ToolCard({ tool }: { tool: Tool }) {
           <div className="text-blue-300 italic text-sm font-sans mb-2">{result}</div>
         )}
       </ToolModalButton>
-      <div className="w-full flex items-center justify-center mb-2">
-        <a
-          href={shareUrl}
-          onClick={e => { e.preventDefault(); handleShare(); }}
-          className="text-blue-300 underline text-sm hover:text-blue-100 text-center"
-        >
-          Share On Your Website
-        </a>
-      </div>
-      {shareCopied && <div className="text-green-400 text-xs mt-1 text-center">Copied!</div>}
+      <a
+        href={shareUrl}
+        onClick={e => { e.preventDefault(); handleShare(); }}
+        className="text-blue-300 underline text-sm mb-2 hover:text-blue-100"
+      >
+        Share this tool on your website
+      </a>
+      {shareCopied && <div className="text-green-400 text-xs mt-1">Copied!</div>}
     </div>
   );
 }

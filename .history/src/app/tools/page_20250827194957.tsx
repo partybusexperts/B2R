@@ -215,7 +215,7 @@ function ToolCard({ tool }: { tool: Tool }) {
             onClick={e => { e.preventDefault(); handleShare(); }}
             className="text-sm text-blue-200 underline hover:text-blue-100 text-center"
           >
-            Share This Tool On Your Website!
+            Share On Your Website
           </a>
           {shareCopied && <span className="text-green-400 text-sm ml-2">Copied!</span>}
         </div>

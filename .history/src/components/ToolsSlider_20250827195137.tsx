@@ -178,7 +178,7 @@ export default function ToolsShowcase() {
                   onClick={handleModalShare}
                   className="text-sm text-blue-600 underline hover:text-blue-500"
                 >
-                  Share This Tool On Your Website!
+                  Share tool on your website
                 </a>
                 {shareCopied && <span className="text-green-600 text-sm ml-2">Copied!</span>}
               </div>
@@ -238,7 +238,7 @@ function ToolCard({
             className="text-sm text-blue-200 underline hover:text-blue-100 text-center"
             onMouseDown={e => e.stopPropagation()}
           >
-            Share This Tool On Your Website!
+            Share tool on your website
           </a>
           {shareCopied && <span className="text-green-400 text-sm">Copied!</span>}
         </div>

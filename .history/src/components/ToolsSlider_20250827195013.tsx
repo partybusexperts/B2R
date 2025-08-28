@@ -102,22 +102,6 @@ const TOOLS: {
 export default function ToolsShowcase() {
   const [openId, setOpenId] = useState<ToolId | null>(null);
   const current = TOOLS.find(t => t.id === openId);
-  const [shareCopied, setShareCopied] = useState(false);
-
-  function handleModalShare(e: React.MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      const title = current?.title || "tool";
-      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-      const url = typeof window !== "undefined" ? `${window.location.origin}/tools#${slug}` : `https://yourdomain.com/tools#${slug}`;
-      navigator.clipboard?.writeText(url);
-      setShareCopied(true);
-      setTimeout(() => setShareCopied(false), 1500);
-    } catch (err) {
-      // ignore
-    }
-  }
 
   return (
     <section
@@ -172,16 +156,6 @@ export default function ToolsShowcase() {
                   {current.render()}
                 </div>
               </Suspense>
-              <div className="w-full flex items-center justify-center mt-4">
-                <a
-                  href="#"
-                  onClick={handleModalShare}
-                  className="text-sm text-blue-600 underline hover:text-blue-500"
-                >
-                  Share This Tool On Your Website!
-                </a>
-                {shareCopied && <span className="text-green-600 text-sm ml-2">Copied!</span>}
-              </div>
             </div>
           </div>
         </div>
@@ -238,7 +212,7 @@ function ToolCard({
             className="text-sm text-blue-200 underline hover:text-blue-100 text-center"
             onMouseDown={e => e.stopPropagation()}
           >
-            Share This Tool On Your Website!
+            Share tool on your website
           </a>
           {shareCopied && <span className="text-green-400 text-sm">Copied!</span>}
         </div>
