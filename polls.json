@@ -1,19 +1,78 @@
 {
   "partybus_vs_limo": {
-    "Party Bus": 1,
-    "Limo": 1
+    "Party Bus": 3,
+    "Limo": 2
   },
   "favorite_limo_color": {
-    "Pink": 2
+    "Pink": 2,
+    "White": 1
   },
   "shuttle_concert": {
-    "No": 1
+    "No": 1,
+    "Yes": 2
   },
   "partybus_safer": {
-    "True": 1
+    "True": 1,
+    "False": 4
   },
   "matters_most": {
     "Price": 1,
-    "Luggage": 1
+    "Luggage": 2,
+    "Space": 2,
+    "Sound": 2,
+    "Lighting": 1
+  },
+  "city-ohio-akron__1": {
+    "B": 1
+  },
+  "city-ohio-akron__2": {
+    "False": 1
+  },
+  "city-ohio-akron__0": {
+    "No": 1
+  },
+  "city-texas-abilene__0": {
+    "No": 1
+  },
+  "veh-shuttle-minibus__1": {
+    "C": 1
+  },
+  "veh-party-bus__1": {
+    "D": 1
+  },
+  "city-pennsylvania-abington__2": {
+    "False": 1
+  },
+  "event_type": {
+    "Birthday": 1,
+    "Gameday": 3
+  },
+  "important_partybus_feature": {
+    "TV Screens": 2
+  },
+  "city-pennsylvania-abington__0": {
+    "No": 2
+  },
+  "suv_vs_sedan_airport": {
+    "SUV": 1,
+    "Sedan": 1
+  },
+  "coachbus_feature": {
+    "Reclining Seats": 1,
+    "WiFi": 1
+  },
+  "rent_partybus_birthday": {
+    "No": 2,
+    "Yes": 1
+  },
+  "rent_limo_birthday": {
+    "Yes": 1
+  },
+  "limo_best_wedding": {
+    "False": 3,
+    "True": 1
+  },
+  "veh-limousine__0": {
+    "No": 1
   }
 }
