@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { getCategoryImages, toImageObject, findByFileName } from "../../utils/optimizedImages";
 import { resolveVehicles } from "../../data/vehicles";
 import VehicleGalleryCard from "../../components/VehicleGalleryCard";
@@ -14,7 +14,14 @@ const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
 const EMAIL = "info@bus2ride.com";
 
-// tools are now provided by the shared registry (ToolsGrid)
+const TOOL_LIST: Tool[] = [
+  { name: "Per Person Splitter", icon: "🧮", desc: "Split total cost per person.", size: "sm" },
+  { name: "BYOB Pack & Ice Calculator", icon: "🥤", desc: "Estimate drinks and ice.", size: "md" },
+  { name: "Seat Space Fit Advisor", icon: "🪑", desc: "Check seating fit for your group.", size: "sm" },
+  { name: "Bar Hop Route Builder", icon: "🗺️", desc: "Plan efficient bar-hop routes.", size: "lg" },
+  { name: "Vibe Selector", icon: "🎶", desc: "Pick a mood and playlist ideas.", size: "md" },
+  { name: "Stop Timing Planner", icon: "⏱️", desc: "Plan stop durations and timing.", size: "md" },
+];
 
 const POPULAR_EVENT_TITLES = [
   "Weddings",
@@ -45,7 +52,7 @@ const EVENT_IMAGES = [
 const eventBlurb = (title: string) => `Perfect for ${title.toLowerCase()}—on-time pickups, clean rides, and a vibe your group will love.`;
 
 export default function PartyBusesPage() {
-  // toolSearch removed; ToolsGrid manages its own state
+  const [toolSearch, setToolSearch] = useState("");
   const [eventSearch, setEventSearch] = useState("");
 
   const partyOptimized = useMemo(() => getCategoryImages("partyBuses"), []);
@@ -72,7 +79,14 @@ export default function PartyBusesPage() {
     return eventsWithImages.filter((e) => e.title.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q));
   }, [eventSearch, eventsWithImages]);
 
-  // tool filtering and modal handlers removed — ToolsGrid handles them
+  const filteredTools = useMemo(() => [], [toolSearch]);
+
+  const closeModal = useCallback(() => setActiveToolIdx(null), []);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActiveToolIdx(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <main className="text-slate-100 bg-[#0f1f46]">
@@ -167,7 +181,7 @@ export default function PartyBusesPage() {
           <p className="text-blue-200 text-center max-w-3xl mx-auto mb-6">Client-side utilities to plan budgets, BYOB, stops, and group sizes.</p>
 
           <div className="mb-6">
-            <ToolsGrid limit={4} />
+            <ToolsGrid />
           </div>
         </div>
       </section>

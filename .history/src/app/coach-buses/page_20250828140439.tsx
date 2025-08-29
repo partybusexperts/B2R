@@ -2,15 +2,14 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { getCategoryImages, getFirst, toImageObject, findByFileName } from "../../utils/optimizedImages";
-import type { OptimizedImageEntry } from "../../utils/optimizedImages";
 import { resolveVehicles } from "../../data/vehicles";
 import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
 import OptimizedImage from "../../components/OptimizedImage";
 import { SmartImage } from "../../components/SmartImage";
-import ToolsGrid from "../../components/tools/ToolsGrid";
 
 type Feature = { label: string; icon: string; description: string };
+type Tool = { name: string; icon: string; desc: string; size: "sm" | "md" | "lg" };
 // legacy Bus type removed (using catalog vehicles)
 
 const PHONE_DISPLAY = "(888) 535-2566";
@@ -27,7 +26,21 @@ const COACH_BUS_FEATURES: Feature[] = [
   { label: "Onboard Restroom (Most 40+)", icon: "🚻", description: "Mid & full size motorcoaches typically include a clean restroom for longer travel." },
 ];
 
-// Tools are provided by shared ToolsGrid
+/* ---------------- Tools (with modal sizes) ---------------- */
+const TOOL_LIST: Tool[] = [
+  { name: "Per Person Splitter", icon: "🧮", desc: "Split total cost per person in seconds.", size: "sm" },
+  { name: "BYOB Pack & Ice Calculator", icon: "🥤", desc: "How much to bring so nobody runs dry.", size: "md" },
+  { name: "Seat Space Fit Advisor", icon: "🪑", desc: "Check if your group fits comfortably.", size: "sm" },
+  { name: "Bar Hop Route Builder", icon: "🗺️", desc: "Plan stops and timings for the night.", size: "lg" },
+  { name: "Vibe Selector", icon: "🎶", desc: "Pick a mood & get playlist ideas.", size: "md" },
+  { name: "Stop Timing Planner", icon: "⏱️", desc: "Map time per stop so you’re never rushed.", size: "md" },
+];
+
+const TOOL_SIZE_CLASS: Record<Tool["size"], string> = {
+  sm: "max-w-md min-h-[300px]",
+  md: "max-w-2xl min-h-[420px]",
+  lg: "max-w-5xl min-h-[540px]",
+};
 
 /* ---------------- Legacy placeholder constants removed; using optimized manifest lookups ---------------- */
 
@@ -84,11 +97,20 @@ const eventBlurb = (title: string) =>
 
 export default function CoachBusesPage() {
   const [toolSearch, setToolSearch] = useState("");
+  const [activeToolIdx, setActiveToolIdx] = useState<number | null>(null);
   const [reviewSearch, setReviewSearch] = useState("");
   const [pollSearch, setPollSearch] = useState("");
   const [eventSearch, setEventSearch] = useState("");
 
-  // tools are provided by ToolsGrid; keep search state for UI only
+  const filteredTools = useMemo(
+    () =>
+      TOOL_LIST.filter(
+        (t) =>
+          t.name.toLowerCase().includes(toolSearch.toLowerCase()) ||
+          t.desc.toLowerCase().includes(toolSearch.toLowerCase())
+      ),
+    [toolSearch]
+  );
 
   const filteredReviews = useMemo(() => {
     const q = reviewSearch.trim().toLowerCase();
@@ -134,7 +156,12 @@ export default function CoachBusesPage() {
     );
   }, [eventSearch, eventsWithImages]);
 
-  // modal handled by ToolsGrid
+  const closeModal = useCallback(() => setActiveToolIdx(null), []);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActiveToolIdx(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <main className="text-slate-100 bg-[#0f1f46]">
@@ -526,7 +553,7 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-      {/* ---------- TOOLS (shared) ---------- */}
+      {/* ---------- TOOLS (with modals) ---------- */}
       <section className="w-full bg-gradient-to-br from-[#122a5c] to-[#0f2148] py-16 md:py-20 border-t border-blue-800/30">
         <div className="max-w-6xl mx-auto flex flex-col items-center px-4 md:px-0">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 font-serif tracking-tight text-white">
@@ -545,10 +572,22 @@ export default function CoachBusesPage() {
               aria-label="Search tools"
             />
           </div>
-
-          {/* Shared tools grid (uses registry + own modal) */}
-          <div className="w-full max-w-6xl">
-            <ToolsGrid className="mx-auto" limit={4} />
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-10 justify-center items-stretch">
+            {filteredTools.map((tool) => {
+              const idx = TOOL_LIST.findIndex((t) => t.name === tool.name);
+              return (
+                <button
+                  key={tool.name}
+                  type="button"
+                  onClick={() => setActiveToolIdx(idx)}
+                  className="flex flex-col items-center text-left bg-[#12244e] rounded-2xl shadow-xl px-8 py-8 w-full max-w-xs mx-auto border border-blue-800/30 hover:scale-105 transition-transform"
+                >
+                  <span className="text-4xl mb-2">{tool.icon}</span>
+                  <span className="font-bold text-lg mb-1 text-white">{tool.name}</span>
+                  <span className="text-blue-100 text-center text-base">{tool.desc}</span>
+                </button>
+              );
+            })}
           </div>
 
           <div className="flex justify-center mt-10">
@@ -613,7 +652,7 @@ export default function CoachBusesPage() {
 
                   {ev.optimizedEntries && (
                     <div className="flex gap-2 overflow-x-auto py-2">
-                      {ev.optimizedEntries.map((entry: OptimizedImageEntry, idx: number) => (
+                      {ev.optimizedEntries.map((entry: any, idx: number) => (
                         <div key={idx} className="flex-shrink-0 w-24 h-14 rounded overflow-hidden border border-blue-800/40">
                           <OptimizedImage entry={entry} alt={`${ev.title} ${idx + 1}`} className="w-full h-full object-cover" minDesiredWidth={200} />
                         </div>
@@ -637,7 +676,115 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* tools modal replaced by ToolsGrid which handles its own modal logic */}
+      {/* ---------- TOOL MODAL ---------- */}
+      {activeToolIdx !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          role="dialog"
+          aria-modal="true"
+          onClick={closeModal}
+        >
+          <div
+            className={`w-full ${TOOL_SIZE_CLASS[TOOL_LIST[activeToolIdx].size]} bg-gradient-to-br from-[#13306a] to-[#0e2250] border border-blue-800/40 rounded-2xl shadow-2xl relative`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-3 right-3 text-blue-100 hover:text-white text-2xl font-bold"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <div className="px-6 py-5">
+              <h3 className="text-2xl font-extrabold text-white mb-3 font-serif tracking-tight">
+                {TOOL_LIST[activeToolIdx].name}
+              </h3>
+              {/* Placeholder tool bodies */}
+              {TOOL_LIST[activeToolIdx].name === "Per Person Splitter" && (
+                <div className="grid gap-3 max-w-md">
+                  <label className="text-blue-100 text-sm font-semibold">Total Trip Cost ($)</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="1200" />
+                  <label className="text-blue-100 text-sm font-semibold mt-3">Passenger Count</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="48" />
+                  <label className="text-blue-100 text-sm font-semibold mt-3">Gratuity % (optional)</label>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="10" />
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Split Cost</button>
+                </div>
+              )}
+              {TOOL_LIST[activeToolIdx].name === "BYOB Pack & Ice Calculator" && (
+                <div className="grid gap-3 max-w-2xl">
+                  <p className="text-blue-100">Estimate total beverages & ice volume to keep everyone supplied.</p>
+                  <div className="grid md:grid-cols-4 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="People" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Hours" />
+                    <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
+                      <option>Balanced Mix</option>
+                      <option>Light Drinks</option>
+                      <option>Heavy Drinks</option>
+                    </select>
+                    <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
+                      <option>Coolers?</option>
+                      <option>1 Small</option>
+                      <option>2 Medium</option>
+                      <option>Large</option>
+                    </select>
+                  </div>
+                  <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Estimate</button>
+                </div>
+              )}
+              {TOOL_LIST[activeToolIdx].name === "Seat Space Fit Advisor" && (
+                <div className="grid gap-3 max-w-md">
+                  <p className="text-blue-100">Will this group fit one coach or need two?</p>
+                  <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Passengers (e.g. 72)" />
+                  <select className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white">
+                    <option>Coach Size Planned</option>
+                    <option>40</option>
+                    <option>50</option>
+                    <option>56</option>
+                  </select>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Check Fit</button>
+                </div>
+              )}
+              {TOOL_LIST[activeToolIdx].name === "Bar Hop Route Builder" && (
+                <div className="grid gap-3 max-w-5xl">
+                  <p className="text-blue-100">Build a multi-stop itinerary (use for tours, shuttles, or campus loops).</p>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 1" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 2" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 3" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Stop 4" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Layover (min)" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Avg Drive (min)" />
+                  </div>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Build Route</button>
+                </div>
+              )}
+              {TOOL_LIST[activeToolIdx].name === "Vibe Selector" && (
+                <div className="grid gap-3 max-w-2xl">
+                  <p className="text-blue-100">Pick a travel atmosphere for curated playlist + amenity suggestions.</p>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Relaxed</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Productive</button>
+                    <button className="bg-[#12244e] hover:bg-[#143061] border border-blue-800/30 rounded-lg px-4 py-3 text-white">Social</button>
+                  </div>
+                </div>
+              )}
+              {TOOL_LIST[activeToolIdx].name === "Stop Timing Planner" && (
+                <div className="grid gap-3 max-w-2xl">
+                  <p className="text-blue-100">Distribute total charter hours across planned stops efficiently.</p>
+                  <div className="grid md:grid-cols-4 gap-3">
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Total Hrs" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="# Stops" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Drive Avg" />
+                    <input className="bg-[#12244e] border border-blue-800/30 rounded-lg px-3 py-2 text-white" placeholder="Buffer %" />
+                  </div>
+                  <button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg border border-blue-700">Plan</button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

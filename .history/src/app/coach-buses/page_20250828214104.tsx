@@ -11,6 +11,7 @@ import { SmartImage } from "../../components/SmartImage";
 import ToolsGrid from "../../components/tools/ToolsGrid";
 
 type Feature = { label: string; icon: string; description: string };
+type Tool = { name: string; icon: string; desc: string; size: "sm" | "md" | "lg" };
 // legacy Bus type removed (using catalog vehicles)
 
 const PHONE_DISPLAY = "(888) 535-2566";
@@ -548,7 +549,7 @@ export default function CoachBusesPage() {
 
           {/* Shared tools grid (uses registry + own modal) */}
           <div className="w-full max-w-6xl">
-            <ToolsGrid className="mx-auto" limit={4} />
+            <ToolsGrid className="mx-auto" />
           </div>
 
           <div className="flex justify-center mt-10">

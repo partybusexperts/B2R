@@ -101,6 +101,7 @@ function Modal({
 export default function PricingPage() {
   const [search, setSearch] = useState("");
   const [modalIdx, setModalIdx] = useState<number | null>(null);
+  const [toolModalIdx, setToolModalIdx] = useState<number | null>(null);
 
   const filteredFaq = useMemo(() => {
     const q = search.toLowerCase();
@@ -311,7 +312,7 @@ export default function PricingPage() {
         </p>
 
         <div className="mb-8">
-          <ToolsGrid limit={4} />
+          <ToolsGrid />
         </div>
       </Section>
     </main>

@@ -311,7 +311,7 @@ export default function PricingPage() {
         </p>
 
         <div className="mb-8">
-          <ToolsGrid limit={4} />
+          <ToolsGrid />
         </div>
       </Section>
     </main>

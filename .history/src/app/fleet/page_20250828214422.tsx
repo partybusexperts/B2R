@@ -1,0 +1,336 @@
+"use client";
+
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import { resolveVehicles } from "../../data/vehicles";
+import { findByFileName } from "../../utils/optimizedImages";
+import VehicleGalleryCard from "../../components/VehicleGalleryCard";
+
+/** ---------- Contact constants ---------- */
+const PHONE_DISPLAY = "(888) 535-2566";
+const PHONE_TEL = "8885352566";
+const EMAIL = "info@bus2ride.com";
+
+/** ---------- Tools (like Party Buses page) ---------- */
+import ToolsGrid from "../../components/tools/ToolsGrid";
+
+/** ---------- Reviews & Polls (like Party Buses page) ---------- */
+const REVIEWS = [
+  { name: "Paul P.", text: "Absolutely excellent! Great customer service! The price was very good. The driver was professional. The limo looked pristine." },
+  { name: "Jessie A.", text: "The limo company you need to call for any event. Prices and vehicles are like no other." },
+  { name: "Dee C.", text: "Used them for our bachelorette/bachelor parties and our wedding—fantastic! Even let me extend an hour. Highly recommend." },
+  { name: "Halee H.", text: "Great price, clean inside, super friendly driver. Will never use another company!" },
+  { name: "Rachel L.", text: "We had the best time! Driver was so fun and amazing. Would recommend them 100%!" },
+  { name: "Becky B.", text: "Made us feel like movie stars! Highly recommend." },
+];
+
+const POLLS = [
+  { question: "What’s the most important factor in party bus pricing?", options: ["Group size", "Date/season", "Trip length", "Vehicle type"] },
+  { question: "Would you pay more for a newer party bus?", options: ["Yes", "No"] },
+  { question: "How much extra would you pay for a party bus with a restroom?", options: ["$0", "$50", "$100", "$200+"] },
+  { question: "What’s a fair hourly rate for a 20-passenger limo?", options: ["$100", "$150", "$200", "$250+"] },
+  { question: "Would you split the cost of a party bus with friends?", options: ["Always", "Sometimes", "Never"] },
+  { question: "Do you prefer all-inclusive pricing or itemized fees?", options: ["All-inclusive", "Itemized", "No preference"] },
+];
+
+// legacy random image helper removed (using manifest/catalog now)
+
+// Use resolved vehicles and group by top-level category label for now (simple mapping)
+const topCategoryOrder: { key: string; label: string; match: (cat: string)=>boolean; href: string }[] = [
+  { key: 'party-buses', label: 'Party Buses', match: c => c === 'party-buses', href: '/party-buses' },
+  { key: 'limousines', label: 'Limousines', match: c => c === 'limousines', href: '/limousines' },
+  { key: 'coach-buses', label: 'Coach & Shuttle Buses', match: c => c === 'coach-buses', href: '/coach-buses' }
+];
+
+/** ---------- Page ---------- */
+export default function FleetPage() {
+  // ToolsGrid handles its own modal and internal state; keep a local search string if desired
+  const [toolSearch, setToolSearch] = useState("");
+  const [reviewSearch, setReviewSearch] = useState("");
+  const [pollSearch, setPollSearch] = useState("");
+
+  // ToolsGrid will accept an optional 'filter' prop for prefiltering
+
+  const filteredReviews = useMemo(() => {
+    const q = reviewSearch.trim().toLowerCase();
+    if (!q) return REVIEWS;
+    return REVIEWS.filter(
+      (r) => r.name.toLowerCase().includes(q) || r.text.toLowerCase().includes(q)
+    );
+  }, [reviewSearch]);
+
+  const filteredPolls = useMemo(() => {
+    const q = pollSearch.trim().toLowerCase();
+    if (!q) return POLLS;
+    return POLLS.filter(
+      (p) =>
+        p.question.toLowerCase().includes(q) ||
+        p.options.some((o) => o.toLowerCase().includes(q))
+    );
+  }, [pollSearch]);
+
+  const closeModal = useCallback(() => setActiveToolIdx(null), []);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActiveToolIdx(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  return (
+    <main className="text-slate-100 bg-[#0f1f46]">
+      {/* ---------- HERO ---------- */}
+      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
+        {/* Primary bright gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
+        {/* Subtle sheen overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
+
+        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
+          Bus2Ride Fleet
+        </h1>
+        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
+          Find the perfect ride for your crew — luxury, comfort, and quotes in seconds.
+        </p>
+
+        {/* CTAs */}
+        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
+          <a
+            href={`tel:${PHONE_TEL}`}
+            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-white/95 text-blue-900 hover:bg-white border-blue-200"
+          >
+            Call {PHONE_DISPLAY}
+          </a>
+          <a
+            href={`mailto:${EMAIL}`}
+            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-blue-700"
+          >
+            Email Us
+          </a>
+          <a
+            href="/quote#instant"
+            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-800 text-white hover:bg-blue-900 border-blue-900"
+          >
+            Instant Live Quote
+          </a>
+        </div>
+
+        {/* wave divider */}
+        <div className="absolute bottom-[-1px] left-0 right-0">
+          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
+            <path
+              d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
+              fill="#122a56"
+              opacity="1"
+            />
+          </svg>
+        </div>
+      </section>
+
+      {/* ---------- FLEET GRID ---------- */}
+      <section className="bg-[#122a56] pt-8 pb-14">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">
+            Browse Vehicle Types
+          </h2>
+          <p className="text-blue-100/90 text-center max-w-3xl mx-auto mt-3 mb-10">
+            From sleek limos to mega party buses — every ride is clean, comfy, and ready to roll.
+          </p>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {topCategoryOrder.map(group => {
+              const vehicles = resolveVehicles(findByFileName).filter(v => group.match(v.category)).slice(0,3);
+              // merge images from first three vehicles for small rotating preview? show first vehicle card only for now.
+              if (!vehicles.length) return null;
+              return (
+                <a key={group.key} href={group.href} className="block" aria-label={`View ${group.label}`}>
+                  <VehicleGalleryCard vehicle={vehicles[0]} showCTA={false} />
+                  <div className="px-6 pb-6 pt-4 -mt-2">
+                    <a href={group.href} className="w-full inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition">View {group.label}</a>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+
+          {/* helper hint */}
+          <p className="text-center text-blue-200 mt-10">
+            Click a vehicle type to see all available options and details.
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- PROMO ---------- */}
+      <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-3 text-white font-serif tracking-tight">
+          Not sure which vehicle fits best?
+        </h2>
+        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">
+          Tell us about your group size, trip length, and vibe — we’ll match you to the perfect fleet in seconds.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="/quote#instant"
+            className="inline-flex items-center justify-center rounded-xl px-6 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition"
+          >
+            Get an Instant Quote
+          </a>
+          <a
+            href={`tel:${PHONE_TEL}`}
+            className="inline-flex items-center justify-center rounded-xl px-6 py-3 font-bold bg-white text-blue-900 hover:bg-blue-50 border border-blue-200 transition"
+          >
+            Call {PHONE_DISPLAY}
+          </a>
+        </div>
+      </section>
+
+      {/* ---------- REVIEWS (added below promo) ---------- */}
+      <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
+          Customer Reviews
+        </h2>
+        <div className="w-full flex justify-center mb-8">
+          <input
+            type="text"
+            placeholder="Search reviews by name or keywords…"
+            value={reviewSearch}
+            onChange={(e) => setReviewSearch(e.target.value)}
+            className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          />
+        </div>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {filteredReviews.map((review, i) => (
+            <div
+              key={i}
+              className="relative bg-[#12244e] border border-blue-800/30 rounded-2xl shadow-xl p-7 flex flex-col gap-3 hover:scale-[1.02] transition-transform overflow-hidden"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="bg-blue-600 rounded-full w-11 h-11 flex items-center justify-center text-2xl font-bold text-white shadow-lg border border-blue-300/30">
+                  {review.name[0]}
+                </div>
+                <span className="font-bold text-blue-50 text-lg">{review.name}</span>
+                <span className="ml-auto text-yellow-300 text-xl">★★★★★</span>
+              </div>
+              <div className="text-blue-50 text-base leading-relaxed font-medium">
+                {review.text}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center mt-10">
+          <a
+            href="/reviews"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
+          >
+            More Reviews
+          </a>
+        </div>
+      </section>
+
+      {/* ---------- POLLS (added below reviews) ---------- */}
+      <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
+          Party Bus Polls
+        </h2>
+        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-6">
+          Real riders. Real opinions. Compare trends and get honest insights to plan the perfect night.
+        </p>
+        <div className="w-full flex justify-center mb-8">
+          <input
+            type="text"
+            placeholder="Search polls…"
+            value={pollSearch}
+            onChange={(e) => setPollSearch(e.target.value)}
+            className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            aria-label="Search polls"
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+          {filteredPolls.map((poll, idx) => (
+            <div
+              key={idx}
+              className="bg-[#12244e] rounded-2xl shadow-xl border border-blue-800/30 p-6 flex flex-col items-center"
+            >
+              <h3 className="text-xl font-bold text-blue-50 mb-2 text-center">{poll.question}</h3>
+              <ul className="text-blue-100 mb-2 text-center">
+                {poll.options.map((opt, i) => (
+                  <li key={i}>{opt}</li>
+                ))}
+              </ul>
+              <span className="text-blue-200 text-sm">
+                Vote on our <a href="/polls" className="underline hover:text-blue-100">polls page</a>!
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center mt-10">
+          <a
+            href="/polls"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
+          >
+            More Polls
+          </a>
+        </div>
+      </section>
+
+      {/* ---------- TOOLS (added below polls, like Party Buses) ---------- */}
+      <section className="w-full bg-gradient-to-br from-[#122a5c] to-[#0f2148] py-16 md:py-20 border-t border-blue-800/30">
+        <div className="max-w-6xl mx-auto flex flex-col items-center px-4 md:px-0">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-3 font-serif tracking-tight text-white">
+            Limo & Party Bus Tools
+          </h2>
+          <p className="text-lg md:text-xl text-blue-100 text-center max-w-2xl font-medium mb-8">
+            Click a tool to open it in a perfectly-sized modal—some are compact, others full-width. Use them right here.
+          </p>
+          <div className="w-full flex justify-center mb-8">
+            <input
+              type="text"
+              placeholder="Search tools..."
+              value={toolSearch}
+              onChange={(e) => setToolSearch(e.target.value)}
+              className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              aria-label="Search tools"
+            />
+          </div>
+          <div className="w-full max-w-6xl">
+            {/* Show a random subset of tools on the fleet page to surface variety */}
+            <ToolsGrid limit={4} filter={toolSearch} />
+          </div>
+
+          <div className="flex justify-center mt-10">
+            <a
+              href="/tools"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
+            >
+              More Tools
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- TOOL MODAL ---------- */}
+      {activeToolIdx !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          role="dialog"
+          aria-modal="true"
+          onClick={closeModal}
+        >
+          <div
+            className={`w-full ${TOOL_SIZE_CLASS[TOOL_LIST[activeToolIdx].size]} bg-gradient-to-br from-[#13306a] to-[#0e2250] border border-blue-800/40 rounded-2xl shadow-2xl relative`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-3 right-3 text-blue-100 hover:text-white text-2xl font-bold"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <div className="px-6 py-5">
+              <h3 className="text-2xl font-extrabold text-white mb-3 font-serif tracking-tight">
+                {TOOL_LIST[activeToolIdx].name}
+              </h3>
+
+              {/* Placeholder tool bodies (same as reference) */}
+              {TOOL_LIST[activeToolIdx].name === "Per Person Splitter" && (
+            {/* Tools handled by shared ToolsGrid which manages its own modal and selection */}
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"

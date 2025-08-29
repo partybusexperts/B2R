@@ -64,7 +64,90 @@ const statsData = [
 ];
 
 /* ------------------------------ Tools + Modals ----------------------------- */
-// ...existing code...
+type ToolCardData = {
+  title: string;
+  desc: string;
+  href: string;
+  modalTitle: string;
+  modalContent: string;
+  ctaLabel?: string;
+};
+const toolsData: ToolCardData[] = [
+  {
+    title: "⚡ Instant Quote Tool",
+    desc: "Get a real-time quote for your trip in seconds. No obligation, no hidden fees.",
+    href: "/quote",
+    modalTitle: "Instant Quote Tool",
+    modalContent:
+      "Enter your city, date, and hours. We’ll fetch live availability and show you all-inclusive pricing for the best-matching vehicles.",
+    ctaLabel: "Open Quote Tool",
+  },
+  {
+    title: "🚌 Vehicle Capacity Finder",
+    desc: "Enter your group size and see which vehicles fit best (and what each costs).",
+    href: "/tools",
+    modalTitle: "Vehicle Capacity Finder",
+    modalContent:
+      "Not sure if you need a 14-passenger or 20? Pop in your party size to see recommended vehicles, typical rates, and pro tips to save.",
+  },
+  {
+    title: "💸 Cost Split Calculator",
+    desc: "Know your per-person cost instantly—just enter total and group size.",
+    href: "/tools",
+    modalTitle: "Cost Split Calculator",
+    modalContent:
+      "Perfect for group trips: instantly see how much each person owes (including taxes/fees if you want).",
+  },
+  {
+    title: "📅 Date Price Checker",
+    desc: "See how prices shift by weekday, season, or holiday.",
+    href: "/tools",
+    modalTitle: "Date Price Checker",
+    modalContent:
+      "Prices can swing based on demand. Check midweek vs. weekend and peak seasons to lock in better rates.",
+  },
+  {
+    title: "📍 Zip Code Price Lookup",
+    desc: "Find pricing for your city or zip code instantly.",
+    href: "/tools",
+    modalTitle: "Zip Code Price Lookup",
+    modalContent:
+      "Coverage varies by market. Plug in your ZIP to see typical hourly minimums and vehicle availability in your area.",
+  },
+  {
+    title: "🕒 Hourly vs. Flat Rate",
+    desc: "Compare hourly and flat-rate options for your itinerary.",
+    href: "/tools",
+    modalTitle: "Hourly vs. Flat Rate",
+    modalContent:
+      "Some trips are cheaper on a flat package, others hourly. Compare both quickly to pick the winner.",
+  },
+  {
+    title: "🚐 Vehicle Comparison",
+    desc: "Compare prices & features across party bus, limo, and coach.",
+    href: "/tools",
+    modalTitle: "Vehicle Comparison",
+    modalContent:
+      "See side-by-side features—sound system, lighting, restroom, luggage, and more—plus typical pricing ranges.",
+  },
+  {
+    title: "🧾 Fee & Tax Estimator",
+    desc: "Rough in taxes, fees, and gratuity for a final out-the-door total.",
+    href: "/tools",
+    modalTitle: "Fee & Tax Estimator",
+    modalContent:
+      "Estimate the complete price including standard fees and suggested gratuity so your budget is spot on.",
+  },
+  {
+    title: "💬 Ask a Pricing Expert",
+    desc: "Get personalized help balancing budget and features.",
+    href: "/tools",
+    modalTitle: "Ask a Pricing Expert",
+    modalContent:
+      "A real human to help you choose the right vehicle, time window, and route to keep costs down and fun up.",
+    ctaLabel: "Chat With Us",
+  },
+];
 
 /* ---------------------------------- Modal --------------------------------- */
 function Modal({
@@ -101,6 +184,7 @@ function Modal({
 export default function PricingPage() {
   const [search, setSearch] = useState("");
   const [modalIdx, setModalIdx] = useState<number | null>(null);
+  const [toolModalIdx, setToolModalIdx] = useState<number | null>(null);
 
   const filteredFaq = useMemo(() => {
     const q = search.toLowerCase();
@@ -311,7 +395,7 @@ export default function PricingPage() {
         </p>
 
         <div className="mb-8">
-          <ToolsGrid limit={4} />
+          <ToolsGrid />
         </div>
       </Section>
     </main>

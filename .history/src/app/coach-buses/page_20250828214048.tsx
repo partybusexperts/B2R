@@ -2,7 +2,6 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { getCategoryImages, getFirst, toImageObject, findByFileName } from "../../utils/optimizedImages";
-import type { OptimizedImageEntry } from "../../utils/optimizedImages";
 import { resolveVehicles } from "../../data/vehicles";
 import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
@@ -11,6 +10,7 @@ import { SmartImage } from "../../components/SmartImage";
 import ToolsGrid from "../../components/tools/ToolsGrid";
 
 type Feature = { label: string; icon: string; description: string };
+type Tool = { name: string; icon: string; desc: string; size: "sm" | "md" | "lg" };
 // legacy Bus type removed (using catalog vehicles)
 
 const PHONE_DISPLAY = "(888) 535-2566";
@@ -548,7 +548,7 @@ export default function CoachBusesPage() {
 
           {/* Shared tools grid (uses registry + own modal) */}
           <div className="w-full max-w-6xl">
-            <ToolsGrid className="mx-auto" limit={4} />
+            <ToolsGrid className="mx-auto" />
           </div>
 
           <div className="flex justify-center mt-10">
@@ -613,7 +613,7 @@ export default function CoachBusesPage() {
 
                   {ev.optimizedEntries && (
                     <div className="flex gap-2 overflow-x-auto py-2">
-                      {ev.optimizedEntries.map((entry: OptimizedImageEntry, idx: number) => (
+                      {ev.optimizedEntries.map((entry: { [k: string]: any }, idx: number) => (
                         <div key={idx} className="flex-shrink-0 w-24 h-14 rounded overflow-hidden border border-blue-800/40">
                           <OptimizedImage entry={entry} alt={`${ev.title} ${idx + 1}`} className="w-full h-full object-cover" minDesiredWidth={200} />
                         </div>

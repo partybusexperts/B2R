@@ -548,7 +548,7 @@ export default function CoachBusesPage() {
 
           {/* Shared tools grid (uses registry + own modal) */}
           <div className="w-full max-w-6xl">
-            <ToolsGrid className="mx-auto" limit={4} />
+            <ToolsGrid className="mx-auto" />
           </div>
 
           <div className="flex justify-center mt-10">

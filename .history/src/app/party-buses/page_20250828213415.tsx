@@ -167,7 +167,7 @@ export default function PartyBusesPage() {
           <p className="text-blue-200 text-center max-w-3xl mx-auto mb-6">Client-side utilities to plan budgets, BYOB, stops, and group sizes.</p>
 
           <div className="mb-6">
-            <ToolsGrid limit={4} />
+            <ToolsGrid />
           </div>
         </div>
       </section>

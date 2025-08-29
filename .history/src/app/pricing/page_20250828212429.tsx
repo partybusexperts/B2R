@@ -3,7 +3,6 @@
 import React, { useMemo, useState } from "react";
 import SmartImage from "../../components/SmartImage";
 import Section from "../../components/Section";
-import ToolsGrid from "../../components/tools/ToolsGrid";
 
 /* ------------------------------- FAQ content ------------------------------- */
 const faqData = [
@@ -64,7 +63,90 @@ const statsData = [
 ];
 
 /* ------------------------------ Tools + Modals ----------------------------- */
-// ...existing code...
+type ToolCardData = {
+  title: string;
+  desc: string;
+  href: string;
+  modalTitle: string;
+  modalContent: string;
+  ctaLabel?: string;
+};
+const toolsData: ToolCardData[] = [
+  {
+    title: "⚡ Instant Quote Tool",
+    desc: "Get a real-time quote for your trip in seconds. No obligation, no hidden fees.",
+    href: "/quote",
+    modalTitle: "Instant Quote Tool",
+    modalContent:
+      "Enter your city, date, and hours. We’ll fetch live availability and show you all-inclusive pricing for the best-matching vehicles.",
+    ctaLabel: "Open Quote Tool",
+  },
+  {
+    title: "🚌 Vehicle Capacity Finder",
+    desc: "Enter your group size and see which vehicles fit best (and what each costs).",
+    href: "/tools",
+    modalTitle: "Vehicle Capacity Finder",
+    modalContent:
+      "Not sure if you need a 14-passenger or 20? Pop in your party size to see recommended vehicles, typical rates, and pro tips to save.",
+  },
+  {
+    title: "💸 Cost Split Calculator",
+    desc: "Know your per-person cost instantly—just enter total and group size.",
+    href: "/tools",
+    modalTitle: "Cost Split Calculator",
+    modalContent:
+      "Perfect for group trips: instantly see how much each person owes (including taxes/fees if you want).",
+  },
+  {
+    title: "📅 Date Price Checker",
+    desc: "See how prices shift by weekday, season, or holiday.",
+    href: "/tools",
+    modalTitle: "Date Price Checker",
+    modalContent:
+      "Prices can swing based on demand. Check midweek vs. weekend and peak seasons to lock in better rates.",
+  },
+  {
+    title: "📍 Zip Code Price Lookup",
+    desc: "Find pricing for your city or zip code instantly.",
+    href: "/tools",
+    modalTitle: "Zip Code Price Lookup",
+    modalContent:
+      "Coverage varies by market. Plug in your ZIP to see typical hourly minimums and vehicle availability in your area.",
+  },
+  {
+    title: "🕒 Hourly vs. Flat Rate",
+    desc: "Compare hourly and flat-rate options for your itinerary.",
+    href: "/tools",
+    modalTitle: "Hourly vs. Flat Rate",
+    modalContent:
+      "Some trips are cheaper on a flat package, others hourly. Compare both quickly to pick the winner.",
+  },
+  {
+    title: "🚐 Vehicle Comparison",
+    desc: "Compare prices & features across party bus, limo, and coach.",
+    href: "/tools",
+    modalTitle: "Vehicle Comparison",
+    modalContent:
+      "See side-by-side features—sound system, lighting, restroom, luggage, and more—plus typical pricing ranges.",
+  },
+  {
+    title: "🧾 Fee & Tax Estimator",
+    desc: "Rough in taxes, fees, and gratuity for a final out-the-door total.",
+    href: "/tools",
+    modalTitle: "Fee & Tax Estimator",
+    modalContent:
+      "Estimate the complete price including standard fees and suggested gratuity so your budget is spot on.",
+  },
+  {
+    title: "💬 Ask a Pricing Expert",
+    desc: "Get personalized help balancing budget and features.",
+    href: "/tools",
+    modalTitle: "Ask a Pricing Expert",
+    modalContent:
+      "A real human to help you choose the right vehicle, time window, and route to keep costs down and fun up.",
+    ctaLabel: "Chat With Us",
+  },
+];
 
 /* ---------------------------------- Modal --------------------------------- */
 function Modal({
@@ -101,6 +183,7 @@ function Modal({
 export default function PricingPage() {
   const [search, setSearch] = useState("");
   const [modalIdx, setModalIdx] = useState<number | null>(null);
+  const [toolModalIdx, setToolModalIdx] = useState<number | null>(null);
 
   const filteredFaq = useMemo(() => {
     const q = search.toLowerCase();
@@ -310,9 +393,53 @@ export default function PricingPage() {
           Quick calculators and finders to dial in your budget, compare options, and book smarter.
         </p>
 
-        <div className="mb-8">
-          <ToolsGrid limit={4} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+          {toolsData.map((tool, idx) => (
+            <button
+              key={tool.title}
+              type="button"
+              onClick={() => setToolModalIdx(idx)}
+              className="text-left bg-white rounded-2xl shadow-xl p-6 border border-blue-200 hover:shadow-2xl hover:-translate-y-1 transition focus:outline-none"
+              aria-label={`Open ${tool.title}`}
+            >
+              <h3 className="text-blue-900 font-extrabold text-lg mb-2">
+                {tool.title}
+              </h3>
+              <p className="text-blue-800 mb-4">{tool.desc}</p>
+              <span className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition border border-blue-800/70">
+                Learn More
+              </span>
+            </button>
+          ))}
         </div>
+
+        <div className="flex justify-center">
+          <a
+            href="/tools"
+            className="inline-block bg-white hover:bg-blue-50 text-blue-900 font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-200"
+          >
+            See All Tools
+          </a>
+        </div>
+
+        {/* Tool Modal */}
+        <Modal
+          open={toolModalIdx !== null}
+          onClose={() => setToolModalIdx(null)}
+          title={toolModalIdx !== null ? toolsData[toolModalIdx].modalTitle : ""}
+        >
+          {toolModalIdx !== null ? (
+            <div className="space-y-4">
+              <p className="text-blue-100">{toolsData[toolModalIdx].modalContent}</p>
+              <a
+                href={toolsData[toolModalIdx].href}
+                className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-bold bg-white text-blue-900 border border-blue-200 hover:bg-blue-50 transition"
+              >
+                {toolsData[toolModalIdx].ctaLabel ?? "Open Tool"}
+              </a>
+            </div>
+          ) : null}
+        </Modal>
       </Section>
     </main>
   );
