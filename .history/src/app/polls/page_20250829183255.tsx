@@ -176,14 +176,11 @@ export default function PollsPage() {
                       ))}
                     </optgroup>
                   )}
-                  {/* Render grouped categories for clearer organization */}
-                  {Object.entries(groupedCategories).map(([group, cats]) => (
-                    <optgroup key={group} label={group}>
-                      {cats.map(c => (
-                        <option key={c} value={c}>{c} {categoryCounts.get(c) ? `(${categoryCounts.get(c)})` : ''}</option>
-                      ))}
-                    </optgroup>
-                  ))}
+                  <optgroup label="All categories">
+                    {categories.filter(c => c !== 'All' && !popularCategories.includes(c)).map(c => (
+                      <option key={c} value={c}>{c} {categoryCounts.get(c) ? `(${categoryCounts.get(c)})` : ''}</option>
+                    ))}
+                  </optgroup>
                 </select>
               </div>
 

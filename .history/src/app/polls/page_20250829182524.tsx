@@ -88,25 +88,6 @@ export default function PollsPage() {
     return { categories: ["All", ...set], categoryCounts: counts, popularCategories: popular };
   }, [allPolls]);
 
-  // Build grouped categories for a more organized dropdown
-  const groupedCategories = useMemo(() => {
-    const vehicleTags = new Set(['party-bus','limo','coach-bus','sedan','suv']);
-    const metaTags = new Set(['pricing','industry-secrets','blogs','poll-results','general']);
-    const groups: Record<string, string[]> = {};
-    categories.filter(c => c !== 'All').forEach((cat) => {
-      if (popularCategories.includes(cat)) return; // popular handled separately
-      let group = 'Other';
-      if (vehicleTags.has(cat)) group = 'Vehicle types';
-      else if (cat === 'events' || /event|party|tour|tours|parties/i.test(cat)) group = 'Events';
-      else if (metaTags.has(cat)) group = 'Meta';
-      groups[group] = groups[group] || [];
-      groups[group].push(cat);
-    });
-    // Sort categories within groups for stable ordering
-    Object.keys(groups).forEach(g => groups[g].sort());
-    return groups;
-  }, [categories, popularCategories]);
-
   // Filter + sort
   const visiblePolls = useMemo(() => {
     let items = allPolls;
@@ -176,14 +157,11 @@ export default function PollsPage() {
                       ))}
                     </optgroup>
                   )}
-                  {/* Render grouped categories for clearer organization */}
-                  {Object.entries(groupedCategories).map(([group, cats]) => (
-                    <optgroup key={group} label={group}>
-                      {cats.map(c => (
-                        <option key={c} value={c}>{c} {categoryCounts.get(c) ? `(${categoryCounts.get(c)})` : ''}</option>
-                      ))}
-                    </optgroup>
-                  ))}
+                  <optgroup label="All categories">
+                    {categories.filter(c => c !== 'All' && !popularCategories.includes(c)).map(c => (
+                      <option key={c} value={c}>{c} {categoryCounts.get(c) ? `(${categoryCounts.get(c)})` : ''}</option>
+                    ))}
+                  </optgroup>
                 </select>
               </div>
 
