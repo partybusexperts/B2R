@@ -13,20 +13,6 @@ type PollData = {
   category?: string;
 };
 
-type ApiPoll = {
-  id: string;
-  question?: string;
-  title?: string;
-  options?: string[];
-  category?: string;
-  tags?: string[];
-};
-
-type ApiResponse = {
-  polls?: ApiPoll[];
-  votes?: Record<string, Record<string, number>>;
-};
-
 export default function PollsPage() {
   const [allPolls, setAllPolls] = useState<PollData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,25 +32,16 @@ export default function PollsPage() {
         setError(null);
         const r = await fetch("/api/poll/all", { cache: "no-store" });
         if (!r.ok) throw new Error(`Failed to fetch polls (${r.status})`);
-  const json = (await r.json()) as ApiResponse | ApiPoll[];
-  // expected shape: { polls: [...], votes: { pollId: { option: count } } }
-  const pollsList: ApiPoll[] = Array.isArray(json) ? (json as ApiPoll[]) : (json.polls || [] as ApiPoll[]);
-  const votesMap: Record<string, Record<string, number>> = (Array.isArray(json) ? {} : (json.votes || {}));
-
-        function firstTag(p: ApiPoll): string | undefined {
-          if (!p || !('tags' in p)) return undefined;
-          const t = (p as any).tags;
-          if (!Array.isArray(t) || t.length === 0) return undefined;
-          return String(t[0]);
-        }
-
+        const json = await r.json();
+        // expected shape: { polls: [...], votes: { pollId: { option: count } } }
+        const pollsList: any[] = Array.isArray(json) ? json : (json.polls || []);
+        const votesMap: Record<string, Record<string, number>> = json.votes || {};
         const merged: PollData[] = pollsList.map(p => ({
           id: String(p.id),
           question: String(p.question || p.title || ''),
           options: Array.isArray(p.options) ? p.options : [],
           votes: votesMap[p.id] || {},
-          // Prefer explicit category, fall back to the first tag so registry tags show up in the UI
-          category: p.category || firstTag(p),
+          category: p.category || undefined,
         }));
         if (!cancelled) setAllPolls(merged);
       } catch (e) {

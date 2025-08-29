@@ -103,13 +103,6 @@ export function PollCard({ poll, initialCounts }: { poll: Poll; initialCounts?: 
   );
 }
 
-// Backwards compatibility: some pages import { Poll } from this module
-function PollLegacy({ poll, initialResults }: { poll: Poll; initialResults?: Record<string, number> }) {
-  return <PollCard poll={poll} initialCounts={initialResults} />;
-}
-
-export { PollLegacy as Poll };
-
 export default function PollsSection({
   mode = "scoped",
   tags,

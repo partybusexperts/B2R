@@ -19,7 +19,6 @@ type ApiPoll = {
   title?: string;
   options?: string[];
   category?: string;
-  tags?: string[];
 };
 
 type ApiResponse = {
@@ -50,21 +49,12 @@ export default function PollsPage() {
   // expected shape: { polls: [...], votes: { pollId: { option: count } } }
   const pollsList: ApiPoll[] = Array.isArray(json) ? (json as ApiPoll[]) : (json.polls || [] as ApiPoll[]);
   const votesMap: Record<string, Record<string, number>> = (Array.isArray(json) ? {} : (json.votes || {}));
-
-        function firstTag(p: ApiPoll): string | undefined {
-          if (!p || !('tags' in p)) return undefined;
-          const t = (p as any).tags;
-          if (!Array.isArray(t) || t.length === 0) return undefined;
-          return String(t[0]);
-        }
-
         const merged: PollData[] = pollsList.map(p => ({
           id: String(p.id),
           question: String(p.question || p.title || ''),
           options: Array.isArray(p.options) ? p.options : [],
           votes: votesMap[p.id] || {},
-          // Prefer explicit category, fall back to the first tag so registry tags show up in the UI
-          category: p.category || firstTag(p),
+          category: p.category || undefined,
         }));
         if (!cancelled) setAllPolls(merged);
       } catch (e) {
