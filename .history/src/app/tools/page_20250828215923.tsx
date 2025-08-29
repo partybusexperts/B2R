@@ -314,15 +314,6 @@ const TOP_TOOLS: Tool[] = [
   { title: "Weather Checker", desc: "Check the forecast for your trip dates.", icon: "🌤️", button: "Try Tool" },
   { title: "Accessibility Guide", desc: "Find accessible vehicles and trip tips.", icon: "♿", button: "Try Tool" },
   { title: "Event Sync", desc: "Sync your trip with calendars and events.", icon: "📅", button: "Try Tool" },
-  // Approved replacements
-  { title: "Quick Seat-Fit Advisor", desc: "Estimate comfort and recommended vehicle size per passenger.", icon: "🪑", button: "Try Tool" },
-  { title: "Group Itinerary Builder", desc: "Create a printable multi-stop timeline with durations and buffer times.", icon: "🗓️", button: "Try Tool" },
-  { title: "BYOB & Ice Planner", desc: "Estimate drinks and ice per person with preset party profiles.", icon: "🍹", button: "Try Tool" },
-  { title: "Event Matchmaker", desc: "Suggest vehicle types by event and group size to simplify choices.", icon: "🎯", button: "Try Tool" },
-  { title: "Weather Impact Alert", desc: "Check weather for your event date and get impact advice.", icon: "🌦️", button: "Try Tool" },
-  { title: "Promo Finder", desc: "Apply available company promos—admin-controlled discounts.", icon: "🏷️", button: "Try Tool" },
-  { title: "Local Venues & Parking Tips", desc: "Quick notes on popular venues and parking/entry tips.", icon: "📍", button: "Try Tool" },
-  { title: "Quick FAQ Popper", desc: "Contextual answers for the most common booking questions.", icon: "❓", button: "Try Tool" },
 ];
 
 const LEGACY_TOOLS: Tool[] = [
