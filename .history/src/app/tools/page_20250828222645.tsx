@@ -33,7 +33,7 @@ export default function Page() {
         </p>
 
         <div className="mb-8">
-          <ToolsGrid randomize={true} />
+          <ToolsGrid />
         </div>
 
         <div className="mt-12">
