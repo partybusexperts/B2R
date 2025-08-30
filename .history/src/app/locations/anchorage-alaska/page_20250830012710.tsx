@@ -58,7 +58,7 @@ export default function AnchoragePage() {
       {/* HERO */}
       <section className="relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[560px] py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,#1e3a8a_0%,#0b1934_55%,#030712_100%)]" />
-  <div className="absolute inset-0 bg-[url(/images/party-buses/18 Passenger White Party Bus Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
+  <div className="absolute inset-0 bg-[url(/images/party-buses/18%20Passenger%20White%20Party%20Bus%20Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
         <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.55)] font-serif">Anchorage Party Bus, Limo & Charter Service</h1>
   <p className="relative z-10 max-w-4xl mx-auto text-xl md:text-2xl mt-6 text-blue-100 font-medium leading-relaxed">Cruise transfers • Aurora & winter readiness • Corporate shuttles • Weddings • Excursions to Seward, Whittier & Alyeska. Professional drivers. Local logistics expertise.</p>
   {/* Salesy booster line */}

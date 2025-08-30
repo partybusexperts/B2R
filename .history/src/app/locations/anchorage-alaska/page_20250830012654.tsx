@@ -58,7 +58,7 @@ export default function AnchoragePage() {
       {/* HERO */}
       <section className="relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[560px] py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,#1e3a8a_0%,#0b1934_55%,#030712_100%)]" />
-  <div className="absolute inset-0 bg-[url(/images/party-buses/18 Passenger White Party Bus Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
+  <div className="absolute inset-0 bg-[url(/images/party-buses/18%20Passenger%20White%20Party%20Bus%20Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
         <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.55)] font-serif">Anchorage Party Bus, Limo & Charter Service</h1>
   <p className="relative z-10 max-w-4xl mx-auto text-xl md:text-2xl mt-6 text-blue-100 font-medium leading-relaxed">Cruise transfers • Aurora & winter readiness • Corporate shuttles • Weddings • Excursions to Seward, Whittier & Alyeska. Professional drivers. Local logistics expertise.</p>
   {/* Salesy booster line */}
@@ -303,10 +303,6 @@ export default function AnchoragePage() {
                 <LiveWeatherAdvisor variant="compact" fixedPlace={{ name: 'Anchorage, Alaska', latitude: 61.2181, longitude: -149.9003, country_code: 'US' }} />
               </div>
             </div>
-            <div className="mt-6">
-              <h4 className="text-sm font-semibold text-blue-200 mb-2">View Similar Vehicles</h4>
-              <AnchorageVehicleSlider />
-            </div>
           </div>
         </div>
       </Section>
@@ -429,13 +425,6 @@ export default function AnchoragePage() {
         <p className="text-blue-100/90 leading-relaxed mb-4">Safety & compliance: our fleet meets local DOT standards and drivers are background‑checked with regular safety retraining. For remote or multi‑day itineraries, we include contingency planning for highway advisories and port notices; reference official resources like the <a href="https://www.weather.gov" target="_blank" rel="noopener noreferrer" className="underline">National Weather Service</a> and the <a href="https://www.nps.gov" target="_blank" rel="noopener noreferrer" className="underline">National Park Service</a> pages for park access rules.</p>
   <p className="text-blue-100/90 leading-relaxed mb-4">Planning checklist quick hits: include passenger count, luggage & gear list, exact pickup/drop addresses, any timed connections, and a note about mobility needs. If you are coordinating with cruise lines or event venues, include terminal names and expected disembark windows so we can model real-world buffer times. Need help? Contact our Anchorage dispatch at <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> or call <a href="tel:8885352566" className="underline">(888) 535‑2566</a>.</p>
   <p className="text-blue-100/90 leading-relaxed">Local resource links: visitor info at <a href="https://www.anchorage.net" target="_blank" rel="noopener noreferrer" className="underline">anchorage.net</a>, train connections at <a href="https://www.alaskarailroad.com" target="_blank" rel="noopener noreferrer" className="underline">alaskarailroad.com</a>, and port timing notices through local port authorities. When in doubt, add extra buffer on the quote and we will convert it to guaranteed time in the confirmation.</p>
-      </Section>
-      {/* EXTRA SLIDER #3 — before final CTA */}
-      <Section className="max-w-7xl mx-auto my-10">
-        <h4 className="text-xl font-bold text-center mb-4 text-blue-50">More Photos from Our Anchorage Fleet</h4>
-        <div className="bg-[#08142a] rounded-2xl p-4 border border-blue-700/30 shadow">
-          <AnchorageVehicleSlider />
-        </div>
       </Section>
 
       {/* FINAL CTA */}
