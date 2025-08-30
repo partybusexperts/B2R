@@ -255,36 +255,19 @@ function ResultsReminder({ compact = false }: { compact?: boolean }) {
 }
 
 /* ===== Main Component ===== */
-export default function ClientPolls() {
+export default function ClientPolls({ polls }: { polls?: Poll[] }) {
   const [q, setQ] = useState("");
   const [jumpSlug, setJumpSlug] = useState<string>("");
   const [showGlobalResults, setShowGlobalResults] = useState(false);
   const { add, node: Toasts } = useToasts();
 
-  // Start with any passed polls or window global; if none, we'll fetch /polls.json client-side
-  const [pollsData, setPollsData] = useState<Poll[] | null>(() => {
-    if (typeof window !== "undefined") {
-      const w = (window as unknown as { __POLLS__?: Poll[] }).__POLLS__;
-      return w ?? null;
-    }
-    return null;
-  });
+  // Use provided polls prop or fallback to preloaded window.__POLLS__
+  const initialPolls = polls ?? (typeof window !== "undefined" ? (window as unknown as { __POLLS__?: Poll[] }).__POLLS__ || [] : []);
 
-  useEffect(() => {
-    // If no data yet, fetch from public/polls.json
-    if (!pollsData) {
-      fetch('/polls.json')
-        .then((r) => r.ok ? r.json() : [])
-        .then((j) => {
-          if (Array.isArray(j)) setPollsData(j as Poll[]);
-        })
-        .catch(() => setPollsData([]));
-    }
-  }, [pollsData]);
-
+  // Build categories -> items
   const data = useMemo(() => {
     const byCat: Record<string, { raw: string; items: Poll[] }> = {};
-    for (const p of pollsData || []) {
+    for (const p of initialPolls || []) {
       const raw = getCategoryRaw(p);
       const slug = slugify(raw);
       if (!byCat[slug]) byCat[slug] = { raw, items: [] };
@@ -297,10 +280,11 @@ export default function ClientPolls() {
       items,
       count: items.length,
     }));
+    // Sort: biggest categories first, then alpha
     entries.sort((a, b) => b.count - a.count || a.pretty.localeCompare(b.pretty));
-    const total = pollsData?.length || 0;
+    const total = initialPolls?.length || 0;
     return { entries, total };
-  }, [pollsData]);
+  }, [initialPolls]);
 
   // Refs for jump-to-category scroll
   const catRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -466,7 +450,7 @@ export default function ClientPolls() {
 
       {/* Grid of scrollable category boxes */}
       <div className="mx-auto max-w-7xl px-4 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.entries.map((cat) => {
+        {data.entries.map((cat, idx) => {
           const filtered = cat.items.filter(matches);
           const showing = filtered.length;
           const headerNote =
@@ -589,4 +573,10 @@ Add this to your globals if you want the horizontal chips to hide scrollbars:
 */
 
 
+import React from 'react';
+import HomePolls from '../../components/HomePolls';
 
+// This page is lightweight; the client-side HomePolls component fetches its own data.
+export default function PollsPage() {
+  return <HomePolls />;
+}

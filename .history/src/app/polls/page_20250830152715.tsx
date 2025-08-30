@@ -255,7 +255,7 @@ function ResultsReminder({ compact = false }: { compact?: boolean }) {
 }
 
 /* ===== Main Component ===== */
-export default function ClientPolls() {
+export default function ClientPolls({ polls }: { polls?: Poll[] }) {
   const [q, setQ] = useState("");
   const [jumpSlug, setJumpSlug] = useState<string>("");
   const [showGlobalResults, setShowGlobalResults] = useState(false);
@@ -265,9 +265,9 @@ export default function ClientPolls() {
   const [pollsData, setPollsData] = useState<Poll[] | null>(() => {
     if (typeof window !== "undefined") {
       const w = (window as unknown as { __POLLS__?: Poll[] }).__POLLS__;
-      return w ?? null;
+      return polls ?? w ?? null;
     }
-    return null;
+    return polls ?? null;
   });
 
   useEffect(() => {

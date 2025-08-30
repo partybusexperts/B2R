@@ -1,0 +1,62 @@
+[
+  {
+    "id": "pricing-factor",
+    "question": "What’s the most important factor in party bus pricing?",
+    "options": ["Group size","Date/season","Trip length","Vehicle type"],
+    "tags": ["pricing","general"]
+  },
+  {
+    "id": "newer-vehicle",
+    "question": "Would you pay more for a newer vehicle?",
+    "options": ["Yes","No"],
+    "tags": ["fleet","pricing"]
+  },
+  {
+    "id": "hourly-20p-limo",
+    "question": "What’s a fair hourly rate for a 20-passenger limo?",
+    "options": ["$100","$150","$200","$250+"],
+    "tags": ["limo","pricing"]
+  },
+  {
+    "id": "partybus_vs_limo",
+    "question": "Party Bus vs Limo — which would you pick?",
+    "options": ["Party Bus","Limo"],
+    "tags": ["general","comparison"]
+  },
+  {
+    "id": "event_type",
+    "question": "What’s your event?",
+    "options": ["Prom","Wedding","Gameday","Birthday","Corporate"],
+    "tags": ["events","general"]
+  },
+  {
+    "id": "matters_most",
+    "question": "What matters most?",
+    "options": ["Price","Space","Lighting","Sound","Luggage"],
+    "tags": ["features","general"]
+  },
+  {
+    "id": "partybus_safer",
+    "question": "True or False: Party buses are safer than limos.",
+    "options": ["True","False"],
+    "tags": ["safety","comparison"]
+  },
+  {
+    "id": "rent_partybus_birthday",
+    "question": "Would you rent a party bus for a birthday?",
+    "options": ["Yes","No"],
+    "tags": ["events","birthday"]
+  },
+  {
+    "id": "important_partybus_feature",
+    "question": "Which party bus feature is most important?",
+    "options": ["Sound System","Lighting","Bar","TV Screens"],
+    "tags": ["features","party-bus"]
+  },
+  {
+    "id": "favorite_limo_color",
+    "question": "What’s your favorite limo color?",
+    "options": ["Black","White","Pink","Silver"],
+    "tags": ["fun","general"]
+  }
+]
