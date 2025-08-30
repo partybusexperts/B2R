@@ -2,40 +2,41 @@
 import React, { useState } from "react";
 import SmartImage from "../../components/SmartImage";
 import { eventDetails } from "./eventDetails";
-import { getCategoryImages } from "../../utils/optimizedImages";
 
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
 const EMAIL = "info@bus2ride.com";
 
-// Pull event-specific optimized images from the manifest. Falls back to a small set
-// of legacy images only if the manifest is empty for some reason.
-const optimizedEventImages = getCategoryImages('eventImages');
-const legacyFallbacks = ['/images/Bus-3.png', '/images/Bus-4.png', '/images/Bus-5.png'];
+const eventImages = [
+  "/images/Bus-3.png",
+  "/images/Bus-4.png",
+  "/images/Bus-5.png",
+  "/images/17 Passenger Black Party Bus Exterior.png",
+  "/images/10 Passenger Black Lincoln Stretch Limo Exterior Black.png",
+  "/images/10 Passenger Chrysler 300 Limo Exterior.png",
+  "/images/10 Passenger Lincoln Stretch Limo Exterior 2.png",
+  "/images/10 Passenger Lincoln Stretch Limo Exterior 3.png",
+  "/images/10 Passenger Lincoln Stretch Limo Interior.png",
+  "/images/10 Passenger Lincoln Stretch Limo Interior Clean.png",
+  "/images/10 Passenger Lincoln Stretch Limo Interior Very Clean.png",
+  "/images/10 Passenger Lincoln Stretch Limo Inside.png",
+  "/images/16 Passenger Ford Excursion Limousine Interior.png",
+  "/images/16 Passenger Ford Excursion Stretch Limo Interior.png",
+  "/images/16_Passenger_Stretch_Excursion_Exterior_optimized.jpg",
+  "/images/18 Passenger Cadillac Escalade Limo Exterior.png",
+  "/images/18 Passenger Ford Excursion Limo Exterior 2.png",
+  "/images/18 Passenger Ford Excursion Limo Inside.png",
+  "/images/18 Passenger Hummer Limo Exterior.png",
+  "/images/18 Passenger Hummer Limo Inside.png",
+  "/images/18 Passenger Hummer Limo Interior.png",
+  "/images/10 Passenger Sprinter Van Limo Style Interior 1.png",
+  "/images/12 Passenger Executive Style Sprinter Van Exterior.png",
+  "/images/14 Passenger Sprinter Van Limo Style Exterior Door Open.png",
+  "/images/14 Passenger Sprinter Van Limo Style Interior Again.png",
+];
 
-// Picks the best image for a given event name with token matching and stable fallback
-function pickImageForEvent(name: string, idx: number) {
-  if (optimizedEventImages && optimizedEventImages.length > 0) {
-    const norm = name
-      .toLowerCase()
-      .replace(/[’'‘“”]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
-    // Try exact normalized match in file path
-    const exact = optimizedEventImages.find(e => e.original.toLowerCase().includes('/' + norm) || e.original.toLowerCase().endsWith('/' + norm + '.webp') || e.original.toLowerCase().includes(norm));
-    if (exact) return exact.original;
-    // Try token matches (any word in the name)
-    const tokens = norm.split('-').filter(Boolean);
-    for (const t of tokens) {
-      const found = optimizedEventImages.find(e => e.original.toLowerCase().includes(t));
-      if (found) return found.original;
-    }
-    // Fallback to a stable cycle by index
-    return optimizedEventImages[idx % optimizedEventImages.length].original;
-  }
-  // If no optimized images available, use small legacy fallback set
-  return legacyFallbacks[idx % legacyFallbacks.length];
-}
+/* Rotating informational banners (injected every 6 cards = two desktop rows)
+   Now focused on specific high-volume event scenarios. */
 const INFO_BANNERS = [
   {
     title: "Wedding Timeline Tip",
@@ -148,7 +149,7 @@ const EventsPage: React.FC = () => {
                   aria-label={`Learn more about ${event.name}`}
                 >
                   <SmartImage
-                    src={pickImageForEvent(event.name, i)}
+                    src={eventImages[i % eventImages.length]}
                     alt={event.name}
                     className="rounded-2xl shadow-lg w-full h-64 object-cover object-center mb-4 border border-blue-800/40"
                   />

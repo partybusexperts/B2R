@@ -8,34 +8,35 @@ const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
 const EMAIL = "info@bus2ride.com";
 
-// Pull event-specific optimized images from the manifest. Falls back to a small set
-// of legacy images only if the manifest is empty for some reason.
-const optimizedEventImages = getCategoryImages('eventImages');
-const legacyFallbacks = ['/images/Bus-3.png', '/images/Bus-4.png', '/images/Bus-5.png'];
+const eventImages = [
+  // Pull event-specific optimized images from the manifest. Falls back to a small set
+  // of legacy images only if the manifest is empty for some reason.
+  const optimizedEventImages = getCategoryImages('eventImages');
+  const legacyFallbacks = ['/images/Bus-3.png', '/images/Bus-4.png', '/images/Bus-5.png'];
 
-// Picks the best image for a given event name with token matching and stable fallback
-function pickImageForEvent(name: string, idx: number) {
-  if (optimizedEventImages && optimizedEventImages.length > 0) {
-    const norm = name
-      .toLowerCase()
-      .replace(/[’'‘“”]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
-    // Try exact normalized match in file path
-    const exact = optimizedEventImages.find(e => e.original.toLowerCase().includes('/' + norm) || e.original.toLowerCase().endsWith('/' + norm + '.webp') || e.original.toLowerCase().includes(norm));
-    if (exact) return exact.original;
-    // Try token matches (any word in the name)
-    const tokens = norm.split('-').filter(Boolean);
-    for (const t of tokens) {
-      const found = optimizedEventImages.find(e => e.original.toLowerCase().includes(t));
-      if (found) return found.original;
+  // Picks the best image for a given event name with token matching and stable fallback
+  function pickImageForEvent(name: string, idx: number) {
+    if (optimizedEventImages && optimizedEventImages.length > 0) {
+      const norm = name
+        .toLowerCase()
+        .replace(/[’'‘“”]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+      // Try exact normalized match in file path
+      const exact = optimizedEventImages.find(e => e.original.toLowerCase().includes('/' + norm) || e.original.toLowerCase().endsWith('/' + norm + '.webp') || e.original.toLowerCase().includes(norm));
+      if (exact) return exact.original;
+      // Try token matches (any word in the name)
+      const tokens = norm.split('-').filter(Boolean);
+      for (const t of tokens) {
+        const found = optimizedEventImages.find(e => e.original.toLowerCase().includes(t));
+        if (found) return found.original;
+      }
+      // Fallback to a stable cycle by index
+      return optimizedEventImages[idx % optimizedEventImages.length].original;
     }
-    // Fallback to a stable cycle by index
-    return optimizedEventImages[idx % optimizedEventImages.length].original;
+    // If no optimized images available, use small legacy fallback set
+    return legacyFallbacks[idx % legacyFallbacks.length];
   }
-  // If no optimized images available, use small legacy fallback set
-  return legacyFallbacks[idx % legacyFallbacks.length];
-}
 const INFO_BANNERS = [
   {
     title: "Wedding Timeline Tip",

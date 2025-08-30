@@ -20,6 +20,9 @@
     },
     "event_type": {
       "Wedding": 1
+    },
+    "newer-vehicle": {
+      "Yes": 1
     }
   }
 }
