@@ -31,16 +31,6 @@ async function fetchAll(): Promise<PollsPayload> {
 const shuffle = <T,>(arr: T[]) => { const c = [...arr]; for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; };
 const sample = <T,>(arr: T[], n: number) => shuffle(arr).slice(0, n);
 
-// Small helper: ensure labels are human-friendly and title-cased like the polls page
-function formatLabel(label?: string) {
-  if (!label) return "";
-  return String(label)
-    .replace(/[-_]/g, " ")
-    .split(" ")
-    .map(s => s.length ? s[0].toUpperCase() + s.slice(1).toLowerCase() : "")
-    .join(" ");
-}
-
 export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, innerScroll = false, innerScrollClass }: { groups?: { tag: string; label?: string }[]; pickSize?: number; visiblePerGroup?: number; innerScroll?: boolean; innerScrollClass?: string }) {
   const [data, setData] = useState<PollsPayload | null>(null);
   const [groupsPicked, setGroupsPicked] = useState<({ label?: string; tag: string; items: { poll: Poll; counts: Record<string, number> }[] }[]) | null>(null);

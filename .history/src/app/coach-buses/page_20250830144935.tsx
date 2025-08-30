@@ -97,6 +97,7 @@ const eventBlurb = (title: string) =>
 export default function CoachBusesPage() {
   const [toolSearch, setToolSearch] = useState("");
   const [reviewSearch, setReviewSearch] = useState("");
+  const [pollSearch, setPollSearch] = useState("");
   const [eventSearch, setEventSearch] = useState("");
 
   // tools are provided by ToolsGrid; keep search state for UI only
@@ -109,7 +110,15 @@ export default function CoachBusesPage() {
     );
   }, [reviewSearch]);
 
-  // Polls are now served by HomePolls; local pollSearch/filter removed
+  const filteredPolls = useMemo(() => {
+    const q = pollSearch.trim().toLowerCase();
+    if (!q) return POLLS;
+    return POLLS.filter(
+      (p) =>
+        p.question.toLowerCase().includes(q) ||
+        p.options.some((o) => o.toLowerCase().includes(q))
+    );
+  }, [pollSearch]);
 
   const coachOptimized = useMemo(() => getCategoryImages("coachBuses"), []);
   const catalogCoaches = useMemo(() => {

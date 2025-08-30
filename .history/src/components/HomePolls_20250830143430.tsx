@@ -31,17 +31,7 @@ async function fetchAll(): Promise<PollsPayload> {
 const shuffle = <T,>(arr: T[]) => { const c = [...arr]; for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; };
 const sample = <T,>(arr: T[], n: number) => shuffle(arr).slice(0, n);
 
-// Small helper: ensure labels are human-friendly and title-cased like the polls page
-function formatLabel(label?: string) {
-  if (!label) return "";
-  return String(label)
-    .replace(/[-_]/g, " ")
-    .split(" ")
-    .map(s => s.length ? s[0].toUpperCase() + s.slice(1).toLowerCase() : "")
-    .join(" ");
-}
-
-export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, innerScroll = false, innerScrollClass }: { groups?: { tag: string; label?: string }[]; pickSize?: number; visiblePerGroup?: number; innerScroll?: boolean; innerScrollClass?: string }) {
+export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3 }: { groups?: { tag: string; label?: string }[]; pickSize?: number; visiblePerGroup?: number }) {
   const [data, setData] = useState<PollsPayload | null>(null);
   const [groupsPicked, setGroupsPicked] = useState<({ label?: string; tag: string; items: { poll: Poll; counts: Record<string, number> }[] }[]) | null>(null);
 
@@ -109,28 +99,18 @@ export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, i
     setGroupsPicked(out);
   }, [data, groups, pickSize]);
 
-  if (!data || groupsPicked === null) return <div className="text-center text-blue-200/80 py-6">Loading polls</div>;
+  if (!data || groupsPicked === null) return <div className="text-center text-blue-200/80 py-6">Loading polls…</div>;
 
   return (
     <div suppressHydrationWarning className="max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {groupsPicked.map((g, gi) => (
           <div key={gi}>
-            <h3 className="text-xl font-bold text-blue-50 mb-4">{formatLabel(g.label)}</h3>
+            <h3 className="text-xl font-bold text-blue-50 mb-4">{g.label}</h3>
             <div className="grid grid-cols-1 gap-4">
-              {
-                innerScroll ? (
-                  <div className={innerScrollClass || "max-h-[60vh] overflow-y-auto no-scrollbar p-1 -mr-2"}>
-                    {g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
-                      <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
-                    ))}
-                  </div>
-                ) : (
-                  g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
-                    <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
-                  ))
-                )
-              }
+              {g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
+                <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
+              ))}
             </div>
             {/* rail of the rest */}
             {g.items.length > visiblePerGroup && (

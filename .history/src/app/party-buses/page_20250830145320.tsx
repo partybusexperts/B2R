@@ -8,7 +8,6 @@ import StructuredData from "../../components/StructuredData";
 import OptimizedImage from "../../components/OptimizedImage";
 import { SmartImage } from "../../components/SmartImage";
 import ToolsGrid from "../../components/tools/ToolsGrid";
-import HomePolls from "../../components/HomePolls";
 
 
 const PHONE_DISPLAY = "(888) 535-2566";
@@ -193,22 +192,6 @@ export default function PartyBusesPage() {
 
           <div className="mb-6">
             <ToolsGrid limit={4} randomize={true} />
-          </div>
-        </div>
-      </section>
-
-      {/* POLLS: canonical HomePolls with inner scroll to match Polls page */}
-      <section className="max-w-6xl mx-auto px-4 md:px-6 my-12">
-        <div className="bg-[#122a56] border border-blue-800/30 rounded-3xl shadow-xl px-6 md:px-8 py-10">
-          <h2 className="text-3xl font-extrabold text-center text-white font-serif tracking-tight mb-3">Community Polls</h2>
-          <p className="text-blue-200 text-center max-w-3xl mx-auto mb-6">See what riders are saying about party buses, pricing, and trip planning. Vote or view results on the polls page.</p>
-
-          <div className="mb-6">
-            <HomePolls pickSize={150} visiblePerGroup={50} innerScroll={true} innerScrollClass="max-h-[48vh] overflow-y-auto no-scrollbar p-2 -mr-2" />
-          </div>
-
-          <div className="flex justify-center mt-6">
-            <a href="/polls" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-2xl shadow transition border border-blue-700">More Polls</a>
           </div>
         </div>
       </section>

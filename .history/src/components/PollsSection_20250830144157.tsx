@@ -183,7 +183,7 @@ export default function PollsSection({
   // When data or options change, ensure itemsState is set and apply client-only randomization.
   useEffect(() => {
     // Start from the deterministic set
-  const next = itemsDeterministic.slice();
+    let next = itemsDeterministic.slice();
     if (randomize && typeof window !== "undefined") {
       // shuffle in-place using Fisher-Yates
       for (let i = next.length - 1; i > 0; i--) {

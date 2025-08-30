@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PollCardPro from "../components/PollCardPro";
 
 type Poll = { id: string; question: string; options: string[]; tags?: string[]; active?: boolean; };
@@ -10,8 +10,8 @@ async function fetchAll(): Promise<PollsPayload> {
   const r = await fetch("/api/poll/all", { cache: "force-cache" });
   if (!r.ok) throw new Error("Failed to load polls");
   const body = await r.json();
-  const polls = Array.isArray(body.polls) ? (body.polls as Poll[]) : [];
-  const ids = polls.slice(0, 24).map((p) => p.id);
+  const polls = Array.isArray(body.polls) ? body.polls : [];
+  const ids = polls.slice(0, 24).map((p: unknown) => (p as any).id);
   let votes: Record<string, Record<string, number>> = {};
   if (ids.length) {
     try {
@@ -20,42 +20,27 @@ async function fetchAll(): Promise<PollsPayload> {
         const j = await br.json();
         votes = j && j.data ? j.data : {};
       }
-    } catch {
+    } catch (/*ignored*/ ) {
       votes = {};
     }
   }
   return { polls, votes };
 }
 
-// NOTE: randomness MUST only run on the client after hydration to avoid SSR/client markup mismatch.
 const shuffle = <T,>(arr: T[]) => { const c = [...arr]; for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; };
 const sample = <T,>(arr: T[], n: number) => shuffle(arr).slice(0, n);
 
-// Small helper: ensure labels are human-friendly and title-cased like the polls page
-function formatLabel(label?: string) {
-  if (!label) return "";
-  return String(label)
-    .replace(/[-_]/g, " ")
-    .split(" ")
-    .map(s => s.length ? s[0].toUpperCase() + s.slice(1).toLowerCase() : "")
-    .join(" ");
-}
-
-export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, innerScroll = false, innerScrollClass }: { groups?: { tag: string; label?: string }[]; pickSize?: number; visiblePerGroup?: number; innerScroll?: boolean; innerScrollClass?: string }) {
+export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3 }: { groups?: { tag: string; label?: string }[]; pickSize?: number; visiblePerGroup?: number }) {
   const [data, setData] = useState<PollsPayload | null>(null);
-  const [groupsPicked, setGroupsPicked] = useState<({ label?: string; tag: string; items: { poll: Poll; counts: Record<string, number> }[] }[]) | null>(null);
 
-  // Fetch polls (client-side). Initial server render will show a loading placeholder which keeps SSR vs client deterministic.
   useEffect(() => {
     let alive = true;
     fetchAll().then(d => { if (alive) setData(d); }).catch(() => {});
     return () => { alive = false; };
   }, []);
 
-  // After data is available on the client, compute picks and persist to sessionStorage. All randomness happens here.
-  useEffect(() => {
-    if (!data) return;
-
+  const groupsPicked = useMemo(() => {
+    if (!data) return [] as { label?: string; tag: string; items: { poll: Poll; counts: Record<string, number> }[] }[];
     const all = data.polls.filter(p => p.active !== false);
     const usedIds = new Set<string>();
 
@@ -63,14 +48,14 @@ export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, i
       try {
         const s = sessionStorage.getItem(`b2r_home_featured_${tag}`) || "[]";
         return JSON.parse(s) as string[];
-      } catch {
+      } catch (err) {
         return [];
       }
     };
     const toSession = (tag: string, ids: string[]) => {
       try {
         sessionStorage.setItem(`b2r_home_featured_${tag}`, JSON.stringify(ids));
-      } catch {
+      } catch (err) {
         // ignore session write failures
       }
     };
@@ -95,42 +80,29 @@ export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, i
       };
     };
 
-    let out: { label?: string; tag: string; items: { poll: Poll; counts: Record<string, number> }[] }[] = [];
     if (groups?.length) {
-      out = groups.map(g => build(g.tag, g.label));
-    } else {
-      const tagCount = new Map<string, number>();
-      all.forEach(p => (p.tags || []).forEach(t => tagCount.set(t, (tagCount.get(t) || 0) + 1)));
-      const sorted = Array.from(tagCount.entries()).sort((a,b)=>b[1]-a[1]).map(([t])=>t);
-      const chosen = sorted.slice(0,3);
-      out = chosen.map(t => build(t, t));
+      return groups.map(g => build(g.tag, g.label));
     }
 
-    setGroupsPicked(out);
-  }, [data, groups, pickSize]);
+    const tagCount = new Map<string, number>();
+    all.forEach(p => (p.tags || []).forEach(t => tagCount.set(t, (tagCount.get(t) || 0) + 1)));
+    const sorted = Array.from(tagCount.entries()).sort((a,b)=>b[1]-a[1]).map(([t])=>t);
+    const chosen = sorted.slice(0,3);
+    return chosen.map(t => build(t, t));
+  }, [data, groups]);
 
-  if (!data || groupsPicked === null) return <div className="text-center text-blue-200/80 py-6">Loading polls</div>;
+  if (!data) return <div className="text-center text-blue-200/80 py-6">Loading polls…</div>;
 
   return (
-    <div suppressHydrationWarning className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {groupsPicked.map((g, gi) => (
           <div key={gi}>
-            <h3 className="text-xl font-bold text-blue-50 mb-4">{formatLabel(g.label)}</h3>
+            <h3 className="text-xl font-bold text-blue-50 mb-4">{g.label}</h3>
             <div className="grid grid-cols-1 gap-4">
-              {
-                innerScroll ? (
-                  <div className={innerScrollClass || "max-h-[60vh] overflow-y-auto no-scrollbar p-1 -mr-2"}>
-                    {g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
-                      <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
-                    ))}
-                  </div>
-                ) : (
-                  g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
-                    <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
-                  ))
-                )
-              }
+              {g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
+                <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
+              ))}
             </div>
             {/* rail of the rest */}
             {g.items.length > visiblePerGroup && (

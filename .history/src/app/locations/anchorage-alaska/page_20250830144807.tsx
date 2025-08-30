@@ -10,6 +10,7 @@ import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
 import { SmartImage } from "../../../components/SmartImage";
 import { ReviewForm } from "../../../components/ReviewForm";
 import SlideshowMaker from "../../../components/SlideshowMaker";
+import ClientPolls from "../../../components/ClientPolls";
 import HomePolls from "../../../components/HomePolls";
 
 const anchorageNeighborhoods = [

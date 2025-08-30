@@ -221,7 +221,7 @@ export default function PricingPage() {
           See what riders value most on price—features, timing, trip length, and more.
         </p>
         <div className="max-w-6xl mx-auto">
-          <HomePolls pickSize={150} visiblePerGroup={3} />
+          <HomePolls />
         </div>
         <div className="flex justify-center mt-10">
           <a

@@ -10,7 +10,7 @@ import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
 import { SmartImage } from "../../../components/SmartImage";
 import { ReviewForm } from "../../../components/ReviewForm";
 import SlideshowMaker from "../../../components/SlideshowMaker";
-import HomePolls from "../../../components/HomePolls";
+import ClientPolls from "../../../components/ClientPolls";
 
 const anchorageNeighborhoods = [
   "Downtown","Midtown","South Anchorage","Hillside","Airport / Spenard","Turnagain","Government Hill","University / UMed","Muldoon","Eagle River (extension)"
@@ -364,10 +364,9 @@ export default function AnchoragePage() {
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Rider Polls</h2>
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Snapshot of planning preferences. Vote below or explore all polls on the <Link href="/polls" className="underline">live polls</Link> page. Your input helps us stock the right gear and plan realistic buffers for Anchorage trips.</p>
-          <div className="mx-auto max-w-5xl">
-            {/* Use canonical HomePolls for consistent UI; pass groups for anchorage tag to focus polls */}
-            <HomePolls groups={[{ tag: 'anchorage', label: 'Anchorage' }]} pickSize={50} visiblePerGroup={6} />
-          </div>
+        <div className="mx-auto max-w-5xl">
+          <ClientPolls polls={anchoragePolls} />
+        </div>
       </Section>
 
       {/* TOOLS */}

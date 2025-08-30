@@ -97,6 +97,7 @@ const eventBlurb = (title: string) =>
 export default function CoachBusesPage() {
   const [toolSearch, setToolSearch] = useState("");
   const [reviewSearch, setReviewSearch] = useState("");
+  const [pollSearch, setPollSearch] = useState("");
   const [eventSearch, setEventSearch] = useState("");
 
   // tools are provided by ToolsGrid; keep search state for UI only
@@ -109,7 +110,15 @@ export default function CoachBusesPage() {
     );
   }, [reviewSearch]);
 
-  // Polls are now served by HomePolls; local pollSearch/filter removed
+  const filteredPolls = useMemo(() => {
+    const q = pollSearch.trim().toLowerCase();
+    if (!q) return POLLS;
+    return POLLS.filter(
+      (p) =>
+        p.question.toLowerCase().includes(q) ||
+        p.options.some((o) => o.toLowerCase().includes(q))
+    );
+  }, [pollSearch]);
 
   const coachOptimized = useMemo(() => getCategoryImages("coachBuses"), []);
   const catalogCoaches = useMemo(() => {
@@ -291,7 +300,7 @@ export default function CoachBusesPage() {
         </div>
       </section>
 
-  {/* ---------- COACH POLLS (canonical) ---------- */}
+  {/* ---------- COACH POLLS ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
           Coach Bus Polls
@@ -300,7 +309,37 @@ export default function CoachBusesPage() {
           Real riders. Real opinions. Compare trends and get honest insights to plan the perfect night.
         </p>
         <div className="w-full flex justify-center mb-8">
-          <HomePolls groups={[{ tag: 'coach-buses', label: 'Coach Buses' }]} pickSize={50} visiblePerGroup={6} />
+          <input
+            type="text"
+            placeholder="Search polls…"
+            value={pollSearch}
+            onChange={(e) => setPollSearch(e.target.value)}
+            className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            aria-label="Search polls"
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+          {filteredPolls.map((poll, idx) => (
+            <div key={idx} className="bg-[#12244e] rounded-2xl shadow-xl border border-blue-800/30 p-6 flex flex-col items-center">
+              <h3 className="text-xl font-bold text-blue-50 mb-2 text-center">{poll.question}</h3>
+              <ul className="text-blue-100 mb-2 text-center">
+                {poll.options.map((opt, i) => (
+                  <li key={i}>{opt}</li>
+                ))}
+              </ul>
+              <span className="text-blue-200 text-sm">
+                Vote on our <a href="/polls" className="underline hover:text-blue-100">polls page</a>!
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center mt-10">
+          <a
+            href="/polls"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
+          >
+            More Polls
+          </a>
         </div>
       </section>
 

@@ -3,13 +3,15 @@
 import React, { useMemo, useState } from "react";
 import ToolsGrid from "../../components/tools/ToolsGrid";
 import HomePolls from "../../components/HomePolls";
-import { findByFileName } from "../../utils/optimizedImages";
+import { getCategoryImages, findByFileName } from "../../utils/optimizedImages";
 import { resolveVehicles } from "../../data/vehicles";
 import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
+import OptimizedImage from "../../components/OptimizedImage";
 
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
+const EMAIL = "info@bus2ride.com";
 
 const topCategoryOrder: { key: string; label: string; match: (cat: string) => boolean; href: string }[] = [
   { key: "limousines", label: "Limousines", match: (c) => c === "limousines", href: "/limousines" },
@@ -18,7 +20,10 @@ const topCategoryOrder: { key: string; label: string; match: (cat: string) => bo
   { key: "shuttles", label: "Shuttles", match: (c) => /shuttle/i.test(c), href: "/shuttles" },
 ];
 
-// POLLS placeholder removed; HomePolls provides canonical polls UI
+const POLLS = [
+  { question: "What matters most when booking a vehicle?", options: ["Price", "Size", "Availability", "Amenities"] },
+  { question: "Would you split the cost with your group?", options: ["Yes", "Sometimes", "No"] },
+];
 
 const REVIEWS = [
   { name: "Paul P.", text: "Absolutely excellent! Great customer service! The price was very good. The driver was professional. The vehicle looked pristine." },
@@ -29,7 +34,7 @@ const REVIEWS = [
 export default function FleetPage() {
   const [toolSearch, setToolSearch] = useState("");
   const [reviewSearch, setReviewSearch] = useState("");
-  // legacy poll search removed; HomePolls handles its own search when needed
+  const [pollSearch, setPollSearch] = useState("");
 
   const catalog = useMemo(() => resolveVehicles(findByFileName), []);
 
@@ -39,7 +44,11 @@ export default function FleetPage() {
     return REVIEWS.filter((r) => r.name.toLowerCase().includes(q) || r.text.toLowerCase().includes(q));
   }, [reviewSearch]);
 
-  // filteredPolls removed
+  const filteredPolls = useMemo(() => {
+    const q = pollSearch.trim().toLowerCase();
+    if (!q) return POLLS;
+    return POLLS.filter((p) => p.question.toLowerCase().includes(q) || p.options.some((o) => o.toLowerCase().includes(q)));
+  }, [pollSearch]);
 
   return (
     <main className="text-slate-100 bg-[#0f1f46]">
@@ -118,7 +127,7 @@ export default function FleetPage() {
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-6">Real riders. Real opinions. Compare trends and get honest insights to plan the perfect group trip.</p>
         <div className="max-w-6xl mx-auto">
           {/* HomePolls auto-selects 3 categories and shows 3 items per column, with a horizontal rail for the rest. */}
-          <HomePolls pickSize={150} visiblePerGroup={3} />
+          <HomePolls />
         </div>
         <div className="flex justify-center mt-10">
           <a href="/polls" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700">More Polls</a>

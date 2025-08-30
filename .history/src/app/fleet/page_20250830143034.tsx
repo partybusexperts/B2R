@@ -7,6 +7,7 @@ import { findByFileName } from "../../utils/optimizedImages";
 import { resolveVehicles } from "../../data/vehicles";
 import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
+import OptimizedImage from "../../components/OptimizedImage";
 
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";

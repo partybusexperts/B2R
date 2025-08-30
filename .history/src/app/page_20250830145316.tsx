@@ -935,7 +935,7 @@ export default function Home() {
   </div>
   <ClientOnly>
   {/* Homepage: show up to 150 polls (50 per column) to match requested layout */}
-  <HomePolls pickSize={150} visiblePerGroup={50} innerScroll={true} innerScrollClass="max-h-[60vh] overflow-y-auto no-scrollbar p-2 -mr-2" />
+  <HomePolls pickSize={150} visiblePerGroup={50} />
   </ClientOnly>
   </Section>
   {/* Live Weather & Comfort Advisor */}

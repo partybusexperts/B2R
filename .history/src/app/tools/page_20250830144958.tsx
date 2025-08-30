@@ -4,7 +4,7 @@ import React, { useMemo, useRef, useState } from "react";
 import tools, { CATEGORY_ORDER, ToolCategory, ToolEntry } from "@/components/tools/registry";
 import Section from "@/components/Section";
 import SmartImage from "@/components/SmartImage";
-import HomePolls from "../../components/HomePolls";
+import HomePolls from "@/components/HomePolls";
 
 /* ---------- helpers ---------- */
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
