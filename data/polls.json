@@ -14,6 +14,12 @@
     },
     "industry_secrets_q_09": {
       "Yes": 1
+    },
+    "blogs_q_01": {
+      "Regularly": 1
+    },
+    "event_type": {
+      "Wedding": 1
     }
   }
 }

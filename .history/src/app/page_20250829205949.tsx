@@ -11,7 +11,9 @@ import PartyBusFeatureModalButton from "../components/PartyBusFeatureModalButton
 import { useMemo } from "react";
 import SlideshowMaker from "../components/SlideshowMaker";
 import { ReviewForm } from "../components/ReviewForm";
-// PollsSection usage replaced by HomePolls (rotating 24 polls: 3 tags × 8 each)
+import dynamic from 'next/dynamic';
+// Dynamically load the PollsSection to keep the homepage bundle small and avoid blocking render
+const PollsSection = dynamic(() => import('../components/PollsSection'), { ssr: false, loading: () => <div className="text-center text-blue-200/80 py-6">Loading live polls…</div> });
 import ClientOnly from '../components/ClientOnly';
 import HomePolls from '../components/HomePolls';
 import WhyRentWithUs from "../components/WhyRentWithUs";
@@ -972,7 +974,7 @@ export default function Home() {
     </p>
   </div>
   <ClientOnly>
-    <HomePolls />
+    <PollsSection />
   </ClientOnly>
   </Section>
   {/* Live Weather & Comfort Advisor */}

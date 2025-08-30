@@ -20,7 +20,30 @@ type PollResults = Record<string, Record<string, number>>;
 const fmt = (n: number) => n.toLocaleString();
 const percent = (num: number, den: number) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
-// CSV export utilities removed; Copy JSON provides the flattened rows if needed.
+/** Build CSV of the current visible rows. */
+function buildCSV(rows: { poll: Poll; counts: Record<string, number>; total: number }[]) {
+  const lines: string[] = [
+    ["poll_id", "question", "option", "votes", "percent", "total_votes"].join(","),
+  ];
+  for (const { poll, counts, total } of rows) {
+    for (const opt of poll.options) {
+      const v = counts[opt] ?? 0;
+      const p = percent(v, total);
+      lines.push(
+        [JSON.stringify(poll.id), JSON.stringify(poll.question), JSON.stringify(opt), v, `${p}%`, total].join(",")
+      );
+    }
+  }
+  return lines.join("\n");
+}
+
+function download(filename: string, text: string) {
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+  a.remove(); URL.revokeObjectURL(url);
+}
 
 /* --------------------------------- Page --------------------------------- */
 export default function PollResultsPage() {
@@ -112,29 +135,6 @@ export default function PollResultsPage() {
     setExpanded(next);
   };
 
-  // Modal to view a single category without scrolling the whole page
-  const [modalCategory, setModalCategory] = useState<string | null>(null);
-  const [modalQ, setModalQ] = useState<string>("");
-  const openModal = (cat: string) => {
-    setModalCategory(cat);
-    setModalQ("");
-    // lock body scroll
-    document.body.style.overflow = "hidden";
-  };
-  const closeModal = () => {
-    setModalCategory(null);
-    document.body.style.overflow = "";
-  };
-
-  // Close modal on ESC
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") closeModal();
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
   return (
     <PageLayout
       gradientFrom="from-blue-950"
@@ -217,7 +217,7 @@ export default function PollResultsPage() {
       </Section>
 
       {/* RESULTS TABLE */}
-      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-6 py-8 px-6 border border-blue-800/30 relative">
+  <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl my-6 py-8 px-6 border border-blue-800/30 relative">
         {loading ? (
           <div className="space-y-2">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -251,8 +251,8 @@ export default function PollResultsPage() {
 
             <div>
               {grouped.length === 0 ? (
-                <div className="p-8 text-center text-blue-200">No polls found.</div>
-              ) : (
+              <div className="p-8 text-center text-blue-200">No polls found.</div>
+            ) : (
                 grouped.map(({ category, rows }) => {
                   const isExpanded = !!expanded[category];
                   const limit = 6;
@@ -263,12 +263,9 @@ export default function PollResultsPage() {
                         <h3 className="text-xl font-bold text-blue-200 mb-3 capitalize">{category.replace(/[-_]/g, ' ')}</h3>
                         <div className="flex items-center gap-2">
                           <div className="text-sm text-blue-300 mr-2">{rows.length} polls</div>
-                          <div className="flex items-center gap-2">
-                            <button onClick={() => toggleCategory(category)} aria-expanded={isExpanded} className="text-sm px-3 py-1 bg-blue-800 text-blue-100 rounded">
-                              {isExpanded ? 'Collapse' : `Show ${Math.max(0, rows.length - limit)} more`}
-                            </button>
-                            <button onClick={() => openModal(category)} className="text-sm px-3 py-1 bg-transparent border border-blue-800 text-blue-100 rounded">View all</button>
-                          </div>
+                          <button onClick={() => toggleCategory(category)} aria-expanded={isExpanded} className="text-sm px-3 py-1 bg-blue-800 text-blue-100 rounded">
+                            {isExpanded ? 'Collapse' : `Show ${Math.max(0, rows.length - limit)} more`}
+                          </button>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -301,68 +298,6 @@ export default function PollResultsPage() {
                     </div>
                   );
                 })
-              )}
-            </div>
-
-            {/* Modal for full category view */}
-            {modalCategory && (
-              <div className="fixed inset-0 z-50 flex items-start justify-center p-6">
-                <div className="absolute inset-0 bg-black/60" onClick={closeModal} />
-                <div className="relative bg-blue-900/80 rounded-lg max-w-4xl w-full mx-auto p-6 overflow-auto max-h-[80vh] border border-blue-800/40">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-lg font-bold text-blue-100">{modalCategory.replace(/[-_]/g, ' ')}</h4>
-                    <div className="flex items-center gap-2">
-                      <input
-                        value={modalQ}
-                        onChange={(e) => setModalQ(e.target.value)}
-                        placeholder="Filter category polls…"
-                        className="rounded px-3 py-2 bg-[#0c1a33] text-blue-100 border border-blue-800/30"
-                      />
-                      <button onClick={closeModal} className="px-3 py-2 bg-blue-800 rounded text-blue-100">Close</button>
-                    </div>
-                  </div>
-                  {(() => {
-                    const group = grouped.find((g) => g.category === modalCategory);
-                    const rows = group
-                      ? group.rows.filter(({ poll }) => {
-                          const ql = modalQ.trim().toLowerCase();
-                          return (
-                            !ql || poll.question.toLowerCase().includes(ql) || poll.options.some((o) => o.toLowerCase().includes(ql))
-                          );
-                        })
-                      : [];
-                    return (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {rows.map(({ poll, counts, total }) => (
-                          <div key={poll.id} className="p-4 bg-blue-950/60 rounded-lg border border-blue-800/30 shadow-sm">
-                            <div className="font-semibold text-blue-100 mb-2">{poll.question}</div>
-                            <div className="space-y-2">
-                              {poll.options.map((opt) => {
-                                const c = Number(counts[opt] || 0);
-                                const p = percent(c, total);
-                                return (
-                                  <div key={opt} className="flex items-center gap-3">
-                                    <div className="flex-1">
-                                      <div className="flex justify-between text-sm text-blue-200">
-                                        <div className="font-medium">{opt}</div>
-                                        <div className="font-mono text-blue-100">{fmt(c)}{total>0?` (${p}%)`:''}</div>
-                                      </div>
-                                      <div className="mt-1 h-2 rounded bg-blue-900/40">
-                                        <div className="h-2 rounded bg-blue-500" style={{ width: `${p}%` }} />
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                            <div className="mt-3 text-sm text-blue-300">Total votes: <span className="font-bold text-blue-100">{fmt(total)}</span></div>
-                          </div>
-                        ))}
-                      </div>
-                    );
-                  })()}
-                </div>
-              </div>
             )}
           </div>
         )}

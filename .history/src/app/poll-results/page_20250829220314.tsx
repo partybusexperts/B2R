@@ -20,7 +20,30 @@ type PollResults = Record<string, Record<string, number>>;
 const fmt = (n: number) => n.toLocaleString();
 const percent = (num: number, den: number) => (den > 0 ? Math.round((num / den) * 100) : 0);
 
-// CSV export utilities removed; Copy JSON provides the flattened rows if needed.
+/** Build CSV of the current visible rows. */
+function buildCSV(rows: { poll: Poll; counts: Record<string, number>; total: number }[]) {
+  const lines: string[] = [
+    ["poll_id", "question", "option", "votes", "percent", "total_votes"].join(","),
+  ];
+  for (const { poll, counts, total } of rows) {
+    for (const opt of poll.options) {
+      const v = counts[opt] ?? 0;
+      const p = percent(v, total);
+      lines.push(
+        [JSON.stringify(poll.id), JSON.stringify(poll.question), JSON.stringify(opt), v, `${p}%`, total].join(",")
+      );
+    }
+  }
+  return lines.join("\n");
+}
+
+function download(filename: string, text: string) {
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+  a.remove(); URL.revokeObjectURL(url);
+}
 
 /* --------------------------------- Page --------------------------------- */
 export default function PollResultsPage() {
