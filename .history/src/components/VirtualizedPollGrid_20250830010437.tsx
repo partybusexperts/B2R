@@ -4,7 +4,7 @@
  */
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { Poll } from '@/lib/pollsStore';
 
 interface VirtualizedPollGridProps {
