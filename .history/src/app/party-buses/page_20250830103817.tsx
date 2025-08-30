@@ -139,18 +139,11 @@ export default function PartyBusesPage() {
             {filteredEvents.map((ev) => (
               <div key={ev.title} className="relative rounded-2xl overflow-hidden border border-blue-800/30 shadow-lg bg-[#173264] flex flex-col">
                 <div className="h-60 md:h-72 w-full relative">
-                  {/* Prefer an actual event photo (public/images/events) when available. If not, fall back to optimized vehicle images, then to the generic fallback. */}
-                  {ev.fallback && String(ev.fallback).startsWith("/images/events/") ? (
-                    <SmartImage src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
-                  ) : ev.optimizedEntries && ev.optimizedEntries.length ? (
+                  {ev.optimizedEntries && ev.optimizedEntries.length ? (
                     <OptimizedImage entry={ev.optimizedEntries[0]} alt={ev.title} className="w-full h-full object-cover" fillParent priorityIfAbove={2000} sizesOverride="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" minDesiredWidth={900} />
                   ) : (
                     <SmartImage src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
                   )}
-                  {/* Server-side fallback for non-JS / SEO: ensure the initial HTML includes the event image if available */}
-                  <noscript>
-                    <img src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
-                  </noscript>
                 </div>
 
                 <div className="absolute inset-x-0 top-0 p-5 bg-gradient-to-b from-black/35 via-black/20 to-transparent pointer-events-none">

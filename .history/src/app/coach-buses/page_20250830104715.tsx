@@ -608,18 +608,11 @@ export default function CoachBusesPage() {
               >
                 {/* Image */}
                 <div className="h-60 md:h-72 w-full relative">
-                  {/* Prefer an actual event photo (public/images/events) when available. If not, fall back to optimized vehicle images, then to the generic fallback. */}
-                  {ev.fallback && String(ev.fallback).startsWith("/images/events/") ? (
-                    <SmartImage src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
-                  ) : ev.optimizedEntries && ev.optimizedEntries.length ? (
+                  {ev.optimizedEntries && ev.optimizedEntries.length ? (
                     <OptimizedImage entry={ev.optimizedEntries[0]} alt={ev.title} className="w-full h-full object-cover" fillParent priorityIfAbove={2000} />
                   ) : (
                     <SmartImage src={ev.fallback || ev.image} alt={ev.title} className="w-full h-full object-cover" />
                   )}
-                  {/* Server-side fallback for non-JS / SEO: ensure the initial HTML includes the event image if available */}
-                  <noscript>
-                    <img src={ev.fallback || ev.image} alt={ev.title} className="w-full h-full object-cover" />
-                  </noscript>
                 </div>
 
                 {/* Title + blurb overlay on top of image */}

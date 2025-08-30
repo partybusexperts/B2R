@@ -147,10 +147,6 @@ export default function PartyBusesPage() {
                   ) : (
                     <SmartImage src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
                   )}
-                  {/* Server-side fallback for non-JS / SEO: ensure the initial HTML includes the event image if available */}
-                  <noscript>
-                    <img src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
-                  </noscript>
                 </div>
 
                 <div className="absolute inset-x-0 top-0 p-5 bg-gradient-to-b from-black/35 via-black/20 to-transparent pointer-events-none">

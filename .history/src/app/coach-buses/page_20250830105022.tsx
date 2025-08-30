@@ -616,10 +616,6 @@ export default function CoachBusesPage() {
                   ) : (
                     <SmartImage src={ev.fallback || ev.image} alt={ev.title} className="w-full h-full object-cover" />
                   )}
-                  {/* Server-side fallback for non-JS / SEO: ensure the initial HTML includes the event image if available */}
-                  <noscript>
-                    <img src={ev.fallback || ev.image} alt={ev.title} className="w-full h-full object-cover" />
-                  </noscript>
                 </div>
 
                 {/* Title + blurb overlay on top of image */}
