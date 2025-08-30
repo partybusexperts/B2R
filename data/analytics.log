@@ -1,1 +1,5 @@
 {"t":1756540304126,"event":"vote","pollId":"newer-vehicle","option":"Yes"}
+{"t":1756585179259,"event":"vote","pollId":"partybus_q_03","option":"Half day"}
+{"t":1756586692361,"event":"vote","pollId":"limo_nightmare_q_21","option":"Yes"}
+{"t":1756586695873,"event":"copy_embed","pollId":"limo_nightmare_q_21"}
+{"t":1756586823117,"event":"vote","pollId":"partybus_q_15","option":"Sometimes"}

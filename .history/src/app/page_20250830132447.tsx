@@ -1,7 +1,6 @@
 // Server component: avoid client-only hooks here. Client interactive pieces are imported below.
 import React from "react";
 import PageLayout from "../components/PageLayout";
-import StepCard from "../components/StepCard";
 import Section from "../components/Section";
 import LiveWeatherAdvisor from "../components/LiveWeatherAdvisor";
 import ToolsSlider from '../components/ToolsSlider';
@@ -33,7 +32,6 @@ const eventOptimizedAll = getCategoryImages('eventImages');
 // Reusable inline component for trust statistic modal cards
 // TrustStatModalCard is a client component (modal) to avoid hydration mismatches.
 import TrustStatModalCard from '../components/TrustStatModalCard';
-import ClickableCard from '../components/ClickableCard';
 
 export default function Home() {
   // For demo: assign a random party bus image to each event card
@@ -1013,10 +1011,13 @@ export default function Home() {
         const insertCta = i === 7 || i === 15;
         return (
           <React.Fragment key={event}>
-            {/* Event Card (client wrapper handles navigation & keyboard) */}
-            <ClickableCard
-              slug={slug}
-              ariaLabel={`${event} details`}
+            {/* Event Card (outer wrapper is a div acting like a link to avoid nested <a> elements) */}
+            <div
+              role="link"
+              tabIndex={0}
+              aria-label={`${event} details`}
+              onClick={() => { window.location.href = `/events/${slug}`; }}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.location.href = `/events/${slug}`; } }}
               className="group cursor-pointer relative rounded-[24px] overflow-hidden border border-blue-800/30 bg-[#173264] shadow-[0_10px_30px_rgba(2,6,23,.35)] hover:shadow-2xl hover:-translate-y-1 transition focus:outline-none focus:ring-4 focus:ring-blue-400/40"
             >
               {/* Image (taller, roomy) */}
@@ -1069,7 +1070,7 @@ export default function Home() {
 
               {/* Soft glow on hover */}
               <div className="pointer-events-none absolute -inset-[1px] rounded-[24px] opacity-0 group-hover:opacity-100 transition duration-300 blur-sm bg-gradient-to-br from-sky-300/20 via-blue-500/20 to-indigo-400/20" />
-            </ClickableCard>
+            </div>
 
             {/* Mid-grid CTA bands after full rows (8th, 16th, …) */}
             {insertCta && (
@@ -1359,3 +1360,49 @@ export default function Home() {
 }
 
 // Step card for "How It Works" section (entire card clickable including icon)
+function StepCard({ icon, label, title, body, stepIndex }: { icon: string; label: string; title: string; body: React.ReactNode; stepIndex: number }) {
+  const [open, setOpen] = React.useState(false);
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
+  return (
+    <div className="relative">
+      {/* connector dot (desktop) */}
+      <div className="hidden md:block absolute -top-[11px] left-1/2 -translate-x-1/2 h-5 w-5 rounded-full bg-white border-2 border-blue-300 shadow" />
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={`${label} details`}
+        onClick={openModal}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); } }}
+        className="group cursor-pointer bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center border-2 border-blue-100 hover:shadow-2xl transition relative h-full focus:outline-none focus:ring-4 focus:ring-blue-400/40"
+      >
+        <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-blue-400/0 group-hover:ring-blue-400/30 transition" />
+        <span className="text-4xl mb-3 select-none" aria-hidden="true">{icon}</span>
+        <span className="text-blue-900 font-bold text-base tracking-tight mb-1 text-center">{label}</span>
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 text-2xl pointer-events-none">→</span>
+        <div className="absolute -top-3 left-3">
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-600 text-white border border-blue-300/40 tracking-wide">
+            STEP {stepIndex + 1}
+          </span>
+        </div>
+      </div>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative animate-fade-in">
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 text-gray-500 hover:text-blue-700 text-2xl font-bold focus:outline-none"
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <h3 className="text-2xl font-bold mb-4 text-blue-900">{title}</h3>
+            <div className="text-gray-800 text-base leading-relaxed space-y-3">
+              {body}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -53,8 +53,11 @@ export default function AnchoragePage() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 text-[13px]"><span className="font-semibold">Instant Quote:</span> <a href="/quote#instant" className="underline">Get a live price</a> — <a href="tel:8885352566" className="underline">(888) 535‑2566</a> • <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a></div>
           <div className="hidden md:flex items-center gap-3 text-[12px]"><span className="px-2 py-1 bg-blue-700 rounded-full">Local Experts</span><span className="px-2 py-1 bg-blue-700 rounded-full">Winter-Ready Fleet</span><span className="px-2 py-1 bg-blue-700 rounded-full">24/7 Support</span></div>
-  </div>
-  </div>
+        <ClickableCard
+              slug={slug}
+              ariaLabel={`${event} details`}
+              className="group cursor-pointer relative rounded-[24px] overflow-hidden border border-blue-800/30 bg-[#173264] shadow-[0_10px_30px_rgba(2,6,23,.35)] hover:shadow-2xl hover:-translate-y-1 transition focus:outline-none focus:ring-4 focus:ring-blue-400/40"
+            >
   {/* Salesy booster line */}
   <p className="relative z-10 max-w-3xl mx-auto text-md md:text-lg mt-4 text-yellow-200 font-semibold leading-relaxed">Book smarter: instant quotes in seconds, attentive local dispatch, flexible aurora-ready windows, and guaranteed on-time pickups. Call <a href="tel:8885352566" className="underline">(888) 535‑2566</a> or <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> — we will handle the weather, routing, and gear.</p>
         {/* Hero benefits & urgency chips */}
@@ -109,7 +112,7 @@ export default function AnchoragePage() {
               <div className="font-bold text-blue-50">18 Passenger Party Bus</div>
               <div className="text-blue-200 text-sm mt-1">Perfect for night-out groups, premium sound and lighting.</div>
               <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
+            </ClickableCard>
           </div>
 
           <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">

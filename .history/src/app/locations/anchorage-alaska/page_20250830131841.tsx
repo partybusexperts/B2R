@@ -53,8 +53,14 @@ export default function AnchoragePage() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 text-[13px]"><span className="font-semibold">Instant Quote:</span> <a href="/quote#instant" className="underline">Get a live price</a> — <a href="tel:8885352566" className="underline">(888) 535‑2566</a> • <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a></div>
           <div className="hidden md:flex items-center gap-3 text-[12px]"><span className="px-2 py-1 bg-blue-700 rounded-full">Local Experts</span><span className="px-2 py-1 bg-blue-700 rounded-full">Winter-Ready Fleet</span><span className="px-2 py-1 bg-blue-700 rounded-full">24/7 Support</span></div>
-  </div>
-  </div>
+        </div>
+      </div>
+      {/* HERO */}
+      <section className="relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[560px] py-24">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,#1e3a8a_0%,#0b1934_55%,#030712_100%)]" />
+  <div className="absolute inset-0 bg-[url(/images/party-buses/18 Passenger White Party Bus Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
+        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.55)] font-serif">Anchorage Party Bus, Limo & Charter Service</h1>
+  <p className="relative z-10 max-w-4xl mx-auto text-xl md:text-2xl mt-6 text-blue-100 font-medium leading-relaxed">Cruise transfers • Aurora & winter readiness • Corporate shuttles • Weddings • Excursions to Seward, Whittier & Alyeska. Professional drivers. Local logistics expertise.</p>
   {/* Salesy booster line */}
   <p className="relative z-10 max-w-3xl mx-auto text-md md:text-lg mt-4 text-yellow-200 font-semibold leading-relaxed">Book smarter: instant quotes in seconds, attentive local dispatch, flexible aurora-ready windows, and guaranteed on-time pickups. Call <a href="tel:8885352566" className="underline">(888) 535‑2566</a> or <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> — we will handle the weather, routing, and gear.</p>
         {/* Hero benefits & urgency chips */}

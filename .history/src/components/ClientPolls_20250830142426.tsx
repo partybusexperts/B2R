@@ -3,6 +3,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 /* ===== Types (robust to varied registry shapes) ===== */
+"use client";
+
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+/* ===== Types (robust to varied registry shapes) ===== */
 type Poll = {
   id?: string | number;
   question?: string;

@@ -33,7 +33,6 @@ const eventOptimizedAll = getCategoryImages('eventImages');
 // Reusable inline component for trust statistic modal cards
 // TrustStatModalCard is a client component (modal) to avoid hydration mismatches.
 import TrustStatModalCard from '../components/TrustStatModalCard';
-import ClickableCard from '../components/ClickableCard';
 
 export default function Home() {
   // For demo: assign a random party bus image to each event card
@@ -1013,10 +1012,13 @@ export default function Home() {
         const insertCta = i === 7 || i === 15;
         return (
           <React.Fragment key={event}>
-            {/* Event Card (client wrapper handles navigation & keyboard) */}
-            <ClickableCard
-              slug={slug}
-              ariaLabel={`${event} details`}
+            {/* Event Card (outer wrapper is a div acting like a link to avoid nested <a> elements) */}
+            <div
+              role="link"
+              tabIndex={0}
+              aria-label={`${event} details`}
+              onClick={() => { window.location.href = `/events/${slug}`; }}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.location.href = `/events/${slug}`; } }}
               className="group cursor-pointer relative rounded-[24px] overflow-hidden border border-blue-800/30 bg-[#173264] shadow-[0_10px_30px_rgba(2,6,23,.35)] hover:shadow-2xl hover:-translate-y-1 transition focus:outline-none focus:ring-4 focus:ring-blue-400/40"
             >
               {/* Image (taller, roomy) */}
@@ -1069,7 +1071,7 @@ export default function Home() {
 
               {/* Soft glow on hover */}
               <div className="pointer-events-none absolute -inset-[1px] rounded-[24px] opacity-0 group-hover:opacity-100 transition duration-300 blur-sm bg-gradient-to-br from-sky-300/20 via-blue-500/20 to-indigo-400/20" />
-            </ClickableCard>
+            </div>
 
             {/* Mid-grid CTA bands after full rows (8th, 16th, …) */}
             {insertCta && (

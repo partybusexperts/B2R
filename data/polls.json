@@ -23,6 +23,15 @@
     },
     "newer-vehicle": {
       "Yes": 1
+    },
+    "partybus_q_03": {
+      "Half day": 1
+    },
+    "limo_nightmare_q_21": {
+      "Yes": 1
+    },
+    "partybus_q_15": {
+      "Sometimes": 1
     }
   }
 }
