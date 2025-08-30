@@ -72,82 +72,24 @@ async function ensureFile(): Promise<void> {
 }
 
 async function readVotes(): Promise<Record<string, Record<string, number>>> {
-  // Prefer in-memory cache if loaded
-  if (VOTES_CACHE) return VOTES_CACHE;
   await ensureFile();
   try {
     const raw = await fs.readFile(DATA_PATH, 'utf8');
     const json = JSON.parse(raw || '{}');
-    VOTES_CACHE = json.votes || {};
-    return VOTES_CACHE;
+    return json.votes || {};
   } catch {
-    VOTES_CACHE = {};
-    return VOTES_CACHE;
+    return {};
   }
 }
 
 async function writeVotes(votes: Record<string, Record<string, number>>) {
-  // Legacy immediate-write path kept for compatibility; prefer schedulePersistVotes
-  VOTES_CACHE = votes;
-  return schedulePersistVotes();
+  writeQueue = writeQueue.then(async () => {
+    const tmp = DATA_PATH + '.tmp';
+    await fs.writeFile(tmp, JSON.stringify({ votes }, null, 2), 'utf8');
+    await fs.rename(tmp, DATA_PATH);
+  });
+  return writeQueue;
 }
-
-// In-memory cache for votes to reduce per-request disk I/O
-let VOTES_CACHE: Record<string, Record<string, number>> | null = null;
-
-// Debounced / batched write machinery
-let pendingWriteTimer: NodeJS.Timeout | null = null;
-let pendingWritePromise: Promise<void> | null = null;
-const WRITE_DEBOUNCE_MS = 2000; // batch writes within this window
-
-async function persistVotesNow(): Promise<void> {
-  const tmp = DATA_PATH + '.tmp';
-  const payload = JSON.stringify({ votes: VOTES_CACHE || {} }, null, 2);
-  await fs.writeFile(tmp, payload, 'utf8');
-  await fs.rename(tmp, DATA_PATH);
-}
-
-function schedulePersistVotes(): Promise<void> {
-  if (pendingWriteTimer) clearTimeout(pendingWriteTimer);
-  if (!pendingWritePromise) {
-    // Start a promise that will be replaced on subsequent writes
-    pendingWritePromise = new Promise((resolve, reject) => {
-      pendingWriteTimer = setTimeout(async () => {
-        try {
-          await persistVotesNow();
-          resolve();
-        } catch (err) {
-          // swallow; next write will retry
-          reject(err);
-        } finally {
-          pendingWritePromise = null;
-          pendingWriteTimer = null;
-        }
-      }, WRITE_DEBOUNCE_MS);
-    });
-    return pendingWritePromise;
-  }
-  // If a write is already pending, create a chained promise to wait for it
-  const chain = pendingWritePromise.then(() => Promise.resolve());
-  return chain;
-}
-
-// Best-effort flush on process exit
-try {
-  if (typeof process !== 'undefined' && process && typeof process.on === 'function') {
-    process.on('exit', () => {
-      try {
-        if (VOTES_CACHE) fsSync.writeFileSync(DATA_PATH, JSON.stringify({ votes: VOTES_CACHE }, null, 2), 'utf8');
-      } catch (e) {
-        // ignore
-      }
-    });
-  }
-} catch {}
-
-// Results cache to avoid recomputing totals repeatedly for hot polls
-const RESULTS_CACHE = new Map<string, { ts: number; results: Record<string, number>; total: number }>();
-const RESULTS_TTL_MS = 5000;
 
 /* Public API */
 export async function getAll(): Promise<PollsData> {
@@ -165,21 +107,10 @@ export async function getAll(): Promise<PollsData> {
 }
 
 export async function getResults(id: string): Promise<{ poll: Poll | null; results: Record<string, number>; total: number }> {
-  // Check results cache first
-  const cached = RESULTS_CACHE.get(id);
-  const now = Date.now();
-  if (cached && now - cached.ts < RESULTS_TTL_MS) {
-    const { results, total } = cached;
-    const { polls } = await getAll();
-    const poll = polls.find(p => p.id === id) || null;
-    return { poll, results: { ...results }, total };
-  }
-
   const { polls, votes } = await getAll();
   const poll = polls.find(p => p.id === id) || null;
   const results = votes[id] || {};
   const total = Object.values(results).reduce((a, b) => a + b, 0);
-  RESULTS_CACHE.set(id, { ts: now, results: { ...results }, total });
   return { poll, results, total };
 }
 
@@ -191,13 +122,9 @@ export async function vote(pollId: string, option: string): Promise<{ results: R
   const votes = await readVotes();
   if (!votes[pollId]) votes[pollId] = {};
   votes[pollId][option] = (votes[pollId][option] || 0) + 1;
-  // update in-memory cache and schedule persist
-  VOTES_CACHE = votes;
-  await schedulePersistVotes();
-  // invalidate/refresh results cache for this poll
+  await writeVotes(votes);
   const results = votes[pollId];
   const total = Object.values(results).reduce((a, b) => a + b, 0);
-  RESULTS_CACHE.set(pollId, { ts: Date.now(), results: { ...results }, total });
   return { results, total };
 }
 
@@ -212,11 +139,12 @@ export async function increment(pollId: string, option: string): Promise<void> {
 }
 
 export async function forceWrite(): Promise<void> {
-  // Force persist the in-memory votes cache
+  const votes = await readVotes();
   try {
-    await persistVotesNow();
+    const tmp = DATA_PATH + '.tmp';
+    await fs.writeFile(tmp, JSON.stringify({ votes }, null, 2), 'utf8');
+    await fs.rename(tmp, DATA_PATH);
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error('forceWrite failed:', err);
   }
 }
