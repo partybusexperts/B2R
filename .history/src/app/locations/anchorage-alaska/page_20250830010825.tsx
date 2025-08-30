@@ -48,36 +48,18 @@ const anchoragePolls = Array.isArray(pollsRegistry)
 export default function AnchoragePage() {
   return (
     <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
-      {/* TOP MICRO-CTA BAR */}
-      <div className="w-full bg-gradient-to-r from-blue-900 to-blue-800 text-sm text-blue-100 py-2">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4 text-[13px]"><span className="font-semibold">Instant Quote:</span> <a href="/quote#instant" className="underline">Get a live price</a> — <a href="tel:8885352566" className="underline">(888) 535‑2566</a> • <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a></div>
-          <div className="hidden md:flex items-center gap-3 text-[12px]"><span className="px-2 py-1 bg-blue-700 rounded-full">Local Experts</span><span className="px-2 py-1 bg-blue-700 rounded-full">Winter-Ready Fleet</span><span className="px-2 py-1 bg-blue-700 rounded-full">24/7 Support</span></div>
-        </div>
-      </div>
       {/* HERO */}
       <section className="relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[560px] py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,#1e3a8a_0%,#0b1934_55%,#030712_100%)]" />
-  <div className="absolute inset-0 bg-[url(/images/party-buses/18%20Passenger%20White%20Party%20Bus%20Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-[url(/images/18%20Passenger%20White%20Party%20Bus%20Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
         <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.55)] font-serif">Anchorage Party Bus, Limo & Charter Service</h1>
-  <p className="relative z-10 max-w-4xl mx-auto text-xl md:text-2xl mt-6 text-blue-100 font-medium leading-relaxed">Cruise transfers • Aurora & winter readiness • Corporate shuttles • Weddings • Excursions to Seward, Whittier & Alyeska. Professional drivers. Local logistics expertise.</p>
-  {/* Salesy booster line */}
-  <p className="relative z-10 max-w-3xl mx-auto text-md md:text-lg mt-4 text-yellow-200 font-semibold leading-relaxed">Book smarter: instant quotes in seconds, attentive local dispatch, flexible aurora-ready windows, and guaranteed on-time pickups. Call <a href="tel:8885352566" className="underline">(888) 535‑2566</a> or <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> — we will handle the weather, routing, and gear.</p>
-        {/* Hero benefits & urgency chips */}
-        <div className="relative z-10 mt-6 flex flex-wrap gap-3 items-center justify-center">
-          <span className="px-3 py-1 rounded-full bg-yellow-600 text-black font-semibold text-sm">Instant Quotes</span>
-          <span className="px-3 py-1 rounded-full bg-blue-700 text-white font-semibold text-sm">Local Dispatch</span>
-          <span className="px-3 py-1 rounded-full bg-blue-700 text-white font-semibold text-sm">Winter-Ready Fleet</span>
-          <span className="ml-4 px-3 py-1 rounded-full bg-red-600 text-white font-bold text-sm">Limited vehicles for peak cruise dates — reserve early</span>
-        </div>
+        <p className="relative z-10 max-w-4xl mx-auto text-xl md:text-2xl mt-6 text-blue-100 font-medium leading-relaxed">Cruise transfers • Aurora & winter readiness • Corporate shuttles • Weddings • Excursions to Seward, Whittier & Alyeska. Professional drivers. Local logistics expertise.</p>
         <div className="relative z-10 mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-3xl justify-center">
           <a href="/quote#instant" className="rounded-full bg-white text-blue-900 font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-50 transition">⚡ Instant Quote</a>
           <a href="/fleet" className="rounded-full bg-blue-700 text-white font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-800 transition">🚌 View Fleet</a>
           <a href="tel:8885352566" className="rounded-full bg-blue-900 text-white font-bold px-8 py-4 text-lg shadow-lg hover:bg-black transition">📞 (888) 535‑2566</a>
-          {/* Secondary sales CTA */}
-          <a href="mailto:info@bus2ride.com" className="rounded-full bg-transparent border border-blue-500 text-blue-200 font-bold px-6 py-3 text-md shadow-sm hover:bg-blue-900/20 transition hidden sm:inline-block">✉️ Email Us</a>
         </div>
-  <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none">
+        <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none">
           <svg viewBox="0 0 1440 160" className="w-full h-full" preserveAspectRatio="none"><path d="M0,96 C240,160 480,32 720,80 C960,128 1200,64 1440,112 L1440,160 L0,160 Z" fill="#0c2344" /></svg>
         </div>
       </section>
@@ -89,78 +71,9 @@ export default function AnchoragePage() {
           <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 shadow flex flex-col gap-2"><div className="text-sm tracking-widest text-blue-300 font-semibold">PEAK DEMAND</div><div className="text-2xl font-extrabold">May–Sept (Cruise + Tours)</div><p className="text-blue-100/90 text-sm">Book popular Saturdays 90+ days out; winter brings aurora & ski transfers.</p></div>
           <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 shadow flex flex-col gap-2"><div className="text-sm tracking-widest text-blue-300 font-semibold">WINTER LOWS</div><div className="text-2xl font-extrabold">↓ 0°F Typical</div><p className="text-blue-100/90 text-sm">We vet block heaters, tires & emergency kits for cold resiliency.</p></div>
         </div>
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">Why Book in Anchorage with Bus2Ride?</h2>
-  <p className="text-center text-blue-200 max-w-3xl mx-auto mb-6">Fast quotes, local dispatch, and a fleet prepped for Alaska’s extremes — we match the right vehicle, driver, and plan to your group so your trip runs flawlessly.</p>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">Why Book in Anchorage with Bus2Ride?</h2>
         <WhyRentWithUs />
       </Section>
-
-      {/* FLEET GALLERY (photos of real vehicles available for Anchorage) */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Fleet Highlights</h2>
-        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Real photos of vehicles we dispatch for Anchorage runs. Choose a model, request an instant quote, and we will reserve the right vehicle for your group and itinerary.</p>
-
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/party-buses/18 Passenger White Party Bus Exterior.png" alt="18 passenger white party bus exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">18 Passenger Party Bus</div>
-              <div className="text-blue-200 text-sm mt-1">Perfect for night-out groups, premium sound and lighting.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/sprinter-limo-style/12 Passenger Sprinter Limo Exterior.png" alt="12 passenger sprinter limo exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">12 Passenger Sprinter Limo</div>
-              <div className="text-blue-200 text-sm mt-1">Executive styling, comfortable seating, ideal for shore transfers.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/coach-buses/50 Passenger Exterior Coach Bus.png" alt="50 passenger coach exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">50 Passenger Coach</div>
-              <div className="text-blue-200 text-sm mt-1">Large group transfers, luggage bays, comfortable touring seats.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/party-buses/20 Passenger Party Bus Exterior.png" alt="20 passenger party bus exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">20 Passenger Party Bus</div>
-              <div className="text-blue-200 text-sm mt-1">Extra space for gear and coolers, great for fishing or aurora nights.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/limousines/10 Passenger Lincoln Stretch Limo Interior.png" alt="10 passenger lincoln stretch limo interior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">10 Passenger Stretch Limo</div>
-              <div className="text-blue-200 text-sm mt-1">Classic comfort for weddings and VIP transfers.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/sprinter-limo-style/14 Passenger Sprinter Van Limo Style Inside.png" alt="14 passenger sprinter van interior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">14 Passenger Sprinter Van</div>
-              <div className="text-blue-200 text-sm mt-1">Flexible seating layouts and easy airport pickups.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center mt-8 gap-4">
-          <a href="/fleet" className="rounded-full bg-blue-700 text-white font-bold px-8 py-3 shadow hover:bg-blue-800 transition">See Full Fleet</a>
-          <a href="/quote#instant" className="rounded-full bg-white text-blue-900 font-bold px-8 py-3 shadow hover:bg-blue-50 transition">Instant Quote</a>
-        </div>
-      </Section>
-
 
   {/* OVERVIEW & STRATEGY (pricing estimator removed) */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
@@ -168,7 +81,6 @@ export default function AnchoragePage() {
           <div>
             <h3 className="text-3xl font-extrabold mb-5 font-serif bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Transportation Overview</h3>
             <p className="text-blue-100/90 leading-relaxed mb-4">Anchorage functions as Alaska’s staging hub—cruise passengers overnight here before rail or coach transfers, corporate teams fly in for energy & logistics projects, and adventure travelers launch day trips to glaciers, fjords and national parks.</p>
-            <p className="text-blue-100/90 leading-relaxed mb-4 font-semibold">We turn logistics into an effortless part of your trip: on-time pickups, clear driver communication, and contingency planning for weather and port surges.</p>
             <p className="text-blue-100/90 leading-relaxed mb-4">We coordinate winter-ready vehicles, veteran drivers accustomed to snow, ice & moose delays, and optimized routing for Seward Highway (AK‑1), Glenn Highway and Port access to Whittier. Need gear capacity? We stage luggage + coolers + photo rigs with advance manifests.</p>
             <div className="mt-6 grid sm:grid-cols-2 gap-4">
               {[{ t: "Cruise Transfer", d: "Hotel → Whittier / Seward with glacier stop" },{ t: "Aurora Charter", d: "Dynamic route pivoting to clearer skies" },{ t: "Corporate Shuttle", d: "Multi‑day crew & vendor loops" },{ t: "Ski / Alyeska", d: "Group lodge & evening dining shuttle" },{ t: "Wedding Guest", d: "Hotel staging + venue return waves" },{ t: "Fishing Charter", d: "Cooler + gear capacity planning" }].map(card => (
@@ -178,7 +90,6 @@ export default function AnchoragePage() {
           </div>
           <div>
             <h3 className="text-3xl font-extrabold mb-5 font-serif bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Seasonal & Weather Strategy</h3>
-            <p className="text-blue-200 text-sm mb-4">Our planners watch KP indexes, road advisories, and cruise manifests so you don’t have to—ask about aurora‑flex windows for maximum sighting odds.</p>
             <ul className="space-y-4 text-blue-100/90 leading-relaxed">
               <li><span className="font-semibold text-blue-50">Summer (Midnight Sun):</span> Compress multiple scenic stops—add buffers for cruise surges.</li>
               <li><span className="font-semibold text-blue-50">Shoulder (Apr–May / Sept–Oct):</span> 8–15% lower rates + flexibility for photo detours.</li>
@@ -212,7 +123,6 @@ export default function AnchoragePage() {
             </div>
             <div>
               <h3 className="text-2xl font-bold mb-3 font-serif">Buffer Recommendations</h3>
-              <p className="text-blue-200 text-sm mb-2">Tip: Add suggested buffers directly in your instant quote so your final confirmation already includes realistic timing and optional aurora flexibility.</p>
               <ul className="list-disc list-inside text-blue-100/90 space-y-1 text-sm">
                 <li>+10–15 min per extra pickup / staging stop</li>
                 <li>+30+ min if Seward Hwy weather advisories</li>
@@ -258,7 +168,6 @@ export default function AnchoragePage() {
           <div className="bg-[#132a55] p-4 md:p-6 rounded-2xl border border-blue-700/40 flex flex-col gap-4">
             <h3 className="text-2xl font-bold font-serif">Live Weather & Comfort</h3>
             <p className="text-blue-100/90 text-sm leading-relaxed">Anchorage-focused forecast snapshot to plan layers, hydration & timing.</p>
-            <p className="text-blue-200 text-sm">We combine live forecasts with vehicle readiness checks—ask dispatch for cold-weather add-ons like extra fuel, blankets, or power banks.</p>
             <div className="rounded-2xl overflow-hidden border border-blue-600/40 bg-blue-900/40 p-2 md:p-3 text-white text-sm">
               {/* Compact weather (anchored to Anchorage) */}
               <div className="[&_*]:!text-[13px] [&_h1]:!text-base [&_h2]:!text-sm [&_.min-h-screen]:min-h-0 [&_.min-h-screen]:bg-transparent [&_.max-w-7xl]:max-w-full [&_.grid]:gap-3">
@@ -271,7 +180,7 @@ export default function AnchoragePage() {
 
       {/* REVIEWS */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Rider Reviews</h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Rider Reviews</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">{localReviews.map(r => (
           <div key={r.name} className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 shadow flex flex-col gap-3">
             <div className="flex items-center gap-3">
@@ -282,7 +191,7 @@ export default function AnchoragePage() {
             <div className="text-sm text-blue-100/90 leading-relaxed">{r.text}</div>
           </div>
         ))}</div>
-  <div className="flex justify-center mt-10"><Link href="/reviews" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700">More Reviews</Link></div>
+        <div className="flex justify-center mt-10"><Link href="/reviews" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700">More Reviews</Link></div>
       </Section>
 
       {/* REVIEW FORM & SLIDESHOW */}
@@ -302,8 +211,8 @@ export default function AnchoragePage() {
 
       {/* POLLS (interactive, registry-driven) */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Rider Polls</h2>
-        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Snapshot of planning preferences. Vote below or explore all polls on the <Link href="/polls" className="underline">live polls</Link> page. Your input helps us stock the right gear and plan realistic buffers for Anchorage trips.</p>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Rider Polls</h2>
+        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Snapshot of planning preferences. Vote below or explore all polls on the <Link href="/polls" className="underline">live polls</Link> page.</p>
         <div className="mx-auto max-w-5xl">
           <ClientPolls polls={anchoragePolls} />
         </div>
@@ -311,9 +220,8 @@ export default function AnchoragePage() {
 
       {/* TOOLS */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Planning Tools</h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Planning Tools</h2>
         <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-8">Compare capacities, split costs, plan multi‑stop routes, and check weather without losing dark theme contrast.</p>
-  <p className="text-center text-blue-200 max-w-2xl mx-auto mb-6">Pro tip: run a ToolsSlider compare and then hit Instant Quote — our team will pre-fill vehicle layout and driver notes for faster confirmations.</p>
         <div className="rounded-3xl shadow-xl border border-blue-600/30 p-2 sm:p-4 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
           <ToolsSlider />
         </div>
@@ -321,7 +229,7 @@ export default function AnchoragePage() {
 
       {/* LOCAL EVENTS */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl py-14 px-6 mb-16 border border-blue-800/40">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Seasonal Events & Trip Builders</h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Seasonal Events & Trip Builders</h2>
         <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-10 text-sm md:text-base">Anchor your itinerary to high‑impact local events—use these to justify early vehicle blocks, plan layered packing, or extend a cruise stay. (Dates approximate—confirm annually.)</p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[ 
@@ -380,16 +288,16 @@ export default function AnchoragePage() {
       </Section>
 
       {/* FINAL CTA */}
-    <Section className="bg-gradient-to-r from-blue-800 via-blue-900 to-black">
+      <Section className="bg-gradient-to-r from-blue-800 via-blue-900 to-black">
         <div className="max-w-5xl mx-auto text-center py-6">
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight font-serif bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Ready for Anchorage Transport Done Right?</h2>
-      <p className="text-blue-100/90 mb-6">Lock preferred vehicles early—peak cruise Saturdays & holiday aurora windows go fast. Book now and enjoy transparent pricing, flexible add-ons, and an operations team that treats your group like VIPs.</p>
+          <p className="text-blue-100/90 mb-6">Lock preferred vehicles early—peak cruise Saturdays & holiday aurora windows go fast.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/quote#instant" className="rounded-full bg-white text-blue-900 font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-50 transition">Instant Quote</a>
             <a href="/fleet" className="rounded-full bg-blue-700 text-white font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-800 transition">View Fleet</a>
             <a href="tel:8885352566" className="rounded-full bg-blue-900 text-white font-bold px-8 py-4 text-lg shadow-lg hover:bg-black transition">Call (888) 535‑2566</a>
           </div>
-      <p className="text-[11px] text-blue-300 mt-6">Need multi-day / remote itinerary support? Include all legs + gear notes. Prefer email? Reach our Anchorage dispatch at <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> and we’ll respond with a tailored plan.</p>
+          <p className="text-[11px] text-blue-300 mt-6">Need multi-day / remote itinerary support? Include all legs + gear notes.</p>
         </div>
       </Section>
     </PageLayout>

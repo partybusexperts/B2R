@@ -58,18 +58,11 @@ export default function AnchoragePage() {
       {/* HERO */}
       <section className="relative overflow-hidden flex flex-col items-center justify-center text-center min-h-[560px] py-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,#1e3a8a_0%,#0b1934_55%,#030712_100%)]" />
-  <div className="absolute inset-0 bg-[url(/images/party-buses/18%20Passenger%20White%20Party%20Bus%20Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-[url(/images/18%20Passenger%20White%20Party%20Bus%20Exterior.png)] bg-cover bg-center opacity-10 mix-blend-overlay" />
         <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.55)] font-serif">Anchorage Party Bus, Limo & Charter Service</h1>
   <p className="relative z-10 max-w-4xl mx-auto text-xl md:text-2xl mt-6 text-blue-100 font-medium leading-relaxed">Cruise transfers • Aurora & winter readiness • Corporate shuttles • Weddings • Excursions to Seward, Whittier & Alyeska. Professional drivers. Local logistics expertise.</p>
   {/* Salesy booster line */}
-  <p className="relative z-10 max-w-3xl mx-auto text-md md:text-lg mt-4 text-yellow-200 font-semibold leading-relaxed">Book smarter: instant quotes in seconds, attentive local dispatch, flexible aurora-ready windows, and guaranteed on-time pickups. Call <a href="tel:8885352566" className="underline">(888) 535‑2566</a> or <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> — we will handle the weather, routing, and gear.</p>
-        {/* Hero benefits & urgency chips */}
-        <div className="relative z-10 mt-6 flex flex-wrap gap-3 items-center justify-center">
-          <span className="px-3 py-1 rounded-full bg-yellow-600 text-black font-semibold text-sm">Instant Quotes</span>
-          <span className="px-3 py-1 rounded-full bg-blue-700 text-white font-semibold text-sm">Local Dispatch</span>
-          <span className="px-3 py-1 rounded-full bg-blue-700 text-white font-semibold text-sm">Winter-Ready Fleet</span>
-          <span className="ml-4 px-3 py-1 rounded-full bg-red-600 text-white font-bold text-sm">Limited vehicles for peak cruise dates — reserve early</span>
-        </div>
+  <p className="relative z-10 max-w-3xl mx-auto text-md md:text-lg mt-4 text-yellow-200 font-semibold leading-relaxed">Book smarter: instant quotes in seconds, attentive local dispatch, and flexible aurora-ready windows. Call <a href="tel:8885352566" className="underline">(888) 535‑2566</a> or <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> — we will handle the weather, routing, and gear.</p>
         <div className="relative z-10 mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-3xl justify-center">
           <a href="/quote#instant" className="rounded-full bg-white text-blue-900 font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-50 transition">⚡ Instant Quote</a>
           <a href="/fleet" className="rounded-full bg-blue-700 text-white font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-800 transition">🚌 View Fleet</a>
@@ -105,7 +98,6 @@ export default function AnchoragePage() {
             <div className="p-4">
               <div className="font-bold text-blue-50">18 Passenger Party Bus</div>
               <div className="text-blue-200 text-sm mt-1">Perfect for night-out groups, premium sound and lighting.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
             </div>
           </div>
 
@@ -114,7 +106,6 @@ export default function AnchoragePage() {
             <div className="p-4">
               <div className="font-bold text-blue-50">12 Passenger Sprinter Limo</div>
               <div className="text-blue-200 text-sm mt-1">Executive styling, comfortable seating, ideal for shore transfers.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
             </div>
           </div>
 
@@ -123,7 +114,6 @@ export default function AnchoragePage() {
             <div className="p-4">
               <div className="font-bold text-blue-50">50 Passenger Coach</div>
               <div className="text-blue-200 text-sm mt-1">Large group transfers, luggage bays, comfortable touring seats.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
             </div>
           </div>
 
@@ -132,7 +122,6 @@ export default function AnchoragePage() {
             <div className="p-4">
               <div className="font-bold text-blue-50">20 Passenger Party Bus</div>
               <div className="text-blue-200 text-sm mt-1">Extra space for gear and coolers, great for fishing or aurora nights.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
             </div>
           </div>
 
@@ -141,7 +130,6 @@ export default function AnchoragePage() {
             <div className="p-4">
               <div className="font-bold text-blue-50">10 Passenger Stretch Limo</div>
               <div className="text-blue-200 text-sm mt-1">Classic comfort for weddings and VIP transfers.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
             </div>
           </div>
 
@@ -150,7 +138,6 @@ export default function AnchoragePage() {
             <div className="p-4">
               <div className="font-bold text-blue-50">14 Passenger Sprinter Van</div>
               <div className="text-blue-200 text-sm mt-1">Flexible seating layouts and easy airport pickups.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
             </div>
           </div>
         </div>
@@ -160,7 +147,6 @@ export default function AnchoragePage() {
           <a href="/quote#instant" className="rounded-full bg-white text-blue-900 font-bold px-8 py-3 shadow hover:bg-blue-50 transition">Instant Quote</a>
         </div>
       </Section>
-
 
   {/* OVERVIEW & STRATEGY (pricing estimator removed) */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
