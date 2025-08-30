@@ -167,27 +167,7 @@ export default function PollResultsPage() {
     setExpanded((prev) => ({ ...init, ...prev }));
   }, [grouped]);
 
-  const toggleCategory = async (cat: string) => {
-    setExpanded((s) => ({ ...s, [cat]: !s[cat] }));
-    // If expanding, ensure we have results for this category's polls (first 24)
-    if (!expanded[cat]) {
-      const group = grouped.find((g) => g.category === cat);
-      if (!group) return;
-      const ids = group.rows.slice(0, 24).map(r => r.poll.id).filter(Boolean);
-      const missing = ids.filter(id => !results[id]);
-      if (missing.length) {
-        try {
-          const r = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: missing }) });
-          if (r.ok) {
-            const j = await r.json();
-            if (j && j.data) setResults(prev => ({ ...prev, ...j.data }));
-          }
-        } catch (e) {
-          // ignore failures — UI will show zeros
-        }
-      }
-    }
-  };
+  const toggleCategory = (cat: string) => setExpanded((s) => ({ ...s, [cat]: !s[cat] }));
   const expandAll = (val: boolean) => {
     const next: Record<string, boolean> = {};
     grouped.forEach((g) => (next[g.category] = val));

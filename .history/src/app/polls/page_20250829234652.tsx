@@ -127,7 +127,7 @@ export default function PollsPage() {
   const onSelectSuggestion = (p: Poll) => { const el = document.getElementById(`poll-${p.id}`); if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); };
 
   const boards = useMemo(() => {
-    if (!data?.polls) return [] as { tag: string; polls: Poll[]; featured: Poll[] }[];
+    if (!data?.polls) return [] as any[];
     const active = data.polls.filter(p => p.active !== false);
     const byTag = new Map<string, Poll[]>();
     active.forEach(p => (p.tags || []).forEach(t => { const k = t.toLowerCase(); const arr = byTag.get(k) || []; arr.push(p); byTag.set(k, arr); }));
@@ -140,7 +140,7 @@ export default function PollsPage() {
 
     const used = new Set<string>();
     const fromSession = (tag: string) => { try { const key = `b2r_polls_featured_${tag}`; const ids = JSON.parse(sessionStorage.getItem(key) || "[]") as string[]; return ids; } catch { return []; } };
-    const toSession = (tag: string, ids: string[]) => { try { sessionStorage.setItem(`b2r_polls_featured_${tag}`, JSON.stringify(ids)); } catch (e) { console.warn('Session storage error:', e); } };
+    const toSession = (tag: string, ids: string[]) => { try { sessionStorage.setItem(`b2r_polls_featured_${tag}`, JSON.stringify(ids)); } catch {} };
 
     const mk = (tag: string) => {
       const pool = (byTag.get(tag) || []).filter(p => !used.has(p.id));

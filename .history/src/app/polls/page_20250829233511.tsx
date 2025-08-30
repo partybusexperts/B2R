@@ -1,35 +1,15 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import PollCardPro from "@/components/PollCardPro";
 
 type Poll = { id: string; question: string; options: string[]; tags?: string[]; active?: boolean; };
 type PollsPayload = { polls: Poll[]; votes: Record<string, Record<string, number>> };
 
-// Performance tracking
-function trackApiCall(endpoint: string, startTime: number) {
-  const duration = performance.now() - startTime;
-  console.log(`🚀 API ${endpoint}: ${duration.toFixed(1)}ms`);
-  return duration;
-}
-
-// Optimized fetch with performance tracking and compression support
 async function fetchAll(): Promise<PollsPayload> {
-  const startTime = performance.now();
-  const r = await fetch("/api/poll", { 
-    cache: "no-store",
-    headers: {
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Cache-Control': 'no-cache'
-    }
-  });
+  const r = await fetch("/api/poll", { cache: "no-store" });
   if (!r.ok) throw new Error("Failed to load polls");
-  
-  const data = await r.json();
-  trackApiCall('/api/poll', startTime);
-  
-  console.log(`📊 Loaded ${data.polls?.length || 0} polls`);
-  return data;
+  return r.json();
 }
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -127,7 +107,7 @@ export default function PollsPage() {
   const onSelectSuggestion = (p: Poll) => { const el = document.getElementById(`poll-${p.id}`); if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); };
 
   const boards = useMemo(() => {
-    if (!data?.polls) return [] as { tag: string; polls: Poll[]; featured: Poll[] }[];
+    if (!data?.polls) return [] as any[];
     const active = data.polls.filter(p => p.active !== false);
     const byTag = new Map<string, Poll[]>();
     active.forEach(p => (p.tags || []).forEach(t => { const k = t.toLowerCase(); const arr = byTag.get(k) || []; arr.push(p); byTag.set(k, arr); }));
@@ -140,7 +120,7 @@ export default function PollsPage() {
 
     const used = new Set<string>();
     const fromSession = (tag: string) => { try { const key = `b2r_polls_featured_${tag}`; const ids = JSON.parse(sessionStorage.getItem(key) || "[]") as string[]; return ids; } catch { return []; } };
-    const toSession = (tag: string, ids: string[]) => { try { sessionStorage.setItem(`b2r_polls_featured_${tag}`, JSON.stringify(ids)); } catch (e) { console.warn('Session storage error:', e); } };
+    const toSession = (tag: string, ids: string[]) => { try { sessionStorage.setItem(`b2r_polls_featured_${tag}`, JSON.stringify(ids)); } catch {} };
 
     const mk = (tag: string) => {
       const pool = (byTag.get(tag) || []).filter(p => !used.has(p.id));
