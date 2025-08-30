@@ -480,7 +480,6 @@ export default function AnchoragePage() {
       </div>
         </div>
       </Section>
-      <StickyBookingUI />
     </PageLayout>
   );
 }

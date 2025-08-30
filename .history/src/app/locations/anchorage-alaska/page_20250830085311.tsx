@@ -200,12 +200,6 @@ export default function AnchoragePage() {
           <li>Weather sensitivity: aurora flexibility windows or winterized vehicle requests.</li>
         </ul>
         <p className="text-blue-100/90 leading-relaxed mb-2">Use the <Link href="/tools" className="underline">Tools</Link> slider to compare capacity and estimated per‑person costs, then hit <Link href="/quote#instant" className="underline">Instant Quote</Link> to get a pre-filled estimate. If you prefer email, send full itinerary details to <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> and our dispatch team will return a consolidated plan with driver notes and suggested buffers.</p>
-        {/* Inline CTA under planning checklist */}
-        <div className="mt-6 flex flex-col sm:flex-row gap-3 items-center justify-center">
-          <a href="/quote#instant" className="rounded-full bg-yellow-500 text-black font-bold px-6 py-3 shadow-lg hover:brightness-95 transition">Get My Instant Quote</a>
-          <a href="/fleet" className="rounded-full bg-transparent border border-yellow-500 text-yellow-300 font-semibold px-5 py-3 shadow-sm hover:bg-yellow-500/10 transition">Browse Fleet</a>
-          <a href="tel:8885352566" className="rounded-full bg-white text-blue-900 font-bold px-5 py-3 shadow hover:opacity-95 transition">Call Anchorage Dispatch</a>
-        </div>
       </Section>
 
 
@@ -221,9 +215,6 @@ export default function AnchoragePage() {
               {[{ t: "Cruise Transfer", d: "Hotel → Whittier / Seward with glacier stop" },{ t: "Aurora Charter", d: "Dynamic route pivoting to clearer skies" },{ t: "Corporate Shuttle", d: "Multi‑day crew & vendor loops" },{ t: "Ski / Alyeska", d: "Group lodge & evening dining shuttle" },{ t: "Wedding Guest", d: "Hotel staging + venue return waves" },{ t: "Fishing Charter", d: "Cooler + gear capacity planning" }].map(card => (
                 <div key={card.t} className="rounded-xl bg-[#132a55] border border-blue-700/40 p-4 shadow"><div className="font-bold text-blue-50">{card.t}</div><div className="text-xs text-blue-200 mt-1 leading-snug">{card.d}</div></div>
               ))}
-            </div>
-            <div className="mt-6">
-              <a href="/quote#instant" className="rounded-full bg-yellow-500 text-black font-bold px-5 py-3 shadow hover:brightness-95 transition">Quote this Route</a>
             </div>
           </div>
           <div>
@@ -307,9 +298,6 @@ export default function AnchoragePage() {
                 <li>Flexible overage policy on aurora nights—extend in 30 min increments if KP spikes.</li>
               </ul>
               <p className="mt-3 text-blue-200/80 italic">Include special cargo (skis, coolers, tripods) in your quote request so we reserve the right interior layout.</p>
-            </div>
-            <div className="mt-4">
-              <a href="/quote#instant" className="inline-block rounded-full bg-red-600 text-white font-bold px-5 py-3 shadow hover:opacity-95 transition">Book an Aurora Flex Window</a>
             </div>
             {/* subtle aurora accent behind slider (decorative) */}
             <div className="relative hidden">
@@ -410,9 +398,6 @@ export default function AnchoragePage() {
                 {e.name.includes('Fair') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Staggered Return</span>}
                 {e.name.includes('Marathon') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Highway Buffer</span>}
               </div>
-          <div className="text-center mt-6">
-            <a href="/quote#instant" className="rounded-full bg-yellow-500 text-black font-bold px-6 py-3 shadow-lg hover:brightness-95 transition">Use Tools & Get Quote</a>
-          </div>
             </div>
           ))}
         </div>
@@ -480,36 +465,6 @@ export default function AnchoragePage() {
       </div>
         </div>
       </Section>
-      <StickyBookingUI />
     </PageLayout>
   );
 }
-// Render StickyBookingUI in the module so the component is active on the page
-export const stickyBooking = StickyBookingUI;
-
-/* Sticky booking UI: mobile sticky bar + floating desktop button */
-function StickyBookingUI() {
-  return (
-    <>
-      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-        <div className="max-w-7xl mx-auto px-4 py-3 bg-gradient-to-r from-blue-900 to-black border-t border-blue-700/40 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="text-sm text-blue-200 font-semibold">Need a ride now?</div>
-            <div className="text-xs text-blue-300">Instant quote or call us</div>
-          </div>
-          <div className="flex gap-2">
-            <a href="/quote#instant" className="rounded-full bg-yellow-500 text-black font-bold px-4 py-2">Quote</a>
-            <a href="tel:8885352566" className="rounded-full bg-white text-blue-900 font-bold px-4 py-2">Call</a>
-          </div>
-        </div>
-      </div>
-
-      <a href="/quote#instant" aria-label="Book Now" className="hidden md:flex fixed right-6 bottom-12 z-50 items-center gap-3 bg-yellow-500 text-black font-bold px-4 py-3 rounded-full shadow-lg hover:brightness-95 transition">
-        <span className="text-lg">⚡</span>
-        <span>Book Now</span>
-      </a>
-    </>
-  );
-}
-
-// Inject the StickyBookingUI at render time by exporting it where PageLayout can import lazily if needed.

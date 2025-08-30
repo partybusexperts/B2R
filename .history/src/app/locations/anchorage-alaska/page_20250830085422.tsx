@@ -480,12 +480,9 @@ export default function AnchoragePage() {
       </div>
         </div>
       </Section>
-      <StickyBookingUI />
     </PageLayout>
   );
 }
-// Render StickyBookingUI in the module so the component is active on the page
-export const stickyBooking = StickyBookingUI;
 
 /* Sticky booking UI: mobile sticky bar + floating desktop button */
 function StickyBookingUI() {
