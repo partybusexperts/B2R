@@ -297,7 +297,7 @@ export default function PollResultsPage() {
                   return (
                     <div id={category} key={category} className="mb-8">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-3">{titleFor(category)}</h3>
+                        <h3 className="text-xl font-bold text-blue-200 mb-3 capitalize">{category.replace(/[-_]/g, ' ')}</h3>
                         <div className="flex items-center gap-2">
                           <div className="text-sm text-blue-300 mr-2">{rows.length} polls</div>
                           <div className="flex items-center gap-2">
@@ -311,7 +311,7 @@ export default function PollResultsPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {visibleRows.map(({ poll, counts, total }) => (
                           <div key={poll.id} className="p-4 bg-blue-950/60 rounded-lg border border-blue-800/30 shadow-sm">
-                            <div className="font-semibold text-blue-100 mb-2">{displayQuestion(poll, titleFor(category))}</div>
+                            <div className="font-semibold text-blue-100 mb-2">{poll.question}</div>
                             <div className="space-y-2">
                               {poll.options.map((opt) => {
                                 const c = Number(counts[opt] || 0);
@@ -347,7 +347,7 @@ export default function PollResultsPage() {
                 <div className="absolute inset-0 bg-black/60" onClick={closeModal} />
                 <div className="relative bg-blue-900/80 rounded-lg max-w-4xl w-full mx-auto p-6 overflow-auto max-h-[80vh] border border-blue-800/40">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-lg md:text-xl font-bold text-blue-100">{titleFor(modalCategory)}</h4>
+                    <h4 className="text-lg font-bold text-blue-100">{modalCategory.replace(/[-_]/g, ' ')}</h4>
                     <div className="flex items-center gap-2">
                       <input
                         value={modalQ}
@@ -369,7 +369,7 @@ export default function PollResultsPage() {
                         })
                       : [];
                     return (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {rows.map(({ poll, counts, total }) => (
                           <div key={poll.id} className="p-4 bg-blue-950/60 rounded-lg border border-blue-800/30 shadow-sm">
                             <div className="font-semibold text-blue-100 mb-2">{poll.question}</div>
