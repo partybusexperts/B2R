@@ -14,13 +14,29 @@ export default async function PollsPage() {
   // Delegate to client component for interactive rendering
   return <ClientPolls polls={polls} />;
 }
-    // Read the pre-generated polls registry JSON at build time
-    const registryPath = path.join(process.cwd(), 'data', 'pollsRegistry.json');
-    const raw = await fs.readFile(registryPath, 'utf8');
-    const polls = JSON.parse(raw);
-
-    // Delegate to a lightweight client component for interactive polls
-    return <ClientPolls polls={polls} />;
+          if (e.key === "ArrowUp") { e.preventDefault(); setIdx(i => Math.max(i - 1, 0)); }
+          if (e.key === "Enter" && suggestions[idx]) { e.preventDefault(); onSelect(suggestions[idx]); setOpen(false); }
+          if (e.key === "Escape") setOpen(false);
+        }}
+        placeholder="Search polls, topics, or tags…"
+        className="w-full rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+      />
+      {open && suggestions.length > 0 && (
+        <div className="absolute z-20 left-0 right-0 mt-2 bg-[#12244e] border border-blue-800/40 rounded-2xl shadow-xl overflow-hidden">
+          {suggestions.map((p, i) => (
+            <button
+              key={p.id}
+              onClick={() => { onSelect(p); setOpen(false); }}
+              className={`w-full text-left px-4 py-3 text-blue-100 hover:bg-[#0f1f46] ${i === idx ? "bg-[#0f1f46]" : ""}`}
+            >
+              <div className="font-semibold">{p.question}</div>
+              {p.tags?.length ? <div className="text-xs text-blue-300 mt-1">{p.tags.map(pretty).join(" • ")}</div> : null}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function CategorySelect({ allTags, value, onChange }: { allTags: string[]; value: string; onChange: (v: string) => void; }) {

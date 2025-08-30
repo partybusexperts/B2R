@@ -1,44 +1,61 @@
 import path from 'path';
 import { promises as fs } from 'fs';
+import type { PollReg } from '@/data/pollsRegistry';
 import ClientPolls from '@/components/ClientPolls';
 
 // Revalidate page every hour (3600 seconds)
 export const revalidate = 3600;
 
+// Server Component: load polls registry JSON at build time
 export default async function PollsPage() {
-  // Load the pre-generated polls registry JSON at build time
   const filePath = path.join(process.cwd(), 'data', 'pollsRegistry.json');
   const raw = await fs.readFile(filePath, 'utf8');
-  const polls = JSON.parse(raw);
+  const polls = JSON.parse(raw) as PollReg[];
   
-  // Delegate to client component for interactive rendering
   return <ClientPolls polls={polls} />;
 }
-    // Read the pre-generated polls registry JSON at build time
-    const registryPath = path.join(process.cwd(), 'data', 'pollsRegistry.json');
-    const raw = await fs.readFile(registryPath, 'utf8');
-    const polls = JSON.parse(raw);
-
-    // Delegate to a lightweight client component for interactive polls
-    return <ClientPolls polls={polls} />;
+          if (e.key === "ArrowUp") { e.preventDefault(); setIdx(i => Math.max(i - 1, 0)); }
+          if (e.key === "Enter" && suggestions[idx]) { e.preventDefault(); onSelect(suggestions[idx]); setOpen(false); }
+          if (e.key === "Escape") setOpen(false);
+        }}
+        placeholder="Search polls, topics, or tags…"
+        className="w-full rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+      />
+      {open && suggestions.length > 0 && (
+        <div className="absolute z-20 left-0 right-0 mt-2 bg-[#12244e] border border-blue-800/40 rounded-2xl shadow-xl overflow-hidden">
+          {suggestions.map((p, i) => (
+            <button
+              key={p.id}
+              onClick={() => { onSelect(p); setOpen(false); }}
+              className={`w-full text-left px-4 py-3 text-blue-100 hover:bg-[#0f1f46] ${i === idx ? "bg-[#0f1f46]" : ""}`}
+            >
+              <div className="font-semibold">{p.question}</div>
+              {p.tags?.length ? <div className="text-xs text-blue-300 mt-1">{p.tags.map(pretty).join(" • ")}</div> : null}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function CategorySelect({ allTags, value, onChange }: { allTags: string[]; value: string; onChange: (v: string) => void; }) {
 
-  import path from 'path';
-  import { promises as fs } from 'fs';
+  import path from 'node:path';
+  import { promises as fs } from 'node:fs';
+  import type { PollReg as Poll } from '@/data/pollsRegistry';
   import ClientPolls from '@/components/ClientPolls';
 
-  // Revalidate this page every hour (3600 seconds)
+  // Revalidate this page every hour
   export const revalidate = 3600;
 
   export default async function PollsPage() {
-    // Load the pre-generated polls registry JSON at build time
+    // Load the pre-generated JSON registry at build time
     const filePath = path.join(process.cwd(), 'data', 'pollsRegistry.json');
     const raw = await fs.readFile(filePath, 'utf8');
-    const polls = JSON.parse(raw);
+    const polls = JSON.parse(raw) as Poll[];
   
-    // Render the interactive client component
+    // Delegate rendering to client-side component
     return <ClientPolls polls={polls} />;
   }
 
@@ -79,21 +96,22 @@ function CategorySelect({ allTags, value, onChange }: { allTags: string[]; value
       return { tag, featured, rest: shuffle(remaining) };
     };
 
-    // Server Component: statically generated, loads polls JSON at build time
     import path from 'path';
     import { promises as fs } from 'fs';
+    import type { PollReg } from '@/data/pollsRegistry';
     import ClientPolls from '@/components/ClientPolls';
 
-    // Revalidate this page every hour
+    // Revalidate page every hour (3600 seconds)
     export const revalidate = 3600;
 
+    /**
+     * Server Component: loads the canonical polls registry JSON at build time
+     * and delegates rendering to a client component.
+     */
     export default async function PollsPage() {
-      // Read the pre-generated JSON registry file
       const filePath = path.join(process.cwd(), 'data', 'pollsRegistry.json');
       const raw = await fs.readFile(filePath, 'utf8');
-      const polls = JSON.parse(raw);
-  
-      // Delegate rendering to a lightweight client component
+      const polls = JSON.parse(raw) as PollReg[];
       return <ClientPolls polls={polls} />;
     }
           <button onClick={() => setSelectedTag("")} className="px-4 py-2 rounded-full bg-white text-blue-900 font-semibold border border-blue-200 hover:bg-blue-50">All Categories</button>
@@ -117,25 +135,29 @@ function CategorySelect({ allTags, value, onChange }: { allTags: string[]; value
                   {featured.map((p: Poll) => (<PollCardPro key={p.id} poll={p} initialCounts={data.votes[p.id] || {}} />))}
                 </div>
                 {rest.length > 0 && (
-                  import path from 'path';
-                  import { promises as fs } from 'fs';
-                  import ClientPolls from '@/components/ClientPolls';
+                  <div className="mt-5">
+                    <div className="text-blue-200 text-sm mb-2">More in {title}</div>
+                    <Rail>
+                      {rest.map((p: Poll) => (
+                        <div key={p.id} className="min-w-[320px] max-w-[360px]"><PollCardPro poll={p} initialCounts={data.votes[p.id] || {}} /></div>
+                      ))}
+                    </Rail>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-                  // Revalidate page every hour (3600 seconds)
-                  export const revalidate = 3600;
-
-                  /**
-                   * Server Component: reads the pre-generated JSON registry at build time
-                   * and renders a minimal client component for interactive polls.
-                   */
-                  export default async function PollsPage() {
-                    // Load the pre-generated polls registry JSON at build time
-                    const filePath = path.join(process.cwd(), 'data', 'pollsRegistry.json');
-                    const raw = await fs.readFile(filePath, 'utf8');
-                    const polls = JSON.parse(raw);
-                    // Delegate to client component for interactivity
-                    return <ClientPolls polls={polls} />;
-                  }
+      <section className="max-w-6xl mx-auto my-12 bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl py-10 px-6 border border-blue-800/30 text-center">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-white font-serif tracking-tight mb-3">Live Insights</h2>
         <p className="text-blue-100/90 mb-6">Curious where the crowd is leaning? Explore combined results across every poll.</p>
-
         <a href="/poll-results" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg border border-blue-700">See All Results</a>
+      </section>
+
+      {toast.msg && (<div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"><div className="px-4 py-2 rounded-xl bg-white text-blue-900 font-semibold shadow-lg border border-blue-200">{toast.msg}</div></div>)}
+    </main>
+  );
+}
+
