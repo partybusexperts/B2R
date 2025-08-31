@@ -389,8 +389,8 @@ export default function ClientPolls({ polls }: { polls: Poll[] }) {
               <div key={cat.slug} ref={(el) => { catRefs.current[cat.slug] = el; }} className="rounded-3xl overflow-hidden border border-blue-800/30 shadow-xl bg-[#173264] flex flex-col">
                 <div className="px-4 py-3 border-b border-blue-800/30 bg-[#122a56] flex items-center justify-between">
                   <div>
-                    <div className="text-base font-extrabold text-white">{displayCategoryName(cat.pretty)}</div>
-                    <div className="text-xs text-blue-100/90">{cat.raw} · {headerNote}</div>
+                    <div className="text-base font-extrabold text-white">{cat.pretty}</div>
+                    <div className="text-xs text-blue-100/90">{headerNote}</div>
                   </div>
                   <div className="rounded-full bg-blue-600 text-white text-[11px] px-2 py-0.5 tabular-nums border border-blue-700">{cat.count}</div>
                 </div>

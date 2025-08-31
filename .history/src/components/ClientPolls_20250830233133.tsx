@@ -117,10 +117,6 @@ function normalizeCategory(raw: string) {
 function formatNumber(n: number) {
   return Intl.NumberFormat().format(n);
 }
-// Human-friendly display name (drop verbose "Polls" suffix)
-function displayCategoryName(pretty: string) {
-  return String(pretty || '').replace(/\s*Polls$/i, '').trim();
-}
 async function copyToClipboard(text: string) {
   try {
     await navigator.clipboard.writeText(text);
@@ -310,14 +306,8 @@ export default function ClientPolls({ polls }: { polls: Poll[] }) {
   const categoryChips = (
     <div className="no-scrollbar flex gap-2 overflow-x-auto py-2">
       {data.entries.map((c) => (
-        <button
-          key={c.slug}
-          onClick={() => handleJump(c.slug)}
-          title={`${displayCategoryName(c.pretty)} — ${c.raw}`}
-          aria-label={`${displayCategoryName(c.pretty)}. ${c.count} polls.`}
-          className="group flex items-center gap-2 rounded-full border border-blue-800/30 bg-[#173264] px-3 py-1.5 text-sm text-blue-100 hover:border-blue-500 hover:scale-[1.02] transition-transform"
-        >
-          <span className="font-semibold text-white">{displayCategoryName(c.pretty)}</span>
+        <button key={c.slug} onClick={() => handleJump(c.slug)} className="group flex items-center gap-2 rounded-full border border-blue-800/30 bg-[#173264] px-3 py-1.5 text-sm text-blue-100 hover:border-blue-500 transition" title={`${c.pretty}`}>
+          <span className="font-semibold text-white">{c.pretty}</span>
           <span className="rounded-full bg-blue-600 text-white text-[11px] px-2 py-0.5 tabular-nums border border-blue-700">{c.count}</span>
         </button>
       ))}
@@ -362,8 +352,8 @@ export default function ClientPolls({ polls }: { polls: Poll[] }) {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex flex-col gap-3 md:flex-row md:items-center">
           <div className="w-full md:w-96">
             <select value={jumpSlug} onChange={(e) => { const val = e.target.value; if (val) setTimeout(() => handleJump(val), 0); }} className="w-full rounded-xl border border-blue-800/30 bg-[#173264] px-4 py-2.5 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="">Jump to a topic…</option>
-              {data.entries.map((c) => <option key={c.slug} value={c.slug}>{displayCategoryName(c.pretty)} ({c.count})</option>)}
+              <option value="">Jump to a category…</option>
+              {data.entries.map((c) => <option key={c.slug} value={c.slug}>{c.pretty} ({c.count})</option>)}
             </select>
           </div>
 
@@ -389,8 +379,8 @@ export default function ClientPolls({ polls }: { polls: Poll[] }) {
               <div key={cat.slug} ref={(el) => { catRefs.current[cat.slug] = el; }} className="rounded-3xl overflow-hidden border border-blue-800/30 shadow-xl bg-[#173264] flex flex-col">
                 <div className="px-4 py-3 border-b border-blue-800/30 bg-[#122a56] flex items-center justify-between">
                   <div>
-                    <div className="text-base font-extrabold text-white">{displayCategoryName(cat.pretty)}</div>
-                    <div className="text-xs text-blue-100/90">{cat.raw} · {headerNote}</div>
+                    <div className="text-base font-extrabold text-white">{cat.pretty}</div>
+                    <div className="text-xs text-blue-100/90">{headerNote}</div>
                   </div>
                   <div className="rounded-full bg-blue-600 text-white text-[11px] px-2 py-0.5 tabular-nums border border-blue-700">{cat.count}</div>
                 </div>
