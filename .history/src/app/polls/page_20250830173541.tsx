@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { normalizeToCategoryKeys, ORDERED_CATEGORIES_BY_GROUP } from "../../data/polls/taxonomy";
+import { normalizeToCategoryKeys } from "../../data/polls/taxonomy";
 
 /* ===== Types ===== */
 type Poll = {
@@ -236,43 +236,19 @@ export default function ClientPolls() {
   }, [pollsData]);
 
   const data = useMemo(() => {
-    const total = pollsData?.length || 0;
-    const itemsByKey: Record<string, Poll[]> = {};
-    const unmatched: Poll[] = [];
-
+    const byCat: Record<string, { raw: string; items: Poll[] }> = {};
     for (const p of pollsData || []) {
+      // use taxonomy helper to map poll metadata to canonical category keys
       const keys = normalizeToCategoryKeys({ category: p.category, tags: p.tags, title: p.title, question: p.question, prompt: p.prompt });
-      if (Array.isArray(keys) && keys.length) {
-        let matched = false;
-        for (const k of keys) {
-          if (!itemsByKey[k]) itemsByKey[k] = [];
-          itemsByKey[k].push(p);
-          matched = true;
-        }
-        if (!matched) unmatched.push(p);
-      } else {
-        unmatched.push(p);
-      }
+      const key = Array.isArray(keys) && keys.length ? keys[0] : "other:misc";
+      const raw = key;
+      const slug = slugify(raw);
+      if (!byCat[slug]) byCat[slug] = { raw, items: [] };
+      byCat[slug].items.push(p);
     }
-
-    // Build ordered entries from taxonomy groups so the UI order is stable and logical
-    const entries: { slug: string; raw: string; pretty: string; items: Poll[]; count: number }[] = [];
-    for (const group of Object.keys(ORDERED_CATEGORIES_BY_GROUP)) {
-      const cats = ORDERED_CATEGORIES_BY_GROUP[group] || [];
-      for (const cat of cats) {
-        const raw = cat.key;
-        const items = itemsByKey[raw] || [];
-        const slug = slugify(raw);
-        entries.push({ slug, raw, pretty: cat.label || prettifyCategory(raw), items, count: items.length });
-      }
-    }
-
-    // finally include any matched keys that weren't in the taxonomy as 'Other' bucket
-    const otherKey = "other:misc";
-    const otherItems = (itemsByKey[otherKey] || []).concat(unmatched);
-    entries.push({ slug: slugify(otherKey), raw: otherKey, pretty: "Other / Misc", items: otherItems, count: otherItems.length });
-
-    return { entries, total };
+    const entries = Object.entries(byCat).map(([slug, { raw, items }]) => ({ slug, raw, pretty: prettifyCategory(raw), items, count: items.length }));
+    entries.sort((a, b) => b.count - a.count || a.pretty.localeCompare(b.pretty));
+    return { entries, total: pollsData?.length || 0 };
   }, [pollsData]);
 
   const catRefs = useRef<Record<string, HTMLDivElement | null>>({});
