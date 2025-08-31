@@ -71,7 +71,14 @@ export default function ToolsPage() {
     { name: "Becky B.", text: "Beautiful vehicles and dependable service. Highly recommend!" },
   ];
 
-  // polls sample (not used on this page)
+  const polls = [
+    { q: "Most important factor in pricing?", opts: ["Group size", "Date/season", "Trip length", "Vehicle type"] },
+    { q: "Pay more for newer vehicle?", opts: ["Yes", "No"] },
+    { q: "Fair hourly for 20-pass limo?", opts: ["$100", "$150", "$200", "$250+"] },
+    { q: "All-inclusive or itemized?", opts: ["All-inclusive", "Itemized", "No preference"] },
+    { q: "Most you'd pay for 4 hrs party bus?", opts: ["$400", "$600", "$800", "$1000+"] },
+    { q: "Best way to save?", opts: ["Book early", "Go off-peak", "Share with friends", "Smaller vehicle"] },
+  ];
 
   const events = [
     "Weddings","Prom & Homecoming","Concerts","Sporting Events",
@@ -121,7 +128,7 @@ export default function ToolsPage() {
           />
           <select
             value={catSelect}
-            onChange={(e) => handleJump(e.target.value as ToolCategory | "All")}
+            onChange={(e) => handleJump(e.target.value as any)}
             className="w-full md:w-[320px] rounded-full px-5 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="All">All Categories</option>

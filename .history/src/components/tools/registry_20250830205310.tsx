@@ -11,7 +11,6 @@ import VehicleComparisonTool from "../VehicleComparisonTool";
 import CapacityFinder from "./CapacityFinder";
 import EmbedTool from "./EmbedTool";
 import registryData from "../../../data/toolsRegistry.json";
-import GeneratedMap from "./generated";
 
 export type ToolCategory =
   | "Compare & Choose"
@@ -61,7 +60,6 @@ const componentMap: Record<string, React.FC | undefined> = {
   "itinerary-builder": ItineraryBuilder,
   "event-match": EventMatchmaker,
   "weather-alert": WeatherAlert,
-  ...GeneratedMap,
 };
 
 const route = (id: string) => `/tools/${id}`;

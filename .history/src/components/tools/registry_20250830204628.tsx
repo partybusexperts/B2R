@@ -10,8 +10,7 @@ import WeatherAlert from "./WeatherAlert";
 import VehicleComparisonTool from "../VehicleComparisonTool";
 import CapacityFinder from "./CapacityFinder";
 import EmbedTool from "./EmbedTool";
-import registryData from "../../../data/toolsRegistry.json";
-import GeneratedMap from "./generated";
+import registryData from "../../data/toolsRegistry.json";
 
 export type ToolCategory =
   | "Compare & Choose"
@@ -61,12 +60,11 @@ const componentMap: Record<string, React.FC | undefined> = {
   "itinerary-builder": ItineraryBuilder,
   "event-match": EventMatchmaker,
   "weather-alert": WeatherAlert,
-  ...GeneratedMap,
 };
 
 const route = (id: string) => `/tools/${id}`;
 
-const tools: ToolEntry[] = (registryData || []).map((d: ToolData) => {
+const tools: ToolEntry[] = (registryData || []).map((d: any) => {
   const href = d.href || route(d.id);
   const component = componentMap[d.id] || makeLinkComponent(href, `Open ${d.title}`);
   return {
