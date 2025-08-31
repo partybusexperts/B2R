@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
 // Link intentionally not used here; page is results-only
 import PageLayout from "../../components/PageLayout";
 import Section from "../../components/Section";
-import { normalizeToCategoryKeys, ORDERED_CATEGORIES_BY_GROUP } from "../../data/polls/taxonomy";
+import { ORDERED_CATEGORIES_BY_GROUP } from "../../data/polls/taxonomy";
 
 /* ------------------------------- Runtime Polls ------------------------------- */
 type Poll = {
@@ -14,8 +14,6 @@ type Poll = {
   tags?: string[];
   active?: boolean;
 };
-
-type PollFull = Poll & { category?: string; title?: string; prompt?: string };
 
 type PollResults = Record<string, Record<string, number>>;
 
@@ -71,37 +69,6 @@ function displayQuestion(poll: { question: string }, catTitle: string) {
 
 // CSV export utilities removed; Copy JSON provides the flattened rows if needed.
 
-function getQuestion(p: { question?: string; title?: string; prompt?: string }) {
-  return (
-    (typeof p.question === 'string' && p.question) ||
-    (typeof p.title === 'string' && p.title) ||
-    (typeof p.prompt === 'string' && p.prompt) ||
-    'Untitled Poll'
-  );
-}
-
-// Normalize bulk API shapes into Record<pollId, Record<option, count>>
-function normalizeBulk(raw: unknown): Record<string, Record<string, number>> {
-  const out: Record<string, Record<string, number>> = {};
-  if (!raw || typeof raw !== 'object') return out;
-  const obj = raw as Record<string, unknown>;
-  for (const [k, v] of Object.entries(obj)) {
-    if (v && typeof v === 'object') {
-      const maybe = v as Record<string, unknown>;
-      if ('results' in maybe) {
-        const rr = maybe['results'];
-        if (rr && typeof rr === 'object') out[k] = rr as Record<string, number>;
-        else out[k] = {};
-      } else {
-        out[k] = (v as Record<string, number>) || {};
-      }
-    } else {
-      out[k] = {};
-    }
-  }
-  return out;
-}
-
 /* --------------------------------- Page --------------------------------- */
 export default function PollResultsPage() {
   const [results, setResults] = useState<PollResults>({});
@@ -142,55 +109,16 @@ export default function PollResultsPage() {
           const slice = arr.slice(0, 6).map(p => p.id);
           groupedIds.push(...slice);
         }
-        // First fetch results for the visible preview ids (keeps initial response small)
-  if (groupedIds.length) {
+        if (groupedIds.length) {
           try {
             const r = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: groupedIds }) });
             if (r.ok) {
               const j = await r.json();
-              if (j && j.data) {
-                setResults((prev) => ({ ...prev, ...normalizeBulk(j.data) }));
-              }
+              if (j && j.data) setResults((prev) => ({ ...prev, ...j.data }));
             }
           } catch {
-            // swallow bulk errors - UI will show zeros
+            // swallow bulk errors — UI will show zeros
           }
-        }
-
-        // Also proactively fetch results for all poll ids (in batches) so every poll shows counts
-        try {
-          const allIds = Array.isArray(data.polls) ? data.polls.map((p: Poll) => p.id).filter(Boolean) : [];
-          const batchSize = 200; // safe batch size
-          let anyBatchFailed = false;
-          for (let i = 0; i < allIds.length; i += batchSize) {
-            const batch = allIds.slice(i, i + batchSize);
-            try {
-              const br = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: batch }) });
-              if (br.ok) {
-                const jj = await br.json();
-                if (jj && jj.data) setResults((prev) => ({ ...prev, ...normalizeBulk(jj.data) }));
-              } else {
-                anyBatchFailed = true;
-              }
-            } catch {
-              anyBatchFailed = true;
-            }
-          }
-
-          // If many batches failed, fall back to raw on-disk read endpoint
-          if (anyBatchFailed) {
-            try {
-              const rr = await fetch('/api/poll/raw');
-              if (rr.ok) {
-                const jj = await rr.json();
-                if (jj && jj.votes) setResults(jj.votes);
-              }
-            } catch {
-              // ignore raw fallback errors
-            }
-          }
-        } catch {
-          // ignore proactive fetch errors
         }
       })
       .catch((e: unknown) => {
@@ -203,82 +131,58 @@ export default function PollResultsPage() {
 
   /** Join fetched polls with counts, then filter/sort and group by category. */
   const grouped = useMemo(() => {
-    // Build entries using the same normalization as the polls page so order and categories match
-    const itemsByKey: Record<string, Poll[]> = {};
-    for (const p0 of polls) {
-      const p = p0 as PollFull;
-      const keys = normalizeToCategoryKeys({ category: p.category, tags: p.tags, title: p.title, question: p.question, prompt: p.prompt });
-      const useKeys = Array.isArray(keys) && keys.length ? keys : [ (p.tags && p.tags[0]) || 'uncategorized' ];
-      for (const k of useKeys) {
-        if (!itemsByKey[k]) itemsByKey[k] = [];
-        itemsByKey[k].push(p);
-      }
-    }
-
-    // Build ordered entries from taxonomy groups so the UI order is stable and logical
-    const entries: { slug: string; raw: string; pretty: string; items: Poll[]; count: number }[] = [];
-    for (const group of Object.keys(ORDERED_CATEGORIES_BY_GROUP)) {
-      const cats = ORDERED_CATEGORIES_BY_GROUP[group] || [];
-      for (const cat of cats) {
-        const raw = cat.key;
-        const items = itemsByKey[raw] || [];
-        const slug = slugify(raw);
-        entries.push({ slug, raw, pretty: cat.label || titleFor(raw), items, count: items.length });
-      }
-    }
-
-    // Include any matched keys that weren't in the taxonomy as 'Other' bucket
-    const otherKey = 'other:misc';
-    const otherItems = (itemsByKey[otherKey] || []).concat(Object.values(itemsByKey).flat().filter(p => {
-      // exclude items already included in entries
-      for (const e of entries) if (e.items.includes(p)) return false;
-      return true;
-    }));
-    entries.push({ slug: slugify(otherKey), raw: otherKey, pretty: 'Other / Misc', items: otherItems, count: otherItems.length });
-
-    // Now convert entries into grouped rows with counts
-    const ql = q.trim().toLowerCase();
-    const mapped = entries.map((e) => {
-      // apply search filter and sort within category
-      let items = e.items.map((poll) => {
-        const counts = results[poll.id] || {};
-        const total = Object.values(counts).reduce((a, b) => a + Number(b || 0), 0);
-        return { poll, counts, total };
-      });
-      if (ql) items = items.filter(({ poll }) => getQuestion(poll).toLowerCase().includes(ql) || (poll.options || []).some(o => o.toLowerCase().includes(ql)));
-      if (sortBy === 'votes_desc') items = items.slice().sort((a, b) => b.total - a.total);
-      else if (sortBy === 'alpha') items = items.slice().sort((a, b) => getQuestion(a.poll).localeCompare(getQuestion(b.poll)));
-      return { category: e.raw, rows: items };
+    // Build rows
+    const joined = polls.map((poll) => {
+      const counts = results[poll.id] || {};
+      const total = Object.values(counts).reduce((a, b) => a + Number(b || 0), 0);
+      return { poll, counts, total };
     });
 
-    return mapped;
+    const ql = q.trim().toLowerCase();
+    let visible = ql
+      ? joined.filter(
+          ({ poll }) =>
+            poll.question.toLowerCase().includes(ql) || poll.options.some((o) => o.toLowerCase().includes(ql))
+        )
+      : joined;
+
+    if (sortBy === "votes_desc") visible = [...visible].sort((a, b) => b.total - a.total);
+    else if (sortBy === "alpha") visible = [...visible].sort((a, b) => a.poll.question.localeCompare(b.poll.question));
+
+    // Group by primary tag (first tag) for categorical order
+    const map = new Map<string, typeof visible>();
+    for (const row of visible) {
+      const tag = (row.poll.tags && row.poll.tags[0]) || "uncategorized";
+      if (!map.has(tag)) map.set(tag, []);
+      map.get(tag)!.push(row);
+    }
+
+    // Sort categories alphabetically, with 'uncategorized' last
+    const cats = Array.from(map.keys()).sort((a, b) => {
+      if (a === "uncategorized") return 1;
+      if (b === "uncategorized") return -1;
+      return a.localeCompare(b);
+    });
+
+    return cats.map((cat) => ({ category: cat, rows: map.get(cat)! }));
   }, [polls, results, q, sortBy]);
 
   // Build category chips & ordered entries similar to /polls page for stable ordering
   const entries = useMemo(() => {
-    // Build itemsByKey directly from the raw polls using taxonomy normalization
-    const itemsByKey: Record<string, Poll[]> = {};
-    for (const p0 of polls) {
-      const p = p0 as PollFull;
-      const keys = normalizeToCategoryKeys({ category: p.category, tags: p.tags, title: p.title, question: p.question, prompt: p.prompt });
-      const useKeys = Array.isArray(keys) && keys.length ? keys : [ (p.tags && p.tags[0]) || 'uncategorized' ];
-      for (const k of useKeys) {
-        if (!itemsByKey[k]) itemsByKey[k] = [];
-        itemsByKey[k].push(p);
-      }
-    }
+    // map tag -> rows
+  const itemsByKey: Record<string, Poll[]> = {};
+  for (const g of grouped) itemsByKey[g.category] = (itemsByKey[g.category] || []).concat(g.rows.map((r) => r.poll as Poll));
 
-    const out: { slug: string; raw: string; pretty: string; items: Poll[]; count: number }[] = [];
+  const out: { slug: string; raw: string; pretty: string; items: Poll[]; count: number }[] = [];
     for (const group of Object.keys(ORDERED_CATEGORIES_BY_GROUP)) {
       const cats = ORDERED_CATEGORIES_BY_GROUP[group] || [];
       for (const cat of cats) {
         const raw = cat.key;
         const items = itemsByKey[raw] || [];
         const slug = (raw || "misc").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "misc";
-        out.push({ slug, raw, pretty: cat.label || titleFor(raw), items, count: items.length });
+        out.push({ slug, raw, pretty: cat.label || (raw.replace(/[-_]/g, ' ').replace(/\b\w/g, (c:string)=>c.toUpperCase()) + ' Polls'), items, count: items.length });
       }
     }
-
     // include any remaining categories not covered by taxonomy
     for (const k of Object.keys(itemsByKey)) {
       if (!out.find((o) => o.raw === k)) {
@@ -286,19 +190,8 @@ export default function PollResultsPage() {
         out.push({ slug, raw: k, pretty: k.replace(/[-_]/g, ' '), items: itemsByKey[k] || [], count: (itemsByKey[k] || []).length });
       }
     }
-
-    // final fallback: ensure an 'Other / Misc' bucket exists (mirrors /polls)
-    const otherKey = 'other:misc';
-    if (!out.find(o => o.raw === otherKey)) {
-      const otherItems = (itemsByKey[otherKey] || []).concat(Object.values(itemsByKey).flat().filter(p => {
-        for (const e of out) if (e.items.includes(p)) return false;
-        return true;
-      }));
-      out.push({ slug: (otherKey || "misc").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""), raw: otherKey, pretty: 'Other / Misc', items: otherItems, count: otherItems.length });
-    }
-
     return out;
-  }, [polls]);
+  }, [grouped]);
 
   // UI state: which categories are expanded
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -324,9 +217,9 @@ export default function PollResultsPage() {
         try {
           const r = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: missing }) });
           if (r.ok) {
-              const j = await r.json();
-              if (j && j.data) setResults(prev => ({ ...prev, ...normalizeBulk(j.data) }));
-            }
+            const j = await r.json();
+            if (j && j.data) setResults(prev => ({ ...prev, ...j.data }));
+          }
           } catch {
           // ignore failures — UI will show zeros
         }
@@ -437,10 +330,9 @@ export default function PollResultsPage() {
               {grouped.length === 0 ? (
                 <div className="p-8 text-center text-blue-200">No polls found.</div>
               ) : (
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {grouped.map(({ category, rows }) => {
+                grouped.map(({ category, rows }) => {
                   const isExpanded = !!expanded[category];
-                  const limit = 3;
+                  const limit = 6;
                   const visibleRows = isExpanded ? rows : rows.slice(0, limit);
                   const slug = slugify(category);
                   return (
@@ -472,12 +364,70 @@ export default function PollResultsPage() {
                       </div>
                     </div>
                   );
-                })}
-                </div>
+                })
               )}
             </div>
 
-            {/* No modal in results view; categories render inline */}
+            {/* Modal for full category view */}
+            {modalCategory && (
+              <div className="fixed inset-0 z-50 flex items-start justify-center p-6">
+                <div className="absolute inset-0 bg-black/60" onClick={closeModal} />
+                <div className="relative bg-blue-900/80 rounded-lg max-w-4xl w-full mx-auto p-6 overflow-auto max-h-[80vh] border border-blue-800/40">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-lg md:text-xl font-bold text-blue-100">{titleFor(modalCategory)}</h4>
+                    <div className="flex items-center gap-2">
+                      <input
+                        value={modalQ}
+                        onChange={(e) => setModalQ(e.target.value)}
+                        placeholder="Filter category polls…"
+                        className="rounded px-3 py-2 bg-[#0c1a33] text-blue-100 border border-blue-800/30"
+                      />
+                      <button onClick={closeModal} className="px-3 py-2 bg-blue-800 rounded text-blue-100">Close</button>
+                    </div>
+                  </div>
+                  {(() => {
+                    const group = grouped.find((g) => g.category === modalCategory);
+                    const rows = group
+                      ? group.rows.filter(({ poll }) => {
+                          const ql = modalQ.trim().toLowerCase();
+                          return (
+                            !ql || poll.question.toLowerCase().includes(ql) || poll.options.some((o) => o.toLowerCase().includes(ql))
+                          );
+                        })
+                      : [];
+                    return (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {rows.map(({ poll, counts, total }) => (
+                          <div key={poll.id} className="p-4 bg-blue-950/60 rounded-lg border border-blue-800/30 shadow-sm">
+                            <div className="font-semibold text-blue-100 mb-2">{poll.question}</div>
+                            <div className="space-y-2">
+                              {poll.options.map((opt) => {
+                                const c = Number(counts[opt] || 0);
+                                const p = percent(c, total);
+                                return (
+                                  <div key={opt} className="flex items-center gap-3">
+                                    <div className="flex-1">
+                                      <div className="flex justify-between text-sm text-blue-200">
+                                        <div className="font-medium">{opt}</div>
+                                        <div className="font-mono text-blue-100">{fmt(c)}{total>0?` (${p}%)`:''}</div>
+                                      </div>
+                                      <div className="mt-1 h-2 rounded bg-blue-900/40">
+                                        <div className="h-2 rounded bg-blue-500" style={{ width: `${p}%` }} />
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <div className="mt-3 text-sm text-blue-300">Total votes: <span className="font-bold text-blue-100">{fmt(total)}</span></div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </Section>

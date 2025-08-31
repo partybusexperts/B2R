@@ -71,37 +71,6 @@ function displayQuestion(poll: { question: string }, catTitle: string) {
 
 // CSV export utilities removed; Copy JSON provides the flattened rows if needed.
 
-function getQuestion(p: { question?: string; title?: string; prompt?: string }) {
-  return (
-    (typeof p.question === 'string' && p.question) ||
-    (typeof p.title === 'string' && p.title) ||
-    (typeof p.prompt === 'string' && p.prompt) ||
-    'Untitled Poll'
-  );
-}
-
-// Normalize bulk API shapes into Record<pollId, Record<option, count>>
-function normalizeBulk(raw: unknown): Record<string, Record<string, number>> {
-  const out: Record<string, Record<string, number>> = {};
-  if (!raw || typeof raw !== 'object') return out;
-  const obj = raw as Record<string, unknown>;
-  for (const [k, v] of Object.entries(obj)) {
-    if (v && typeof v === 'object') {
-      const maybe = v as Record<string, unknown>;
-      if ('results' in maybe) {
-        const rr = maybe['results'];
-        if (rr && typeof rr === 'object') out[k] = rr as Record<string, number>;
-        else out[k] = {};
-      } else {
-        out[k] = (v as Record<string, number>) || {};
-      }
-    } else {
-      out[k] = {};
-    }
-  }
-  return out;
-}
-
 /* --------------------------------- Page --------------------------------- */
 export default function PollResultsPage() {
   const [results, setResults] = useState<PollResults>({});
@@ -143,17 +112,15 @@ export default function PollResultsPage() {
           groupedIds.push(...slice);
         }
         // First fetch results for the visible preview ids (keeps initial response small)
-  if (groupedIds.length) {
+        if (groupedIds.length) {
           try {
             const r = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: groupedIds }) });
             if (r.ok) {
               const j = await r.json();
-              if (j && j.data) {
-                setResults((prev) => ({ ...prev, ...normalizeBulk(j.data) }));
-              }
+              if (j && j.data) setResults((prev) => ({ ...prev, ...j.data }));
             }
           } catch {
-            // swallow bulk errors - UI will show zeros
+            // swallow bulk errors — UI will show zeros
           }
         }
 
@@ -161,32 +128,16 @@ export default function PollResultsPage() {
         try {
           const allIds = Array.isArray(data.polls) ? data.polls.map((p: Poll) => p.id).filter(Boolean) : [];
           const batchSize = 200; // safe batch size
-          let anyBatchFailed = false;
           for (let i = 0; i < allIds.length; i += batchSize) {
             const batch = allIds.slice(i, i + batchSize);
             try {
               const br = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: batch }) });
               if (br.ok) {
                 const jj = await br.json();
-                if (jj && jj.data) setResults((prev) => ({ ...prev, ...normalizeBulk(jj.data) }));
-              } else {
-                anyBatchFailed = true;
+                if (jj && jj.data) setResults((prev) => ({ ...prev, ...jj.data }));
               }
             } catch {
-              anyBatchFailed = true;
-            }
-          }
-
-          // If many batches failed, fall back to raw on-disk read endpoint
-          if (anyBatchFailed) {
-            try {
-              const rr = await fetch('/api/poll/raw');
-              if (rr.ok) {
-                const jj = await rr.json();
-                if (jj && jj.votes) setResults(jj.votes);
-              }
-            } catch {
-              // ignore raw fallback errors
+              // ignore per-batch failures
             }
           }
         } catch {
@@ -256,29 +207,20 @@ export default function PollResultsPage() {
 
   // Build category chips & ordered entries similar to /polls page for stable ordering
   const entries = useMemo(() => {
-    // Build itemsByKey directly from the raw polls using taxonomy normalization
-    const itemsByKey: Record<string, Poll[]> = {};
-    for (const p0 of polls) {
-      const p = p0 as PollFull;
-      const keys = normalizeToCategoryKeys({ category: p.category, tags: p.tags, title: p.title, question: p.question, prompt: p.prompt });
-      const useKeys = Array.isArray(keys) && keys.length ? keys : [ (p.tags && p.tags[0]) || 'uncategorized' ];
-      for (const k of useKeys) {
-        if (!itemsByKey[k]) itemsByKey[k] = [];
-        itemsByKey[k].push(p);
-      }
-    }
+    // map tag -> rows
+  const itemsByKey: Record<string, Poll[]> = {};
+  for (const g of grouped) itemsByKey[g.category] = (itemsByKey[g.category] || []).concat(g.rows.map((r) => r.poll as Poll));
 
-    const out: { slug: string; raw: string; pretty: string; items: Poll[]; count: number }[] = [];
+  const out: { slug: string; raw: string; pretty: string; items: Poll[]; count: number }[] = [];
     for (const group of Object.keys(ORDERED_CATEGORIES_BY_GROUP)) {
       const cats = ORDERED_CATEGORIES_BY_GROUP[group] || [];
       for (const cat of cats) {
         const raw = cat.key;
         const items = itemsByKey[raw] || [];
         const slug = (raw || "misc").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "misc";
-        out.push({ slug, raw, pretty: cat.label || titleFor(raw), items, count: items.length });
+        out.push({ slug, raw, pretty: cat.label || (raw.replace(/[-_]/g, ' ').replace(/\b\w/g, (c:string)=>c.toUpperCase()) + ' Polls'), items, count: items.length });
       }
     }
-
     // include any remaining categories not covered by taxonomy
     for (const k of Object.keys(itemsByKey)) {
       if (!out.find((o) => o.raw === k)) {
@@ -286,19 +228,8 @@ export default function PollResultsPage() {
         out.push({ slug, raw: k, pretty: k.replace(/[-_]/g, ' '), items: itemsByKey[k] || [], count: (itemsByKey[k] || []).length });
       }
     }
-
-    // final fallback: ensure an 'Other / Misc' bucket exists (mirrors /polls)
-    const otherKey = 'other:misc';
-    if (!out.find(o => o.raw === otherKey)) {
-      const otherItems = (itemsByKey[otherKey] || []).concat(Object.values(itemsByKey).flat().filter(p => {
-        for (const e of out) if (e.items.includes(p)) return false;
-        return true;
-      }));
-      out.push({ slug: (otherKey || "misc").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""), raw: otherKey, pretty: 'Other / Misc', items: otherItems, count: otherItems.length });
-    }
-
     return out;
-  }, [polls]);
+  }, [grouped]);
 
   // UI state: which categories are expanded
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -324,9 +255,9 @@ export default function PollResultsPage() {
         try {
           const r = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: missing }) });
           if (r.ok) {
-              const j = await r.json();
-              if (j && j.data) setResults(prev => ({ ...prev, ...normalizeBulk(j.data) }));
-            }
+            const j = await r.json();
+            if (j && j.data) setResults(prev => ({ ...prev, ...j.data }));
+          }
           } catch {
           // ignore failures — UI will show zeros
         }

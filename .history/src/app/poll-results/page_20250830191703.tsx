@@ -80,28 +80,6 @@ function getQuestion(p: { question?: string; title?: string; prompt?: string }) 
   );
 }
 
-// Normalize bulk API shapes into Record<pollId, Record<option, count>>
-function normalizeBulk(raw: unknown): Record<string, Record<string, number>> {
-  const out: Record<string, Record<string, number>> = {};
-  if (!raw || typeof raw !== 'object') return out;
-  const obj = raw as Record<string, unknown>;
-  for (const [k, v] of Object.entries(obj)) {
-    if (v && typeof v === 'object') {
-      const maybe = v as Record<string, unknown>;
-      if ('results' in maybe) {
-        const rr = maybe['results'];
-        if (rr && typeof rr === 'object') out[k] = rr as Record<string, number>;
-        else out[k] = {};
-      } else {
-        out[k] = (v as Record<string, number>) || {};
-      }
-    } else {
-      out[k] = {};
-    }
-  }
-  return out;
-}
-
 /* --------------------------------- Page --------------------------------- */
 export default function PollResultsPage() {
   const [results, setResults] = useState<PollResults>({});
@@ -143,17 +121,15 @@ export default function PollResultsPage() {
           groupedIds.push(...slice);
         }
         // First fetch results for the visible preview ids (keeps initial response small)
-  if (groupedIds.length) {
+        if (groupedIds.length) {
           try {
             const r = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: groupedIds }) });
             if (r.ok) {
               const j = await r.json();
-              if (j && j.data) {
-                setResults((prev) => ({ ...prev, ...normalizeBulk(j.data) }));
-              }
+              if (j && j.data) setResults((prev) => ({ ...prev, ...j.data }));
             }
           } catch {
-            // swallow bulk errors - UI will show zeros
+            // swallow bulk errors — UI will show zeros
           }
         }
 
@@ -168,7 +144,7 @@ export default function PollResultsPage() {
               const br = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: batch }) });
               if (br.ok) {
                 const jj = await br.json();
-                if (jj && jj.data) setResults((prev) => ({ ...prev, ...normalizeBulk(jj.data) }));
+                if (jj && jj.data) setResults((prev) => ({ ...prev, ...jj.data }));
               } else {
                 anyBatchFailed = true;
               }
@@ -176,7 +152,6 @@ export default function PollResultsPage() {
               anyBatchFailed = true;
             }
           }
-
           // If many batches failed, fall back to raw on-disk read endpoint
           if (anyBatchFailed) {
             try {
@@ -324,9 +299,9 @@ export default function PollResultsPage() {
         try {
           const r = await fetch('/api/poll/results/bulk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids: missing }) });
           if (r.ok) {
-              const j = await r.json();
-              if (j && j.data) setResults(prev => ({ ...prev, ...normalizeBulk(j.data) }));
-            }
+            const j = await r.json();
+            if (j && j.data) setResults(prev => ({ ...prev, ...j.data }));
+          }
           } catch {
           // ignore failures — UI will show zeros
         }

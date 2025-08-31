@@ -169,6 +169,7 @@ export default function PollResultsPage() {
               if (br.ok) {
                 const jj = await br.json();
                 if (jj && jj.data) setResults((prev) => ({ ...prev, ...normalizeBulk(jj.data) }));
+              }
               } else {
                 anyBatchFailed = true;
               }
@@ -176,7 +177,6 @@ export default function PollResultsPage() {
               anyBatchFailed = true;
             }
           }
-
           // If many batches failed, fall back to raw on-disk read endpoint
           if (anyBatchFailed) {
             try {

@@ -88,15 +88,9 @@ async def get_raw_votes():
 
 @router.get("/api/poll/all")
 async def get_all_polls():
-    # Return the canonical shape {"votes": {...}} regardless of how the file is stored
     if os.path.exists(POLL_FILE):
         with open(POLL_FILE, "r", encoding="utf-8") as f:
-            parsed = json.load(f)
+            polls = json.load(f)
     else:
-        parsed = {}
-    votes = {}
-    if isinstance(parsed, dict) and "votes" in parsed and isinstance(parsed.get("votes"), dict):
-        votes = parsed.get("votes", {})
-    elif isinstance(parsed, dict):
-        votes = parsed
-    return {"votes": votes}
+        polls = {}
+    return polls

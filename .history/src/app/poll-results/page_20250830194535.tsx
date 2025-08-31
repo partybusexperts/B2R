@@ -80,28 +80,6 @@ function getQuestion(p: { question?: string; title?: string; prompt?: string }) 
   );
 }
 
-// Normalize bulk API shapes into Record<pollId, Record<option, count>>
-function normalizeBulk(raw: unknown): Record<string, Record<string, number>> {
-  const out: Record<string, Record<string, number>> = {};
-  if (!raw || typeof raw !== 'object') return out;
-  const obj = raw as Record<string, unknown>;
-  for (const [k, v] of Object.entries(obj)) {
-    if (v && typeof v === 'object') {
-      const maybe = v as Record<string, unknown>;
-      if ('results' in maybe) {
-        const rr = maybe['results'];
-        if (rr && typeof rr === 'object') out[k] = rr as Record<string, number>;
-        else out[k] = {};
-      } else {
-        out[k] = (v as Record<string, number>) || {};
-      }
-    } else {
-      out[k] = {};
-    }
-  }
-  return out;
-}
-
 /* --------------------------------- Page --------------------------------- */
 export default function PollResultsPage() {
   const [results, setResults] = useState<PollResults>({});
@@ -169,6 +147,7 @@ export default function PollResultsPage() {
               if (br.ok) {
                 const jj = await br.json();
                 if (jj && jj.data) setResults((prev) => ({ ...prev, ...normalizeBulk(jj.data) }));
+              }
               } else {
                 anyBatchFailed = true;
               }
@@ -176,7 +155,6 @@ export default function PollResultsPage() {
               anyBatchFailed = true;
             }
           }
-
           // If many batches failed, fall back to raw on-disk read endpoint
           if (anyBatchFailed) {
             try {
