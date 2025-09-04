@@ -1,7 +1,6 @@
-"use client";
-
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import tools, { CATEGORY_ORDER, ToolCategory, ToolEntry } from "@/components/tools/registry";
+import { fetchToolsFromSupabase } from '@/lib/supabaseClient';
 import ToolsGrid from '@/components/tools/ToolsGrid';
 import Section from "@/components/Section";
 import SmartImage from "@/components/SmartImage";
@@ -21,30 +20,22 @@ function groupByCategory(items: ToolEntry[]) {
   return map;
 }
 
-export default function ToolsPage() {
-  const [registry, setRegistry] = useState<ToolEntry[]>(tools);
+export default async function ToolsPage() {
+  // Try server-side fetch from Supabase; fall back to bundled registry
+  let registry: ToolEntry[] = tools;
+  try {
+    const fromSupabase = await fetchToolsFromSupabase();
+    // normalize to ToolEntry shape if necessary
+    if (Array.isArray(fromSupabase) && fromSupabase.length > 0) {
+      registry = fromSupabase.map((r: any) => ({ id: r.id, title: r.title, desc: r.desc, category: r.category || 'Uncategorized', href: r.href || `/tools/${r.id}` }));
+    }
+  } catch (err) {
+    // keep bundled tools on error
+    // console.warn('Supabase fetch failed', String(err));
+  }
+
   const [query, setQuery] = useState("");
   const [catSelect, setCatSelect] = useState<ToolCategory | "All">("All");
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const url = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/+$/, '');
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-        if (!url || !key) return;
-        const endpoint = `${url}/rest/v1/tools?select=*`;
-        const res = await fetch(endpoint, { headers: { apikey: key, Authorization: `Bearer ${key}`, Accept: 'application/json' } });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setRegistry(data.map((r: any) => ({ id: r.id, title: r.title, desc: r.desc, category: r.category || 'Uncategorized', href: r.href || `/tools/${r.id}` })));
-        }
-      } catch (e) {
-        // ignore and keep bundled registry
-      }
-    }
-    load();
-  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
