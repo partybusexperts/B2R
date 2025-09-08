@@ -1,8 +1,21 @@
 // app/api/quote-vehicles/route.ts
 import { NextRequest } from 'next/server';
+import { z } from 'zod';
 import { getCache, setCache } from '../../../lib/serverCache';
 
 export const runtime = 'nodejs';
+
+const QuoteReqSchema = z.object({
+  category_slug: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  passengers: z.number().int().positive().optional().default(1),
+  hours: z.number().int().positive().optional().default(1),
+  event_type: z.string().nullable().optional(),
+  event_date: z.string().nullable().optional(),
+  start_time: z.string().nullable().optional(),
+});
+
+type QuoteReq = z.infer<typeof QuoteReqSchema>;
 
 type QuoteResponse = { ok: true; data: unknown } | { ok: false; error: string };
 
@@ -13,22 +26,22 @@ function safeInt(v: unknown, fallback = 0) {
 
 export async function POST(req: NextRequest) {
   try {
-    const raw = await req.json().catch(() => null);
-    if (!raw || typeof raw !== 'object') return Response.json({ ok: false, error: 'Missing or invalid JSON body' } satisfies QuoteResponse, { status: 400 });
-    const b = raw as Record<string, unknown>;
-
-    const passengers = safeInt(b.passengers, 1) || 1;
-    const hours = safeInt(b.hours, 1) || 1;
-    const category_slug = b.category_slug == null ? null : String(b.category_slug);
-    const city = b.city == null ? null : String(b.city);
-    const event_type = b.event_type == null ? null : String(b.event_type);
-    const event_date = b.event_date == null ? new Date().toISOString().slice(0, 10) : String(b.event_date);
-    const start_time = b.start_time == null ? null : String(b.start_time);
-
-    // Basic validation
-    if (passengers <= 0 || hours <= 0) {
-      return Response.json({ ok: false, error: 'passengers and hours must be > 0' } satisfies QuoteResponse, { status: 400 });
+    const parsed = QuoteReqSchema.safeParse(await req.json());
+    if (!parsed.success) {
+      return Response.json(
+        { ok: false, error: `Invalid input: ${parsed.error.message}` } satisfies QuoteResponse,
+        { status: 400 }
+      );
     }
+    const body = parsed.data as QuoteReq;
+
+    const passengers = body.passengers ?? 1;
+    const hours = body.hours ?? 1;
+    const category_slug = body.category_slug ?? null;
+    const city = body.city ?? null;
+    const event_type = body.event_type ?? null;
+    const event_date = body.event_date ?? new Date().toISOString().slice(0, 10);
+    const start_time = body.start_time ?? null;
 
     const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE;

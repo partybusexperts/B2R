@@ -23,8 +23,7 @@ export async function fetchTokens(site: string, page: string = ''): Promise<Styl
     const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase get_style timeout')), 2000));
     const res = (await Promise.race([rpcPromise, timeout])) as { data: unknown; error?: unknown } | undefined;
     const data = res?.data;
-    const possible = res as unknown;
-    const error = typeof possible === 'object' && possible !== null && 'error' in (possible as any) ? (possible as any).error : undefined;
+    const error = (res as any)?.error;
     if (error) {
       console.error('get_style error', error);
       return {};

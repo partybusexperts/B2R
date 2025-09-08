@@ -4,6 +4,16 @@ import { getCache, setCache } from '../../../lib/serverCache';
 
 export const runtime = 'nodejs';
 
+interface QuoteReq {
+  category_slug?: string | null;
+  city?: string | null;
+  passengers?: number;
+  hours?: number;
+  event_type?: string | null;
+  event_date?: string | null;
+  start_time?: string | null;
+}
+
 type QuoteResponse = { ok: true; data: unknown } | { ok: false; error: string };
 
 function safeInt(v: unknown, fallback = 0) {
