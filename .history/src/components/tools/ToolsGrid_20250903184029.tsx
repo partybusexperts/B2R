@@ -11,23 +11,13 @@ function Modal({ open, onClose, title, children, sizeClass }: { open: boolean; o
   const maxW = sizeClass || 'max-w-2xl';
   return (
     // clicking the overlay will close the modal; clicking inside content won't
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 sm:p-6" onClick={onClose}>
-      <div className={`relative w-full ${maxW} bg-white rounded-2xl shadow-2xl ring-1 ring-slate-200 overflow-hidden`} onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 p-5 border-b border-slate-100">
-          <div className="flex-1 min-w-0">
-            {title ? <h3 className="text-2xl font-semibold text-slate-900 truncate">{title}</h3> : null}
-            {/* optional subtitle / small desc can render in body */}
-          </div>
-          <div className="flex items-start">
-            <button onClick={onClose} className="inline-flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 w-9 h-9 leading-none" aria-label="Close">×</button>
-          </div>
-        </div>
-
-        {/* Body: scrollable if tall */}
-        <div className="p-6 max-h-[75vh] overflow-y-auto text-slate-700">
-          {children}
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div className={`relative w-full ${maxW} rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-2xl text-slate-900`} onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-3 right-3 text-slate-700 hover:text-slate-900 text-2xl font-bold" aria-label="Close">×</button>
+        {title ? <div className="flex items-center justify-between mb-3">
+          <h3 className="text-2xl font-extrabold font-serif tracking-tight text-slate-900">{title}</h3>
+        </div> : null}
+        <div className="text-slate-700 leading-relaxed">{children}</div>
       </div>
     </div>
   );

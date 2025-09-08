@@ -2,7 +2,7 @@
 import "../styles/b2r.css"; // global theme (scoped by .theme-b2r)
 import "./globals.css";
 import React from 'react';
-import { fetchTokens, toCssVars } from '@/lib/styles';
+import { loadThemeVars } from '@/lib/theme';
 
 import type { Metadata } from "next";
 import Navigation from "../components/Navigation";
@@ -24,18 +24,19 @@ export default async function RootLayout({
   // load theme tokens from Supabase and inject as CSS variables
   let cssVars = '';
   try {
-    const tokens = await fetchTokens('bus2ride', '');
-    cssVars = toCssVars(tokens);
-  } catch {
+    const vars = await loadThemeVars('light');
+    cssVars = `:root{${Object.entries(vars).map(([k,v]) => `${k}:${v}`).join(';')}}`;
+  } catch (e) {
     // fail softly if Supabase credentials missing
     cssVars = '';
   }
 
   return (
     <html lang="en">
-      <head>{cssVars && <style dangerouslySetInnerHTML={{ __html: cssVars }} />}</head>
       {/* Apply the theme site-wide by putting .theme-b2r on <body> */}
       <body className="theme-b2r min-h-screen antialiased">
+        {/* Inject CSS variables loaded from Supabase */}
+        {cssVars && <style dangerouslySetInnerHTML={{ __html: cssVars }} />}
         <StructuredData
           id="org-jsonld"
           data={{

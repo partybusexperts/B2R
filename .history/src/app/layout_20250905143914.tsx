@@ -26,16 +26,17 @@ export default async function RootLayout({
   try {
     const tokens = await fetchTokens('bus2ride', '');
     cssVars = toCssVars(tokens);
-  } catch {
+  } catch (e) {
     // fail softly if Supabase credentials missing
     cssVars = '';
   }
 
   return (
     <html lang="en">
-      <head>{cssVars && <style dangerouslySetInnerHTML={{ __html: cssVars }} />}</head>
       {/* Apply the theme site-wide by putting .theme-b2r on <body> */}
       <body className="theme-b2r min-h-screen antialiased">
+        {/* Inject CSS variables loaded from Supabase */}
+        {cssVars && <style dangerouslySetInnerHTML={{ __html: cssVars }} />}
         <StructuredData
           id="org-jsonld"
           data={{

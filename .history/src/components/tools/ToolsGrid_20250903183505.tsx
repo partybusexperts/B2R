@@ -11,23 +11,13 @@ function Modal({ open, onClose, title, children, sizeClass }: { open: boolean; o
   const maxW = sizeClass || 'max-w-2xl';
   return (
     // clicking the overlay will close the modal; clicking inside content won't
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 sm:p-6" onClick={onClose}>
-      <div className={`relative w-full ${maxW} bg-white rounded-2xl shadow-2xl ring-1 ring-slate-200 overflow-hidden`} onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4 p-5 border-b border-slate-100">
-          <div className="flex-1 min-w-0">
-            {title ? <h3 className="text-2xl font-semibold text-slate-900 truncate">{title}</h3> : null}
-            {/* optional subtitle / small desc can render in body */}
-          </div>
-          <div className="flex items-start">
-            <button onClick={onClose} className="inline-flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 w-9 h-9 leading-none" aria-label="Close">×</button>
-          </div>
-        </div>
-
-        {/* Body: scrollable if tall */}
-        <div className="p-6 max-h-[75vh] overflow-y-auto text-slate-700">
-          {children}
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div className={`relative w-full ${maxW} rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-2xl text-slate-900`} onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-3 right-3 text-slate-700 hover:text-slate-900 text-2xl font-bold" aria-label="Close">×</button>
+        {title ? <div className="flex items-center justify-between mb-3">
+          <h3 className="text-2xl font-extrabold font-serif tracking-tight text-slate-900">{title}</h3>
+        </div> : null}
+        <div className="text-slate-700 leading-relaxed">{children}</div>
       </div>
     </div>
   );
@@ -42,7 +32,7 @@ export default function ToolsGrid({ className, limit, filter, items, randomize }
   const openTool = (i: number) => setOpenIdx(i);
   const closeTool = () => setOpenIdx(null);
 
-  const copyEmbed = async (id: string, i: number) => {
+  const copyEmbed = (id: string, i: number) => {
     try {
       // Copy the public tool URL (no raw embed code shown)
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
@@ -115,17 +105,8 @@ export default function ToolsGrid({ className, limit, filter, items, randomize }
             </div>
 
             <div className="mb-4">
-              <label className="text-xs text-slate-500 block mb-2">Share this tool</label>
-              <div className="flex items-center gap-2 mb-2">
-                <button type="button" onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(candidates[openIdx].title + ' - ' + window.location.origin + '/tools/' + candidates[openIdx].id)}`,'_blank') } className="px-3 py-1 rounded-md bg-blue-500 text-white text-sm">Share on Twitter</button>
-                <button type="button" onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/tools/' + candidates[openIdx].id)}`,'_blank') } className="px-3 py-1 rounded-md bg-blue-700 text-white text-sm">Share on Facebook</button>
-                <button type="button" onClick={() => { navigator.clipboard?.writeText(window.location.origin + '/tools/' + candidates[openIdx].id); setCopiedIdx(openIdx); setTimeout(()=>setCopiedIdx(null),2000); }} className="px-3 py-1 rounded-md bg-gray-200 text-slate-900 text-sm">{copiedIdx === openIdx ? 'Copied' : 'Copy link'}</button>
-              </div>
-              <div className="text-sm text-slate-600 flex items-center gap-3">
-                <span>Embed on your site:</span>
-                <button type="button" onClick={() => { const url = (typeof window !== 'undefined' ? window.location.origin : '') + '/tools/' + candidates[openIdx].id; navigator.clipboard?.writeText(url); setCopiedIdx(openIdx); setTimeout(()=>setCopiedIdx(null),2000); }} className="px-3 py-1 rounded-md bg-gray-200 text-slate-900 text-sm">{copiedIdx === openIdx ? 'Copied' : 'Copy link'}</button>
-                <a className="text-blue-600 underline text-sm" href={`${typeof window !== 'undefined' ? window.location.origin : ''}/tools/${candidates[openIdx].id}`} target="_blank" rel="noreferrer">Open</a>
-              </div>
+              <label className="text-xs text-blue-200 block mb-1">Embed preview</label>
+              <textarea readOnly className="w-full bg-[#0d274d] border border-blue-800/30 text-blue-100 rounded-md p-3 text-sm" rows={3} value={`<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}/tools/${candidates[openIdx].id}" width="600" height="400" loading="lazy" style="border:0"></iframe>`} />
             </div>
 
             {candidates[openIdx].component ? (

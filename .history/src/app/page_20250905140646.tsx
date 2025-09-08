@@ -1,11 +1,12 @@
 import React from "react";
+import React from "react";
 import Section from "../components/Section";
 import StepCard from "../components/StepCard";
 import ToolsSlider from "../components/ToolsSlider";
 import ClientOnly from "../components/ClientOnly";
 import HomePolls from "../components/HomePolls";
 import LiveWeatherAdvisor from "../components/LiveWeatherAdvisor";
-import { ReviewForm } from "../components/ReviewForm";
+import ReviewForm from "../components/ReviewForm";
 import SlideshowMaker from "../components/SlideshowMaker";
 
 export default function Home() {
@@ -78,3 +79,4 @@ export default function Home() {
     </main>
   );
 }
+import Section from "../components/Section";
