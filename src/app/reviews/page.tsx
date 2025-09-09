@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import HeroHeader from "../../components/HeroHeader";
 
 const reviews = [
   {
@@ -68,51 +69,22 @@ const reviews = [
 export default function ReviewsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black text-white p-0 m-0">
-      {/* Header Section (matches Events page) */}
-      <div className="relative flex flex-col items-center justify-center text-center !p-0 !py-0 overflow-hidden w-full bg-gradient-to-br from-blue-900/80 via-blue-950/80 to-black/90">
-        <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700/30 via-blue-900/10 to-black" />
-        <div className="pt-16" />
-        <h1 className="text-6xl md:text-8xl font-extrabold mb-10 drop-shadow-lg tracking-tight font-serif bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500 bg-clip-text text-transparent">
-          Customer Reviews
-        </h1>
-        <p className="text-3xl md:text-4xl max-w-4xl mx-auto mb-14 text-blue-100 font-medium">
-          See what real customers say about their Bus2Ride experience. We pride ourselves on top-notch service, clean vehicles, and unforgettable events. Read our latest reviews below!
-        </p>
-        <div className="flex flex-row flex-wrap gap-4 justify-center items-center mb-14">
-          <a
-            href="/quote"
-            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[170px] max-w-full text-center bg-white text-blue-900 border-blue-200 hover:bg-blue-100 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
-            style={{wordBreak: 'keep-all'}}
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <span className="text-blue-700 text-xl">⚡</span>
-              <span className="leading-tight text-blue-900 font-semibold truncate">Get Instant Quote</span>
-            </span>
-          </a>
-          <a
-            href="/fleet"
-            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[170px] max-w-full text-center bg-blue-700 text-white border-blue-700 hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
-            style={{wordBreak: 'keep-all'}}
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <span className="text-white text-xl">🚌</span>
-              <span className="leading-tight text-white font-semibold truncate">View Fleet</span>
-            </span>
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="rounded-full font-bold px-7 py-3 text-lg tracking-tight shadow-md transition border-2 flex items-center justify-center min-w-[170px] max-w-full text-center bg-white text-blue-900 border-blue-200 hover:bg-blue-100 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap overflow-hidden"
-            style={{wordBreak: 'keep-all'}}
-          >
-            <span className="flex items-center gap-2 min-w-0">
-              <span className="text-pink-500 text-xl">📞</span>
-              <span className="leading-tight text-blue-900 font-semibold truncate">Contact Us</span>
-            </span>
-          </a>
-        </div>
-        <div className="pb-10" />
-        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[120vw] h-40 bg-gradient-to-r from-blue-500/30 via-blue-500/20 to-blue-900/10 blur-2xl opacity-60" />
-      </div>
+      <HeroHeader
+        pageSlug="reviews"
+        fallback={{
+          page_slug: "reviews",
+          title: "Customer Reviews",
+          subtitle: "See what real customers say about their Bus2Ride experience. We pride ourselves on top-notch service, clean vehicles, and unforgettable events.",
+          primary_cta: { label: "Get Instant Quote", href: "/quote" },
+          secondary_cta: { label: "View Fleet", href: "/fleet" },
+          tertiary_cta: { label: "Contact Us", href: "mailto:info@bus2ride.com" },
+          gradient_from: "from-blue-900/80",
+          gradient_via: "via-blue-950/80",
+          gradient_to: "to-black/90",
+          text_color: "text-white",
+          wave_fill: "#0b1934",
+        }}
+      />
 
       {/* Reviews Grid Section */}
       <div className="w-full max-w-4xl mx-auto py-16 px-4">

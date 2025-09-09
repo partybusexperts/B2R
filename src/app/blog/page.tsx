@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import PageLayout from "../../components/PageLayout";
+import HeroHeader from "../../components/HeroHeader";
 import { SmartImage } from "../../components/SmartImage";
 import Section from "../../components/Section";
 
@@ -64,7 +65,7 @@ const POSTS = [
 ].map((p, i) => ({ ...p, image: imgAt(i) }));
 
 export default function Page() {
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
 
   const filteredPosts = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -85,70 +86,22 @@ export default function Page() {
       gradientTo="to-black"
       textColor="text-white"
     >
-      {/* ---------- HERO / HEADER (matches your Polls page look) ---------- */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        {/* Primary bright gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        {/* Sheen overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          Blog & Insights
-        </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-8 text-blue-50 font-medium drop-shadow">
-          Guides, checklists, and insider tips for renting party buses, limos, shuttles, and black cars—plan with confidence.
-        </p>
-
-        {/* Header CTAs (optional but consistent with Polls page) */}
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a
-            href={`tel:${PHONE_TEL}`}
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-white/95 text-blue-900 hover:bg-white border-blue-200"
-          >
-            Call {PHONE_DISPLAY}
-          </a>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-blue-700"
-          >
-            Email Us
-          </a>
-          <a
-            href="/quote#instant"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-800 text-white hover:bg-blue-900 border-blue-900"
-          >
-            Instant Live Quote
-          </a>
-        </div>
-
-        {/* Search in header */}
-        <div className="relative z-10 w-full max-w-5xl mt-8 px-4">
-          <div className="flex items-center justify-center">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search posts (pricing, wedding, airport, party bus, limo...)"
-              className="w-full max-w-2xl rounded-full px-6 py-3 text-lg bg-white/90 text-blue-900 border border-white/60 placeholder-blue-900/60 shadow focus:outline-none focus:ring-2 focus:ring-white/70"
-              aria-label="Search blog posts"
-            />
-          </div>
-          <div className="mt-3 text-sm text-blue-50/90 text-center">
-            {filteredPosts.length} / {POSTS.length} posts visible
-          </div>
-        </div>
-
-        {/* Decorative wave divider */}
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path
-              d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
-              fill="#0b1934"
-              opacity="1"
-            />
-          </svg>
-        </div>
-      </section>
+      <HeroHeader
+        pageSlug="blog"
+        fallback={{
+          page_slug: "blog",
+          title: "Blog & Insights",
+          subtitle: "Guides, checklists, and insider tips for renting party buses, limos, shuttles, and black cars—plan with confidence.",
+          primary_cta: { label: `Instant Live Quote`, href: "/quote#instant" },
+          secondary_cta: { label: `Email Us`, href: `mailto:${EMAIL}` },
+          tertiary_cta: { label: `Call ${PHONE_DISPLAY}`, href: `tel:${PHONE_TEL}` },
+          gradient_from: "from-sky-400",
+          gradient_via: "via-blue-600",
+          gradient_to: "to-indigo-900",
+          text_color: "text-white",
+          wave_fill: "#0b1934",
+        }}
+      />
 
       {/* ---------- POSTS GRID ---------- */}
       <Section className="max-w-7xl mx-auto mb-16 bg-gradient-to-br from-blue-900/80 to-black rounded-2xl shadow-xl py-10 px-6">

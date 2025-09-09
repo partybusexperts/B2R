@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import HeroHeader from "../../components/HeroHeader";
 
 type Secret = {
   id: string;
@@ -224,51 +225,23 @@ export default function IndustrySecretsPage() {
 
   return (
     <main className="text-slate-100 bg-[#0f1f46]">
-      {/* ---------- HERO (matches Fleet page, with CTAs) ---------- */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          Limo & Party Bus — Industry Secrets
-        </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
-          Insider tips operators don’t always advertise—book smarter, avoid surprise fees, and get the most out of your ride.
-        </p>
-
-        {/* Matching CTAs */}
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a
-            href={`tel:${PHONE_TEL}`}
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-white/95 text-blue-900 hover:bg-white border-blue-200"
-          >
-            Call {PHONE_DISPLAY}
-          </a>
-          <a
-            href={`mailto:${EMAIL}`}
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-blue-700"
-          >
-            Email Us
-          </a>
-          <a
-            href="/quote#instant"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-800 text-white hover:bg-blue-900 border-blue-900"
-          >
-            ⚡ Instant Live Quote
-          </a>
-        </div>
-
-        {/* Decorative wave divider */}
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path
-              d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
-              fill="#122a56"
-              opacity="1"
-            />
-          </svg>
-        </div>
-      </section>
+      <HeroHeader
+        pageSlug="industry-secrets"
+        fallback={{
+          page_slug: "industry-secrets",
+          title: "Limo & Party Bus — Industry Secrets",
+          subtitle: "Insider tips operators don't always advertise—book smarter, avoid surprise fees, and get the most out of your ride.",
+          primary_cta: { label: "See Pricing", href: "/pricing" },
+          secondary_cta: { label: "Ask About Off-Peak", href: "/contact" },
+          tertiary_cta: { label: "Explore Fleet", href: "/party-buses" },
+          gradient_from: "from-sky-400",
+          gradient_via: "via-blue-600",
+          gradient_to: "to-indigo-900",
+          text_color: "text-white",
+          wave_fill: "#122a56",
+        }}
+      />
+      
 
       {/* ---------- SECRETS GRID ---------- */}
       <section className="bg-[#122a56] pt-8 pb-14">

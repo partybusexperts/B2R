@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import HeroHeader from "../../components/HeroHeader";
 import { normalizeToCategoryKeys, ORDERED_CATEGORIES_BY_GROUP } from "../../data/polls/taxonomy";
 
 /* ===== Types ===== */
@@ -332,42 +333,22 @@ export default function ClientPolls() {
     <main className="text-slate-100 bg-[#0f1f46] min-h-screen">
       {Toasts}
 
-      {/* Hero (pricing-like, copied from pricing page) */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          Community Polls Hub
-        </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
-          Vote fast. See results instantly. Embed any poll on your site in one click.
-        </p>
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a
-            href="/polls"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-white/95 text-blue-900 hover:bg-white border-blue-200"
-          >
-            Browse Polls
-          </a>
-          <a
-            href="/poll-results"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-blue-700"
-          >
-            View Results
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-800 text-white hover:bg-blue-900 border-blue-900"
-          >
-            ✉️ Contact Us
-          </a>
-        </div>
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z" fill="#122a56" />
-          </svg>
-        </div>
-      </section>
+      <HeroHeader
+        pageSlug="polls"
+        fallback={{
+          page_slug: "polls",
+          title: "Community Polls Hub",
+          subtitle: "Vote fast. See results instantly. Embed any poll on your site in one click.",
+          primary_cta: { label: `Browse Polls`, href: "/polls" },
+          secondary_cta: { label: `View Results`, href: "/poll-results" },
+          tertiary_cta: { label: `Contact Us`, href: `mailto:info@bus2ride.com` },
+          gradient_from: "from-sky-400",
+          gradient_via: "via-blue-600",
+          gradient_to: "to-indigo-900",
+          text_color: "text-white",
+          wave_fill: "#122a56",
+        }}
+      />
 
       {/* Search + chips area (reinserted so polls search remains available) */}
       <section className="bg-[#122a56] pt-6 pb-6 relative">

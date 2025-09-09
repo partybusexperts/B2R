@@ -7,6 +7,7 @@ import { findByFileName } from "../../utils/optimizedImages";
 import { resolveVehicles } from "../../data/vehicles";
 import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
+import HeroHeader from "../../components/HeroHeader";
 
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
@@ -54,7 +55,23 @@ export default function FleetPage() {
         }}
       />
 
-      {/* ---------- FLEET GRID ---------- */}
+      <HeroHeader
+        pageSlug="fleet"
+        fallback={{
+          page_slug: "fleet",
+          title: "Browse Vehicle Types",
+          subtitle: "From sleek limos to mega party buses — every ride is clean, comfy, and ready to roll.",
+          primary_cta: { label: "Get an Instant Quote", href: "/quote#instant" },
+          secondary_cta: { label: "Call", href: `tel:${PHONE_TEL}` },
+          tertiary_cta: { label: "View Fleet", href: "/fleet" },
+          gradient_from: "from-blue-950",
+          gradient_via: "via-blue-900",
+          gradient_to: "to-black",
+          text_color: "text-white",
+          wave_fill: "#122a56",
+        }}
+      />
+
       <section className="bg-[#122a56] pt-8 pb-14">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">Browse Vehicle Types</h2>

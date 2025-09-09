@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import SmartImage from "../../components/SmartImage";
 import Section from "../../components/Section";
+import HeroHeader from "../../components/HeroHeader";
 import ToolsGrid from "../../components/tools/ToolsGrid";
 import HomePolls from "../../components/HomePolls";
 
@@ -28,80 +29,10 @@ const faqData = [
   { title: "How do I get a quote?", answer: "Use our Instant Quote Tool or call us for a custom quote in minutes.", image: "/vercel.svg" },
 ];
 
-/* ------------------------------ Stats + Modals ----------------------------- */
-const statsData = [
-  {
-    icon: "⏰",
-    title: "3–4 Hours",
-    subtitle: "Minimum Booking",
-    modalTitle: "Minimum Booking Time",
-    modalContent:
-      "Most party bus rentals require a 3–4 hour minimum. This ensures you get the best value and covers travel, setup, and cleanup time.",
-  },
-  {
-    icon: "💵",
-    title: "No Hidden Fees",
-    subtitle: "Transparent Quotes",
-    modalTitle: "No Hidden Fees",
-    modalContent:
-      "Quotes include taxes and standard fees. What you see is what you pay—no surprises at checkout.",
-  },
-  {
-    icon: "🧾",
-    title: "All-Inclusive",
-    subtitle: "Taxes & Fees",
-    modalTitle: "All-Inclusive Pricing",
-    modalContent:
-      "Your price covers all mandatory charges (taxes, standard fees, and service). Tipping extra is optional.",
-  },
-  {
-    icon: "💳",
-    title: "Flexible Pay",
-    subtitle: "Cards, Zelle, CashApp",
-    modalTitle: "Flexible Payment Methods",
-    modalContent:
-      "We accept all major credit/debit cards, Zelle, and CashApp. (No ACH or crypto.)",
-  },
-];
-
 /* ------------------------------ Tools + Modals ----------------------------- */
-// ...existing code...
-
-/* ---------------------------------- Modal --------------------------------- */
-function Modal({
-  open,
-  onClose,
-  title,
-  children,
-}: {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-}) {
-  if (!open) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="relative w-full max-w-md rounded-2xl border border-blue-800/40 bg-gradient-to-br from-[#13306a] to-[#0e2250] p-8 shadow-2xl text-blue-100">
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-blue-100 hover:text-white text-2xl font-bold"
-          aria-label="Close"
-        >
-          ×
-        </button>
-        <h3 className="text-2xl font-extrabold mb-3 font-serif tracking-tight text-white">
-          {title}
-        </h3>
-        <div className="text-blue-100 leading-relaxed">{children}</div>
-      </div>
-    </div>
-  );
-}
 
 export default function PricingPage() {
   const [search, setSearch] = useState("");
-  const [modalIdx, setModalIdx] = useState<number | null>(null);
 
   const filteredFaq = useMemo(() => {
     const q = search.toLowerCase();
@@ -113,74 +44,23 @@ export default function PricingPage() {
   }, [search]);
 
   return (
-    <main className="min-h-screen w-full text-white bg-[#0f1f46]">
-      {/* ---------- HERO ---------- */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          Transparent Pricing
-        </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
-          No hidden fees. No surprises. Just clear, all-inclusive rates for every trip.
-        </p>
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a
-            href="/quote"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-white/95 text-blue-900 hover:bg-white border-blue-200"
-          >
-            Get Instant Quote
-          </a>
-          <a
-            href="/fleet"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-600 text-white hover:bg-blue-700 border-blue-700"
-          >
-            🚌 View Fleet
-          </a>
-          <a
-            href="mailto:info@bus2ride.com"
-            className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] whitespace-nowrap bg-blue-800 text-white hover:bg-blue-900 border-blue-900"
-          >
-            ✉️ Contact Us
-          </a>
-        </div>
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z" fill="#122a56" />
-          </svg>
-        </div>
-      </section>
-
-      {/* ---------- WHAT AFFECTS YOUR PRICE ---------- */}
-      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 text-white font-serif tracking-tight">
-          What Affects Your Price
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {statsData.map((stat, idx) => (
-            <button
-              key={stat.title}
-              type="button"
-              onClick={() => setModalIdx(idx)}
-              className="text-left bg-[#12244e] rounded-2xl shadow-xl p-6 border border-blue-800/30 hover:shadow-2xl hover:-translate-y-1 transition group focus:outline-none"
-            >
-              <div className="text-5xl mb-3 drop-shadow-lg">{stat.icon}</div>
-              <div className="text-white font-extrabold text-2xl leading-tight font-serif group-hover:underline">
-                {stat.title}
-              </div>
-              <div className="text-blue-200 font-semibold text-lg mt-1">{stat.subtitle}</div>
-              <div className="mt-4 text-blue-300 font-bold group-hover:text-blue-100 transition">Learn more →</div>
-            </button>
-          ))}
-        </div>
-        <Modal
-          open={modalIdx !== null}
-          onClose={() => setModalIdx(null)}
-          title={modalIdx !== null ? statsData[modalIdx].modalTitle : ""}
-        >
-          {modalIdx !== null ? statsData[modalIdx].modalContent : null}
-        </Modal>
-      </Section>
+    <main className="min-h-screen w-full text-white">
+      <HeroHeader
+        pageSlug="pricing"
+        fallback={{
+          page_slug: "pricing",
+          title: "Transparent Pricing",
+          subtitle: "No hidden fees. No surprises. Just clear, all-inclusive rates for every trip.",
+          primary_cta: { label: "Get Instant Quote", href: "/quote" },
+          secondary_cta: { label: "View Fleet", href: "/fleet" },
+          tertiary_cta: { label: "Contact Us", href: "mailto:info@bus2ride.com" },
+          gradient_from: "from-sky-400",
+          gradient_via: "via-blue-600",
+          gradient_to: "to-indigo-900",
+          text_color: "text-white",
+          wave_fill: "#122a56",
+        }}
+      />
 
       {/* ---------- PRICING FAQ ---------- */}
       <Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">

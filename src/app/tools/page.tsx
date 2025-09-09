@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
-import tools, { CATEGORY_ORDER, ToolCategory, ToolEntry } from "@/components/tools/registry";
-import ToolsGrid from '@/components/tools/ToolsGrid';
-import Section from "@/components/Section";
-import SmartImage from "@/components/SmartImage";
+import tools, { CATEGORY_ORDER, ToolCategory, ToolEntry } from "../../components/tools/registry";
+import ToolsGrid from '../../components/tools/ToolsGrid';
+import Section from "../../components/Section";
+import SmartImage from "../../components/SmartImage";
 import HomePolls from "../../components/HomePolls";
+import HeroHeader from "../../components/HeroHeader";
 
 /* ---------- helpers ---------- */
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -37,11 +38,12 @@ export default function ToolsPage() {
         if (!res.ok) return;
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setRegistry(data.map((r: any) => ({ id: r.id, title: r.title, desc: r.desc, category: r.category || 'Uncategorized', href: r.href || `/tools/${r.id}` })));
         }
-      } catch (e) {
-        // ignore and keep bundled registry
-      }
+      } catch {
+          // ignore and keep bundled registry
+        }
     }
     load();
   }, []);
@@ -102,33 +104,22 @@ export default function ToolsPage() {
 
   return (
     <main className="min-h-screen w-full text-white bg-[#0f1f46]">
-      {/* ---------- HERO / HEADER (3 buttons) ---------- */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-blue-600 to-indigo-900" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          Tools & Calculators
-        </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-3xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
-          Plan smarter. Save money. Pick the perfect ride—fast.
-        </p>
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a href="/quote" className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] bg-white/95 text-blue-900 hover:bg-white border-blue-200">
-            Get Instant Quote
-          </a>
-          <a href="/fleet" className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] bg-blue-600 text-white hover:bg-blue-700 border-blue-700">
-            🚌 View Fleet
-          </a>
-          <a href="mailto:info@bus2ride.com" className="rounded-full font-bold px-6 py-3 text-base shadow-lg transition border flex items-center justify-center min-w-[210px] bg-blue-800 text-white hover:bg-blue-900 border-blue-900">
-            ✉️ Contact Us
-          </a>
-        </div>
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg viewBox="0 0 1440 110" className="w-full h-[110px]" preserveAspectRatio="none">
-            <path d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z" fill="#122a56" />
-          </svg>
-        </div>
-      </section>
+      <HeroHeader
+        pageSlug="tools"
+        fallback={{
+          page_slug: "tools",
+          title: "Tools & Calculators",
+          subtitle: "Plan smarter. Save money. Pick the perfect ride—fast.",
+          primary_cta: { label: `Get Instant Quote`, href: "/quote" },
+          secondary_cta: { label: `View Fleet`, href: "/fleet" },
+          tertiary_cta: { label: `Contact Us`, href: `mailto:info@bus2ride.com` },
+          gradient_from: "from-sky-400",
+          gradient_via: "via-blue-600",
+          gradient_to: "to-indigo-900",
+          text_color: "text-white",
+          wave_fill: "#122a56",
+        }}
+      />
 
       {/* ---------- SEARCH / FILTER BAR ---------- */}
       <Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl -mt-10 mb-10 py-6 px-6 border border-blue-800/30">

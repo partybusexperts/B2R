@@ -1,5 +1,6 @@
 import React from "react";
 import Section from "../components/Section";
+import HeroHeader from "../components/HeroHeader";
 import QuoteForm from '../components/QuoteForm';
 import StepCard from "../components/StepCard";
 import ToolsSlider from "../components/ToolsSlider";
@@ -12,6 +13,22 @@ import SlideshowMaker from "../components/SlideshowMaker";
 export default function Home() {
   return (
     <main>
+      <HeroHeader
+        pageSlug="home"
+        fallback={{
+          page_slug: "home",
+          title: "Bus2Ride — Group transport made easy",
+          subtitle: "Instant quotes, transparent pricing, and clean vehicles for every event.",
+          primary_cta: { label: "Get Instant Quote", href: "/quote" },
+          secondary_cta: { label: "View Fleet", href: "/fleet" },
+          tertiary_cta: { label: "Contact Us", href: "mailto:info@bus2ride.com" },
+          gradient_from: "from-sky-400",
+          gradient_via: "via-blue-600",
+          gradient_to: "to-indigo-900",
+          text_color: "text-white",
+          wave_fill: "#122a56",
+        }}
+      />
       {/* Top CTA */}
       <Section className="max-w-4xl mx-auto text-center py-8">
         <a

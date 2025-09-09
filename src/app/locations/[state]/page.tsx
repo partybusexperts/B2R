@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import Section from "../../../components/Section";
+import HeroHeader from "../../../components/HeroHeader";
 import { findState, slugifyState } from "../locationData";
 import { getStateContent } from "../stateContent";
 
@@ -73,51 +74,22 @@ export default function StatePage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black text-white">
-      {/* HERO */}
-      <section className="relative overflow-hidden min-h-[520px] md:min-h-[600px] flex flex-col items-center justify-center text-center py-20">
-        <div className={`absolute inset-0 bg-gradient-to-b ${accent}`} />
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 mix-blend-overlay pointer-events-none" />
-        <h1 className="relative z-10 text-5xl md:text-7xl font-extrabold mb-6 tracking-tight font-serif text-white drop-shadow-[0_6px_20px_rgba(0,0,0,.35)]">
-          {entry.state} Charter Buses & Limos
-        </h1>
-        <p className="relative z-10 text-2xl md:text-3xl max-w-4xl mx-auto mb-10 text-blue-50 font-medium drop-shadow">
-          Reliable group transportation across {entry.state}
-          {isAlaska && " — from cruise transfers to northern lights tours"}.
-        </p>
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 justify-center w-full max-w-3xl">
-          <a
-            href="/quote#instant"
-            className="rounded-full font-bold px-7 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[200px] bg-white/95 text-blue-900 hover:bg-white border-blue-200"
-          >
-            ⚡ Instant Quote
-          </a>
-          <a
-            href="/fleet"
-            className="rounded-full font-bold px-7 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[200px] bg-blue-700 text-white hover:bg-blue-800 border-blue-800"
-          >
-            🚌 View Fleet
-          </a>
-          <a
-            href="tel:8885352566"
-            className="rounded-full font-bold px-7 py-3 text-lg shadow-lg transition border flex items-center justify-center min-w-[200px] bg-blue-900 text-white hover:bg-black/80 border-blue-900"
-          >
-            📞 (888) 535-2566
-          </a>
-        </div>
-        <div className="absolute bottom-[-1px] left-0 right-0">
-          <svg
-            viewBox="0 0 1440 110"
-            className="w-full h-[110px]"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,80 C240,130 480,20 720,60 C960,100 1200,40 1440,80 L1440,120 L0,120 Z"
-              fill="#122a56"
-              opacity="1"
-            />
-          </svg>
-        </div>
-      </section>
+      <HeroHeader
+        pageSlug={`locations-${slugify(entry.state)}`}
+        fallback={{
+          page_slug: `locations-${slugify(entry.state)}`,
+          title: `${entry.state} Charter Buses & Limos`,
+          subtitle: `Reliable group transportation across ${entry.state}${isAlaska ? ' — from cruise transfers to northern lights tours' : ''}.`,
+          primary_cta: { label: `Instant Quote`, href: `/quote#instant` },
+          secondary_cta: { label: `View Fleet`, href: `/fleet` },
+          tertiary_cta: { label: `Call (888) 535-2566`, href: `tel:8885352566` },
+          gradient_from: accent.split(' ')[0] || 'from-blue-300',
+          gradient_via: accent.split(' ')[1] || 'via-sky-500',
+          gradient_to: accent.split(' ')[2] || 'to-indigo-700',
+          text_color: 'text-white',
+          wave_fill: '#122a56',
+        }}
+      />
 
       <main className="max-w-7xl mx-auto px-5 md:px-10 -mt-2">
         {/* BREADCRUMB */}
