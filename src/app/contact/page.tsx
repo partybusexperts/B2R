@@ -15,15 +15,37 @@ async function fetchContactHero() {
   try {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
     const orClause = `key.eq.hero-contact,key.eq.contact-hero,page_slug.eq.contact`;
-    const { data, error } = await supabase
+    // Fetch a small set of recent matches and pick the best candidate in code.
+  const { data, error } = await supabase
       .from('content_points')
       .select('*')
       .or(orClause)
       .order('updated_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (error) return null;
-  const candidate = data?.body ?? data?.data ?? data?.content ?? data?.json ?? data?.props ?? data ?? null;
+      .limit(5);
+
+    if (error || !data || data.length === 0) return null;
+
+    type Row = { key?: string; body?: any; data?: any; content?: any; json?: any; props?: any };
+
+    // Prefer an explicit 'hero-contact' key if present.
+    let chosen: Row | null = (data as Row[]).find((r) => r?.key === 'hero-contact') || null;
+
+    // Otherwise prefer the first row that has a JSON body with a title.
+    if (!chosen) {
+      chosen = (data as Row[]).find((r) => {
+        const body = r?.body ?? r?.data ?? r?.content ?? r?.json ?? r?.props;
+        if (!body) return false;
+        if (typeof body === 'string') {
+          try { const p = JSON.parse(body); return !!p?.title; } catch { return false; }
+        }
+        return !!body?.title;
+      }) || null;
+    }
+
+    // Fallback to the most-recent row.
+    if (!chosen) chosen = data[0];
+
+    const candidate = chosen?.body ?? chosen?.data ?? chosen?.content ?? chosen?.json ?? chosen?.props ?? chosen ?? null;
     if (!candidate) return null;
     if (typeof candidate === 'string') {
       try { return JSON.parse(candidate); } catch { return null; }
