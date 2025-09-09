@@ -44,3 +44,4 @@ next-env.d.ts
 # local env and build output
 .env.local
 .next
+.history
