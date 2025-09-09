@@ -14,14 +14,16 @@ async function fetchContactHero() {
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE) return null;
   try {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
+    const orClause = `key.eq.hero-contact,key.eq.contact-hero,page_slug.eq.contact`;
     const { data, error } = await supabase
       .from('content_points')
       .select('*')
-      .or(`key.eq.contact-hero,page_slug.eq.contact`)
+      .or(orClause)
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle();
     if (error) return null;
-    const candidate = data?.data ?? data?.content ?? data?.json ?? data?.props ?? data?.body ?? data ?? null;
+  const candidate = data?.body ?? data?.data ?? data?.content ?? data?.json ?? data?.props ?? data ?? null;
     if (!candidate) return null;
     if (typeof candidate === 'string') {
       try { return JSON.parse(candidate); } catch { return null; }

@@ -14,10 +14,12 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
 
   try {
+    const orClause = `key.eq.hero-${slug},key.eq.${slug}-hero,page_slug.eq.${slug}`;
     const { data, error } = await supabase
       .from('content_points')
       .select('*')
-      .or(`key.eq.${slug}-hero,page_slug.eq.${slug}`)
+      .or(orClause)
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle();
 
