@@ -32,31 +32,35 @@ const POPULAR_EVENT_TITLES = [
   "Quinceañeras",
 ];
 
+// NOTE: these were replaced with project-local placeholders. Drop your real
+// images into the folders below (or update the paths) to swap them in.
+// TODO: Replace '/images/replacements/...' with final image paths or move
+// the replacement images into the public folder at those locations.
 const EVENT_IMAGES = [
-  "/images/party-buses/18 Passenger White Party Bus Exterior.png",
-  "/images/party-buses/18 Passenger White Party Bus Interior.png",
-  "/images/party-buses/20 Passenger Party Bus Exterior.png",
-  "/images/party-buses/24 Passenger Party Bus Exterior.jpg",
-  "/images/party-buses/30 Passenger Party Bus Exterior.png",
-  "/images/party-buses/36 Passenger Party Bus Inside.png",
-  "/images/party-buses/17 Passenger Black Party Bus Exterior.png",
-  "/images/party-buses/18 Passenger Party Bus Interior 2.png",
+  "/images/replacements/party/party-01.jpg",
+  "/images/replacements/party/party-02.jpg",
+  "/images/replacements/party/party-03.jpg",
+  "/images/replacements/party/party-04.jpg",
+  "/images/replacements/party/party-05.jpg",
+  "/images/replacements/party/party-06.jpg",
+  "/images/replacements/party/party-07.jpg",
+  "/images/replacements/party/party-08.jpg",
 ];
 
 // Prefer event-specific images when available in public/images/events
 const EVENTS_IMAGES_MAP: Record<string, string> = {
-  Weddings: "/images/events/weddings.jpg",
-  Proms: "/images/events/prom.jpg",
-  "Birthday Parties": "/images/events/birthday parties.jpg",
-  Concerts: "/images/events/concerts.jpg",
-  "Sporting Events": "/images/events/sporting events.jpg",
-  "Bachelorette Parties": "/images/events/bachelorette parties.jpg",
-  "Bachelor Parties": "/images/events/bachelor parties.jpg",
-  "Night Out on the Town": "/images/events/girls nights out.jpg",
-  "Wine Tours": "/images/events/brewery tours.jpg",
-  "Brewery Tours": "/images/events/brewery tours.jpg",
-  "Corporate Events": "/images/events/corporate parties.jpg",
-  Quinceañeras: "/images/events/quinceanera parties.jpg",
+  Weddings: "/images/replacements/events/weddings.jpg",
+  Proms: "/images/replacements/events/prom.jpg",
+  "Birthday Parties": "/images/replacements/events/birthday-parties.jpg",
+  Concerts: "/images/replacements/events/concerts.jpg",
+  "Sporting Events": "/images/replacements/events/sporting-events.jpg",
+  "Bachelorette Parties": "/images/replacements/events/bachelorette-parties.jpg",
+  "Bachelor Parties": "/images/replacements/events/bachelor-parties.jpg",
+  "Night Out on the Town": "/images/replacements/events/girls-night-out.jpg",
+  "Wine Tours": "/images/replacements/events/wine-tours.jpg",
+  "Brewery Tours": "/images/replacements/events/brewery-tours.jpg",
+  "Corporate Events": "/images/replacements/events/corporate-events.jpg",
+  Quinceañeras: "/images/replacements/events/quinceaneras.jpg",
 };
 
 const eventBlurb = (title: string) => `Perfect for ${title.toLowerCase()}—on-time pickups, clean rides, and a vibe your group will love.`;
@@ -132,8 +136,8 @@ export default function PartyBusesPage() {
 
       <section className="bg-[#122a56] pt-8 pb-14">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">Pick Your Party Bus</h2>
-          <p className="text-blue-100/90 text-center max-w-3xl mx-auto mt-3 mb-10">From minis to mega buses—clean, comfy, and ready for your group.</p>
+          <h2 data-content-key="party_buses.title" className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight">Pick Your Party Bus</h2>
+          <p data-content-key="party_buses.description" className="text-blue-100/90 text-center max-w-3xl mx-auto mt-3 mb-10">From minis to mega buses—clean, comfy, and ready for your group.</p>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {catalogPartyBuses.map((v) => (
@@ -147,8 +151,8 @@ export default function PartyBusesPage() {
 
       {/* ---------- WHY PARTY BUSES ROCK ---------- */}
       <section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">Why Party Buses Rock</h2>
-        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Everything you need for a great group night—sound, space, and style.</p>
+  <h2 data-content-key="party_buses.why_title" className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">Why Party Buses Rock</h2>
+  <p data-content-key="party_buses.why_description" className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Everything you need for a great group night—sound, space, and style.</p>
 
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {PARTY_FEATURES.map((f) => (
@@ -303,10 +307,10 @@ export default function PartyBusesPage() {
                 </div>
 
                 <div className="p-5">
-                  <div className="flex items-center gap-3 mb-3">
-                    <a href={`tel:${PHONE_TEL}`} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition" aria-label={`Call ${PHONE_DISPLAY}`}>{PHONE_DISPLAY}</a>
-                    <a href={`mailto:${EMAIL}`} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition">Email Now</a>
-                  </div>
+                          <div className="flex items-center gap-3 mb-3">
+                            <a data-content-key="party_buses.phone_display" href={`tel:${PHONE_TEL}`} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition" aria-label={`Call ${PHONE_DISPLAY}`}>{PHONE_DISPLAY}</a>
+                            <a data-content-key="party_buses.email_cta" href={`mailto:${EMAIL}`} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition">Email Now</a>
+                          </div>
 
                   {ev.optimizedEntries && (
                     <div className="flex gap-2 overflow-x-auto py-2">
@@ -322,8 +326,8 @@ export default function PartyBusesPage() {
             ))}
           </div>
 
-          <div className="flex justify-center mt-8">
-            <a href="/events" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700">More Event Ideas</a>
+            <div className="flex justify-center mt-8">
+            <a data-content-key="party_buses.more_events_cta" href="/events" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700">More Event Ideas</a>
           </div>
         </div>
       </section>
