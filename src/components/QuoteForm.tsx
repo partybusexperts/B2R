@@ -17,7 +17,7 @@ export default function QuoteForm() {
   const [passengers, setPassengers] = useState(4);
   const [hours, setHours] = useState(2);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<unknown | null>(null);
+  const [result, setResult] = useState<React.ReactNode | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function submit(e: React.FormEvent) {
@@ -47,7 +47,8 @@ export default function QuoteForm() {
       } else if (!data.ok) {
         setError(data.error ?? 'Quote returned an error');
       } else {
-        setResult(data.data);
+        // Store renderable node (stringify for display)
+        setResult(<pre className="text-sm overflow-x-auto">{JSON.stringify(data.data, null, 2)}</pre>);
       }
     } catch (err) {
       setError((err as Error).message || String(err));

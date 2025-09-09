@@ -44,12 +44,14 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* Tools */}
+      {/* Tools (client-only to avoid SSR stalls) */}
       <Section className="max-w-7xl mx-auto mt-8">
         <h2 className="text-4xl font-extrabold text-center mb-4">Tools</h2>
         <p className="text-center mb-6">Planner tools to help you choose the right vehicle and plan your trip.</p>
         <div className="max-w-6xl mx-auto bg-white p-4 rounded-2xl">
-          <ToolsSlider />
+          <ClientOnly>
+            <ToolsSlider />
+          </ClientOnly>
         </div>
       </Section>
 
@@ -61,23 +63,29 @@ export default function Home() {
         </ClientOnly>
       </Section>
 
-      {/* Live Weather */}
+      {/* Live Weather (client-only) */}
       <Section className="max-w-6xl mx-auto mt-10">
         <h2 className="text-3xl font-bold text-center mb-4">Smart Weather & Comfort Tips</h2>
-        <LiveWeatherAdvisor />
+        <ClientOnly>
+          <LiveWeatherAdvisor />
+        </ClientOnly>
       </Section>
 
-      {/* Reviews & Slideshow */}
+      {/* Reviews & Slideshow (client-only) */}
       <Section className="max-w-6xl mx-auto mt-10 mb-20">
         <div className="grid md:grid-cols-2 gap-8">
           <div>
             <h3 className="text-2xl font-bold mb-3">Leave a Review</h3>
-            <ReviewForm />
+            <ClientOnly>
+              <ReviewForm />
+            </ClientOnly>
           </div>
           <div>
             <h3 className="text-2xl font-bold mb-3">Make a Slideshow</h3>
             <div id="slideshow-tool" />
-            <SlideshowMaker />
+            <ClientOnly>
+              <SlideshowMaker />
+            </ClientOnly>
           </div>
         </div>
       </Section>
