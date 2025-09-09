@@ -14,17 +14,12 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
 
   try {
-    const orClause = `key.eq.hero-${slug},key.eq.${slug}-hero,page_slug.eq.${slug}`;
-    const { data, error } = await supabase
-      .from('content_points')
-      .select('*')
-      .or(orClause)
-      .order('updated_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+  // Prefer canonical header via RPC
+  const { data, error } = await supabase.rpc('fetch_header', { p_page_slug: slug });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json(data ?? {});
+  const row = Array.isArray(data) ? data[0] : data;
+  return NextResponse.json(row ?? {});
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: message }, { status: 500 });
