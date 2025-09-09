@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import SmartImage from "../../components/SmartImage";
+import HeroHeader from "../../components/HeroHeader";
 import { eventDetails } from "./eventDetails";
 import { getCategoryImages } from "../../utils/optimizedImages";
 
