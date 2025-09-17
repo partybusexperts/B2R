@@ -273,60 +273,11 @@ export default function PartyBusesPage() {
         </div>
       </section>
 
-      {/* EVENTS */}
+      {/* EVENTS (DB-driven) */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 my-12 pb-12">
         <div className="bg-[#122a56] border border-blue-800/30 rounded-3xl shadow-xl px-6 md:px-8 py-10">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center text-white font-serif tracking-tight mb-3">Events We Love Rolling To</h2>
-          <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-6">From milestone moments to big-night blowouts—book the perfect ride for your event.</p>
-
-          <div className="w-full flex justify-center mb-8">
-            <input type="text" placeholder="Search events…" value={eventSearch} onChange={(e) => setEventSearch(e.target.value)} className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredEvents.map((ev) => (
-              <div key={ev.title} className="relative rounded-2xl overflow-hidden border border-blue-800/30 shadow-lg bg-[#173264] flex flex-col">
-                <div className="h-60 md:h-72 w-full relative">
-                  {/* Prefer an actual event photo (public/images/events) when available. If not, fall back to optimized vehicle images, then to the generic fallback. */}
-                  {ev.fallback && String(ev.fallback).startsWith("/images/events/") ? (
-                    <SmartImage src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
-                  ) : ev.optimizedEntries && ev.optimizedEntries.length ? (
-                    <OptimizedImage entry={ev.optimizedEntries[0]} alt={ev.title} className="w-full h-full object-cover" fillParent priorityIfAbove={2000} sizesOverride="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" minDesiredWidth={900} />
-                  ) : (
-                    <SmartImage src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
-                  )}
-                  {/* Server-side fallback for non-JS / SEO: ensure the initial HTML includes the event image if available */}
-                  <noscript>
-                    <img src={ev.fallback} alt={ev.title} className="w-full h-full object-cover" />
-                  </noscript>
-                </div>
-
-                <div className="absolute inset-x-0 top-0 p-5 bg-gradient-to-b from-black/35 via-black/20 to-transparent pointer-events-none">
-                  <div className="text-2xl font-extrabold text-white drop-shadow">{ev.title}</div>
-                  <div className="text-blue-100 text-sm mt-1">{ev.desc}</div>
-                </div>
-
-                <div className="p-5">
-                          <div className="flex items-center gap-3 mb-3">
-                            <a data-content-key="party_buses.phone_display" href={`tel:${PHONE_TEL}`} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition" aria-label={`Call ${PHONE_DISPLAY}`}>{PHONE_DISPLAY}</a>
-                            <a data-content-key="party_buses.email_cta" href={`mailto:${EMAIL}`} className="inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-bold bg-blue-800 text-white hover:bg-blue-900 border border-blue-900 transition">Email Now</a>
-                          </div>
-
-                  {ev.optimizedEntries && (
-                    <div className="flex gap-2 overflow-x-auto py-2">
-                      {ev.optimizedEntries.map((entry, idx) => (
-                        <div key={idx} className="flex-shrink-0 w-24 h-14 rounded overflow-hidden border border-blue-800/40">
-                          <OptimizedImage entry={entry} alt={`${ev.title} ${idx + 1}`} className="w-full h-full object-cover" minDesiredWidth={200} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-            <div className="flex justify-center mt-8">
+          <EventsSection limit={6} tag="party-buses" />
+          <div className="flex justify-center mt-8">
             <a data-content-key="party_buses.more_events_cta" href="/events" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700">More Event Ideas</a>
           </div>
         </div>

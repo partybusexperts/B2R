@@ -15,7 +15,7 @@ export type ToolSchema = {
   fields: Field[];
 };
 
-export type ToolCalculator = (inputs: Record<string, any>) => any;
+export type ToolCalculator = (inputs: Record<string, unknown>) => unknown;
 
 const calculators: Record<string, { schema: ToolSchema; calc: ToolCalculator }> = {};
 
@@ -602,11 +602,28 @@ calculators["cancellation-flex-score"] = {
   calc: (i) => {
     const days = Math.max(0, Math.floor(Number(i.daysBeforeRefund) || 0));
     const pct = Math.max(0, Math.min(100, Number(i.refundPct) || 0));
-    // simple scoring: more days and higher refundPct => higher score
     const score = Math.round(Math.min(100, (pct * 0.6) + Math.min(40, days * 1.5)));
     return { score, days, refundPct: pct };
   }
 };
+
+// Explicit placeholders for missing registry tools (safe fallbacks)
+calculators["group-vibe-matcher"] = { schema: { id: "group-vibe-matcher", title: "Group Vibe Matcher", fields: [] }, calc: (i) => ({ id: "group-vibe-matcher", placeholder: true, inputs: i }) };
+calculators["luxury-level-selector"] = { schema: { id: "luxury-level-selector", title: "Luxury Level Selector", fields: [] }, calc: (i) => ({ id: "luxury-level-selector", placeholder: true, inputs: i }) };
+calculators["group-discount-finder"] = { schema: { id: "group-discount-finder", title: "Group Discount Finder", fields: [] }, calc: (i) => ({ id: "group-discount-finder", placeholder: true, inputs: i }) };
+calculators["hidden-fees-detector"] = { schema: { id: "hidden-fees-detector", title: "Hidden Fees Detector", fields: [] }, calc: (i) => ({ id: "hidden-fees-detector", placeholder: true, inputs: i }) };
+calculators["early-booking-savings"] = { schema: { id: "early-booking-savings", title: "Early Booking Savings", fields: [] }, calc: (i) => ({ id: "early-booking-savings", placeholder: true, inputs: i }) };
+calculators["last-minute-deal-finder"] = { schema: { id: "last-minute-deal-finder", title: "Last-Minute Deal Finder", fields: [] }, calc: (i) => ({ id: "last-minute-deal-finder", placeholder: true, inputs: i }) };
+calculators["real-time-traffic-adjuster"] = { schema: { id: "real-time-traffic-adjuster", title: "Real-Time Traffic Adjuster", fields: [] }, calc: (i) => ({ id: "real-time-traffic-adjuster", placeholder: true, inputs: i }) };
+calculators["nighttime-route-safety"] = { schema: { id: "nighttime-route-safety", title: "Nighttime Route Safety", fields: [] }, calc: (i) => ({ id: "nighttime-route-safety", placeholder: true, inputs: i }) };
+calculators["cross-city-route-planner"] = { schema: { id: "cross-city-route-planner", title: "Cross-City Route Planner", fields: [] }, calc: (i) => ({ id: "cross-city-route-planner", placeholder: true, inputs: i }) };
+calculators["parking-availability-finder"] = { schema: { id: "parking-availability-finder", title: "Parking Availability Finder", fields: [] }, calc: (i) => ({ id: "parking-availability-finder", placeholder: true, inputs: i }) };
+calculators["rush-hour-avoidance"] = { schema: { id: "rush-hour-avoidance", title: "Rush Hour Avoidance", fields: [] }, calc: (i) => ({ id: "rush-hour-avoidance", placeholder: true, inputs: i }) };
+calculators["onboard-entertainment-planner"] = { schema: { id: "onboard-entertainment-planner", title: "Onboard Entertainment Planner", fields: [] }, calc: (i) => ({ id: "onboard-entertainment-planner", placeholder: true, inputs: i }) };
+calculators["custom-signage-creator"] = { schema: { id: "custom-signage-creator", title: "Custom Signage Creator", fields: [] }, calc: (i) => ({ id: "custom-signage-creator", placeholder: true, inputs: i }) };
+calculators["food-stop-recommender"] = { schema: { id: "food-stop-recommender", title: "Food Stop Recommender", fields: [] }, calc: (i) => ({ id: "food-stop-recommender", placeholder: true, inputs: i }) };
+calculators["multi-event-day-planner"] = { schema: { id: "multi-event-day-planner", title: "Multi-Event Day Planner", fields: [] }, calc: (i) => ({ id: "multi-event-day-planner", placeholder: true, inputs: i }) };
+calculators["guest-communication-hub"] = { schema: { id: "guest-communication-hub", title: "Guest Communication Hub", fields: [] }, calc: (i) => ({ id: "guest-communication-hub", placeholder: true, inputs: i }) };
 
 // --- First batch additions ---
 
@@ -1348,5 +1365,149 @@ calculators["wedding-timeline-builder"] = {
     return suggested;
   }
 };
+
+// --- Placeholder stubs for registry tools that were not yet implemented ---
+// These provide safe defaults so the UI can render every registry tool.
+const placeholder = (id: string): { schema: ToolSchema; calc: ToolCalculator } => ({ schema: { id, title: id, fields: [] }, calc: (i: Record<string, unknown>) => ({ id, placeholder: true, inputs: i }) });
+
+[
+  'group-vibe-matcher',
+  'luxury-level-selector',
+  'group-discount-finder',
+  'hidden-fees-detector',
+  'early-booking-savings',
+  'last-minute-deal-finder',
+  'real-time-traffic-adjuster',
+  'nighttime-route-safety',
+  'cross-city-route-planner',
+  'parking-availability-finder',
+  'rush-hour-avoidance',
+  'onboard-entertainment-planner',
+  'custom-signage-creator',
+  'food-stop-recommender',
+  'multi-event-day-planner',
+  'guest-communication-hub',
+  'vehicle-amenities-filter',
+  'venue-parking-permit',
+  'large-group-staging',
+  'event-exit-strategy',
+  'vip-drop-off-coordinator',
+  'luggage-transfer-scheduler',
+  'venue-accessibility-map',
+  'smoking-policy-verifier',
+  'emergency-evacuation-planner',
+  'child-seat-fit-guide',
+  'oversized-gear-planner',
+  'seating-accessibility-optimizer',
+  'group-size-flex-calculator',
+  'hello-world'
+].forEach(id => { if (!calculators[id]) calculators[id] = placeholder(id); });
+
+// === tools-runtime helpers (append after all calculators are defined) ===
+export type FieldValue = string | number | undefined | null;
+
+export type ValidationResult = {
+  ok: boolean;
+  errors: string[];
+  normalized: Record<string, unknown>;
+};
+
+const isFiniteNumber = (v: unknown): v is number =>
+  typeof v === "number" && Number.isFinite(v);
+
+const toNumber = (v: FieldValue): number | undefined => {
+  if (typeof v === "number") return Number.isFinite(v) ? v : undefined;
+  if (typeof v === "string" && v.trim() !== "") {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : undefined;
+  }
+  return undefined;
+};
+
+const coerceSelect = (
+  value: FieldValue,
+  options: string[] | undefined,
+  fallback?: FieldValue
+): string | undefined => {
+  if (!options || options.length === 0) {
+    return typeof value === "string" ? value : typeof fallback === "string" ? fallback : undefined;
+  }
+  const str = String(value ?? "");
+  if (options.includes(str)) return str;
+  const fb = typeof fallback === "string" ? fallback : undefined;
+  return fb ?? options[0];
+};
+
+export const normalizeInputs = (schema: ToolSchema, raw: Record<string, unknown>) => {
+  const out: Record<string, unknown> = {};
+  for (const f of schema.fields || []) {
+    const incoming = raw?.[f.name];
+    const base = incoming ?? f.default;
+
+    if (f.type === "number") {
+      const n = toNumber(base);
+      out[f.name] = n ?? 0;
+      continue;
+    }
+    if (f.type === "select") {
+      out[f.name] = coerceSelect(base, f.options, f.default);
+      continue;
+    }
+    out[f.name] = base == null ? "" : String(base); // text
+  }
+  for (const k of Object.keys(raw || {})) if (!(k in out)) out[k] = (raw as Record<string, unknown>)[k];
+  return out;
+};
+
+export const validateInputs = (schema: ToolSchema, raw: Record<string, unknown>): ValidationResult => {
+  const errors: string[] = [];
+  const normalized = normalizeInputs(schema, raw);
+
+  for (const f of schema.fields || []) {
+    const v = normalized[f.name];
+    if (f.type === "number" && !isFiniteNumber(v)) errors.push(`"${f.label}" must be a number.`);
+    if (f.type === "select" && f.options?.length && !f.options.includes(String(v ?? ""))) {
+      errors.push(`"${f.label}" must be one of: ${f.options.join(", ")}.`);
+    }
+  }
+  return { ok: errors.length === 0, errors, normalized };
+};
+
+export const toolSchemas: Record<string, ToolSchema> = Object.fromEntries(
+  Object.entries(calculators).map(([id, def]) => [id, def.schema])
+);
+
+export const listTools = (): ToolSchema[] => Object.values(toolSchemas);
+
+export const getTool = (id: string):
+  | { id: string; schema: ToolSchema; calc: ToolCalculator }
+  | undefined => {
+  const def = calculators[id];
+  if (!def) return undefined;
+  return { id, schema: def.schema, calc: def.calc };
+};
+
+export const runTool = (id: string, rawInputs: Record<string, unknown>) => {
+  const tool = getTool(id);
+  if (!tool) throw new Error(`Unknown tool: "${id}".`);
+  const { schema, calc } = tool;
+  const validation = validateInputs(schema, rawInputs);
+  if (!validation.ok) {
+    const msg = `Invalid inputs for "${schema.title}":\n- ${validation.errors.join("\n- ")}`;
+    const err = new Error(msg) as Error & { details?: ValidationResult };
+    err.details = validation;
+    throw err;
+  }
+  return {
+    id,
+    title: schema.title,
+    desc: schema.desc,
+    inputs: validation.normalized,
+    result: calc(validation.normalized),
+  };
+};
+
+export const TOOL_TITLES: Record<string, string> =
+  Object.fromEntries(Object.values(toolSchemas).map((s) => [s.id, s.title]));
 
 export default calculators;

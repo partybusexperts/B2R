@@ -83,7 +83,13 @@ export function getRandomImages(category: VehicleCategory, count: number, seed?:
       h = Math.imul(h, 16777619);
     }
   } else {
-    h = Date.now() & 0xffffffff; // fallback non-deterministic if seed omitted
+    // Use category name as a deterministic seed when none provided so SSR and CSR remain consistent.
+    const catSeed = (category || "") + "::stable";
+    h = 2166136261 >>> 0;
+    for (let i = 0; i < catSeed.length; i++) {
+      h ^= catSeed.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
   }
   const keyed = arr.map((img, idx) => {
     const k = (h ^ (idx * 2654435761)) >>> 0;

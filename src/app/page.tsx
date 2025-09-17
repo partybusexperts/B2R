@@ -9,6 +9,7 @@ import HomePolls from "../components/HomePolls";
 import LiveWeatherAdvisor from "../components/LiveWeatherAdvisor";
 import { ReviewForm } from "../components/ReviewForm";
 import SlideshowMaker from "../components/SlideshowMaker";
+import EventsSection from "../components/EventsSection";
 
 export default function Home() {
   return (
@@ -86,6 +87,11 @@ export default function Home() {
         <ClientOnly>
           <LiveWeatherAdvisor />
         </ClientOnly>
+      </Section>
+
+      {/* Events Section (DB-driven) */}
+      <Section className="max-w-7xl mx-auto mt-10">
+        <EventsSection limit={6} />
       </Section>
 
       {/* Reviews & Slideshow (client-only) */}

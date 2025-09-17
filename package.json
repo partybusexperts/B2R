@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+  "start": "next start",
     "lint": "next lint",
+  "seed:tools": "node --experimental-specifier-resolution=node scripts/seed-tools.mjs",
+  "pull:tools": "node --experimental-specifier-resolution=node scripts/export-tools-from-supabase.mjs",
+  "sync:tools": "node --experimental-specifier-resolution=node scripts/sync-tools-from-supabase.mjs",
     "validate:images": "node scripts/validate-images.cjs",
     "migrate:images": "node scripts/migrate-images.cjs",
     "optimize:images": "node scripts/optimize-images.cjs"
@@ -14,6 +17,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.57.2",
   "zod": "^3.22.2",
+  "undici": "^5.14.0",
     "next": "15.4.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

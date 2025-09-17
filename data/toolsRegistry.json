@@ -1,69 +1,633 @@
 [
-  {"id":"vehicle-compare","title":"Vehicle Comparison","desc":"Compare vehicle types side-by-side.","category":"Compare & Choose","href":"/tools/vehicle-compare"},
-  {"id":"special-request-matcher","title":"Special Request Matcher","desc":"Find vehicles that allow poles, restrooms, ADA, etc.","category":"Compare & Choose","href":"/tools/special-request-matcher"},
-  {"id":"good-better-best-package-builder","title":"Good–Better–Best Package Builder","desc":"Offer tiered packages so guests can compare value.","category":"Compare & Choose","href":"/tools/good-better-best-package-builder"},
-  {"id":"event-match","title":"Event Matchmaker","desc":"Recommend vehicles by occasion and group vibe.","category":"Compare & Choose","href":"/tools/event-match"},
-  {"id":"return-trip-price-compare","title":"Return-Trip Price Compare","desc":"1-way vs wait-and-return vs two 1-ways.","category":"Compare & Choose","href":"/tools/return-trip-price-compare"},
-  {"id":"hours-vs-mileage-optimizer","title":"Hours vs Mileage Optimizer","desc":"Find the cheapest combo for your itinerary.","category":"Compare & Choose","href":"/tools/hours-vs-mileage-optimizer"},
-
-  {"id":"cost-split","title":"Cost Split Calculator","desc":"Split the total cost per person.","category":"Pricing & Savings","href":"/tools/cost-split"},
-  {"id":"budget-guardrail-planner","title":"Budget Guardrail Planner","desc":"Set a max spend and see best-fit options.","category":"Pricing & Savings","href":"/tools/budget-guardrail-planner"},
-  {"id":"surge-peak-predictor","title":"Surge & Peak Predictor","desc":"Demand index by date & time.","category":"Pricing & Savings","href":"/tools/surge-peak-predictor"},
-  {"id":"off-peak-saver-finder","title":"Off-Peak Saver Finder","desc":"Cheapest days/hours to book.","category":"Pricing & Savings","href":"/tools/off-peak-saver-finder"},
-  {"id":"minimum-hours-calculator","title":"Minimum Hours Calculator","desc":"Typical market minimums by vehicle/date.","category":"Pricing & Savings","href":"/tools/minimum-hours-calculator"},
-  {"id":"overtime-risk-meter","title":"Overtime Risk Meter","desc":"Likelihood your plan runs long; plan a buffer.","category":"Pricing & Savings","href":"/tools/overtime-risk-meter"},
-  {"id":"seasonality-heatmap","title":"Seasonality Heatmap","desc":"Month × weekday price pressure grid.","category":"Pricing & Savings","href":"/tools/seasonality-heatmap"},
-  {"id":"local-event-demand-radar","title":"Local Event Demand Radar","desc":"Nearby events that spike demand/traffic.","category":"Pricing & Savings","href":"/tools/local-event-demand-radar"},
-  {"id":"rain-plan-builder","title":"Rain Plan Builder","desc":"Backup timings & savings if weather shifts.","category":"Pricing & Savings","href":"/tools/rain-plan-builder"},
-  {"id":"cancellation-flex-score","title":"Cancellation Flex Score","desc":"Refund vs reschedule friendliness.","category":"Pricing & Savings","href":"/tools/cancellation-flex-score"},
-  {"id":"pickup-radius-surcharge-checker","title":"Pickup Radius Surcharge Checker","desc":"Fees beyond base service area.","category":"Pricing & Savings","href":"/tools/pickup-radius-surcharge-checker"},
-  {"id":"fuel-surcharge-calculator","title":"Fuel Surcharge Calculator","desc":"Estimate fuel add-ons by distance/market.","category":"Pricing & Savings","href":"/tools/fuel-surcharge-calculator"},
-  {"id":"tolls-road-fees-estimator","title":"Tolls & Road Fees Estimator","desc":"Rough in tolls, bridges, venue fees.","category":"Pricing & Savings","href":"/tools/tolls-road-fees-estimator"},
-  {"id":"multi-vehicle-split-planner","title":"Multi-Vehicle Split Planner","desc":"1 big vs multiple smaller vehicles.","category":"Pricing & Savings","href":"/tools/multi-vehicle-split-planner"},
-
-  {"id":"drive-time-estimator","title":"Drive Time Estimator","desc":"Traffic-aware travel time between stops.","category":"Route & Timing","href":"/tools/drive-time-estimator"},
-  {"id":"multi-stop-route-optimizer","title":"Multi-Stop Route Optimizer","desc":"Reorder stops to cut hours & cost.","category":"Route & Timing","href":"/tools/multi-stop-route-optimizer"},
-  {"id":"pick-up-window-recommender","title":"Pick-Up Window Recommender","desc":"Best start/end vs traffic & venue rules.","category":"Route & Timing","href":"/tools/pick-up-window-recommender"},
-  {"id":"boarding-time-calculator","title":"Boarding Time Calculator","desc":"Load/unload time by group size.","category":"Route & Timing","href":"/tools/boarding-time-calculator"},
-  {"id":"door-to-venue-walking-time","title":"Door-to-Venue Walking Time","desc":"Drop point to entrance ETA.","category":"Route & Timing","href":"/tools/door-to-venue-walking-time"},
-  {"id":"extra-stops-cost-calculator","title":"Extra Stops Cost Calculator","desc":"Price impact per extra stop.","category":"Route & Timing","href":"/tools/extra-stops-cost-calculator"},
-  {"id":"deadhead-distance-estimator","title":"Deadhead Distance Estimator","desc":"Garage-to-pickup miles affecting price.","category":"Route & Timing","href":"/tools/deadhead-distance-estimator"},
-  {"id":"bar-hop-time-calculator","title":"Bar-Hop Time Calculator","desc":"Dwell/travel math for 3–6 stops.","category":"Route & Timing","href":"/tools/bar-hop-time-calculator"},
-  {"id":"sunset-timing-advisor","title":"Sunset Timing Advisor","desc":"Golden hour on your date & city.","category":"Route & Timing","href":"/tools/sunset-timing-advisor"},
-  {"id":"shuttle-frequency-planner","title":"Shuttle Frequency Planner","desc":"Loops needed to move guests on time.","category":"Route & Timing","href":"/tools/shuttle-frequency-planner"},
-
-  {"id":"venue-coordination-script","title":"Venue Coordination Script","desc":"Call script: staging, entrance, contacts.","category":"Venues & Logistics","href":"/tools/venue-coordination-script"},
-  {"id":"curbside-drop-strategy","title":"Curbside Drop Strategy","desc":"Best drop/pick spots + turnaround plan.","category":"Venues & Logistics","href":"/tools/curbside-drop-strategy"},
-  {"id":"stadium-concert-playbook","title":"Stadium/Concert Playbook","desc":"Bag rules, exits, traffic tips.","category":"Venues & Logistics","href":"/tools/stadium-concert-playbook"},
-  {"id":"airport-transfer-wizard","title":"Airport Transfer Wizard","desc":"Terminal rules & timing guidance.","category":"Venues & Logistics","href":"/tools/airport-transfer-wizard"},
-  {"id":"pickup-point-street-view-preview","title":"Pickup Point Street View Preview","desc":"Peek curb space & entrances.","category":"Venues & Logistics","href":"/tools/pickup-point-street-view-preview"},
-  {"id":"trailer-add-on-recommender","title":"Trailer Add-On Recommender","desc":"Add trailer for luggage/gear.","category":"Venues & Logistics","href":"/tools/trailer-add-on-recommender"},
-
-  {"id":"alcohol-open-container-policy-checker","title":"Alcohol/Open-Container Policy Checker","desc":"BYOB legality by city/state.","category":"Policies & Risk","href":"/tools/alcohol-open-container-policy-checker"},
-  {"id":"family-minors-policy-advisor","title":"Family & Minors Policy Advisor","desc":"Supervision & car seat rules.","category":"Policies & Risk","href":"/tools/family-minors-policy-advisor"},
-  {"id":"driver-break-compliance-planner","title":"Driver Break & Compliance Planner","desc":"Plan legal rest windows.","category":"Policies & Risk","href":"/tools/driver-break-compliance-planner"},
-  {"id":"noise-curfew-checker","title":"Noise Curfew Checker","desc":"Neighborhood quiet hours.","category":"Policies & Risk","href":"/tools/noise-curfew-checker"},
-  {"id":"cleaning-fee-risk-checker","title":"Cleaning Fee Risk Checker","desc":"Glitter, confetti, smoke, mud risks.","category":"Policies & Risk","href":"/tools/cleaning-fee-risk-checker"},
-  {"id":"decorations-policy-checker","title":"Decorations Policy Checker","desc":"What décor is allowed.","category":"Policies & Risk","href":"/tools/decorations-policy-checker"},
-  {"id":"pet-policy-checker","title":"Pet Policy Checker","desc":"Which trips allow pets.","category":"Policies & Risk","href":"/tools/pet-policy-checker"},
-  {"id":"ada-accessibility-checker","title":"ADA Accessibility Checker","desc":"Lifts, steps, aisle clearances.","category":"Policies & Risk","href":"/tools/ada-accessibility-checker"},
-
-  {"id":"capacity-finder","title":"Capacity Finder","desc":"Find vehicles by group size.","category":"Capacity & Seating","href":"/tools/capacity-finder","modalSize":"max-w-md"},
-  {"id":"seat-fit","title":"Seat Fit Advisor","desc":"Estimate comfort per passenger.","category":"Capacity & Seating","href":"/tools/seat-fit"},
-  {"id":"seating-map-designer","title":"Seating Map Designer","desc":"Lay out seats to balance comfort & weight.","category":"Capacity & Seating","href":"/tools/seating-map-designer"},
-  {"id":"capacity-overflow-planner","title":"Capacity Overflow Planner","desc":"When to book 2 vehicles vs 1 bigger.","category":"Capacity & Seating","href":"/tools/capacity-overflow-planner"},
-  {"id":"luggage-gear-fit-guide","title":"Luggage & Gear Fit Guide","desc":"Bags, coolers, instruments that fit.","category":"Capacity & Seating","href":"/tools/luggage-gear-fit-guide"},
-
-  {"id":"byob-ice","title":"BYOB & Ice Planner","desc":"Estimate drinks and ice per person.","category":"Amenities & Experience","href":"/tools/byob-ice"},
-  {"id":"qr-playlist-generator","title":"QR Playlist Generator","desc":"Share your trip playlist via QR code.","category":"Amenities & Experience","href":"/tools/qr-playlist-generator"},
-  {"id":"lighting-theme-selector","title":"Lighting & Theme Selector","desc":"Choose interior mood presets.","category":"Amenities & Experience","href":"/tools/lighting-theme-selector"},
-  {"id":"scenic-photo-stop-recommender","title":"Scenic Photo-Stop Recommender","desc":"Route-friendly photo ops.","category":"Amenities & Experience","href":"/tools/scenic-photo-stop-recommender"},
-  {"id":"comfort-planner","title":"Comfort Planner","desc":"Climate, attire, hydration & A/C tips.","category":"Amenities & Experience","href":"/tools/comfort-planner"},
-
-  {"id":"itinerary-builder","title":"Itinerary Builder","desc":"Build a simple multi-stop plan.","category":"Planning & Coordination","href":"/tools/itinerary-builder"},
-  {"id":"weather-alert","title":"Weather Alert","desc":"Check weather impact for dates.","category":"Planning & Coordination","href":"/tools/weather-alert"},
-  {"id":"group-rsvp-headcount-tracker","title":"Group RSVP & Headcount Tracker","desc":"Confirm riders & auto-update counts.","category":"Planning & Coordination","href":"/tools/group-rsvp-headcount-tracker"},
-  {"id":"pickup-readiness-checklist","title":"Pickup Readiness Checklist","desc":"IDs, attire, ice, chargers—be ready.","category":"Planning & Coordination","href":"/tools/pickup-readiness-checklist"},
-  {"id":"event-duration-wizard","title":"Event Duration Wizard","desc":"Suggested total hours by occasion.","category":"Planning & Coordination","href":"/tools/event-duration-wizard"},
-  {"id":"wedding-timeline-builder","title":"Wedding Timeline Builder","desc":"Ceremony → photos → reception flow.","category":"Planning & Coordination","href":"/tools/wedding-timeline-builder"}
+  {
+    "id": "vehicle-compare",
+    "title": "Vehicle Comparison",
+    "desc": "Compare vehicle types side-by-side.",
+    "category": "Compare & Choose",
+    "href": "/tools/vehicle-compare"
+  },
+  {
+    "id": "special-request-matcher",
+    "title": "Special Request Matcher",
+    "desc": "Find vehicles that allow poles, restrooms, ADA, etc.",
+    "category": "Compare & Choose",
+    "href": "/tools/special-request-matcher"
+  },
+  {
+    "id": "good-better-best-package-builder",
+    "title": "Good–Better–Best Package Builder",
+    "desc": "Offer tiered packages so guests can compare value.",
+    "category": "Compare & Choose",
+    "href": "/tools/good-better-best-package-builder"
+  },
+  {
+    "id": "event-match",
+    "title": "Event Matchmaker",
+    "desc": "Recommend vehicles by occasion and group vibe.",
+    "category": "Compare & Choose",
+    "href": "/tools/event-match"
+  },
+  {
+    "id": "return-trip-price-compare",
+    "title": "Return-Trip Price Compare",
+    "desc": "1-way vs wait-and-return vs two 1-ways.",
+    "category": "Compare & Choose",
+    "href": "/tools/return-trip-price-compare"
+  },
+  {
+    "id": "hours-vs-mileage-optimizer",
+    "title": "Hours vs Mileage Optimizer",
+    "desc": "Find the cheapest combo for your itinerary.",
+    "category": "Compare & Choose",
+    "href": "/tools/hours-vs-mileage-optimizer"
+  },
+  {
+    "id": "cost-split",
+    "title": "Cost Split Calculator",
+    "desc": "Split the total cost per person.",
+    "category": "Pricing & Savings",
+    "href": "/tools/cost-split"
+  },
+  {
+    "id": "budget-guardrail-planner",
+    "title": "Budget Guardrail Planner",
+    "desc": "Set a max spend and see best-fit options.",
+    "category": "Pricing & Savings",
+    "href": "/tools/budget-guardrail-planner"
+  },
+  {
+    "id": "surge-peak-predictor",
+    "title": "Surge & Peak Predictor",
+    "desc": "Demand index by date & time.",
+    "category": "Pricing & Savings",
+    "href": "/tools/surge-peak-predictor"
+  },
+  {
+    "id": "off-peak-saver-finder",
+    "title": "Off-Peak Saver Finder",
+    "desc": "Cheapest days/hours to book.",
+    "category": "Pricing & Savings",
+    "href": "/tools/off-peak-saver-finder"
+  },
+  {
+    "id": "minimum-hours-calculator",
+    "title": "Minimum Hours Calculator",
+    "desc": "Typical market minimums by vehicle/date.",
+    "category": "Pricing & Savings",
+    "href": "/tools/minimum-hours-calculator"
+  },
+  {
+    "id": "overtime-risk-meter",
+    "title": "Overtime Risk Meter",
+    "desc": "Likelihood your plan runs long; plan a buffer.",
+    "category": "Pricing & Savings",
+    "href": "/tools/overtime-risk-meter"
+  },
+  {
+    "id": "seasonality-heatmap",
+    "title": "Seasonality Heatmap",
+    "desc": "Month × weekday price pressure grid.",
+    "category": "Pricing & Savings",
+    "href": "/tools/seasonality-heatmap"
+  },
+  {
+    "id": "local-event-demand-radar",
+    "title": "Local Event Demand Radar",
+    "desc": "Nearby events that spike demand/traffic.",
+    "category": "Pricing & Savings",
+    "href": "/tools/local-event-demand-radar"
+  },
+  {
+    "id": "rain-plan-builder",
+    "title": "Rain Plan Builder",
+    "desc": "Backup timings & savings if weather shifts.",
+    "category": "Pricing & Savings",
+    "href": "/tools/rain-plan-builder"
+  },
+  {
+    "id": "cancellation-flex-score",
+    "title": "Cancellation Flex Score",
+    "desc": "Refund vs reschedule friendliness.",
+    "category": "Pricing & Savings",
+    "href": "/tools/cancellation-flex-score"
+  },
+  {
+    "id": "pickup-radius-surcharge-checker",
+    "title": "Pickup Radius Surcharge Checker",
+    "desc": "Fees beyond base service area.",
+    "category": "Pricing & Savings",
+    "href": "/tools/pickup-radius-surcharge-checker"
+  },
+  {
+    "id": "fuel-surcharge-calculator",
+    "title": "Fuel Surcharge Calculator",
+    "desc": "Estimate fuel add-ons by distance/market.",
+    "category": "Pricing & Savings",
+    "href": "/tools/fuel-surcharge-calculator"
+  },
+  {
+    "id": "tolls-road-fees-estimator",
+    "title": "Tolls & Road Fees Estimator",
+    "desc": "Rough in tolls, bridges, venue fees.",
+    "category": "Pricing & Savings",
+    "href": "/tools/tolls-road-fees-estimator"
+  },
+  {
+    "id": "multi-vehicle-split-planner",
+    "title": "Multi-Vehicle Split Planner",
+    "desc": "1 big vs multiple smaller vehicles.",
+    "category": "Pricing & Savings",
+    "href": "/tools/multi-vehicle-split-planner"
+  },
+  {
+    "id": "drive-time-estimator",
+    "title": "Drive Time Estimator",
+    "desc": "Traffic-aware travel time between stops.",
+    "category": "Route & Timing",
+    "href": "/tools/drive-time-estimator"
+  },
+  {
+    "id": "multi-stop-route-optimizer",
+    "title": "Multi-Stop Route Optimizer",
+    "desc": "Reorder stops to cut hours & cost.",
+    "category": "Route & Timing",
+    "href": "/tools/multi-stop-route-optimizer"
+  },
+  {
+    "id": "pick-up-window-recommender",
+    "title": "Pick-Up Window Recommender",
+    "desc": "Best start/end vs traffic & venue rules.",
+    "category": "Route & Timing",
+    "href": "/tools/pick-up-window-recommender"
+  },
+  {
+    "id": "boarding-time-calculator",
+    "title": "Boarding Time Calculator",
+    "desc": "Load/unload time by group size.",
+    "category": "Route & Timing",
+    "href": "/tools/boarding-time-calculator"
+  },
+  {
+    "id": "door-to-venue-walking-time",
+    "title": "Door-to-Venue Walking Time",
+    "desc": "Drop point to entrance ETA.",
+    "category": "Route & Timing",
+    "href": "/tools/door-to-venue-walking-time"
+  },
+  {
+    "id": "extra-stops-cost-calculator",
+    "title": "Extra Stops Cost Calculator",
+    "desc": "Price impact per extra stop.",
+    "category": "Route & Timing",
+    "href": "/tools/extra-stops-cost-calculator"
+  },
+  {
+    "id": "deadhead-distance-estimator",
+    "title": "Deadhead Distance Estimator",
+    "desc": "Garage-to-pickup miles affecting price.",
+    "category": "Route & Timing",
+    "href": "/tools/deadhead-distance-estimator"
+  },
+  {
+    "id": "bar-hop-time-calculator",
+    "title": "Bar-Hop Time Calculator",
+    "desc": "Dwell/travel math for 3–6 stops.",
+    "category": "Route & Timing",
+    "href": "/tools/bar-hop-time-calculator"
+  },
+  {
+    "id": "sunset-timing-advisor",
+    "title": "Sunset Timing Advisor",
+    "desc": "Golden hour on your date & city.",
+    "category": "Route & Timing",
+    "href": "/tools/sunset-timing-advisor"
+  },
+  {
+    "id": "shuttle-frequency-planner",
+    "title": "Shuttle Frequency Planner",
+    "desc": "Loops needed to move guests on time.",
+    "category": "Route & Timing",
+    "href": "/tools/shuttle-frequency-planner"
+  },
+  {
+    "id": "venue-coordination-script",
+    "title": "Venue Coordination Script",
+    "desc": "Call script: staging, entrance, contacts.",
+    "category": "Venues & Logistics",
+    "href": "/tools/venue-coordination-script"
+  },
+  {
+    "id": "curbside-drop-strategy",
+    "title": "Curbside Drop Strategy",
+    "desc": "Best drop/pick spots + turnaround plan.",
+    "category": "Venues & Logistics",
+    "href": "/tools/curbside-drop-strategy"
+  },
+  {
+    "id": "stadium-concert-playbook",
+    "title": "Stadium/Concert Playbook",
+    "desc": "Bag rules, exits, traffic tips.",
+    "category": "Venues & Logistics",
+    "href": "/tools/stadium-concert-playbook"
+  },
+  {
+    "id": "airport-transfer-wizard",
+    "title": "Airport Transfer Wizard",
+    "desc": "Terminal rules & timing guidance.",
+    "category": "Venues & Logistics",
+    "href": "/tools/airport-transfer-wizard"
+  },
+  {
+    "id": "pickup-point-street-view-preview",
+    "title": "Pickup Point Street View Preview",
+    "desc": "Peek curb space & entrances.",
+    "category": "Venues & Logistics",
+    "href": "/tools/pickup-point-street-view-preview"
+  },
+  {
+    "id": "trailer-add-on-recommender",
+    "title": "Trailer Add-On Recommender",
+    "desc": "Add trailer for luggage/gear.",
+    "category": "Venues & Logistics",
+    "href": "/tools/trailer-add-on-recommender"
+  },
+  {
+    "id": "alcohol-open-container-policy-checker",
+    "title": "Alcohol/Open-Container Policy Checker",
+    "desc": "BYOB legality by city/state.",
+    "category": "Policies & Risk",
+    "href": "/tools/alcohol-open-container-policy-checker"
+  },
+  {
+    "id": "family-minors-policy-advisor",
+    "title": "Family & Minors Policy Advisor",
+    "desc": "Supervision & car seat rules.",
+    "category": "Policies & Risk",
+    "href": "/tools/family-minors-policy-advisor"
+  },
+  {
+    "id": "driver-break-compliance-planner",
+    "title": "Driver Break & Compliance Planner",
+    "desc": "Plan legal rest windows.",
+    "category": "Policies & Risk",
+    "href": "/tools/driver-break-compliance-planner"
+  },
+  {
+    "id": "noise-curfew-checker",
+    "title": "Noise Curfew Checker",
+    "desc": "Neighborhood quiet hours.",
+    "category": "Policies & Risk",
+    "href": "/tools/noise-curfew-checker"
+  },
+  {
+    "id": "cleaning-fee-risk-checker",
+    "title": "Cleaning Fee Risk Checker",
+    "desc": "Glitter, confetti, smoke, mud risks.",
+    "category": "Policies & Risk",
+    "href": "/tools/cleaning-fee-risk-checker"
+  },
+  {
+    "id": "decorations-policy-checker",
+    "title": "Decorations Policy Checker",
+    "desc": "What décor is allowed.",
+    "category": "Policies & Risk",
+    "href": "/tools/decorations-policy-checker"
+  },
+  {
+    "id": "pet-policy-checker",
+    "title": "Pet Policy Checker",
+    "desc": "Which trips allow pets.",
+    "category": "Policies & Risk",
+    "href": "/tools/pet-policy-checker"
+  },
+  {
+    "id": "ada-accessibility-checker",
+    "title": "ADA Accessibility Checker",
+    "desc": "Lifts, steps, aisle clearances.",
+    "category": "Policies & Risk",
+    "href": "/tools/ada-accessibility-checker"
+  },
+  {
+    "id": "capacity-finder",
+    "title": "Capacity Finder",
+    "desc": "Find vehicles by group size.",
+    "category": "Capacity & Seating",
+    "href": "/tools/capacity-finder",
+    "modalSize": "max-w-md"
+  },
+  {
+    "id": "seat-fit",
+    "title": "Seat Fit Advisor",
+    "desc": "Estimate comfort per passenger.",
+    "category": "Capacity & Seating",
+    "href": "/tools/seat-fit"
+  },
+  {
+    "id": "seating-map-designer",
+    "title": "Seating Map Designer",
+    "desc": "Lay out seats to balance comfort & weight.",
+    "category": "Capacity & Seating",
+    "href": "/tools/seating-map-designer"
+  },
+  {
+    "id": "capacity-overflow-planner",
+    "title": "Capacity Overflow Planner",
+    "desc": "When to book 2 vehicles vs 1 bigger.",
+    "category": "Capacity & Seating",
+    "href": "/tools/capacity-overflow-planner"
+  },
+  {
+    "id": "luggage-gear-fit-guide",
+    "title": "Luggage & Gear Fit Guide",
+    "desc": "Bags, coolers, instruments that fit.",
+    "category": "Capacity & Seating",
+    "href": "/tools/luggage-gear-fit-guide"
+  },
+  {
+    "id": "byob-ice",
+    "title": "BYOB & Ice Planner",
+    "desc": "Estimate drinks and ice per person.",
+    "category": "Amenities & Experience",
+    "href": "/tools/byob-ice"
+  },
+  {
+    "id": "qr-playlist-generator",
+    "title": "QR Playlist Generator",
+    "desc": "Share your trip playlist via QR code.",
+    "category": "Amenities & Experience",
+    "href": "/tools/qr-playlist-generator"
+  },
+  {
+    "id": "lighting-theme-selector",
+    "title": "Lighting & Theme Selector",
+    "desc": "Choose interior mood presets.",
+    "category": "Amenities & Experience",
+    "href": "/tools/lighting-theme-selector"
+  },
+  {
+    "id": "scenic-photo-stop-recommender",
+    "title": "Scenic Photo-Stop Recommender",
+    "desc": "Route-friendly photo ops.",
+    "category": "Amenities & Experience",
+    "href": "/tools/scenic-photo-stop-recommender"
+  },
+  {
+    "id": "comfort-planner",
+    "title": "Comfort Planner",
+    "desc": "Climate, attire, hydration & A/C tips.",
+    "category": "Amenities & Experience",
+    "href": "/tools/comfort-planner"
+  },
+  {
+    "id": "itinerary-builder",
+    "title": "Itinerary Builder",
+    "desc": "Build a simple multi-stop plan.",
+    "category": "Planning & Coordination",
+    "href": "/tools/itinerary-builder"
+  },
+  {
+    "id": "weather-alert",
+    "title": "Weather Alert",
+    "desc": "Check weather impact for dates.",
+    "category": "Planning & Coordination",
+    "href": "/tools/weather-alert"
+  },
+  {
+    "id": "group-rsvp-headcount-tracker",
+    "title": "Group RSVP & Headcount Tracker",
+    "desc": "Confirm riders & auto-update counts.",
+    "category": "Planning & Coordination",
+    "href": "/tools/group-rsvp-headcount-tracker"
+  },
+  {
+    "id": "pickup-readiness-checklist",
+    "title": "Pickup Readiness Checklist",
+    "desc": "IDs, attire, ice, chargers—be ready.",
+    "category": "Planning & Coordination",
+    "href": "/tools/pickup-readiness-checklist"
+  },
+  {
+    "id": "event-duration-wizard",
+    "title": "Event Duration Wizard",
+    "desc": "Suggested total hours by occasion.",
+    "category": "Planning & Coordination",
+    "href": "/tools/event-duration-wizard"
+  },
+  {
+    "id": "wedding-timeline-builder",
+    "title": "Wedding Timeline Builder",
+    "desc": "Ceremony → photos → reception flow.",
+    "category": "Planning & Coordination",
+    "href": "/tools/wedding-timeline-builder"
+  },
+  {
+    "id": "group-vibe-matcher",
+    "title": "Group Vibe Matcher",
+    "desc": "Match vehicles to party, quiet, or family vibes.",
+    "category": "Compare & Choose",
+    "href": "/tools/group-vibe-matcher"
+  },
+  {
+    "id": "luxury-level-selector",
+    "title": "Luxury Level Selector",
+    "desc": "Compare standard, premium, and luxury vehicles.",
+    "category": "Compare & Choose",
+    "href": "/tools/luxury-level-selector"
+  },
+  {
+    "id": "group-discount-finder",
+    "title": "Group Discount Finder",
+    "desc": "Find discounts for large groups or bulk bookings.",
+    "category": "Pricing & Savings",
+    "href": "/tools/group-discount-finder"
+  },
+  {
+    "id": "hidden-fees-detector",
+    "title": "Hidden Fees Detector",
+    "desc": "Highlight potential hidden costs in bookings.",
+    "category": "Pricing & Savings",
+    "href": "/tools/hidden-fees-detector"
+  },
+  {
+    "id": "early-booking-savings",
+    "title": "Early Booking Savings Calculator",
+    "desc": "Show savings for booking in advance.",
+    "category": "Pricing & Savings",
+    "href": "/tools/early-booking-savings"
+  },
+  {
+    "id": "last-minute-deal-finder",
+    "title": "Last-Minute Deal Finder",
+    "desc": "Find discounted last-minute bookings.",
+    "category": "Pricing & Savings",
+    "href": "/tools/last-minute-deal-finder"
+  },
+  {
+    "id": "real-time-traffic-adjuster",
+    "title": "Real-Time Traffic Adjuster",
+    "desc": "Adjust routes based on live traffic data.",
+    "category": "Route & Timing",
+    "href": "/tools/real-time-traffic-adjuster"
+  },
+  {
+    "id": "nighttime-route-safety",
+    "title": "Nighttime Route Safety Planner",
+    "desc": "Recommend safer routes for late-night trips.",
+    "category": "Route & Timing",
+    "href": "/tools/nighttime-route-safety"
+  },
+  {
+    "id": "cross-city-route-planner",
+    "title": "Cross-City Route Planner",
+    "desc": "Optimize multi-city or regional routes.",
+    "category": "Route & Timing",
+    "href": "/tools/cross-city-route-planner"
+  },
+  {
+    "id": "parking-availability-finder",
+    "title": "Parking Availability Finder",
+    "desc": "Locate parking for drop-off/pick-up points.",
+    "category": "Route & Timing",
+    "href": "/tools/parking-availability-finder"
+  },
+  {
+    "id": "rush-hour-avoidance",
+    "title": "Rush Hour Avoidance Tool",
+    "desc": "Suggest times to avoid peak traffic.",
+    "category": "Route & Timing",
+    "href": "/tools/rush-hour-avoidance"
+  },
+  {
+    "id": "onboard-entertainment-planner",
+    "title": "Onboard Entertainment Planner",
+    "desc": "Curate movies, games, or streaming options.",
+    "category": "Amenities & Experience",
+    "href": "/tools/onboard-entertainment-planner"
+  },
+  {
+    "id": "custom-signage-creator",
+    "title": "Custom Signage Creator",
+    "desc": "Design personalized vehicle signs.",
+    "category": "Amenities & Experience",
+    "href": "/tools/custom-signage-creator"
+  },
+  {
+    "id": "food-stop-recommender",
+    "title": "Food Stop Recommender",
+    "desc": "Suggest quick, route-friendly dining.",
+    "category": "Amenities & Experience",
+    "href": "/tools/food-stop-recommender"
+  },
+  {
+    "id": "multi-event-day-planner",
+    "title": "Multi-Event Day Planner",
+    "desc": "Coordinate transport for multiple events.",
+    "category": "Planning & Coordination",
+    "href": "/tools/multi-event-day-planner"
+  },
+  {
+    "id": "guest-communication-hub",
+    "title": "Guest Communication Hub",
+    "desc": "Send automated pickup updates to guests.",
+    "category": "Planning & Coordination",
+    "href": "/tools/guest-communication-hub"
+  },
+  {
+    "id": "vehicle-amenities-filter",
+    "title": "Vehicle Amenities Filter",
+    "desc": "Filter vehicles by Wi-Fi, charging ports, mini-fridge, etc.",
+    "category": "Compare & Choose",
+    "href": "/tools/vehicle-amenities-filter"
+  },
+  {
+    "id": "venue-parking-permit",
+    "title": "Venue Parking Permit Checker",
+    "desc": "Verify parking permit needs for venues.",
+    "category": "Venues & Logistics",
+    "href": "/tools/venue-parking-permit"
+  },
+  {
+    "id": "large-group-staging",
+    "title": "Large Group Staging Planner",
+    "desc": "Plan staging areas for large groups.",
+    "category": "Venues & Logistics",
+    "href": "/tools/large-group-staging"
+  },
+  {
+    "id": "event-exit-strategy",
+    "title": "Event Exit Strategy Tool",
+    "desc": "Map fastest exits to avoid post-event crowds.",
+    "category": "Venues & Logistics",
+    "href": "/tools/event-exit-strategy"
+  },
+  {
+    "id": "vip-drop-off-coordinator",
+    "title": "VIP Drop-Off Coordinator",
+    "desc": "Arrange priority drop-off for VIPs.",
+    "category": "Venues & Logistics",
+    "href": "/tools/vip-drop-off-coordinator"
+  },
+  {
+    "id": "luggage-transfer-scheduler",
+    "title": "Luggage Transfer Scheduler",
+    "desc": "Coordinate separate luggage delivery.",
+    "category": "Venues & Logistics",
+    "href": "/tools/luggage-transfer-scheduler"
+  },
+  {
+    "id": "venue-accessibility-map",
+    "title": "Venue Accessibility Map",
+    "desc": "Detailed accessibility info for venues.",
+    "category": "Venues & Logistics",
+    "href": "/tools/venue-accessibility-map"
+  },
+  {
+    "id": "smoking-policy-verifier",
+    "title": "Smoking Policy Verifier",
+    "desc": "Check smoking policies for vehicles/venues.",
+    "category": "Policies & Risk",
+    "href": "/tools/smoking-policy-verifier"
+  },
+  {
+    "id": "emergency-evacuation-planner",
+    "title": "Emergency Evacuation Planner",
+    "desc": "Outline vehicle evacuation plans.",
+    "category": "Policies & Risk",
+    "href": "/tools/emergency-evacuation-planner"
+  },
+  {
+    "id": "child-seat-fit-guide",
+    "title": "Child Seat Fit Guide",
+    "desc": "Recommend vehicles for car seats/boosters.",
+    "category": "Capacity & Seating",
+    "href": "/tools/child-seat-fit-guide"
+  },
+  {
+    "id": "oversized-gear-planner",
+    "title": "Oversized Gear Planner",
+    "desc": "Plan for large sports or music gear.",
+    "category": "Capacity & Seating",
+    "href": "/tools/oversized-gear-planner"
+  },
+  {
+    "id": "seating-accessibility-optimizer",
+    "title": "Seating Accessibility Optimizer",
+    "desc": "Suggest accessible seating arrangements.",
+    "category": "Capacity & Seating",
+    "href": "/tools/seating-accessibility-optimizer"
+  },
+  {
+    "id": "group-size-flex-calculator",
+    "title": "Group Size Flex Calculator",
+    "desc": "Adjust vehicle size for last-minute changes.",
+    "category": "Capacity & Seating",
+    "href": "/tools/group-size-flex-calculator"
+  },
+  {
+    "id": "hello-world",
+    "title": "Hello World",
+    "desc": "Echoes a friendly greeting.",
+    "category": "demo",
+    "href": "/tools/hello-world"
+  }
 ]

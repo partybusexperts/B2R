@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Prefer server-only service role for server-side calls; fall back to anon key
+const supabaseAnon = process.env.SUPABASE_SERVICE_ROLE || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export type StyleTokens = {
   colors?: { primary?: string; accent?: string; bg?: string; muted?: string };
@@ -21,14 +22,31 @@ export async function fetchTokens(site: string, page: string = ''): Promise<Styl
     // Race the RPC call against a short timeout to fail-fast in dev or if network is problematic
     const rpcPromise = supabase.rpc('get_style', { site, page });
     const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase get_style timeout')), 2000));
-    const res = (await Promise.race([rpcPromise, timeout])) as { data: unknown; error?: unknown } | undefined;
-    const data = res?.data;
-    const possible = res as unknown;
-    const error = typeof possible === 'object' && possible !== null && 'error' in (possible as any) ? (possible as any).error : undefined;
+    const res = await Promise.race([rpcPromise, timeout]) as unknown;
+
+    // normalize shapes: Supabase RPC may return { data } or the value directly
+    let data: unknown = undefined;
+    let error: unknown = undefined;
+    if (res && typeof res === 'object') {
+      const r = res as Record<string, unknown>;
+      if ('error' in r) error = r.error;
+      if ('data' in r) data = r.data;
+    } else {
+      // direct value
+      data = res;
+    }
+
     if (error) {
-      console.error('get_style error', error);
+      try {
+        console.error('get_style error', JSON.stringify(error));
+      } catch {
+        console.error('get_style error', String(error));
+      }
+      // also log the whole response for debugging
+      try { console.debug('get_style raw response:', JSON.stringify(res)); } catch { console.debug('get_style raw response non-serializable'); }
       return {};
     }
+
     return (data ?? {}) as StyleTokens;
   } catch (err) {
     console.error('fetchTokens failed:', err instanceof Error ? err.message : String(err));

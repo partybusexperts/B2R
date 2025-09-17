@@ -42,12 +42,34 @@ export function getCategoryImages(friendly: keyof typeof friendlyMap): Optimized
   return arr ? [...arr] : [];
 }
 
-export function pickRandom(friendly: keyof typeof friendlyMap, count: number): OptimizedImageEntry[] {
+// Simple seeded RNG (xorshift32) for deterministic picks when a seed is provided.
+function seedFromString(s: string) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h || 1;
+}
+function seededRandom(seed: number) {
+  // xorshift32
+  let x = seed >>> 0;
+  return () => {
+    x ^= x << 13;
+    x ^= x >>> 17;
+    x ^= x << 5;
+    return (x >>> 0) / 0xffffffff;
+  };
+}
+
+export function pickRandom(friendly: keyof typeof friendlyMap, count: number, deterministicSeed?: string): OptimizedImageEntry[] {
   const imgs = getCategoryImages(friendly);
   if (imgs.length <= count) return imgs;
   const copy = [...imgs];
+  // If a deterministicSeed is provided, use a seeded RNG so server renders are stable.
+  const rand = deterministicSeed ? seededRandom(seedFromString(deterministicSeed)) : Math.random;
   for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rand() * (i + 1));
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy.slice(0, count);

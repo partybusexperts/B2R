@@ -36,6 +36,16 @@ function Modal({ open, onClose, title, children, sizeClass }: { open: boolean; o
 export default function ToolsGrid({ className, limit, filter, items, randomize }: { className?: string; limit?: number; filter?: string; items?: ToolEntry[]; randomize?: boolean }) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  // store candidates in state so we can update (shuffle) after mount without causing hydration mismatch
+  const [candidates, setCandidates] = useState<ToolEntry[]>(() => {
+    const normalizedFilter = (filter || "").trim().toLowerCase();
+    const base = (items && items.length ? items : tools).filter(t =>
+      !normalizedFilter || t.title.toLowerCase().includes(normalizedFilter) || t.desc.toLowerCase().includes(normalizedFilter)
+    );
+    // deterministic initial slice (no shuffle during render)
+    if (typeof limit === 'number' && limit > 0) return base.slice(0, limit);
+    return base;
+  });
   // limit: optionally show a random subset of tools (useful on non-canonical pages)
   // filter: optional prefilter text applied to tool titles/desc
 
@@ -58,7 +68,9 @@ export default function ToolsGrid({ className, limit, filter, items, randomize }
   };
 
   const modalSizeFor = (t: ToolEntry) => {
-    if ((t as any).modalSize) return (t as any).modalSize as string;
+    type WithModal = ToolEntry & { modalSize?: string };
+    const tt = t as WithModal;
+    if (tt.modalSize) return tt.modalSize;
     const map: Record<string, string> = {
       'capacity-finder': 'max-w-md',
       'cleaning-fee-risk-checker': 'max-w-md',
@@ -68,22 +80,19 @@ export default function ToolsGrid({ className, limit, filter, items, randomize }
     return map[t.id] || 'max-w-2xl';
   };
 
-  // apply optional filter
-  const normalizedFilter = (filter || "").trim().toLowerCase();
-  let candidates = (items && items.length ? items : tools).filter(t =>
-    !normalizedFilter || t.title.toLowerCase().includes(normalizedFilter) || t.desc.toLowerCase().includes(normalizedFilter)
-  );
-
-  // apply random selection if limit is provided and less than total
-  // optionally shuffle candidates (randomize true) or when a limit is provided
-  if ((randomize || (typeof limit === 'number' && limit > 0)) && candidates.length > 1) {
-    const copy = [...candidates];
+  // if randomize requested, shuffle after mount to avoid SSR/client initial render mismatch
+  React.useEffect(() => {
+    if (!randomize && !(typeof limit === 'number' && limit > 0)) return;
+    // create a shuffled copy
+    const copy = [...((items && items.length) ? items : tools)];
     for (let i = copy.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [copy[i], copy[j]] = [copy[j], copy[i]];
     }
-    candidates = typeof limit === 'number' && limit > 0 ? copy.slice(0, limit) : copy;
-  }
+    const newCandidates = (typeof limit === 'number' && limit > 0) ? copy.slice(0, limit) : copy;
+    setCandidates(newCandidates);
+  // run once on mount or when filter/limit/items change
+  }, [randomize, limit, filter, items]);
 
   return (
     <div className={className}>

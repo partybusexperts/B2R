@@ -96,8 +96,9 @@ async function copyToClipboard(text: string) {
 /* ===== Toasts (blue) ===== */
 function useToasts() {
   const [toasts, setToasts] = useState<Array<{ id: number; text: string }>>([]);
+  const counterRef = React.useRef(1);
   const add = (text: string, ms = 1600) => {
-    const id = Date.now() + Math.random();
+    const id = counterRef.current++;
     setToasts((t) => [...t, { id, text }]);
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), ms);
   };

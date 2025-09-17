@@ -33,26 +33,55 @@ export default function HeroHeader({ pageSlug, fallback, initialData }: { pageSl
       try {
         const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const SUPABASE_ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-        if (!SUPABASE_URL || !SUPABASE_ANON) return;
+        if (!SUPABASE_URL || !SUPABASE_ANON) {
+          // surface missing env in developer console
+          console.warn('HeroHeader: NEXT_PUBLIC_SUPABASE_* env vars missing; skipping client RPC fetch');
+          return;
+        }
 
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
         // Use the headers RPC suggested in Option A
-        type RpcResult = Record<string, unknown> | { data?: unknown } | null;
-        const rpc: RpcResult = await supabase.rpc('fetch_header', { p_page_slug: pageSlug }) as RpcResult;
-        const rpcData = (rpc && typeof rpc === 'object' && 'data' in rpc) ? (rpc as any).data : rpc;
-        if (!rpcData || typeof rpcData !== 'object') return;
+        type RpcResult = unknown;
+        // call the new RPC fetch_hero1 which returns the hero payload
+        const rpc: RpcResult = await supabase.rpc('fetch_hero1', { p_page_slug: pageSlug }) as RpcResult;
+
+        // Normalize rpc envelope safely without using `any`
+        let rpcData: unknown = null;
+        if (rpc && typeof rpc === 'object' && 'data' in (rpc as Record<string, unknown>)) {
+          rpcData = (rpc as Record<string, unknown>).data;
+        } else {
+          rpcData = rpc;
+        }
+
+        // debug: surface raw RPC envelope for diagnostics
+        console.debug('HeroHeader: raw rpc response', rpc);
+        if (!rpcData) {
+          console.debug('HeroHeader: rpc returned no data for', pageSlug);
+          return;
+        }
 
         // try common container keys or assume object
-        const candidate = (rpcData as any)?.body ?? (rpcData as any)?.data ?? (rpcData as any)?.content ?? (rpcData as any)?.json ?? rpcData ?? null;
+        let candidate: unknown = null;
+        if (typeof rpcData === 'string') {
+          candidate = rpcData;
+        } else if (rpcData && typeof rpcData === 'object') {
+          const obj = rpcData as Record<string, unknown>;
+          candidate = obj.body ?? obj.data ?? obj.content ?? obj.json ?? rpcData;
+        }
+
         let parsed: Record<string, unknown> | null = null;
         if (typeof candidate === 'string') {
           try { parsed = JSON.parse(candidate); } catch { parsed = null; }
-        } else if (typeof candidate === 'object') {
+        } else if (candidate && typeof candidate === 'object') {
           parsed = candidate as Record<string, unknown>;
         }
 
-        if (mounted && parsed) setData(parsed as FallbackShape);
+        if (mounted && parsed) {
+          setData(parsed as FallbackShape);
+        } else {
+          console.debug('HeroHeader: parsed RPC candidate is empty or invalid', { pageSlug, parsed, candidate });
+        }
       } catch {
         // keep silent — fallback/initialData will be used
       }
