@@ -9,6 +9,7 @@ import OptimizedImage from "../../components/OptimizedImage";
 import { SmartImage } from "../../components/SmartImage";
 import ToolsGrid from "../../components/tools/ToolsGrid";
 import HomePolls from "../../components/HomePolls";
+import EventsSection from "../../components/EventsSection";
 
 
 const PHONE_DISPLAY = "(888) 535-2566";
