@@ -11,6 +11,18 @@ type OpenKey = "fleet" | "resources" | null;
 
 export default function Navigation() {
   const pathname = usePathname();
+  // Hide server-rendered header fallback after client hydrates to avoid duplicate navs
+  useEffect(() => {
+    const el = document.getElementById('server-main-header');
+    if (el) {
+      // Prefer to set aria-hidden and visually hide to avoid reflow issues
+      el.setAttribute('aria-hidden', 'true');
+      el.style.display = 'none';
+    }
+    return () => {
+      // no-op on unmount; leave removed
+    };
+  }, []);
   const [open, setOpen] = useState<OpenKey>(null);
 
   // timers to prevent flicker when moving from trigger -> submenu

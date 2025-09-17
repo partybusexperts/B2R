@@ -1,7 +1,8 @@
+// app/page.tsx
 import React from "react";
 import Section from "../components/Section";
-import HeroHeader from "../components/HeroHeader";
-import QuoteForm from '../components/QuoteForm';
+import HeroHeaderServer from "../components/HeroHeaderServer";
+import QuoteForm from "../components/QuoteForm";
 import StepCard from "../components/StepCard";
 import ToolsSlider from "../components/ToolsSlider";
 import ClientOnly from "../components/ClientOnly";
@@ -14,22 +15,23 @@ import EventsSection from "../components/EventsSection";
 export default function Home() {
   return (
     <main>
-      <HeroHeader
+      <HeroHeaderServer
         pageSlug="home"
         fallback={{
           page_slug: "home",
           title: "Bus2Ride — Group transport made easy",
           subtitle: "Instant quotes, transparent pricing, and clean vehicles for every event.",
-          primary_cta: { label: "Get Instant Quote", href: "/quote" },
-          secondary_cta: { label: "View Fleet", href: "/fleet" },
-          tertiary_cta: { label: "Contact Us", href: "mailto:info@bus2ride.com" },
-          gradient_from: "from-sky-400",
+          primary_cta:  { label: "Get Instant Quote", href: "/quote" },
+          secondary_cta:{ label: "View Fleet",       href: "/fleet" },
+          tertiary_cta: { label: "Contact Us",       href: "/contact" },
+          gradient_from:"from-sky-400",
           gradient_via: "via-blue-600",
-          gradient_to: "to-indigo-900",
-          text_color: "text-white",
-          wave_fill: "#122a56",
+          gradient_to:  "to-indigo-900",
+          text_color:   "text-white",
+          wave_fill:    "#122a56",
         }}
       />
+
       {/* Top CTA */}
       <Section className="max-w-4xl mx-auto text-center py-8">
         <a
@@ -62,7 +64,7 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* Tools (client-only to avoid SSR stalls) */}
+      {/* Tools (client-only) */}
       <Section className="max-w-7xl mx-auto mt-8">
         <h2 className="text-4xl font-extrabold text-center mb-4">Tools</h2>
         <p className="text-center mb-6">Planner tools to help you choose the right vehicle and plan your trip.</p>
@@ -89,12 +91,12 @@ export default function Home() {
         </ClientOnly>
       </Section>
 
-      {/* Events Section (DB-driven) */}
+      {/* Events Section */}
       <Section className="max-w-7xl mx-auto mt-10">
         <EventsSection limit={6} />
       </Section>
 
-      {/* Reviews & Slideshow (client-only) */}
+      {/* Reviews & Slideshow */}
       <Section className="max-w-6xl mx-auto mt-10 mb-20">
         <div className="grid md:grid-cols-2 gap-8">
           <div>
