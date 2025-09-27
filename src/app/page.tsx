@@ -2,10 +2,11 @@
 import React from "react";
 import HeroHeaderServer from "../components/HeroHeaderServer";
 import VehiclePreviewSection from "../components/sections/VehiclePreviewSection";
-import CTAFromDbServer from "@/components/sections/CTAFromDbServer";
+import CTAFromDbServer from "../components/sections/CTAFromDbServer";
 
 import { getWhySections, pickWhyByType } from "../lib/server/why";
 import WhyVehicleCard from "../components/sections/WhyVehicleCard";
+import GlobalReviewStripServer from "../components/reviews/GlobalReviewStripServer";
 
 export default async function Home() {
   const why = await getWhySections();
@@ -30,6 +31,7 @@ export default async function Home() {
       </div>
 
   <CTAFromDbServer vehicleHint="coach-buses" />
+      <GlobalReviewStripServer />
     </main>
   );
 }

@@ -82,3 +82,23 @@ html, body {
   }
   .animate-floaty { animation: floaty 4s ease-in-out infinite; }
 }
+
+@layer utilities {
+  /* Infinite horizontal marquee that loops a duplicated track */
+  @keyframes marquee-left {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); } /* because track is duplicated 2x */
+  }
+  .marquee {
+    overflow: hidden;
+    position: relative;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0.75rem; /* matches gap-3 in Tailwind */
+    will-change: transform;
+    animation: marquee-left var(--marquee-duration, 55s) linear infinite;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; } /* optional pause on hover */
+  .motion-reduce\:marquee-none { animation: none !important; }
+}
