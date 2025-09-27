@@ -2,7 +2,7 @@
 import React from "react";
 import HeroHeaderServer from "../components/HeroHeaderServer";
 import VehiclePreviewSection from "../components/sections/VehiclePreviewSection";
-import CTA from "../components/sections/CTA";
+import CTAFromDbServer from "@/components/sections/CTAFromDbServer";
 
 import { getWhySections, pickWhyByType } from "../lib/server/why";
 import WhyVehicleCard from "../components/sections/WhyVehicleCard";
@@ -29,7 +29,7 @@ export default async function Home() {
         <WhyVehicleCard section={pickWhyByType(why, "coach-buses")} />
       </div>
 
-      <CTA data={{ title: "Ready to roll?", subtitle: "Book your ride today", buttons: [{ label: "Contact us", href: "/contact" }] }} />
+  <CTAFromDbServer vehicleHint="coach-buses" />
     </main>
   );
 }
