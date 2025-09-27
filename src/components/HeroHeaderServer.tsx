@@ -1,14 +1,15 @@
 // src/components/HeroHeaderServer.tsx
+import React from "react";
 import { createClient } from "@supabase/supabase-js";
 
-type HeroData = Record<string, any> | null;
+type HeroData = Record<string, unknown> | null;
 
 export default async function HeroHeaderServer({
   pageSlug,
   fallback,
 }: {
   pageSlug: string;
-  fallback: Record<string, any>;
+  fallback: Record<string, unknown>;
 }) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;      // server-only (preferred)
@@ -57,8 +58,10 @@ export default async function HeroHeaderServer({
   }
 
   // Ensure we always pass an images array (fallback if DB is empty)
-  if (!initialData?.images?.length && fallback?.images?.length) {
-    initialData = { ...(initialData ?? {}), images: fallback.images };
+  const initialImages = Array.isArray((initialData as any)?.images) ? (initialData as any).images : [];
+  const fallbackImages = Array.isArray((fallback as any)?.images) ? (fallback as any).images : [];
+  if (!initialImages.length && fallbackImages.length) {
+    initialData = { ...(initialData ?? {}), images: fallbackImages } as any;
   }
 
   return <HeroHeader pageSlug={pageSlug} fallback={fallback} initialData={initialData} />;
