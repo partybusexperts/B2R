@@ -1,89 +1,63 @@
-"use client";
+import React from "react";
+import { createClient } from "@/lib/supabase/server";
+export const revalidate = 60;
 
-import React, { useEffect, useState } from 'react';
+function normalizeOptions(rows: any[]) {
+  return (rows ?? []).map((r) => {
+    const label = r.label ?? r.text ?? r.title ?? r.option ?? r.name ?? String(r.option_value ?? "");
+    const id = r.option_id_uuid ?? r.id ?? r.uuid ?? r.option_uuid ?? r.option_id ?? label;
+    return { id: String(id), label: String(label) };
+  });
+}
 
-type Props = { params: { id: string } };
+export default async function EmbedPoll({ params }: { params: { id: string } }) {
+  const pollId = decodeURIComponent(params.id);
+  const supabase = createClient();
 
-export default function EmbedPoll({ params }: Props) {
-  const pollId = params?.id || '';
-  const [results, setResults] = useState<Record<string, number>>({});
-  const [options, setOptions] = useState<string[]>([]);
-  const [question, setQuestion] = useState<string>(pollId);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [voted, setVoted] = useState(false);
+  // options (try common sources)
+  const sources = ["v_poll_options", "poll_options1", "poll_options"];
+  let optRows: any[] = [];
+  for (const t of sources) {
+    const { data, error } = await supabase.from(t).select("*").eq("poll_id_uuid", pollId).limit(200);
+    if (!error && data?.length) { optRows = data; break; }
+  }
+  const options = normalizeOptions(optRows);
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const res = await fetch(`/api/poll/results/${encodeURIComponent(pollId)}`);
-        if (!res.ok) throw new Error('no');
-        const j = await res.json();
-        if (!mounted) return;
-        const r = j.results || {};
-        setResults(r);
-        // derive options from results if present
-        const opts = Object.keys(r);
-        if (opts.length) {
-          setOptions(opts);
-          setQuestion(pollId.replaceAll('__', ' — '));
-        }
-      } catch (e) {
-        // leave empty
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => { mounted = false; };
-  }, [pollId]);
-
-  const total = Object.values(results).reduce((a, b) => a + Number(b), 0);
-
-  const handleVote = async (opt: string) => {
-    setSelected(opt);
-    try {
-      await fetch('/api/poll/vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ poll_id: pollId, option: opt }) });
-      setVoted(true);
-      // refresh
-      const r = await fetch(`/api/poll/results/${encodeURIComponent(pollId)}`);
-      if (r.ok) {
-        const j = await r.json();
-        setResults(j.results || {});
-      }
-    } catch { /* ignore */ }
-  };
+  // votes aggregate
+  const { data: votes } = await supabase
+    .from("poll_votes")
+    .select("option_id")
+    .eq("poll_id", pollId);
+  const counts = new Map<string, number>();
+  (votes ?? []).forEach((r: any) => counts.set(String(r.option_id), (counts.get(String(r.option_id)) || 0) + 1));
+  const total = Array.from(counts.values()).reduce((a, b) => a + b, 0);
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, Arial', background: 'white', padding: 12, borderRadius: 8, width: 320, color: '#0b2545' }}>
-      <div style={{ fontWeight: 700, marginBottom: 8 }}>{question}</div>
-      {loading && <div style={{ fontSize: 12, color: '#61759a' }}>Loading…</div>}
-      {!loading && !voted && (
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {(options.length ? options : ['A','B']).map((o) => (
-            <button key={o} onClick={() => handleVote(o)} style={{ padding: '6px 10px', background: '#0f6adc', color: 'white', borderRadius: 6, border: 'none', cursor: 'pointer' }}>{o}</button>
-          ))}
-        </div>
-      )}
-      {!loading && voted && (
-        <div style={{ marginTop: 8 }}>
-          {(options.length ? options : Object.keys(results)).map((o) => {
-            const count = Number(results[o] || 0);
-            const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-            const mine = selected === o;
+    <main className="min-h-[220px] bg-white text-[#0a1530] p-4">
+      <div className="mx-auto max-w-2xl">
+        <h3 className="m-0 text-lg font-semibold">Community Poll Results</h3>
+        <div className="mt-2 space-y-2">
+          {options.map((o) => {
+            const c = counts.get(o.id) || 0;
+            const pct = total ? Math.round((c / total) * 1000) / 10 : 0;
             return (
-              <div key={o} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <div style={{ width: 90, fontSize: 13 }}>{o}{mine ? ' ✓' : ''}</div>
-                <div style={{ flex: 1, background: '#e6f0ff', height: 10, borderRadius: 6 }}>
-                  <div style={{ width: `${pct}%`, height: '100%', background: mine ? '#18a558' : '#0f6adc', borderRadius: 6 }} />
+              <div key={o.id}>
+                <div className="flex justify-between text-sm">
+                  <span>{o.label}</span>
+                  <span>{pct}%</span>
                 </div>
-                <div style={{ width: 40, textAlign: 'right', fontSize: 12 }}>{count} {total>0?`(${pct}%)`:''}</div>
+                <div className="h-2 w-full bg-gray-200 rounded">
+                  <div className="h-full rounded bg-[#3b82f6]" style={{ width: `${pct}%` }} />
+                </div>
               </div>
             );
           })}
         </div>
-      )}
-      <div style={{ marginTop: 10, fontSize: 12, color: '#8aa0d6' }}>Powered by Bus2Ride — embed this iframe on your site</div>
-    </div>
+        <p className="mt-3 text-xs text-gray-600">
+          Data by <a href="/" target="_blank" rel="nofollow" className="underline">Bus2Ride</a>
+        </p>
+      </div>
+    </main>
   );
 }
+

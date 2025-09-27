@@ -3,6 +3,7 @@ import React from "react";
 import HeroHeaderServer from "../components/HeroHeaderServer";
 import VehiclePreviewSection from "../components/sections/VehiclePreviewSection";
 import CTAFromDbServer from "../components/sections/CTAFromDbServer";
+import HomePollsSection from "../components/polls/HomePollsSection";
 
 import { getWhySections, pickWhyByType } from "../lib/server/why";
 import WhyVehicleCard from "../components/sections/WhyVehicleCard";
@@ -32,6 +33,11 @@ export default async function Home() {
 
   <CTAFromDbServer vehicleHint="coach-buses" />
       <GlobalReviewStripServer />
+      {/* Visual marker to confirm HomePollsSection is mounted */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 mt-6">
+        <div className="bg-yellow-300 text-black p-3 rounded-md text-center font-semibold">HomePollsSection mounted ↓</div>
+      </div>
+      <HomePollsSection />
     </main>
   );
 }

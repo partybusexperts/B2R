@@ -7,9 +7,10 @@ import { ResolvedVehicle } from "../data/vehicles";
 interface Props {
   vehicle: ResolvedVehicle;
   amenityLabels?: string[]; // NEW
+  showCTA?: boolean;
 }
 
-export default function VehicleGalleryCard({ vehicle, amenityLabels }: Props) {
+export default function VehicleGalleryCard({ vehicle, amenityLabels, showCTA = true }: Props) {
   const images = vehicle.images || [];
   const [activeIdx, setActiveIdx] = useState(0);
   const active = images[activeIdx] || vehicle.primary;
@@ -91,6 +92,8 @@ export default function VehicleGalleryCard({ vehicle, amenityLabels }: Props) {
           ))}
         </div>
       )}
+      {/* Optional CTA placeholder to satisfy showCTA prop (render nothing if false) */}
+      {showCTA && <div className="px-4 pb-4" />}
     </div>
   );
 }

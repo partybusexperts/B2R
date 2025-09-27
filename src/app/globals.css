@@ -46,6 +46,12 @@ html, body {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Polls column scrollbar */
+.thin-scrollbar { scrollbar-width: thin; scrollbar-color: #64748b transparent; }
+.thin-scrollbar::-webkit-scrollbar { width: 8px; }
+.thin-scrollbar::-webkit-scrollbar-thumb { background: rgba(148,163,184,.6); border-radius: 8px; }
+.thin-scrollbar::-webkit-scrollbar-track { background: transparent; }
+
 @layer utilities {
   .btn-shine {
     position: relative;

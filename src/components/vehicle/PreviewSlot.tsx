@@ -1,101 +1,98 @@
-"use client";
+import { createClient } from "@/lib/supabase/server";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+export type PollItem = { id: string; slug: string | null; question: string };
+export type PollColumn = { topic: { slug: string; name: string }, polls: PollItem[] };
 
-// safe hash + seeded RNG
-function safeHash(input: string) {
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < input.length; i++) {
-    h ^= input.charCodeAt(i);
-    h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
+const hasSupabase =
+  !!(process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL) &&
+  !!(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY);
+
+function chunk<T>(arr: T[], n: number) {
+  const out: T[][] = Array.from({ length: n }, () => []);
+  arr.forEach((x, i) => out[i % n].push(x));
+  return out;
+}
+
+function normalizeRows(rows: any[]): PollItem[] {
+  return (rows ?? [])
+    .map((r) => {
+      const question =
+        r.question ??
+        r.question_text ??
+        r.title ??
+        r.text ??
+        r.prompt ??
+        "";
+      if (!String(question).trim()) return null;
+
+      const id =
+        r.poll_id_uuid ??
+        r.id ??
+        r.uuid ??
+        r.pk ??
+        `${r.slug ?? "poll"}:${Math.random()}`;
+
+      const slug = r.poll_slug ?? r.slug ?? null;
+
+      return { id: String(id), slug, question: String(question) };
+    })
+    .filter(Boolean) as PollItem[];
+}
+
+async function fetchAnyPolls(supabase: ReturnType<typeof createClient>, max: number) {
+  // Try multiple tables/views you likely have (based on your screenshots)
+  const candidates = [
+    "polls1",
+    "v_polls",
+    "v_polls_preview",
+    "v_polls_public",
+    "polls", // fallback if a simple table exists
+  ];
+
+  for (const table of candidates) {
+    const { data, error } = await supabase.from(table).select("*").limit(max);
+    if (error) {
+      console.error(`[home-polls] ${table} error`, error);
+      continue;
+    }
+    if (data && data.length) {
+      return { table, rows: data };
+    }
   }
-  return h >>> 0;
-}
-function mulberry32(seed: number) {
-  return function () {
-    let t = (seed += 0x6d2b79f5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+  return { table: null, rows: [] };
 }
 
-type Props<Item> = {
-  items?: Item[] | null; // may be undefined/null
-  slotKey?: string; // unique per tile; fallback if missing
-  renderItem: (item: Item) => React.ReactElement | null; // how to render one vehicle
-  baseMs?: number; // base rotate period
-  jitterMs?: number; // extra randomization
-  pauseOnHover?: boolean;
-};
+export async function getHomepagePollColumns(
+  numColumns = 3,
+  pollsPerColumn = 50
+): Promise<PollColumn[]> {
+  if (!hasSupabase) return [];
 
-export default function PreviewSlot<Item>({
-  items,
-  slotKey,
-  renderItem,
-  baseMs = 6200,
-  jitterMs = 2400,
-  pauseOnHover = true,
-}: Props<Item>) {
-  const list = Array.isArray(items) ? items : [];
-  const len = list.length;
+  const supabase = createClient();
 
-  // stable fallback key (unique per instance)
-  const rid = useId();
-  const stableKey = String(slotKey ?? rid);
-  const rand = useRef(mulberry32(safeHash(stableKey)));
-
-  const [idx, setIdx] = useState<number>(() => (len > 0 ? Math.floor(rand.current() * len) : 0));
-
-  const timer = useRef<number | null>(null);
-  const paused = useRef(false);
-  const started = useRef(false);
-  const holderRef = useRef<HTMLDivElement | null>(null);
-
-  // pause when off-screen
-  useEffect(() => {
-    if (!holderRef.current || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(([entry]) => {
-      paused.current = !entry.isIntersecting;
-    }, { rootMargin: "120px" });
-    io.observe(holderRef.current);
-    return () => io.disconnect();
-  }, []);
-
-  const schedule = () => {
-    if (timer.current) window.clearTimeout(timer.current);
-    if (len <= 1) return;
-
-    const period = baseMs * (0.9 + rand.current() * 0.4) + Math.floor(rand.current() * jitterMs);
-
-    timer.current = window.setTimeout(() => {
-      if (!paused.current) setIdx((i) => (i + 1) % len);
-      schedule();
-    }, period) as unknown as number;
-  };
-
-  useEffect(() => {
-    if (started.current) return; // avoid Strict Mode double-start
-    started.current = true;
-
-    const bootDelay = 300 + Math.floor(rand.current() * 1200);
-    const boot = window.setTimeout(schedule, bootDelay);
-
-    return () => {
-      window.clearTimeout(boot);
-      if (timer.current) window.clearTimeout(timer.current);
-    };
-  }, [len, baseMs, jitterMs, stableKey]);
-
-  if (len === 0) return null;
-
-  return (
-    <div
-      ref={holderRef}
-      onMouseEnter={() => { if (pauseOnHover) paused.current = true; }}
-      onMouseLeave={() => { if (pauseOnHover) { paused.current = false; } }}
-    >
-      {renderItem(list[idx])}
-    </div>
+  // Pull a large pool so we can confidently fill all columns.
+  const { table, rows } = await fetchAnyPolls(
+    supabase,
+    numColumns * pollsPerColumn * 3
   );
+
+  if (!table || !rows?.length) {
+    console.warn("[home-polls] No rows from any poll table/view");
+    return [];
+  }
+
+  const items = normalizeRows(rows);
+  if (!items.length) {
+    console.warn(`[home-polls] ${table} returned rows, but no recognizable question field`);
+    return [];
+  }
+
+  // Evenly distribute across N columns, then cap each column.
+  const cols = chunk(items, numColumns).map((arr) => arr.slice(0, pollsPerColumn));
+  const titles = ["Trending Polls", "Hot Right Now", "Popular Topics"];
+
+  return cols.map((polls, i) => ({
+    topic: { slug: `col-${i + 1}`, name: titles[i] ?? `Polls ${i + 1}` },
+    polls,
+  }));
 }

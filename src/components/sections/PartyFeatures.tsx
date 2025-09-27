@@ -3,10 +3,10 @@
 import React from "react";
 
 type PartyFeature = { label?: string; description?: string; icon?: React.ReactNode };
-type PartyFeaturesData = { title?: string; subtitle?: string; items?: PartyFeature[] } | null;
+type PartyFeaturesData = { title?: string; subtitle?: string; items?: PartyFeature[] };
 
-export default function PartyFeatures({ data }: { data: PartyFeaturesData }) {
-  const { title, subtitle, items = [] } = (data ?? {}) as PartyFeaturesData;
+export default function PartyFeatures({ data }: { data?: PartyFeaturesData | null }) {
+  const { title, subtitle, items = [] } = data ?? {} as PartyFeaturesData;
 
   return (
     <section className="relative max-w-7xl mx-auto my-16 px-6">

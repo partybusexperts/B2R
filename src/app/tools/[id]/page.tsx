@@ -3,12 +3,12 @@ import React from "react";
 import ToolRunner from "@/components/ToolRunner";
 import { notFound } from "next/navigation";
 
-type Props = { params: any };
+type Params = { id?: string };
+type Props = { params: Params };
 
 export default function ToolPage({ params }: Props) {
-  // `params` is a Promise-like value in newer Next.js versions for migration.
-  // Unwrap safely in a client component using React.use(params) before accessing properties.
-  const { id } = React.use(params);
+  // `params` may be a plain object here in this client component. Access id directly.
+  const id = params?.id;
   // Simple guard: if id looks invalid, 404
   if (!id) return notFound();
 

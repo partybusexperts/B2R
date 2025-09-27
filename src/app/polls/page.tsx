@@ -1,3 +1,18 @@
+export const dynamic = "force-dynamic";
+
+export default function PollsPage() {
+  return (
+    <main className="min-h-[60vh] bg-slate-900 text-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10">
+        <h1 className="text-3xl font-bold">All Polls</h1>
+        <p className="mt-2 text-white/70">Full polls directory coming soon.</p>
+      </div>
+    </main>
+  );
+}
+// Client-side components / helpers are exported below as named exports
+// Keep the top-level default export for the server-rendered page above.
+
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -236,7 +251,7 @@ function ResultsReminder({ compact = false }: { compact?: boolean }) {
 }
 
 /* ===== Main (blue/black themed) ===== */
-export default function ClientPolls() {
+export function ClientPolls() {
   const [q, setQ] = useState("");
   const [jumpSlug, setJumpSlug] = useState<string>("");
   const [showGlobalResults, setShowGlobalResults] = useState(false);

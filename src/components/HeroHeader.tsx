@@ -126,7 +126,6 @@ export default function HeroHeader({
                 className={`hero-slide ${i === idx ? "is-active" : ""}`}
                 style={{
                   backgroundImage: `url("${src}")`,
-                  // @ts-expect-error custom property for ::after
                   "--darken": String(darken),
                 } as React.CSSProperties}
               />
@@ -195,12 +194,11 @@ function pickCtas(d: Shape, fb: Shape) {
       style: (style ?? "secondary") as "primary" | "secondary" | "outline",
     })) ?? [];
 
-  const fromLegacy: { label: string; href: string; style: "primary" | "secondary" | "outline" }[] =
-    [
-      (d.primary_cta ?? fb.primary_cta) ? { ...(d.primary_cta ?? fb.primary_cta)!, style: "outline" } : null,
-      (d.secondary_cta ?? fb.secondary_cta) ? { ...(d.secondary_cta ?? fb.secondary_cta)!, style: "primary" } : null,
-      (d.tertiary_cta ?? fb.tertiary_cta) ? { ...(d.tertiary_cta ?? fb.tertiary_cta)!, style: "secondary" } : null,
-    ].filter(Boolean) as any[];
+  const fromLegacy = [
+    (d.primary_cta ?? fb.primary_cta) ? { ...(d.primary_cta ?? fb.primary_cta)!, style: "outline" as const } : null,
+    (d.secondary_cta ?? fb.secondary_cta) ? { ...(d.secondary_cta ?? fb.secondary_cta)!, style: "primary" as const } : null,
+    (d.tertiary_cta ?? fb.tertiary_cta) ? { ...(d.tertiary_cta ?? fb.tertiary_cta)!, style: "secondary" as const } : null,
+  ].filter(Boolean) as { label: string; href: string; style: "primary" | "secondary" | "outline" }[];
 
   return (fromArray.length ? fromArray : fromLegacy).slice(0, 3);
 }

@@ -1,9 +1,18 @@
 "use client";
 import React from "react";
 
-export function Button({ children, className, onClick, variant }: { children?: React.ReactNode; className?: string; onClick?: () => void; variant?: string }) {
+type ButtonProps = {
+  children?: React.ReactNode;
+  className?: string;
+  onClick?: (() => void) | (() => Promise<void>);
+  variant?: string;
+  disabled?: boolean;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+export function Button({ children, className, onClick, variant, disabled, ...rest }: ButtonProps) {
+  // Ensure native disabled is passed and arbitrary button props are supported
   return (
-    <button type="button" className={className} onClick={onClick} data-variant={variant}>
+    <button type="button" className={className} onClick={onClick as any} data-variant={variant} disabled={disabled} {...rest}>
       {children}
     </button>
   );
