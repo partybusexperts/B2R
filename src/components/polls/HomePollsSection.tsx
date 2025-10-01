@@ -40,11 +40,34 @@ export default async function HomePollsSection() {
 
                 <div className="max-h-[420px] overflow-y-auto thin-scrollbar px-3 py-3">
                   <ol className="space-y-2 text-[14px]">
-                    {col.polls.map((p, i) => (
-                      <li key={p.id ?? `${col.topic.slug}:${i}`}>
-                        <PollInlineCard pollId={p.id ?? null} slug={p.slug ?? null} question={p.question} />
-                      </li>
-                    ))}
+                    {col.polls.map((p, i) => {
+                      const idx = i;
+
+                      // ---------- helpers (self-contained) ----------
+                      // Minimal safe searchForOptions helper so the page won't crash while debugging.
+                      function searchForOptions(obj: any): any[] {
+                        if (!obj) return [];
+                        if (Array.isArray(obj.options) && obj.options.length) return obj.options;
+                        if (Array.isArray(obj.pollOptions) && obj.pollOptions.length) return obj.pollOptions;
+                        // look for any array-valued property that looks like options
+                        for (const k of Object.keys(obj)) {
+                          const v = (obj as any)[k];
+                          if (Array.isArray(v) && v.length && (typeof v[0] === 'object' || typeof v[0] === 'string')) return v;
+                        }
+                        return [];
+                      }
+
+                      // ---------- build poll prop ----------
+                      console.log("[poll debug]", { idx, keys: Object.keys(p || {}), sample: p });
+                      // First try: direct object p
+                      const options = searchForOptions(p);
+
+                      return (
+                        <li key={p.id ?? `${col.topic.slug}:${idx}`}>
+                          <PollInlineCard pollId={p.id ?? null} slug={p.slug ?? null} question={p.question} />
+                        </li>
+                      );
+                    })}
                   </ol>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 "use client";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "../supabase/client";
 
 export type OptionRow = { option_id: string; label: string };
 
@@ -42,7 +42,8 @@ export async function fetchOptionsForPoll(
         .limit(50);
 
       if (!error && data?.length) {
-        return (data as any[]).map((r) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return (data as any[]).map((r: any) => ({
           option_id:
             r.option_id?.toString() ??
             r.option_uuid?.toString() ??
@@ -75,6 +76,7 @@ export async function fetchTotals(pollId: string) {
     .select("option_id, votes")
     .eq("poll_id", pollId);
   const m = new Map<string, number>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (data ?? []).forEach((r: any) => m.set(String(r.option_id), Number(r.votes || 0)));
   return m;
 }
@@ -97,4 +99,3 @@ export async function castVote(pollId: string, optionId: string) {
   }
   return { ok: !error, error };
 }
-
