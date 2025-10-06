@@ -4,6 +4,7 @@ import HeroHeaderServer from "../components/HeroHeaderServer";
 import VehiclePreviewSection from "../components/sections/VehiclePreviewSection";
 import CTAFromDbServer from "../components/sections/CTAFromDbServer";
 import HomePollsSection from "../components/polls/HomePollsSection";
+import ToolsSection from "@/components/home/ToolsSection";
 
 import { getWhySections, pickWhyByType } from "../lib/server/why";
 import WhyVehicleCard from "../components/sections/WhyVehicleCard";
@@ -33,7 +34,8 @@ export default async function Home() {
 
   <CTAFromDbServer vehicleHint="coach-buses" />
       <GlobalReviewStripServer />
-      <HomePollsSection />
+  <HomePollsSection />
+  <ToolsSection />
     </main>
   );
 }
