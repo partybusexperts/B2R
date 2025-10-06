@@ -34,21 +34,22 @@ export default function ToolsGridClient({ tools }: { tools: ToolLite[] }) {
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+  {/* Bigger cards; 3 columns on lg to align with the 3 poll columns vibe */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((t) => {
           const coming = t.slug.startsWith("coming-soon");
           return (
             <button
               key={t.slug}
               onClick={() => setOpenSlug(t.slug)}
-              className="group rounded-2xl border border-white/10 bg-white/5 p-4 text-left hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white/30"
+              className="group rounded-2xl border border-white/10 bg-white/5 p-5 lg:p-6 text-left hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white/30"
             >
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-white/10 flex items-center justify-center text-sm">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl">
                   {emojiFor(t.slug)}
                 </div>
                 <div className="min-w-0">
-                  <div className="font-medium truncate">{t.name}</div>
+                  <div className="text-lg font-semibold truncate">{t.name}</div>
                   <div className="text-xs text-white/60 truncate">
                     {coming ? "Coming soon" : "Tap to learn more"}
                   </div>
@@ -61,19 +62,15 @@ export default function ToolsGridClient({ tools }: { tools: ToolLite[] }) {
 
       {/* Modal */}
       {active && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
-        >
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/60" onClick={close} />
-          <div className="relative z-10 w-full sm:max-w-md sm:rounded-2xl sm:border sm:border-white/10 sm:bg-neutral-900 p-5 sm:p-6">
+          <div className="absolute inset-x-0 bottom-0 sm:inset-0 sm:m-auto sm:h-auto sm:max-w-md sm:rounded-2xl sm:border sm:border-white/10 sm:bg-neutral-900 p-6">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center text-base">
                   {emojiFor(active.slug)}
                 </div>
-                <div className="font-semibold">{active.name}</div>
+                <div className="font-semibold text-lg">{active.name}</div>
               </div>
               <button
                 onClick={close}
