@@ -52,6 +52,13 @@ html, body {
 .thin-scrollbar::-webkit-scrollbar-thumb { background: rgba(148,163,184,.6); border-radius: 8px; }
 .thin-scrollbar::-webkit-scrollbar-track { background: transparent; }
 
+/* Show a thin, visible scrollbar in scrollable columns */
+.scrollable { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.35) transparent; }
+.scrollable::-webkit-scrollbar { width: 10px; }
+.scrollable::-webkit-scrollbar-track { background: transparent; }
+.scrollable::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.35); border-radius: 8px; }
+.scrollable::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.55); }
+
 @layer utilities {
   .btn-shine {
     position: relative;

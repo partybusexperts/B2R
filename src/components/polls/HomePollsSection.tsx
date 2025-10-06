@@ -11,15 +11,15 @@ export default async function HomePollsSection() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-10">
-      <h2 className="text-2xl font-semibold">Limo Polls &amp; Surveys</h2>
-      <p className="text-sm text-gray-500">Rotates each refresh • non-city/state • grouped by category</p>
+      <h2 className="text-2xl md:text-3xl font-semibold">Limo Polls &amp; Surveys</h2>
+      <p className="text-sm text-white/70">Rotates each refresh</p>
 
       {total === 0 ? (
         <div className="mt-6 rounded-xl bg-yellow-100 text-yellow-900 p-4">
-          No non-city/state categories found. Add more global categories or relax filters.
+          No categories found. Add more global polls or relax filters.
         </div>
       ) : (
-        <div className="mt-6 grid gap-6 md:grid-cols-3">
+        <div className="mt-6 grid gap-8 md:grid-cols-3">
           <PollColumnsByCategoryClient columns={columns} />
         </div>
       )}
