@@ -14,33 +14,66 @@ function chunk<T>(arr: T[], n: number) {
   return out;
 }
 
-const isGeo = (slug: unknown) =>
-  !!slug && /-[a-z]{2}$/i.test(String(slug)); // e.g. "...-tx", "...-ca"
+// determine whether a row represents a geo/local poll
+const isGeo = (rowOrSlug: unknown) => {
+  let slug: string | null = null;
+  if (typeof rowOrSlug === "string") slug = rowOrSlug;
+  else if (typeof rowOrSlug === "object" && rowOrSlug !== null) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const r = rowOrSlug as any;
+    slug = r.category_slug ?? r.poll_slug ?? null;
+  }
+  if (slug && /-[a-z]{2}$/i.test(String(slug))) return true; // e.g. "...-tx", "...-ca"
+
+  // also consider explicit scope or presence of geo ids
+  if (typeof rowOrSlug === "object" && rowOrSlug !== null) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const r = rowOrSlug as any;
+    const scope = String(r.scope ?? "").toLowerCase();
+    if (scope === "city" || scope === "state") return true;
+    if (r.city_id || r.state_id) return true;
+  }
+  return false;
+};
+
+// Fisher–Yates shuffle (in-place)
+function shuffle<T>(arr: T[]) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+  return arr;
+}
 
 // helper functions intentionally minimal — all parsing is inline in toItems
 
-function toItems(rows: any[]): PollItem[] {
-  return (rows ?? [])
+function toItems(rows: unknown[]): PollItem[] {
+  return (Array.isArray(rows) ? rows : [])
     .map((r) => {
+      // r may be unknown; cast to any for flexible field checks
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const row = r as any;
       const q =
-        r.question ??
-        r.question_text ??
-        r.title ??
-        r.text ??
-        r.prompt ??
+        row.question ??
+        row.question_text ??
+        row.title ??
+        row.text ??
+        row.prompt ??
         "";
       if (!String(q).trim()) return null;
 
       // <-- REAL poll id (string), used to look up options & totals
       const pollPk =
-        r.poll_id_uuid ??
-        r.poll_uuid ??
-        r.poll_id ??
-        r.id ??
-        r.uuid ??
+        row.poll_id_uuid ??
+        row.poll_uuid ??
+        row.poll_id ??
+        row.id ??
+        row.uuid ??
         null;
 
-      const slug = r.poll_slug ?? r.slug ?? null;
+      const slug = row.poll_slug ?? row.slug ?? null;
 
       if (!pollPk && !slug) return null;
 
@@ -74,21 +107,38 @@ export async function getHomepagePollColumns(
 
   // Try public-friendly views first, then the base table
   const sources = ["v_polls_public", "v_polls", "polls1"];
-  let rows: any[] = [];
+  let rows: unknown[] = [];
+  let usedSource = "(none)";
   for (const table of sources) {
     const got = await trySource(supabase, table, grab);
     if (got.length) {
       rows = got;
+      usedSource = table;
       break;
     }
   }
   if (!rows.length) return [];
 
-  // Prefer non-geo by category_slug if present; otherwise use everything
-  const nonGeoRows = rows.filter((r) => !isGeo(r?.category_slug));
+  // Prefer non-geo rows (exclude city/state/local polls) — use stricter detection
+  const nonGeoRows = rows.filter((r) => !isGeo(r));
   const primaryRows = nonGeoRows.length ? nonGeoRows : rows;
 
+  // Debugging: report what we found
+  try {
+    console.log(`[home-polls] source=${usedSource} fetched=${rows.length} nonGeo=${nonGeoRows.length}`);
+  } catch {
+    void 0;
+  }
+
+  // Convert to normalized items, then shuffle so homepage rotation is random per load
   const items = toItems(primaryRows);
+  shuffle(items);
+  try {
+    const sample = items.slice(0, 6).map((it) => it.id).filter(Boolean);
+    console.log(`[home-polls] items=${items.length} sampleIds=${JSON.stringify(sample)}`);
+  } catch {
+    void 0;
+  }
   if (!items.length) return [];
 
   const cols = chunk(items, numColumns).map((arr) => arr.slice(0, pollsPerColumn));

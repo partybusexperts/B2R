@@ -11,6 +11,7 @@ export default function PollInlineCard({ pollId, slug, question }: Props) {
   const [totals, setTotals] = useState<Map<string, number>>(new Map());
   const [selected, setSelected] = useState<string | null>(null);
   const [voted, setVoted] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -49,17 +50,43 @@ export default function PollInlineCard({ pollId, slug, question }: Props) {
         const t = await fetchTotals(pollId);
         setTotals(t ?? new Map());
         setVoted(true);
+        setShowResults(true);
       }
     } catch (err) {
       console.error("PollInlineCard: vote failed", err);
     }
   }
 
+  async function fetchAndShowResults() {
+    if (!pollId) return setShowResults(true);
+    try {
+      setLoading(true);
+      const t = await fetchTotals(pollId);
+      setTotals(t ?? new Map());
+      setShowResults(true);
+    } catch (err) {
+      console.error("PollInlineCard: failed to fetch totals", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="rounded-lg bg-white/5 ring-1 ring-white/10 px-2 py-1.5">
-      <div className="flex items-start gap-1.5">
-        <span className="mt-[3px] inline-block h-1 w-1 rounded-full bg-sky-400 flex-shrink-0" />
-        <h4 className="font-medium leading-tight text-white text-[12px]">{question}</h4>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start gap-2">
+          <span className="mt-[3px] inline-block h-2 w-2 rounded-full bg-sky-400 flex-shrink-0" />
+          <h4 className="font-semibold leading-tight text-white text-sm md:text-[14px]">{question}</h4>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => fetchAndShowResults()}
+            className="text-xs md:text-sm text-white/80 bg-white/6 hover:bg-white/8 px-2 py-1 rounded-md ring-1 ring-white/10"
+          >
+            View results
+          </button>
+        </div>
       </div>
 
       {loading && <div className="mt-1 text-xs text-white/60">Loading options…</div>}
@@ -69,36 +96,56 @@ export default function PollInlineCard({ pollId, slug, question }: Props) {
       )}
 
       {!loading && opts.length > 0 && (
-        <div className="mt-1 grid grid-cols-1 sm:grid-cols-2 gap-1">
+        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
           {opts.map((o) => {
             const count = totals.get(o.option_id) ?? 0;
-            const pct = voted && totalVotes ? Math.round((count * 100) / totalVotes) : 0;
+            const pct = (showResults || voted) && totalVotes ? Math.round((count * 100) / totalVotes) : 0;
             const isChosen = selected === o.option_id;
 
             return (
-              <button
-                key={o.option_id}
-                onClick={() => onVote(o.option_id)}
-                disabled={voted}
-                className={`w-full text-left rounded-md px-2 py-1 text-[11px] transition
-                  ${isChosen && voted ? "bg-sky-500/20 ring-1 ring-sky-400" : "bg-white/6 hover:bg-white/8 ring-1 ring-white/10"}
-                  ${voted ? "cursor-not-allowed opacity-75" : "cursor-pointer"}
-                `}
-              >
-                <div className="text-white leading-tight">{o.label}</div>
-                {voted && (
-                  <>
-                    <div className="mt-0.5 h-1 w-full rounded bg-white/10 overflow-hidden">
-                      <div className="h-1 bg-sky-400" style={{ width: `${pct}%` }} aria-hidden />
-                    </div>
-                    <div className="mt-0.5 text-[9px] text-white/60 leading-tight">
-                      {pct}% • {count} vote{count === 1 ? "" : "s"}
-                    </div>
-                  </>
+              <div key={o.option_id} className="w-full">
+                <button
+                  onClick={() => onVote(o.option_id)}
+                  disabled={voted}
+                  aria-pressed={isChosen}
+                  className={`w-full flex items-center justify-between gap-3 rounded-full px-4 py-3 text-[14px] md:text-[15px] font-semibold transition-all duration-200 ease-out
+                      ${isChosen ? "bg-gradient-to-r from-sky-500/80 to-indigo-500/70 text-white shadow-md scale-100" : "bg-white/6 hover:scale-[1.01] hover:shadow-sm text-white/95"}
+                      ${voted ? "cursor-not-allowed opacity-80" : "cursor-pointer"}
+                    `}
+                >
+                    <span className="truncate">{o.label}</span>
+                    {(showResults || voted) ? (
+                      <span className="ml-2 inline-flex items-center gap-3">
+                        <span className="text-sm font-semibold text-white/95">{pct}%</span>
+                        <span className="text-[11px] text-white/60">{count} vote{count === 1 ? "" : "s"}</span>
+                      </span>
+                    ) : (
+                      <svg className="h-4 w-4 text-white/60" viewBox="0 0 24 24" fill="none" aria-hidden>
+                        <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                </button>
+
+                {/* Animated progress bar shown after voting */}
+                {(showResults || voted) && (
+                  <div className="mt-2 h-2 w-full rounded-full bg-white/6 overflow-hidden">
+                    <div
+                      className="h-2 bg-gradient-to-r from-sky-400 to-indigo-400 transition-all duration-700 ease-in-out"
+                      style={{ width: `${pct}%` }}
+                      aria-hidden
+                    />
+                  </div>
                 )}
-              </button>
+              </div>
             );
           })}
+        </div>
+      )}
+
+      {/* total summary when results visible */}
+      {(showResults || voted) && (
+        <div className="mt-2 text-[11px] text-white/70">
+          Total votes: <span className="font-semibold text-white/90">{totalVotes}</span>
         </div>
       )}
 

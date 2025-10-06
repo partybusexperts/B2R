@@ -1,5 +1,5 @@
-"use client";
 import { createClient } from "../supabase/client";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type OptionRow = { option_id: string; label: string };
 
@@ -14,88 +14,107 @@ export async function fetchOptionsForPoll(
   if (!hasEnv) return [];
   const supabase = createClient();
 
-  // 1) Prefer normalized public view
   if (pollId) {
-    const { data, error } = await supabase
-      .from("v_options_public")
-      .select("option_id,label")
-      .eq("poll_id", pollId)
-      .limit(50);
-    if (!error && data?.length) return data as OptionRow[];
+    const candidates = ["poll_id", "poll_id_text", "poll_uuid", "id"];
+    for (const col of candidates) {
+      try {
+        const { data, error, status } = await supabase
+          .from("v_options_public")
+          .select("option_id, option_label, poll_id_text, poll_slug")
+          .eq(col, pollId)
+          .limit(200);
+        if (error && status === 400) continue; // column missing on view
+        if (error) {
+          console.warn(`[fetchOptionsForPoll] ${col} ->`, error);
+          continue;
+        }
+        if (data && data.length) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (data as any[]).map((r: any) => ({
+            option_id: String(r.option_id ?? ""),
+            label: String(r.option_label ?? r.label ?? ""),
+          }));
+        }
+      } catch (err) {
+        console.warn("fetchOptionsForPoll unexpected error", err);
+      }
+    }
   }
+
   if (slug) {
     const { data, error } = await supabase
       .from("v_options_public")
-      .select("option_id,label")
+      .select("option_id,label,poll_slug")
       .eq("poll_slug", slug)
-      .limit(50);
+      .limit(200);
     if (!error && data?.length) return data as OptionRow[];
-  }
-
-  // 2) Fallbacks (if someone renames the view)
-  if (pollId) {
-    for (const tryCol of ["poll_id_uuid", "poll_uuid", "poll_id"]) {
-      const { data, error } = await supabase
-        .from("poll_options1")
-        .select(`label:label, option_id:option_id_uuid, option_uuid, id, uuid`)
-        .eq(tryCol, pollId)
-        .limit(50);
-
-      if (!error && data?.length) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return (data as any[]).map((r: any) => ({
-          option_id:
-            r.option_id?.toString() ??
-            r.option_uuid?.toString() ??
-            r.id?.toString() ??
-            r.uuid?.toString() ??
-            "",
-          label:
-            r.label ??
-            r.option_text ??
-            r.text ??
-            r.title ??
-            r.option ??
-            r.name ??
-            String(r.option_value ?? ""),
-        }));
-      }
-    }
   }
 
   return [];
 }
 
-export type TotalsRow = { option_id: string; votes: number };
-
 export async function fetchTotals(pollId: string) {
   if (!hasEnv) return new Map<string, number>();
   const supabase = createClient();
-  const { data } = await supabase
-    .from("v_poll_vote_totals")
-    .select("option_id, votes")
-    .eq("poll_id", pollId);
+  const res = await fetchTotalsForPollIds(supabase, [pollId]);
+  const byPoll = res[pollId] ?? {};
   const m = new Map<string, number>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (data ?? []).forEach((r: any) => m.set(String(r.option_id), Number(r.votes || 0)));
+  for (const [opt, v] of Object.entries(byPoll)) {
+    m.set(String(opt), Number(v ?? 0) || 0);
+  }
   return m;
+}
+
+export async function fetchTotalsForPollIds(
+  supabase: SupabaseClient,
+  pollIds: string[]
+) {
+  if (!pollIds?.length) return {} as Record<string, Record<string, number>>;
+  const { data, error } = await supabase
+    .from("v_poll_results_cast")
+    .select("poll_id, option_id, votes")
+    .in("poll_id", pollIds);
+
+  if (error) {
+    console.error("fetchTotalsForPollIds error", error);
+    return {} as Record<string, Record<string, number>>;
+  }
+
+  const totals: Record<string, Record<string, number>> = {};
+  for (const row of (data ?? [])) {
+    const r = row as Record<string, unknown>;
+    const p = String(r.poll_id ?? "");
+    const o = String(r.option_id ?? "");
+    const v = Number(r.votes as number ?? Number(r.votes ?? 0)) || 0;
+    if (!p) continue;
+    if (!totals[p]) totals[p] = {};
+    totals[p][o] = v;
+  }
+  return totals;
 }
 
 export async function castVote(pollId: string, optionId: string) {
   if (!hasEnv) return { ok: false };
   const supabase = createClient();
 
-  // Prevent easy dupes in the same browser (soft guard)
   const key = `voted:${pollId}`;
   if (typeof window !== "undefined" && localStorage.getItem(key)) {
     return { ok: true, already: true };
   }
 
-  const { error } = await supabase
-    .from("poll_votes")
-    .insert({ poll_id: pollId, option_id: optionId });
+  const { error, data } = await supabase
+    .from("poll_votes1")
+    .insert({ poll_id: pollId, option_id: optionId })
+    .select();
+
   if (!error && typeof window !== "undefined") {
-    localStorage.setItem(key, "1");
+    try {
+      localStorage.setItem(key, "1");
+    } catch {
+      // ignore
+    }
   }
-  return { ok: !error, error };
+
+  return { ok: !error, error, data };
 }
+
