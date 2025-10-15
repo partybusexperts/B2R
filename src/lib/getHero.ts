@@ -4,6 +4,9 @@ import { createClient } from '@supabase/supabase-js';
 /**
  * Server-side helper: fetch hero JSON for a page slug from heroes1 via RPC.
  * Safe to import in server components / loaders only (no "use client").
+ * Note: the underlying RPC (fetch_hero1) should filter rows with is_active = true
+ * so only active hero entries are returned. If you prefer a direct query, include
+ * `.eq('is_active', true)` on the heroes1 table selection.
  */
 export async function getHeroInitialData(pageSlug: string) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

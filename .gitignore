@@ -48,3 +48,12 @@ next-env.d.ts
 # local history snapshots (editor backups)
 .history
 .history
+node_modules/
+.next/
+*.tsbuildinfo
+.env*
+!.env.local.example
+venv/
+__pycache__/
+*.pyc
+.vscode/

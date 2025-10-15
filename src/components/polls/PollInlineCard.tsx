@@ -4,7 +4,13 @@ import { castVote, fetchTotals, fetchOptionsForPoll } from "../../lib/client-hel
 
 type Option = { id: string; label: string };
 
-export default function PollInlineCard({ pollId, question }: { pollId: string; question: string }) {
+export type PollInlineCardProps = {
+  pollId: string;
+  question: string;
+  slug?: string;
+};
+
+export default function PollInlineCard({ pollId, question }: PollInlineCardProps) {
   const [options, setOptions] = useState<Option[]>([]);
   const [totals, setTotals] = useState<Record<string, number>>({});
   const [totalVotes, setTotalVotes] = useState(0);

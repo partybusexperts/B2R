@@ -34,8 +34,9 @@ export default async function HeroHeaderServer({
     const { data, error } = await supabase
       .from("heroes1")
       .select("data")
-      .eq("page_slug", pageSlug)
-      .eq("is_active", true)
+        .eq("page_slug", pageSlug)
+        // ensure we only fetch active hero rows
+        .eq("is_active", true)
       .maybeSingle(); // safer than .single() when 0 rows
 
     if (error) {
