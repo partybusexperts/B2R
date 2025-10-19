@@ -8,7 +8,7 @@ import CTA from '../../../../../components/CTA';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
-export const revalidate = 60 * 10;
+export const revalidate = 600;
 
 export async function generateMetadata() {
   const { data: cityRows } = await supabase.from('cities111').select('name').eq('slug', 'anchorage').limit(1);
