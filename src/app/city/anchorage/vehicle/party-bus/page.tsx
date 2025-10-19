@@ -1,5 +1,6 @@
 // src/app/city/anchorage/vehicle/party-bus/page.tsx
 import { createClient } from '@supabase/supabase-js';
+import HeroHeaderServer from "../../../../../components/HeroHeaderServer";
 import PollList from '../../../../../components/PollList';
 import Gallery from '../../../../../components/Gallery';
 import Amenities from '../../../../../components/Amenities';
@@ -12,60 +13,60 @@ import { Metadata } from 'next';
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 async function getData() {
-    const { data: cityRows } = await supabase.from('cities111').select('*').eq('slug','anchorage').limit(1);
-    const city = cityRows?.[0] ?? null;
+  const { data: cityRows } = await supabase.from('cities111').select('*').eq('slug', 'anchorage').limit(1);
+  const city = cityRows?.[0] ?? null;
 
-    let vehiclesList = [];
-    if (city?.id) {
-        const { data: veh } = await supabase
-        .from('vehicles11')
-        .select('id,name,capacity,type,amenities,storage_path,city_id')
-        .eq('city_id', city.id)
-        .order('name', { ascending: true })
-        .ilike('type', '%party%');
-        vehiclesList = veh || [];
-    }
+  let vehiclesList = [];
+  if (city?.id) {
+    const { data: veh } = await supabase
+      .from('vehicles11')
+      .select('id,name,capacity,type,amenities,storage_path,city_id')
+      .eq('city_id', city.id)
+      .order('name', { ascending: true })
+      .ilike('type', '%party%');
+    vehiclesList = veh || [];
+  }
 
-    const { data: images } = await supabase
-        .from('images111')
-        .select('*')
-        .eq('city_id', city?.id ?? null)
-        .eq('vehicle_type', 'party-bus');
+  const { data: images } = await supabase
+    .from('images111')
+    .select('*')
+    .eq('city_id', city?.id ?? null)
+    .eq('vehicle_type', 'party-bus');
 
-    const { data: polls } = await supabase
-        .from('polls1')
-        .select('*')
-        .eq('category_slug', 'anchorage-municipality-ak')
-        .order('created_at', { ascending: false });
+  const { data: polls } = await supabase
+    .from('polls1')
+    .select('*')
+    .eq('category_slug', 'anchorage-municipality-ak')
+    .order('created_at', { ascending: false });
 
-    const pollIds = (polls || []).map(p => p.id);
-    const { data: options } = pollIds.length ? await supabase.from('poll_options1').select('*').in('poll_id', pollIds) : { data: [] };
+  const pollIds = (polls || []).map(p => p.id);
+  const { data: options } = pollIds.length ? await supabase.from('poll_options1').select('*').in('poll_id', pollIds) : { data: [] };
 
-    const { data: blocks } = await supabase
-        .from('content_blocks111')
-        .select('*')
-        .eq('city_id', city?.id ?? null)
-        .eq('vehicle_type', 'party-bus')
-        .order('position');
+  const { data: blocks } = await supabase
+    .from('content_blocks111')
+    .select('*')
+    .eq('city_id', city?.id ?? null)
+    .eq('vehicle_type', 'party-bus')
+    .order('position');
 
-    const { data: amenities } = await supabase
-        .from('amenities111')
-        .select('*')
-        .eq('city_id', city?.id ?? null)
-        .eq('vehicle_type', 'party-bus');
+  const { data: amenities } = await supabase
+    .from('amenities111')
+    .select('*')
+    .eq('city_id', city?.id ?? null)
+    .eq('vehicle_type', 'party-bus');
 
-    const citySlug = 'anchorage';
-    const hero = await getHeroForPage({ pageSlug: 'anchorage-ak', citySlug, vehicleType: 'party-bus' });
+  const citySlug = 'anchorage';
+  const hero = await getHeroForPage({ pageSlug: 'anchorage-ak', citySlug, vehicleType: 'party-bus' });
 
-    return { city, vehiclesList, images: images || [], polls: polls || [], options: options || [], blocks: blocks || [], amenities: amenities || [], hero };
+  return { city, vehiclesList, images: images || [], polls: polls || [], options: options || [], blocks: blocks || [], amenities: amenities || [], hero };
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-    const { city } = await getData();
-    return {
-        title: `${city?.name || 'Anchorage'} Party Bus Rentals — Bus2Ride`,
-        description: `Party buses in ${city?.name || 'Anchorage'}. Compare vehicles, view photos, and get a fast quote.`,
-    };
+  const { city } = await getData();
+  return {
+    title: `${city?.name || 'Anchorage'} Party Bus Rentals — Bus2Ride`,
+    description: `Party buses in ${city?.name || 'Anchorage'}. Compare vehicles, view photos, and get a fast quote.`,
+  };
 }
 
 export default async function AnchoragePartyBusPage() {
@@ -73,6 +74,9 @@ export default async function AnchoragePartyBusPage() {
 
   return (
     <>
+
+      <HeroHeaderServer pageSlug="home" fallback={{ page_slug: "home" }} />
+
       <HeroDB heroData={hero} />
 
       <main style={{ maxWidth: 1100, margin: '0 auto', padding: '2rem' }}>
