@@ -1,3 +1,4 @@
+"use client";
 import { useState } from 'react';
 export default function Poll({ poll, options = [] }) {
   const [voted, setVoted] = useState(false);

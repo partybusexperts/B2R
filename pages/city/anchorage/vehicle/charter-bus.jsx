@@ -1,11 +1,11 @@
 // pages/city/anchorage/vehicle/charter-bus.jsx
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
-import PollList from '../../../../components/PollList';
-import Gallery from '../../../../components/Gallery';
-import Amenities from '../../../../components/Amenities';
-import ContentBlocks from '../../../../components/ContentBlocks';
-import CTA from '../../../../components/CTA';
+import PollList from '../../../../src/components/PollList';
+import Gallery from '../../../../src/components/Gallery';
+import Amenities from '../../../../src/components/Amenities';
+import ContentBlocks from '../../../../src/components/ContentBlocks';
+import CTA from '../../../../src/components/CTA';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
