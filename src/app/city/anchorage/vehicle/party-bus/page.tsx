@@ -1,16 +1,19 @@
-// pages/city/anchorage/vehicle/charter-bus.jsx
-import Head from 'next/head';
+// src/app/city/anchorage/vehicle/party-bus/page.tsx
 import { createClient } from '@supabase/supabase-js';
-import PollList from '../../../../components/PollList';
-import Gallery from '../../../../components/Gallery';
-import Amenities from '../../../../components/Amenities';
-import ContentBlocks from '../../../../components/ContentBlocks';
-import CTA from '../../../../components/CTA';
+import HeroHeaderServer from "../../../../../components/HeroHeaderServer";
+import PollList from '../../../../../components/PollList';
+import Gallery from '../../../../../components/Gallery';
+import Amenities from '../../../../../components/Amenities';
+import ContentBlocks from '../../../../../components/ContentBlocks';
+import CTA from '../../../../../components/CTA';
+import { getHeroForPage } from '../../../../../../utils/getHero';
+import HeroDB from '../../../../../components/HeroDB';
+import { Metadata } from 'next';
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
-export async function getStaticProps() {
-  const { data: cityRows } = await supabase.from('cities111').select('*').eq('slug','anchorage').limit(1);
+async function getData() {
+  const { data: cityRows } = await supabase.from('cities111').select('*').eq('slug', 'anchorage').limit(1);
   const city = cityRows?.[0] ?? null;
 
   let vehiclesList = [];
@@ -19,8 +22,8 @@ export async function getStaticProps() {
       .from('vehicles11')
       .select('id,name,capacity,type,amenities,storage_path,city_id')
       .eq('city_id', city.id)
-      .ilike('type', '%charter%')
-      .order('name', { ascending: true });
+      .order('name', { ascending: true })
+      .ilike('type', '%party%');
     vehiclesList = veh || [];
   }
 
@@ -28,7 +31,7 @@ export async function getStaticProps() {
     .from('images111')
     .select('*')
     .eq('city_id', city?.id ?? null)
-    .eq('vehicle_type', 'charter-bus');
+    .eq('vehicle_type', 'party-bus');
 
   const { data: polls } = await supabase
     .from('polls1')
@@ -43,38 +46,43 @@ export async function getStaticProps() {
     .from('content_blocks111')
     .select('*')
     .eq('city_id', city?.id ?? null)
-    .eq('vehicle_type', 'charter-bus')
+    .eq('vehicle_type', 'party-bus')
     .order('position');
 
   const { data: amenities } = await supabase
     .from('amenities111')
     .select('*')
     .eq('city_id', city?.id ?? null)
-    .eq('vehicle_type', 'charter-bus');
+    .eq('vehicle_type', 'party-bus');
 
-  const seo = {
-    title: `${city?.name || 'Anchorage'} Charter Bus Rentals — Bus2Ride`,
-    description: `Charter buses in ${city?.name || 'Anchorage'}. Compare vehicles, photos, and get a custom quote.`,
-  };
+  const citySlug = 'anchorage';
+  const hero = await getHeroForPage({ pageSlug: 'anchorage-ak', citySlug, vehicleType: 'party-bus' });
 
-  return {
-    props: { city, vehiclesList, images: images || [], polls: polls || [], options: options || [], blocks: blocks || [], amenities: amenities || [], seo },
-    revalidate: 60 * 10
-  }
+  return { city, vehiclesList, images: images || [], polls: polls || [], options: options || [], blocks: blocks || [], amenities: amenities || [], hero };
 }
 
-export default function AnchorageCharterBus({ city, vehiclesList, images, polls, options, blocks, amenities, seo }) {
+export async function generateMetadata(): Promise<Metadata> {
+  const { city } = await getData();
+  return {
+    title: `${city?.name || 'Anchorage'} Party Bus Rentals — Bus2Ride`,
+    description: `Party buses in ${city?.name || 'Anchorage'}. Compare vehicles, view photos, and get a fast quote.`,
+  };
+}
+
+export default async function AnchoragePartyBusPage() {
+  const { city, vehiclesList, images, polls, options, blocks, amenities, hero } = await getData();
+
   return (
     <>
-      <Head>
-        <title>{seo.title}</title>
-        <meta name="description" content={seo.description} />
-      </Head>
+
+      <HeroHeaderServer pageSlug="home" fallback={{ page_slug: "home" }} />
+
+      <HeroDB heroData={hero} />
 
       <main style={{ maxWidth: 1100, margin: '0 auto', padding: '2rem' }}>
         <header>
-          <h1>Charter Buses in {city?.name || 'Anchorage'}</h1>
-          <p>Group transport for tours, school trips, and corporate events — get a quote.</p>
+          <h1>Party Buses in {city?.name || 'Anchorage'}</h1>
+          <p>Large groups, safe drivers, and local knowledge — get a fast quote.</p>
         </header>
 
         <section style={{ marginTop: 20 }}>
@@ -83,7 +91,7 @@ export default function AnchorageCharterBus({ city, vehiclesList, images, polls,
 
         <section style={{ marginTop: 24 }}>
           <h2>Available Vehicles</h2>
-          {vehiclesList.length === 0 ? <p>No charter buses found for Anchorage yet.</p> : (
+          {vehiclesList.length === 0 ? <p>No party buses found for Anchorage yet.</p> : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 12 }}>
               {vehiclesList.map(v => (
                 <article key={v.id} style={{ border: '1px solid #eee', padding: 12, borderRadius: 8 }}>
@@ -91,7 +99,7 @@ export default function AnchorageCharterBus({ city, vehiclesList, images, polls,
                   <p><strong>Type:</strong> {v.type}</p>
                   <p><strong>Capacity:</strong> {v.capacity}</p>
                   <p>{Array.isArray(v.amenities) ? v.amenities.join(', ') : v.amenities}</p>
-                  <a href={`/get-quote?city=${city?.slug}&vehicle=charter-bus&vehicle_id=${v.id}`} className="btn">Get quote</a>
+                  <a href={`/get-quote?city=${city?.slug}&vehicle=party-bus&vehicle_id=${v.id}`} className="btn">Get quote</a>
                 </article>
               ))}
             </div>
