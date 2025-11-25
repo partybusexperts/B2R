@@ -5,6 +5,7 @@ import VehiclePreviewSection from "../components/sections/VehiclePreviewSection"
 import CTAFromDbServer from "../components/sections/CTAFromDbServer";
 import HomePollsSection from "../components/polls/HomePollsSection";
 import ToolsSection from "@/components/home/ToolsSection";
+import HomeFaqSection from "@/components/home/HomeFaqSection";
 
 import { getWhySections, pickWhyByType } from "../lib/server/why";
 import WhyVehicleCard from "../components/sections/WhyVehicleCard";
@@ -32,10 +33,11 @@ export default async function Home() {
         <WhyVehicleCard section={pickWhyByType(why, "coach-buses")} />
       </div>
 
-  <CTAFromDbServer vehicleHint="coach-buses" />
+      <CTAFromDbServer vehicleHint="coach-buses" />
       <GlobalReviewStripServer />
-  <HomePollsSection />
-  <ToolsSection />
+      <HomePollsSection />
+      <ToolsSection />
+      <HomeFaqSection />
     </main>
   );
 }
