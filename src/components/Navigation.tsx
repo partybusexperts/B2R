@@ -139,7 +139,7 @@ export default function Navigation() {
           <Dropdown label="Resources" k="resources">
             <li><Link href="/blog" className={itemCls} onClick={closeNow}>Blog</Link></li>
             <li><Link href="/tools" className={itemCls} onClick={closeNow}>Tools</Link></li>
-            <li><Link href="/tools2" className={itemCls} onClick={closeNow}>Tools2 (DB)</Link></li>
+            <li><Link href="/faq" className={itemCls} onClick={closeNow}>FAQ</Link></li>
             <li><Link href="/industry-secrets" className={itemCls} onClick={closeNow}>Industry Secrets</Link></li>
             <li><Link href="/poll-results" className={itemCls} onClick={closeNow}>Poll Results</Link></li>
             <li><Link href="/reviews" className={itemCls} onClick={closeNow}>Reviews</Link></li>

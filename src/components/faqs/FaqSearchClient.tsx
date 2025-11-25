@@ -1,20 +1,37 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { FaqItem } from "@/lib/server/faqs";
 
 type Props = {
   faqs: FaqItem[];
 };
 
+const INITIAL_BATCH = 10;
+const BATCH_SIZE = 10;
+
 export default function FaqSearchClient({ faqs }: Props) {
   const [query, setQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
 
   const filteredFaqs = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return faqs;
     return faqs.filter((faq) => faq.question.toLowerCase().includes(q) || faq.answer.toLowerCase().includes(q));
   }, [faqs, query]);
+
+  const isSearching = query.trim().length > 0;
+  const visibleFaqs = isSearching ? filteredFaqs : filteredFaqs.slice(0, visibleCount);
+  const canLoadMore = !isSearching && visibleCount < filteredFaqs.length;
+  const allConsumed = !isSearching && !canLoadMore && filteredFaqs.length >= INITIAL_BATCH;
+
+  useEffect(() => {
+    if (isSearching) {
+      setVisibleCount(filteredFaqs.length);
+    } else {
+      setVisibleCount((count) => Math.max(INITIAL_BATCH, Math.min(count, filteredFaqs.length)));
+    }
+  }, [filteredFaqs.length, isSearching]);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -30,11 +47,11 @@ export default function FaqSearchClient({ faqs }: Props) {
           placeholder='Try "payment", "booking", "safety"...'
           className="w-full rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-base text-white placeholder-white/50 shadow focus:outline-none focus:ring-2 focus:ring-white/40"
         />
-        <p className="text-sm text-white/60">Showing {filteredFaqs.length} of {faqs.length} answers</p>
+        <p className="text-sm text-white/60">Showing {visibleFaqs.length} of {faqs.length} answers</p>
       </div>
 
       <div className="space-y-3">
-        {filteredFaqs.map((faq) => (
+        {visibleFaqs.map((faq) => (
           <details
             key={faq.id}
             className="group rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-shadow hover:shadow-lg"
@@ -47,12 +64,35 @@ export default function FaqSearchClient({ faqs }: Props) {
           </details>
         ))}
 
-        {!filteredFaqs.length && (
+        {!visibleFaqs.length && (
           <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-8 text-center text-white/70">
             No answers found. Try a different keyword.
           </div>
         )}
       </div>
+
+      {!isSearching && (
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          {canLoadMore && (
+            <button
+              type="button"
+              onClick={() => setVisibleCount((count) => Math.min(count + BATCH_SIZE, filteredFaqs.length))}
+              className="rounded-2xl border border-white/15 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
+            >
+              Show 10 more
+            </button>
+          )}
+
+          {allConsumed && (
+            <a
+              href="/faq"
+              className="rounded-2xl border border-white/15 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
+            >
+              View all FAQs
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }
