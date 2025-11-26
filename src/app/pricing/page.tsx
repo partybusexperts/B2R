@@ -4,7 +4,7 @@ import GlobalReviewStripServer from '../../components/reviews/GlobalReviewStripS
 import ToolsSection from '@/components/home/ToolsSection';
 import PricingPollSection from '@/components/pricing/PricingPollSection';
 import PricingFaqSection from '@/components/pricing/PricingFaqSection';
-import { getHeroFallback } from '../../data/heroFallbacks';
+import { getHeroFallback } from '@/data/heroFallbacks';
 
 export default function PricingPage() {
   return (

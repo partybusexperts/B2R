@@ -1,6 +1,6 @@
 import HeroHeaderServer from "../../components/HeroHeaderServer";
 import ToolsClient from "./ToolsClient";
-import { getHeroFallback } from "../../data/heroFallbacks";
+import { getHeroFallback } from "@/data/heroFallbacks";
 
 export default function ToolsPage() {
   return (

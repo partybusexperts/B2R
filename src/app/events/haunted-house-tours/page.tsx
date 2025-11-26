@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import SmartImage from "../../../components/SmartImage";
 import ToolsGrid from "../../../components/tools/ToolsGrid";
 import HeroHeader from "../../../components/HeroHeader";
-import { getHeroFallback } from "../../../../data/heroFallbacks";
+import { getHeroFallback } from "@/data/heroFallbacks";
 
 /* ===== Contact constants ===== */
 const PHONE_DISPLAY = "(888) 535-2566";

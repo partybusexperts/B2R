@@ -9,7 +9,7 @@ import CTA from '../../../../../components/CTA';
 import { getHeroForPage } from '../../../../../../utils/getHero';
 import HeroDB from '../../../../../components/HeroDB';
 import { Metadata } from 'next';
-import { getHeroFallback } from '../../../../../../data/heroFallbacks';
+import { getHeroFallback } from '@/data/heroFallbacks';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 

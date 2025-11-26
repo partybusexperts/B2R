@@ -5,7 +5,7 @@ import Link from "next/link";
 import PageLayout from "../../components/PageLayout";
 import HeroHeader from "../../components/HeroHeader";
 import Section from "../../components/Section";
-import { getHeroFallback } from "../../data/heroFallbacks";
+import { getHeroFallback } from "@/data/heroFallbacks";
 
 /* ----------------------------- DATA: States/Cities ----------------------------- */
 const locations = [

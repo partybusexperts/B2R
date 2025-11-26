@@ -5,7 +5,7 @@ import Section from "../../../components/Section";
 import HeroHeader from "../../../components/HeroHeader";
 import { findState, slugifyState } from "../locationData";
 import { getStateContent } from "../stateContent";
-import { getHeroFallback } from "../../../data/heroFallbacks";
+import { getHeroFallback } from "@/data/heroFallbacks";
 
 interface Props {
   params: { state: string };
