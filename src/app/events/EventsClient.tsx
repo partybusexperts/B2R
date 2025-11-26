@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import SmartImage from "../../components/SmartImage";
 import { eventDetails as fallbackEventDetails } from "./eventDetails";
 import { getCategoryImages } from "../../utils/optimizedImages";
-import StickyDock from "../../components/StickyDock";
 
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
@@ -113,8 +112,6 @@ export default function EventsClient() {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [query, setQuery] = useState("");
   const [events, setEvents] = useState<typeof fallbackEventDetails>(fallbackEventDetails);
-  const [limit] = useState(9);
-  const [total, setTotal] = useState<number | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -124,14 +121,12 @@ export default function EventsClient() {
 
     async function load(off = 0) {
       try {
-        const res = await fetch(`/api/events?limit=${limit}&offset=${off}`, { signal: ac.signal });
+        const res = await fetch(`/api/events?limit=250&offset=${off}`, { signal: ac.signal });
         clearTimeout(to);
         if (!res.ok) throw new Error(`API ${res.status}`);
         const json = await res.json();
         if (mounted && json?.ok && Array.isArray(json.data) && json.data.length > 0) {
-          if (off === 0) setEvents(json.data);
-          else setEvents((prev) => [...prev, ...json.data]);
-          if (json.meta?.total != null) setTotal(Number(json.meta.total));
+          setEvents(json.data);
         }
       } catch (e) {
         if ((e as any)?.name === "AbortError") {
@@ -141,6 +136,7 @@ export default function EventsClient() {
         }
       }
     }
+
     load();
     return () => {
       mounted = false;
@@ -265,37 +261,6 @@ export default function EventsClient() {
               );
             })}
           </div>
-
-          {total == null || events.length < total ? (
-            <div className="w-full flex justify-center mt-8">
-              <button
-                className="px-6 py-2 rounded-full bg-white text-blue-900 font-bold border border-blue-200 shadow hover:bg-blue-50"
-                onClick={async () => {
-                  const next = events.length;
-                  try {
-                    const ac2 = new AbortController();
-                    const to2 = setTimeout(() => ac2.abort(), 2500);
-                    const res = await fetch(`/api/events?limit=${limit}&offset=${next}`, { signal: ac2.signal });
-                    clearTimeout(to2);
-                    if (!res.ok) throw new Error(`API ${res.status}`);
-                    const json = await res.json();
-                    if (json?.ok && Array.isArray(json.data) && json.data.length > 0) {
-                      setEvents((p) => [...p, ...json.data]);
-                      if (json.meta?.total != null) setTotal(Number(json.meta.total));
-                    }
-                  } catch (err) {
-                    if ((err as any)?.name === "AbortError") {
-                      console.debug("Load more aborted (timeout)");
-                    } else {
-                      console.debug("Load more failed", err instanceof Error ? err.message : String(err));
-                    }
-                  }
-                }}
-              >
-                Load more
-              </button>
-            </div>
-          ) : null}
         </div>
       </div>
 
@@ -315,8 +280,6 @@ export default function EventsClient() {
           }),
         }}
       />
-
-      <StickyDock />
     </>
   );
 }
