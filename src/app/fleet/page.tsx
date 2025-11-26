@@ -8,6 +8,7 @@ import { resolveVehicles } from "../../data/vehicles";
 import VehicleGalleryCard from "../../components/VehicleGalleryCard";
 import StructuredData from "../../components/StructuredData";
 import HeroHeader from "../../components/HeroHeader";
+import { getHeroFallback } from "../../data/heroFallbacks";
 
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
@@ -57,19 +58,10 @@ export default function FleetPage() {
 
       <HeroHeader
         pageSlug="fleet"
-        fallback={{
-          page_slug: "fleet",
-          title: "Browse Vehicle Types",
-          subtitle: "From sleek limos to mega party buses — every ride is clean, comfy, and ready to roll.",
-          primary_cta: { label: "Get an Instant Quote", href: "/quote#instant" },
+        fallback={getHeroFallback("fleet", {
           secondary_cta: { label: "Call", href: `tel:${PHONE_TEL}` },
           tertiary_cta: { label: "View Fleet", href: "/fleet" },
-          gradient_from: "from-blue-950",
-          gradient_via: "via-blue-900",
-          gradient_to: "to-black",
-          text_color: "text-white",
-          wave_fill: "#122a56",
-        }}
+        })}
       />
 
       <section className="bg-[#122a56] pt-8 pb-14">

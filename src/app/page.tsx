@@ -10,13 +10,14 @@ import HomeFaqSection from "@/components/home/HomeFaqSection";
 import { getWhySections, pickWhyByType } from "../lib/server/why";
 import WhyVehicleCard from "../components/sections/WhyVehicleCard";
 import GlobalReviewStripServer from "../components/reviews/GlobalReviewStripServer";
+import { getHeroFallback } from "../data/heroFallbacks";
 
 export default async function Home() {
   const why = await getWhySections();
 
   return (
     <main>
-      <HeroHeaderServer pageSlug="home" fallback={{ page_slug: "home" }} />
+      <HeroHeaderServer pageSlug="home" fallback={getHeroFallback("home")} />
 
       <VehiclePreviewSection category="party-buses" title="Party Buses" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 mt-4">

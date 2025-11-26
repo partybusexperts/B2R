@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import SmartImage from "../../../components/SmartImage";
 import ToolsGrid from "../../../components/tools/ToolsGrid";
 import HeroHeader from "../../../components/HeroHeader";
+import { getHeroFallback } from "../../../../data/heroFallbacks";
 
 /* ===== Contact constants ===== */
 const PHONE_DISPLAY = "(888) 535-2566";
@@ -125,19 +126,11 @@ export default function HauntedHouseToursRichPage() {
     <main className="text-slate-100 bg-[#0f1f46]">
       <HeroHeader
         pageSlug="events/haunted-house-tours"
-        fallback={{
-          page_slug: "events/haunted-house-tours",
-          title: "Haunted House Tours",
-          subtitle: "Skip parking, arrive together, and hit multiple haunts in one night—zero stress, all screams.",
-          primary_cta: { label: `Instant Quote`, href: quoteHref },
-          secondary_cta: { label: `View Fleet`, href: "/fleet" },
+        fallback={getHeroFallback("events/haunted-house-tours", {
+          primary_cta: { label: "Instant Quote", href: quoteHref },
+          secondary_cta: { label: "View Fleet", href: "/fleet" },
           tertiary_cta: { label: `Call ${PHONE_DISPLAY}`, href: `tel:${PHONE_TEL}` },
-          gradient_from: "from-sky-400",
-          gradient_via: "via-blue-600",
-          gradient_to: "to-indigo-900",
-          text_color: "text-white",
-          wave_fill: "#122a56",
-        }}
+        })}
       />
 
       {/* INTRO + LONG-FORM CONTENT + PLANNER */}

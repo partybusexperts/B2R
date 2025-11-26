@@ -5,6 +5,7 @@ import Section from "../../../components/Section";
 import HeroHeader from "../../../components/HeroHeader";
 import { findState, slugifyState } from "../locationData";
 import { getStateContent } from "../stateContent";
+import { getHeroFallback } from "../../../data/heroFallbacks";
 
 interface Props {
   params: { state: string };
@@ -76,19 +77,17 @@ export default function StatePage({ params }: Props) {
     <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black text-white">
       <HeroHeader
         pageSlug={`locations-${slugify(entry.state)}`}
-        fallback={{
+        fallback={getHeroFallback("locations", {
           page_slug: `locations-${slugify(entry.state)}`,
           title: `${entry.state} Charter Buses & Limos`,
           subtitle: `Reliable group transportation across ${entry.state}${isAlaska ? ' — from cruise transfers to northern lights tours' : ''}.`,
-          primary_cta: { label: `Instant Quote`, href: `/quote#instant` },
-          secondary_cta: { label: `View Fleet`, href: `/fleet` },
-          tertiary_cta: { label: `Call (888) 535-2566`, href: `tel:8885352566` },
+          primary_cta: { label: "Instant Quote", href: "/quote#instant" },
+          secondary_cta: { label: "View Fleet", href: "/fleet" },
+          tertiary_cta: { label: "Call (888) 535-2566", href: "tel:8885352566" },
           gradient_from: accent.split(' ')[0] || 'from-blue-300',
           gradient_via: accent.split(' ')[1] || 'via-sky-500',
           gradient_to: accent.split(' ')[2] || 'to-indigo-700',
-          text_color: 'text-white',
-          wave_fill: '#122a56',
-        }}
+        })}
       />
 
       <main className="max-w-7xl mx-auto px-5 md:px-10 -mt-2">

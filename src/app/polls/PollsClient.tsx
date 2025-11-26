@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import HeroHeader from "../../components/HeroHeader";
 import { normalizeToCategoryKeys, ORDERED_CATEGORIES_BY_GROUP } from "../../data/polls/taxonomy";
 
 /* ===== Types ===== */
@@ -330,25 +329,8 @@ export default function PollsClient() {
   useEffect(() => { const onScroll = () => setShowTop(window.scrollY > 600); onScroll(); window.addEventListener('scroll', onScroll, { passive: true }); return () => window.removeEventListener('scroll', onScroll); }, []);
 
   return (
-    <main className="text-slate-100 bg-[#0f1f46] min-h-screen">
+    <div className="text-slate-100 bg-[#0f1f46]">
       {Toasts}
-
-      <HeroHeader
-        pageSlug="polls"
-        fallback={{
-          page_slug: "polls",
-          title: "Community Polls Hub",
-          subtitle: "Vote fast. See results instantly. Embed any poll on your site in one click.",
-          primary_cta: { label: `Browse Polls`, href: "/polls" },
-          secondary_cta: { label: `View Results`, href: "/poll-results" },
-          tertiary_cta: { label: `Contact Us`, href: `mailto:info@bus2ride.com` },
-          gradient_from: "from-sky-400",
-          gradient_via: "via-blue-600",
-          gradient_to: "to-indigo-900",
-          text_color: "text-white",
-          wave_fill: "#122a56",
-        }}
-      />
 
       {/* Search + chips area (reinserted so polls search remains available) */}
       <section className="bg-[#122a56] pt-6 pb-6 relative">
@@ -441,7 +423,7 @@ export default function PollsClient() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 

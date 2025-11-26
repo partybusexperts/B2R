@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import HeroHeader from "../../components/HeroHeader";
+import { getHeroFallback } from "../../data/heroFallbacks";
 
 type Secret = {
   id: string;
@@ -227,19 +228,11 @@ export default function IndustrySecretsPage() {
     <main className="text-slate-100 bg-[#0f1f46]">
       <HeroHeader
         pageSlug="industry-secrets"
-        fallback={{
-          page_slug: "industry-secrets",
-          title: "Limo & Party Bus — Industry Secrets",
-          subtitle: "Insider tips operators don't always advertise—book smarter, avoid surprise fees, and get the most out of your ride.",
+        fallback={getHeroFallback("industry-secrets", {
           primary_cta: { label: "See Pricing", href: "/pricing" },
           secondary_cta: { label: "Ask About Off-Peak", href: "/contact" },
           tertiary_cta: { label: "Explore Fleet", href: "/party-buses" },
-          gradient_from: "from-sky-400",
-          gradient_via: "via-blue-600",
-          gradient_to: "to-indigo-900",
-          text_color: "text-white",
-          wave_fill: "#122a56",
-        }}
+        })}
       />
       
 

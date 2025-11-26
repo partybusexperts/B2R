@@ -5,6 +5,7 @@ import Link from "next/link";
 import PageLayout from "../../components/PageLayout";
 import HeroHeader from "../../components/HeroHeader";
 import Section from "../../components/Section";
+import { getHeroFallback } from "../../data/heroFallbacks";
 
 /* ----------------------------- DATA: States/Cities ----------------------------- */
 const locations = [
@@ -84,19 +85,13 @@ export default function LocationsPage() {
     >
       <HeroHeader
         pageSlug="locations"
-        fallback={{
-          page_slug: "locations",
+        fallback={getHeroFallback("locations", {
           title: "Find Your City",
           subtitle: "We serve cities and towns across the U.S. Use the search or browse below to find service in your area.",
-          primary_cta: { label: `Get Instant Quote`, href: "/quote" },
-          secondary_cta: { label: `View Fleet`, href: "/fleet" },
-          tertiary_cta: { label: `Contact Us`, href: `mailto:info@bus2ride.com` },
-          gradient_from: "from-sky-400",
-          gradient_via: "via-blue-600",
-          gradient_to: "to-indigo-900",
-          text_color: "text-white",
-          wave_fill: "#122a56",
-        }}
+          primary_cta: { label: "Get Instant Quote", href: "/quote" },
+          secondary_cta: { label: "View Fleet", href: "/fleet" },
+          tertiary_cta: { label: "Contact Us", href: "mailto:info@bus2ride.com" },
+        })}
       />
 
       {/* ---------- SEARCH BAR ---------- */}

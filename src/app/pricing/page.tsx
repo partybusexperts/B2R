@@ -1,34 +1,12 @@
 import React from 'react';
-import HeroHeader from '../../components/HeroHeader';
+import HeroHeaderServer from '../../components/HeroHeaderServer';
 import PricingClient from './PricingClient';
-import { getHeroInitialData } from '../../lib/getHero';
+import { getHeroFallback } from '../../data/heroFallbacks';
 
-export default async function PricingPage() {
-  // slug for this page’s hero row
-  const pageSlug = 'pricing';
-
-  // server-side fetch from heroes1
-  const hero = await getHeroInitialData(pageSlug);
-
+export default function PricingPage() {
   return (
     <>
-      <HeroHeader
-        pageSlug={pageSlug}
-        // your existing fallback still works if DB is empty
-        fallback={{
-          page_slug: pageSlug,
-          title: 'Transparent Pricing',
-          subtitle: 'No hidden fees. Real quotes in minutes.',
-          gradient_from: 'from-blue-950',
-          gradient_via: 'via-blue-900',
-          gradient_to: 'to-black',
-          text_color: 'text-white',
-          wave_fill: '#122a56',
-        }}
-        initialData={hero} // <- this makes your HeroHeader skip client fetch
-      />
-
-      {/* the rest of your pricing page */}
+      <HeroHeaderServer pageSlug="pricing" fallback={getHeroFallback("pricing")} />
       <PricingClient />
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import HeroHeader from "../../components/HeroHeader";
+import { getHeroFallback } from "../../data/heroFallbacks";
 
 const reviews = [
   {
@@ -69,22 +70,9 @@ const reviews = [
 export default function ReviewsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-black text-white p-0 m-0">
-      <HeroHeader
-        pageSlug="reviews"
-        fallback={{
-          page_slug: "reviews",
-          title: "Customer Reviews",
-          subtitle: "See what real customers say about their Bus2Ride experience. We pride ourselves on top-notch service, clean vehicles, and unforgettable events.",
-          primary_cta: { label: "Get Instant Quote", href: "/quote" },
-          secondary_cta: { label: "View Fleet", href: "/fleet" },
-          tertiary_cta: { label: "Contact Us", href: "mailto:info@bus2ride.com" },
-          gradient_from: "from-blue-900/80",
-          gradient_via: "via-blue-950/80",
-          gradient_to: "to-black/90",
-          text_color: "text-white",
-          wave_fill: "#0b1934",
-        }}
-      />
+      <HeroHeader pageSlug="reviews" fallback={getHeroFallback("reviews", {
+        primary_cta: { label: "Get Instant Quote", href: "/quote" },
+      })} />
 
       {/* Reviews Grid Section */}
       <div className="w-full max-w-4xl mx-auto py-16 px-4">
