@@ -19,9 +19,22 @@ export default async function HomePollsSection() {
           No categories found. Add more global polls or relax filters.
         </div>
       ) : (
-        <div className="mt-6 grid gap-8 md:grid-cols-3">
-          <PollColumnsByCategoryClient columns={columns} />
-        </div>
+        <>
+          <div className="mt-6 grid gap-8 md:grid-cols-3">
+            <PollColumnsByCategoryClient columns={columns} />
+          </div>
+          <div className="mt-8 text-center">
+            <p className="text-base text-white/80">
+              Want more? See thousands and thousands of additional polls, breakdowns, and rider opinions.
+            </p>
+            <a
+              href="/polls"
+              className="mt-4 inline-flex items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-6 py-3 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg transition hover:bg-blue-500"
+            >
+              See All Polls
+            </a>
+          </div>
+        </>
       )}
     </section>
   );
