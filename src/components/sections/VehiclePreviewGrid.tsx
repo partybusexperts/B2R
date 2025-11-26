@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import VehicleGalleryCard from "../VehicleGalleryCard";
-import { ResolvedVehicle } from "../../data/vehicles";
+import type { HomepageVehicle } from "../../types/homepageVehicles";
 
 // ---------- tiny seeded RNG helpers ----------
 function safeHash(input: string) {
@@ -88,10 +88,10 @@ export default function VehiclePreviewGrid({
   category,
   slots = 3,
   baseMs,
-  jitterMs = 2200,
+  jitterMs = 600,
   labelsMap,
 }: {
-  vehicles?: ResolvedVehicle[];
+  vehicles?: HomepageVehicle[];
   category: "party-buses" | "limousines" | "coach-buses" | string;
   slots?: number;
   baseMs?: number;
@@ -100,6 +100,7 @@ export default function VehiclePreviewGrid({
 }) {
   const len = vehicles.length;
   if (len === 0) return null;
+  const slotCount = Math.min(slots, len);
 
   const seedId = useId();
   const rand = useMemo(() => mulberry32(safeHash(category + seedId)), [category, seedId]);
@@ -108,15 +109,13 @@ export default function VehiclePreviewGrid({
     const indices = Array.from({ length: len }, (_, i) => i);
     shuffleInPlace(indices, rand);
     const out: number[] = [];
-    for (let i = 0; i < Math.min(slots, len); i++) out.push(indices[i]);
-    while (out.length < slots) out.push(out[out.length % len]);
+    for (let i = 0; i < slotCount; i++) out.push(indices[i]);
     return out;
-  }, [len, slots, rand]);
+  }, [len, slotCount, rand]);
 
   const [visible, setVisible] = useState<number[]>(initial);
 
-  const effectiveBase =
-    baseMs ?? (category === "party-buses" ? 5400 : category === "limousines" ? 6200 : 7000);
+  const effectiveBase = baseMs ?? 3000;
 
   const advance = (slot: number) => {
     if (len <= 1) return;
@@ -136,10 +135,10 @@ export default function VehiclePreviewGrid({
 
   return (
     <div className="grid gap-6 md:grid-cols-3">
-      {Array.from({ length: slots }).map((_, i) => {
+      {Array.from({ length: slotCount }).map((_, i) => {
         const slotKey = `${category}-${i}`;
         const idx = visible[i] ?? 0;
-        const item = vehicles[idx] as ResolvedVehicle | undefined;
+        const item = vehicles[idx] ?? vehicles[0];
         return (
           <RotatingTile
             key={slotKey}
@@ -148,9 +147,7 @@ export default function VehiclePreviewGrid({
             baseMs={effectiveBase}
             jitterMs={jitterMs}
           >
-            <a href={`/${category}`} className="block">
-              <VehicleGalleryCard vehicle={item!} amenityLabels={labelsMap?.[item?.name ?? ""]} />
-            </a>
+            <VehicleGalleryCard vehicle={item!} amenityLabels={labelsMap?.[item?.name ?? ""]} />
           </RotatingTile>
         );
       })}

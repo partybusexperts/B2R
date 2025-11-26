@@ -1,8 +1,9 @@
 import React from "react";
+import { cache } from "react";
+
 import VehiclePreviewGrid from "./VehiclePreviewGrid";
-import { ResolvedVehicle } from "../../data/vehicles";
-import { resolveVehicles } from "../../data/vehicles";
-import { findByFileName } from "../../utils/optimizedImages";
+import type { HomepageVehicle, HomepageVehicleCategory } from "../../types/homepageVehicles";
+import { fetchFleetVehicles } from "../../lib/server/fleetData";
 
 export default async function VehiclePreviewSection({
   category,
@@ -15,9 +16,14 @@ export default async function VehiclePreviewSection({
   linkHref?: string;
   labelsMap?: Record<string, string[]>; // NEW
 }) {
-  const vehicles = resolveVehicles(findByFileName)
-    .filter((v) => v.category === category)
-    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  const fleet = await loadFleet();
+  const source = fleet[category] ?? [];
+
+  const processed = prioritizeVehicles(source, category);
+
+  if (!processed.length) {
+    return null;
+  }
 
   return (
     <section className="py-16">
@@ -29,9 +35,20 @@ export default async function VehiclePreviewSection({
           </a>
         </div>
 
-  <VehiclePreviewGrid vehicles={vehicles as ResolvedVehicle[]} category={category} slots={3} labelsMap={labelsMap} />
+        <VehiclePreviewGrid vehicles={processed} category={category} slots={3} labelsMap={labelsMap} />
       </div>
     </section>
   );
+}
+
+const loadFleet = cache(fetchFleetVehicles);
+
+const CHRYSLER_MATCH = /black\s+chrysler\s+300/i;
+
+function prioritizeVehicles(source: HomepageVehicle[], category: HomepageVehicleCategory) {
+  if (category !== "limousines") return source;
+  const chrysler = source.filter((vehicle) => CHRYSLER_MATCH.test(vehicle.name ?? ""));
+  const remainder = source.filter((vehicle) => !CHRYSLER_MATCH.test(vehicle.name ?? ""));
+  return [...chrysler, ...remainder];
 }
 

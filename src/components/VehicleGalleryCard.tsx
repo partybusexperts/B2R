@@ -1,100 +1,257 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import OptimizedImage from "./OptimizedImage";
-import { ResolvedVehicle } from "../data/vehicles";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
+import type { HomepageVehicle } from "../types/homepageVehicles";
+import type { ResolvedVehicle } from "../data/vehicles";
+
+type VehicleCardVehicle = HomepageVehicle | ResolvedVehicle;
 
 interface Props {
-  vehicle: ResolvedVehicle;
-  amenityLabels?: string[]; // NEW
+  vehicle: VehicleCardVehicle;
+  amenityLabels?: string[];
   showCTA?: boolean;
+  phoneDisplay?: string;
+  phoneTel?: string;
+  quoteHref?: string;
 }
 
-export default function VehicleGalleryCard({ vehicle, amenityLabels, showCTA = true }: Props) {
-  const images = vehicle.images || [];
-  const [activeIdx, setActiveIdx] = useState(0);
-  const active = images[activeIdx] || vehicle.primary;
+const CATEGORY_LABEL: Record<"party-buses" | "limousines" | "coach-buses", string> = {
+  "party-buses": "Party Bus",
+  "limousines": "Limo",
+  "coach-buses": "Coach Bus",
+};
 
-  // auto-rotate main image every 6s if >1 image
+const EXTRA_HIGHLIGHTS = [
+  "Pro driver included",
+  "BYOB friendly",
+  "Hourly & flat-rate",
+  "LED glow interior",
+  "Chilled coolers",
+  "Bluetooth sound",
+  "VIP door service",
+  "Privacy shades",
+  "USB + outlets",
+  "Premium sound",
+];
+
+const THUMB_LABELS = ["Current View", "Alt View", "Lounge"];
+
+export default function VehicleGalleryCard({
+  vehicle,
+  amenityLabels,
+  showCTA = true,
+  phoneDisplay,
+  phoneTel,
+  quoteHref,
+}: Props) {
+  const capacity = vehicle.capacityMax ?? vehicle.capacityMin;
+
+  const fallbackAmenities = getVehicleAmenities(vehicle);
+  const normalizedAmenities = normalizeAmenities(amenityLabels?.length ? amenityLabels : fallbackAmenities);
+  const randomizedHighlights = pickAmenitySlice(EXTRA_HIGHLIGHTS, `${vehicle.id}-extras`, 4);
+  const amenityPool = normalizedAmenities.length ? normalizedAmenities.concat(randomizedHighlights) : randomizedHighlights;
+  const featuredAmenities = pickAmenitySlice(amenityPool, vehicle.id, 4);
+
+  const capacityLabel = capacity
+    ? capacity === vehicle.capacityMin || !vehicle.capacityMin
+      ? `Seats up to ${capacity}`
+      : `Seats ${vehicle.capacityMin}–${vehicle.capacityMax}`
+    : "Capacity on request";
+
+
+  const telDisplay = phoneDisplay ?? process.env.NEXT_PUBLIC_PRIMARY_PHONE_DISPLAY ?? "(888) 535-2566";
+  const telNumber = phoneTel ?? process.env.NEXT_PUBLIC_PRIMARY_PHONE_TEL ?? "8885352566";
+  const quoteTarget = quoteHref ?? "/free-instant-estimates";
+
+  // --- gallery: main image + up to 2 thumbs from props ---
+  const imageUrls = getVehicleImages(vehicle);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const mainImage = imageUrls[activeIndex] ?? imageUrls[0] ?? null;
+  const hasAltImage = imageUrls.length > 1;
+  const altIndex = hasAltImage ? (activeIndex + 1) % imageUrls.length : activeIndex;
+  const altImage = hasAltImage ? imageUrls[altIndex] : null;
+
   useEffect(() => {
-    if (images.length < 2) return;
-    const id = setInterval(
-      () => setActiveIdx((prev) => (prev + 1) % images.length),
-      6000
-    );
-    return () => clearInterval(id);
-  }, [images.length]);
+    setActiveIndex(0);
+  }, [vehicle.id]);
 
   return (
-    <div
-      className="relative rounded-3xl overflow-hidden shadow-xl
-                 border border-blue-800/40 bg-[#122a5c] group hover:shadow-2xl
-                 transition-all duration-300 hover:scale-[1.02]"
-    >
-      {/* Main Image */}
-      <div className="relative h-60">
-        {active?.entry ? (
-          <OptimizedImage
-            entry={active.entry}
-            alt={vehicle.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-            minDesiredWidth={900}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-blue-100">
-            {vehicle.name}
-          </div>
-        )}
+    <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-blue-800/40 bg-gradient-to-b from-[#132a5d] to-[#0a1734] shadow-xl transition-transform duration-300 hover:-translate-y-1 hover:border-blue-500/60">
+      {/* TOP: main image */}
+      <div className="w-full overflow-hidden rounded-t-3xl">
+        <div className="relative h-64 w-full md:h-72 lg:h-80">
+          {mainImage ? (
+            <Image
+              src={mainImage}
+              alt={vehicle.name}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-[#0c1a39] text-blue-100">{vehicle.name}</div>
+          )}
 
-        {/* Overlay title + capacity */}
-        <div
-          className="absolute bottom-0 left-0 right-0
-                     bg-gradient-to-t from-black/70 via-black/30 to-transparent
-                     px-4 py-3"
-        >
-          <h3 className="text-lg font-extrabold text-white">{vehicle.name}</h3>
-          <p className="text-blue-200 text-sm">
-            Seats up to {vehicle.capacityMax}
-          </p>
+          {/* overlay label */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-4">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-200">{CATEGORY_LABEL[vehicle.category]}</div>
+            <h3 className="mt-1 text-2xl font-extrabold text-white">{vehicle.name}</h3>
+            <p className="text-sm text-blue-200/90">{capacityLabel}</p>
+          </div>
+          {/* badges */}
+          <div className="absolute left-4 top-4 flex flex-col gap-2">
+            <span className="rounded-full border border-white/40 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white backdrop-blur">
+              Chauffeur Included
+            </span>
+          </div>
+
+          {/* capacity pill */}
+          <div className="absolute right-4 top-4 rounded-full bg-blue-600/90 px-3 py-1 text-xs font-bold uppercase text-white shadow-lg">
+            {capacity ? `${capacity} Pax` : "Ask Us"}
+          </div>
+        </div>
+
+        <div className="border-t border-blue-900/60 bg-[#050d22]/95 px-4 pb-4 pt-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div
+              className={`relative overflow-hidden rounded-2xl border text-left shadow-sm transition ${
+                "border-blue-400 ring-2 ring-blue-400/70"
+              }`}
+            >
+              <div className="relative w-full aspect-square">
+                {mainImage ? (
+                  <Image src={mainImage} alt={`${vehicle.name} current`} fill sizes="140px" className="object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-[#0b1533]/60 text-[10px] font-semibold uppercase tracking-wide text-blue-200/60">
+                    Preview coming soon
+                  </div>
+                )}
+              </div>
+              <span className="pointer-events-none absolute left-2 bottom-2 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                {THUMB_LABELS[0]}
+              </span>
+            </div>
+
+            {altImage ? (
+              <button
+                type="button"
+                onClick={() => setActiveIndex(altIndex)}
+                className="relative overflow-hidden rounded-2xl border border-blue-800/60 text-left shadow-sm transition hover:border-blue-500/70 hover:opacity-100"
+              >
+                <div className="relative w-full aspect-square">
+                  <Image src={altImage} alt={`${vehicle.name} alternate view`} fill sizes="140px" className="object-cover" />
+                </div>
+                <span className="pointer-events-none absolute left-2 bottom-2 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                  {THUMB_LABELS[1]}
+                </span>
+              </button>
+            ) : (
+              <div className="relative flex aspect-square items-center justify-center rounded-2xl border border-blue-900/40 bg-[#0b1533]/60 text-[10px] font-semibold uppercase tracking-wide text-blue-200/60">
+                More photos soon
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Amenity bullets (from DB) or fall back to vehicle.highlights */}
-      <ul className="text-blue-100/95 text-sm space-y-1 px-4 py-3 bg-[#0f2148]">
-        {(amenityLabels ?? vehicle.highlights ?? []).slice(0, 3).map((txt) => (
-          <li key={txt}>• {txt}</li>
-        ))}
-      </ul>
-
-      {/* Thumbnails */}
-      {images.length > 1 && (
-        <div className="flex justify-center gap-2 p-3 bg-[#0f2148]">
-          {images.slice(0, 3).map((img, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveIdx(i)}
-              className={`h-14 w-20 rounded-lg overflow-hidden border-2
-                          ${
-                            i === activeIdx
-                              ? "border-blue-400"
-                              : "border-blue-700/50"
-                          }`}
-            >
-              {img.entry && (
-                <OptimizedImage
-                  entry={img.entry}
-                  alt=""
-                  className="h-full w-full object-cover"
-                  minDesiredWidth={200}
-                />
-              )}
-            </button>
-          ))}
+      {/* BOTTOM: text + amenities + CTAs */}
+      <div className="flex flex-1 flex-col gap-4 p-5 pt-4">
+        <div className="rounded-2xl border border-blue-800/40 bg-[#0d1e40]/80 p-3 text-sm text-blue-100/90 shadow-inner min-h-[82px]">
+          {featuredAmenities.length ? (
+            <div className="flex flex-wrap gap-2">
+              {featuredAmenities.map((label) => (
+                <span key={label} className="rounded-full border border-blue-700/50 bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-100">
+                  {label}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-blue-200/70 text-xs">Ask for the full amenities list—LED, sound, BYOB, and more available.</p>
+          )}
         </div>
-      )}
-      {/* Optional CTA placeholder to satisfy showCTA prop (render nothing if false) */}
-      {showCTA && <div className="px-4 pb-4" />}
+
+        {showCTA && (
+          <div className="flex flex-col gap-2 pt-1 sm:flex-row">
+            <a
+              href={`tel:${telNumber}`}
+              className="inline-flex flex-1 items-center justify-center rounded-xl border border-blue-300/60 bg-white/95 px-3 py-2 text-xs font-extrabold uppercase tracking-wide text-blue-900 shadow-md transition hover:shadow-lg"
+            >
+              Call · {telDisplay}
+            </a>
+            <a
+              href={quoteTarget}
+              className="inline-flex flex-1 items-center justify-center rounded-xl border border-blue-700 bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2 text-xs font-extrabold uppercase tracking-wide text-white shadow-md transition hover:brightness-110"
+            >
+              Live Quote
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
+function getVehicleAmenities(vehicle: VehicleCardVehicle): string[] {
+  if (isHomepageVehicle(vehicle)) {
+    return vehicle.amenities ?? [];
+  }
+  if (isResolvedVehicle(vehicle)) {
+    return vehicle.highlights ?? [];
+  }
+  return [];
+}
+
+function getVehicleImages(vehicle: VehicleCardVehicle): string[] {
+  if (isHomepageVehicle(vehicle)) {
+    return [vehicle.imageUrl, vehicle.secondaryImageUrl, vehicle.thirdImageUrl].filter(isNonEmptyString);
+  }
+
+  if (isResolvedVehicle(vehicle)) {
+    const ordered = [vehicle.primary?.entry?.original ?? null, ...vehicle.images.map((img) => img.entry?.original ?? null)];
+    return Array.from(new Set(ordered.filter(isNonEmptyString)));
+  }
+
+  return [];
+}
+
+function isHomepageVehicle(vehicle: VehicleCardVehicle): vehicle is HomepageVehicle {
+  return "imageUrl" in vehicle;
+}
+
+function isResolvedVehicle(vehicle: VehicleCardVehicle): vehicle is ResolvedVehicle {
+  return "images" in vehicle;
+}
+
+function isNonEmptyString(value: string | null | undefined): value is string {
+  return typeof value === "string" && value.length > 0;
+}
+
+function normalizeAmenities(input: unknown): string[] {
+  if (!input) return [];
+  const arr = Array.isArray(input) ? input : [input];
+  return arr
+    .map((value) => (typeof value === "string" ? value.trim() : String(value)))
+    .filter((value) => value.length > 0);
+}
+
+function pickAmenitySlice(values: string[], seed: number | string | undefined, count: number) {
+  if (!values.length) return [];
+  const normalizedSeed = typeof seed === "number" ? seed : Math.abs(hashString(String(seed ?? "")));
+  const start = normalizedSeed % values.length;
+  const doubled = [...values.slice(start), ...values.slice(0, start)];
+  return Array.from(new Set(doubled)).slice(0, Math.min(count, values.length));
+}
+
+function hashString(value: string) {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash << 5) - hash + value.charCodeAt(i);
+    hash |= 0;
+  }
+  return hash;
+}
+
 

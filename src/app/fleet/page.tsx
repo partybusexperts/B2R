@@ -83,7 +83,10 @@ export default function FleetPage() {
               if (!vehicles.length) return null;
               return (
                 <a key={group.key} href={group.href} className="block" aria-label={`View ${group.label}`}>
-                  <VehicleGalleryCard vehicle={vehicles[0]} showCTA={false} />
+                  <VehicleGalleryCard
+                    vehicle={vehicles[0]}
+                    showCTA={false}
+                  />
                   <div className="px-6 pb-6 pt-4 -mt-2">
                     <a href={group.href} className="w-full inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition">View {group.label}</a>
                   </div>
