@@ -1,7 +1,13 @@
 // src/lib/home-polls.ts
 import { createClient } from "./supabase/server";
 
-export type RawPoll = { id: string; slug: string; question: string };
+export type RawPoll = {
+  id: string;
+  slug: string;
+  question: string;
+  options?: string[] | null;
+  tags?: string[] | null;
+};
 export type HomePollColumn = { key: string; title: string; items: RawPoll[] };
 
 // Heuristics to detect city/state in slugs (works for "santa-ana-ca-q01", "austin-tx-q07", etc.)
