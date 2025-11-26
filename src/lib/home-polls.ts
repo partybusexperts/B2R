@@ -242,3 +242,30 @@ export async function getCoachBusPollColumns(
     perColumn: opts?.perColumn,
   });
 }
+
+export async function getPricingPollColumns(
+  opts?: { numColumns?: number; perColumn?: number }
+): Promise<HomePollColumn[]> {
+  return getKeywordDrivenPollColumns({
+    primaryKey: "pricing",
+    primaryTitle: "Pricing & Budget Polls",
+    slugKeywords: [
+      "pricing",
+      "price",
+      "prices",
+      "budget",
+      "cost",
+      "quote",
+      "quotes",
+      "rate",
+      "rates",
+      "deposit",
+      "fee",
+      "fees",
+      "surcharge",
+    ],
+    preferKeywords: ["pricing", "budget", "cost", "quote", "rate", "deposit", "fee"],
+    numColumns: opts?.numColumns,
+    perColumn: opts?.perColumn,
+  });
+}

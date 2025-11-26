@@ -43,56 +43,10 @@ export default function PricingClient() {
     <>
       <Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 text-white font-serif tracking-tight">
-          Pricing FAQ
-        </h2>
-        <div className="flex justify-center mb-8">
-          <input
-            type="text"
-            placeholder="Search pricing questions…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full max-w-xl rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredFaq.map((item) => (
-            <div
-              key={item.title}
-              className="bg-[#12244e] rounded-2xl shadow-xl p-6 border border-blue-800/30 hover:shadow-2xl transition"
-            >
-              <div className="flex items-center gap-4 mb-3">
-                <SmartImage src={item.image} alt={item.title} className="w-10 h-10" />
-                <h3 className="text-white font-extrabold text-xl font-serif">{item.title}</h3>
-              </div>
-              <p className="text-blue-100">{item.answer}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
-          Pricing Polls
-        </h2>
-        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-6">
-          See what riders value most on price—features, timing, trip length, and more.
-        </p>
-        <div className="max-w-6xl mx-auto">
-          <HomePolls pickSize={150} visiblePerGroup={3} />
-        </div>
-        <div className="flex justify-center mt-10">
-          <a
-            href="/polls"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
-          >
-            More Polls
-          </a>
-        </div>
-      </Section>
-
-      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
-          Customer Reviews
+          // Deprecated: legacy pricing client kept for reference during the refactor.
+          export default function PricingClient() {
+            return null;
+          }
         </h2>
         <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">
           Real feedback from happy riders. Book with confidence.
