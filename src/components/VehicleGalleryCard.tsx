@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import type { HomepageVehicle } from "../types/homepageVehicles";
 import type { ResolvedVehicle } from "../data/vehicles";
@@ -15,6 +16,7 @@ interface Props {
   phoneDisplay?: string;
   phoneTel?: string;
   quoteHref?: string;
+  cardHref?: string;
 }
 
 const CATEGORY_LABEL: Record<"party-buses" | "limousines" | "coach-buses", string> = {
@@ -45,8 +47,11 @@ export default function VehicleGalleryCard({
   phoneDisplay,
   phoneTel,
   quoteHref,
+  cardHref,
 }: Props) {
   const capacity = vehicle.capacityMax ?? vehicle.capacityMin;
+  const router = useRouter();
+  const clickable = Boolean(cardHref);
 
   const fallbackAmenities = getVehicleAmenities(vehicle);
   const normalizedAmenities = normalizeAmenities(amenityLabels?.length ? amenityLabels : fallbackAmenities);
@@ -71,15 +76,34 @@ export default function VehicleGalleryCard({
   const [activeIndex, setActiveIndex] = useState(0);
   const mainImage = imageUrls[activeIndex] ?? imageUrls[0] ?? null;
   const hasAltImage = imageUrls.length > 1;
-  const altIndex = hasAltImage ? (activeIndex + 1) % imageUrls.length : activeIndex;
-  const altImage = hasAltImage ? imageUrls[altIndex] : null;
+  const altIndex = hasAltImage ? (activeIndex + 1) % imageUrls.length : null;
+  const altImage = typeof altIndex === "number" ? imageUrls[altIndex] : null;
 
   useEffect(() => {
     setActiveIndex(0);
-  }, [vehicle.id]);
+  }, [vehicle.id, imageUrls.length]);
+
+  const handleCardNavigate = () => {
+    if (!cardHref) return;
+    router.push(cardHref);
+  };
+
+  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!clickable) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleCardNavigate();
+    }
+  };
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-blue-800/40 bg-gradient-to-b from-[#132a5d] to-[#0a1734] shadow-xl transition-transform duration-300 hover:-translate-y-1 hover:border-blue-500/60">
+    <div
+      className="group relative flex flex-col overflow-hidden rounded-3xl border border-blue-800/40 bg-gradient-to-b from-[#132a5d] to-[#0a1734] shadow-xl transition-transform duration-300 hover:-translate-y-1 hover:border-blue-500/60"
+      onClick={clickable ? handleCardNavigate : undefined}
+      onKeyDown={clickable ? handleCardKeyDown : undefined}
+      role={clickable ? "link" : undefined}
+      tabIndex={clickable ? 0 : undefined}
+    >
       {/* TOP: main image */}
       <div className="w-full overflow-hidden rounded-t-3xl">
         <div className="relative h-64 w-full md:h-72 lg:h-80">
@@ -116,10 +140,13 @@ export default function VehicleGalleryCard({
 
         <div className="border-t border-blue-900/60 bg-[#050d22]/95 px-4 pb-4 pt-3">
           <div className="grid grid-cols-2 gap-2">
-            <div
-              className={`relative overflow-hidden rounded-2xl border text-left shadow-sm transition ${
-                "border-blue-400 ring-2 ring-blue-400/70"
-              }`}
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                setActiveIndex(0);
+              }}
+              className="relative overflow-hidden rounded-2xl border border-blue-400 text-left shadow-sm transition ring-2 ring-blue-400/70"
             >
               <div className="relative w-full aspect-square">
                 {mainImage ? (
@@ -133,12 +160,15 @@ export default function VehicleGalleryCard({
               <span className="pointer-events-none absolute left-2 bottom-2 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
                 {THUMB_LABELS[0]}
               </span>
-            </div>
+            </button>
 
             {altImage ? (
               <button
                 type="button"
-                onClick={() => setActiveIndex(altIndex)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setActiveIndex(altIndex ?? 0);
+                }}
                 className="relative overflow-hidden rounded-2xl border border-blue-800/60 text-left shadow-sm transition hover:border-blue-500/70 hover:opacity-100"
               >
                 <div className="relative w-full aspect-square">
@@ -149,7 +179,7 @@ export default function VehicleGalleryCard({
                 </span>
               </button>
             ) : (
-              <div className="relative flex aspect-square items-center justify-center rounded-2xl border border-blue-900/40 bg-[#0b1533]/60 text-[10px] font-semibold uppercase tracking-wide text-blue-200/60">
+              <div className="relative flex aspect-square items-center justify-center rounded-2xl border border-blue-900/40 bg-[#0b1533]/60 text-[10px] font-semibold uppercase tracking-wide text-blue-200/60" onClick={(event) => event.stopPropagation()}>
                 More photos soon
               </div>
             )}
@@ -177,12 +207,14 @@ export default function VehicleGalleryCard({
           <div className="flex flex-col gap-2 pt-1 sm:flex-row">
             <a
               href={`tel:${telNumber}`}
+              onClick={(event) => event.stopPropagation()}
               className="inline-flex flex-1 items-center justify-center rounded-xl border border-blue-300/60 bg-white/95 px-3 py-2 text-xs font-extrabold uppercase tracking-wide text-blue-900 shadow-md transition hover:shadow-lg"
             >
               Call · {telDisplay}
             </a>
             <a
               href={quoteTarget}
+              onClick={(event) => event.stopPropagation()}
               className="inline-flex flex-1 items-center justify-center rounded-xl border border-blue-700 bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2 text-xs font-extrabold uppercase tracking-wide text-white shadow-md transition hover:brightness-110"
             >
               Live Quote

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import VehicleGalleryCard from "../VehicleGalleryCard";
-import type { HomepageVehicle } from "../../types/homepageVehicles";
+import type { HomepageVehicle, HomepageVehicleCategory } from "../../types/homepageVehicles";
 
 // ---------- tiny seeded RNG helpers ----------
 function safeHash(input: string) {
@@ -139,6 +139,7 @@ export default function VehiclePreviewGrid({
         const slotKey = `${category}-${i}`;
         const idx = visible[i] ?? 0;
         const item = vehicles[idx] ?? vehicles[0];
+        const cardHref = getFleetRoute(item?.category ?? category);
         return (
           <RotatingTile
             key={slotKey}
@@ -147,10 +148,21 @@ export default function VehiclePreviewGrid({
             baseMs={effectiveBase}
             jitterMs={jitterMs}
           >
-            <VehicleGalleryCard vehicle={item!} amenityLabels={labelsMap?.[item?.name ?? ""]} />
+            <VehicleGalleryCard vehicle={item!} amenityLabels={labelsMap?.[item?.name ?? ""]} cardHref={cardHref} />
           </RotatingTile>
         );
       })}
     </div>
   );
+}
+
+const CATEGORY_PATHS: Record<HomepageVehicleCategory, string> = {
+  "party-buses": "/party-buses",
+  "limousines": "/limousines",
+  "coach-buses": "/coach-buses",
+};
+
+function getFleetRoute(value: string): string | undefined {
+  const normalized = value as HomepageVehicleCategory;
+  return CATEGORY_PATHS[normalized];
 }
