@@ -109,3 +109,136 @@ export async function getHomepageCategoryColumns(
 
   return columns;
 }
+
+type KeywordPollOptions = {
+  primaryKey: string;
+  primaryTitle: string;
+  slugKeywords: string[];
+  preferKeywords?: string[];
+  numColumns?: number;
+  perColumn?: number;
+};
+
+async function getKeywordDrivenPollColumns(
+  opts: KeywordPollOptions
+): Promise<HomePollColumn[]> {
+  const numColumns = opts.numColumns ?? 3;
+  const perColumn = opts.perColumn ?? 45;
+  const supabase = createClient();
+  const take = Math.min(numColumns * perColumn * 12, 1000);
+
+  const { data, error } = await supabase
+    .from("v_polls_home")
+    .select("id, slug, question")
+    .limit(take);
+
+  if (error) {
+    console.log(`[polls:${opts.primaryKey}] v_polls_home error`, error);
+    return [];
+  }
+
+  const all = (data ?? []).filter((p) => p && p.id && p.slug && p.question);
+  const nonGeo = all.filter((p) => !isGeoSlug(p.slug));
+
+  const matchKeyword = (value: string) => {
+    const normalized = (value ?? "").toLowerCase();
+    return opts.slugKeywords.some((keyword) => normalized.includes(keyword));
+  };
+
+  const primaryPool = nonGeo.filter((poll) => {
+    const slug = poll.slug ?? "";
+    const key = deriveCategoryKey(slug);
+    return matchKeyword(slug) || matchKeyword(key);
+  });
+
+  const usedIds = new Set<string>();
+  const columns: HomePollColumn[] = [];
+
+  const takeFromPool = (pool: RawPoll[] | undefined, key: string, title: string) => {
+    if (!pool?.length || columns.length >= numColumns) return;
+    const available = pool.filter((p) => !usedIds.has(p.id));
+    if (!available.length) return;
+    const picks = shuffle(available).slice(0, perColumn);
+    if (!picks.length) return;
+    picks.forEach((p) => usedIds.add(p.id));
+    columns.push({ key, title, items: picks });
+  };
+
+  takeFromPool(primaryPool, opts.primaryKey, opts.primaryTitle);
+
+  const byCategory = new Map<string, RawPoll[]>();
+  for (const poll of nonGeo) {
+    const key = deriveCategoryKey(poll.slug);
+    if (!byCategory.has(key)) byCategory.set(key, []);
+    byCategory.get(key)!.push(poll);
+  }
+
+  const categoryKeys = Array.from(byCategory.keys());
+  const preferKeywords = opts.preferKeywords ?? opts.slugKeywords;
+
+  const prioritizedKeys: string[] = [];
+  for (const keyword of preferKeywords) {
+    for (const key of categoryKeys) {
+      if (key === opts.primaryKey) continue;
+      if (prioritizedKeys.includes(key)) continue;
+      if (key.includes(keyword)) prioritizedKeys.push(key);
+    }
+  }
+
+  const fallbackKeys = shuffle(categoryKeys).filter(
+    (key) => key !== opts.primaryKey && !prioritizedKeys.includes(key)
+  );
+
+  const orderedKeys = [...prioritizedKeys, ...fallbackKeys];
+
+  for (const key of orderedKeys) {
+    if (columns.length >= numColumns) break;
+    const pool = (byCategory.get(key) ?? []).filter((p) => !usedIds.has(p.id));
+    if (!pool.length) continue;
+    const picks = shuffle(pool).slice(0, perColumn);
+    if (!picks.length) continue;
+    picks.forEach((p) => usedIds.add(p.id));
+    columns.push({ key, title: toTitle(key), items: picks });
+  }
+
+  return columns.slice(0, numColumns);
+}
+
+export async function getPartyBusPollColumns(
+  opts?: { numColumns?: number; perColumn?: number }
+): Promise<HomePollColumn[]> {
+  return getKeywordDrivenPollColumns({
+    primaryKey: "party-bus",
+    primaryTitle: "Party Bus Polls",
+    slugKeywords: ["party-bus", "partybus"],
+    preferKeywords: ["party", "bus", "nightlife", "club", "bachelor", "bachelorette"],
+    numColumns: opts?.numColumns,
+    perColumn: opts?.perColumn,
+  });
+}
+
+export async function getLimousinePollColumns(
+  opts?: { numColumns?: number; perColumn?: number }
+): Promise<HomePollColumn[]> {
+  return getKeywordDrivenPollColumns({
+    primaryKey: "limousine",
+    primaryTitle: "Limousine Polls",
+    slugKeywords: ["limousine", "limousines", "limo", "stretch-limo", "sprinter-limo"],
+    preferKeywords: ["limo", "wedding", "prom", "chauffeur", "black-car"],
+    numColumns: opts?.numColumns,
+    perColumn: opts?.perColumn,
+  });
+}
+
+export async function getCoachBusPollColumns(
+  opts?: { numColumns?: number; perColumn?: number }
+): Promise<HomePollColumn[]> {
+  return getKeywordDrivenPollColumns({
+    primaryKey: "coach-bus",
+    primaryTitle: "Coach & Charter Polls",
+    slugKeywords: ["coach", "coach-bus", "charter", "charter-bus", "motorcoach", "tour-bus"],
+    preferKeywords: ["coach", "charter", "team", "corporate", "event"],
+    numColumns: opts?.numColumns,
+    perColumn: opts?.perColumn,
+  });
+}

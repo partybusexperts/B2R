@@ -5,12 +5,15 @@ import type { FaqItem } from "@/lib/server/faqs";
 
 type Props = {
   faqs: FaqItem[];
+  searchInputId?: string;
+  searchLabel?: string;
+  searchPlaceholder?: string;
 };
 
 const INITIAL_BATCH = 10;
 const BATCH_SIZE = 10;
 
-export default function FaqSearchClient({ faqs }: Props) {
+export default function FaqSearchClient({ faqs, searchInputId = "faq-search", searchLabel = "Search FAQs", searchPlaceholder = 'Try "pricing", "booking", "safety"…' }: Props) {
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
 
@@ -36,15 +39,15 @@ export default function FaqSearchClient({ faqs }: Props) {
   return (
     <div className="mx-auto max-w-6xl">
       <div className="flex flex-col gap-2 text-center mb-8">
-        <label htmlFor="home-faq-search" className="text-lg font-medium text-white/80">
-          Search any home FAQ
+        <label htmlFor={searchInputId} className="text-lg font-medium text-white/80">
+          {searchLabel}
         </label>
         <input
-          id="home-faq-search"
+          id={searchInputId}
           type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder='Try "payment", "booking", "safety"...'
+          placeholder={searchPlaceholder}
           className="w-full rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-base text-white placeholder-white/50 shadow focus:outline-none focus:ring-2 focus:ring-white/40"
         />
         <p className="text-sm text-white/60">Showing {visibleFaqs.length} of {faqs.length} answers</p>

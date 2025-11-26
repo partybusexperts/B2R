@@ -20,7 +20,12 @@ export default async function HomeFaqSection() {
           </p>
         </div>
 
-        <FaqSearchClient faqs={faqs.slice(0, 50)} />
+        <FaqSearchClient
+          faqs={faqs.slice(0, 50)}
+          searchInputId="home-faq-search"
+          searchLabel="Search any home FAQ"
+          searchPlaceholder='Try "payment", "booking", "safety"…'
+        />
       </div>
     </section>
   );
