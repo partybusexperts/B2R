@@ -96,7 +96,7 @@ export default function VehicleGalleryCard({
     }
   };
 
-  return 
+  return (
     <div
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-blue-800/40 bg-gradient-to-b from-[#132a5d] to-[#0a1734] shadow-xl transition-transform duration-300 hover:-translate-y-1 hover:border-blue-500/60"
       onClick={clickable ? handleCardNavigate : undefined}
