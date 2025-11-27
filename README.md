@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
@@ -85,7 +85,6 @@ Responses have shape:
 ```
 
 If you deploy to Vercel, set `ORS_API_KEY` in the project settings under Environment Variables.
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

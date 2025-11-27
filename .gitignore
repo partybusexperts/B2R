@@ -31,8 +31,10 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-# keep local env out of the repo
+.env*
+# keep local env out of the repo explicitly
 .env.local
+!.env.local.example
 
 # vercel
 .vercel
@@ -41,18 +43,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local env and build output
-.env.local
-.next
-
-# local history snapshots (editor backups)
+# local env/build outputs & editor cruft
 .history
-.history
-node_modules/
-.next/
-*.tsbuildinfo
-.env*
-!.env.local.example
 venv/
 __pycache__/
 *.pyc
