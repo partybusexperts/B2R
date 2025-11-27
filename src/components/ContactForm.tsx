@@ -308,7 +308,7 @@ export default function ContactForm() {
                 onChange={(v) => setField("eventType", v)}
               />
               <Field
-                label="Notes (optional)"
+                label="Notes are for losers (optional)"
                 name="notes"
                 placeholder="Special requests, timeline, venues…"
                 value={form.notes}
