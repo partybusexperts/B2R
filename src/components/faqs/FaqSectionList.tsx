@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { FaqItem } from "@/lib/server/faqs";
+
+type FaqItem = {
+  id: number | string;
+  question: string;
+  answer: string;
+};
 
 const SECTION_INITIAL = 4;
 const SECTION_STEP = 4;
