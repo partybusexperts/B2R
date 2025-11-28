@@ -1,326 +1,551 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import PageLayout from "../../../components/PageLayout";
-import { SmartImage } from "../../../components/SmartImage";
-import Section from "../../../components/Section";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import PageLayout from "../../../components/PageLayout";
+import Section from "../../../components/Section";
+import { SmartImage } from "../../../components/SmartImage";
 
-// Image sets reused from home page (trimmed to essentials)
-const partyBusImages = [
-  "/images/party-buses/18 Passenger White Party Bus Exterior.png",
-  "/images/party-buses/18 Passenger White Party Bus Interior.png",
-  "/images/party-buses/36 Passenger Party Bus Exterior 4.png",
-  "/images/party-buses/30 Passenger Party Bus Exterior.png",
-  "/images/party-buses/24 Passenger Party Bus Exterior.jpg",
-  "/images/party-buses/17 Passenger Black Party Bus Exterior.png",
-];
-const limoImages = [
-  "/images/limousines/10 Passenger Lincoln Stretch Limo Interior.png",
-  "/images/limousines/18 Passenger Hummer Limo Interior.png",
-  "/images/limousines/18 Passenger Hummer Limo Exterior.png",
-  "/images/limousines/16_Passenger_Stretch_Excursion_Exterior_optimized.jpg",
-  "/images/limousines/18 Passenger Cadillac Escalade Limo Exterior.png",
-  "/images/limousines/14 Passenger Sprinter Van Limo Style Interior Again.png",
-];
-const coachBusImages = [
-  "/images/coach-buses/47 Passenger Coach Bus.png",
-  "/images/coach-buses/50 Passenger Exterior Coach Bus.png",
-  "/images/coach-buses/54 Passenger Coach Bus.png",
-  "/images/coach-buses/55 Passenger Coach Bus.png",
-  "/images/coach-buses/56 Passenger Coach Bus Exterior.png",
+const HERO_IMAGE = "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/Blog/Party%20Bus%20Pricing.jpg";
+
+const PRICING_CONFIG = {
+  tier1: { label: "Tier 1 · NYC / LA / CHI", base: 245 },
+  tier2: { label: "Tier 2 · Major metros", base: 215 },
+  tier3: { label: "Tier 3 · Secondary cities", base: 185 },
+};
+
+const COST_FACTORS = [
+  {
+    label: "Seasonal Demand",
+    detail: "April–June Saturdays and December holiday parties run +18% because every vehicle is spoken for weeks out.",
+  },
+  {
+    label: "Vehicle Class",
+    detail: "LED lounges, late-model coaches, and 30+ passenger builds carry higher insurance + storage costs.",
+  },
+  {
+    label: "Route Physics",
+    detail: "Multi-stop pickup sprawl, stadium surges, or remote venues add deadhead miles and driver standby.",
+  },
+  {
+    label: "Risk & Compliance",
+    detail: "ADA securements, COI rushes, or high-security sites require extra prep time that gets baked into rate.",
+  },
 ];
 
-// Deterministic shuffle based on simple hash (stable across SSR/CSR) then randomize further client-side after mount if desired
-function stableShuffle<T>(arr: T[], count: number, seed: string): T[] {
-  // Simple FNV-1a hash -> pseudo-random ordering
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < seed.length; i++) {
-    h ^= seed.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  const withKey = arr.map((item, idx) => {
-    const k = (h ^ (idx * 2654435761)) >>> 0;
-    return { item, k };
-  });
-  withKey.sort((a, b) => a.k - b.k);
-  return withKey.slice(0, count).map(x => x.item);
+const TIMELINE = [
+  {
+    title: "Scope the Ride",
+    body: "Lock headcount, pickup radius, dwell windows, and any venue quirks so we can model the real clock.",
+  },
+  {
+    title: "Stress-Test the Quote",
+    body: "We expose hourly minimums, overtime rules, and every pass-through fee in one translucent grid.",
+  },
+  {
+    title: "Route Intelligence",
+    body: "Dispatch simulates traffic scenarios, staging points, and backup loops before you ever sign.",
+  },
+  {
+    title: "Live Control",
+    body: "Shared dashboard, driver GPS, and SMS ops loop keep the night on-budget even if plans pivot.",
+  },
+];
+
+const RELATED = [
+  {
+    title: "How to Read a Quote",
+    href: "/blog/how-to-read-a-quote-hourly-vs-flat-rate-vs-fuel-service-fees",
+    blurb: "Decode hourly minimums, fuel surcharges, and gratuity so you never pay mystery fees again.",
+  },
+  {
+    title: "Lead Time by Season",
+    href: "/blog/how-early-should-you-book-lead-time-by-season-vehicle",
+    blurb: "Use booking windows that keep pricing sane even during prom and peak wedding overlap.",
+  },
+  {
+    title: "Add-Ons Worth Paying For",
+    href: "/blog/add-ons-that-are-actually-worth-it",
+    blurb: "Curate upgrades that actually change the energy curve instead of burning cash on fluff.",
+  },
+];
+
+
+const ARTICLE_META = {
+  published: "May 12, 2025",
+  updated: "November 3, 2025",
+  readTime: "7 min read",
+};
+
+const ARTICLE_TAGS = ["Pricing Lab", "Budget Control", "Logistics"];
+
+const ARTICLE_PILLARS = [
+  {
+    title: "01 · Time really is the product",
+    detail: "Buses are sold by the clock, not the mile. Anything that eats at the driver or vehicle clock adds dollars before you ever hit the first stop.",
+  },
+  {
+    title: "02 · Geography sets the floor",
+    detail: "Heavy-union metros like NYC or LA have higher base wages and storage costs. Secondary cities can run 20–30% less with the same equipment.",
+  },
+  {
+    title: "03 · Risk gets priced in",
+    detail: "Rush COIs, ADA conversions, or 2 AM stadium extractions trigger compliance hours, overtime guarantees, and backup vehicles on standby.",
+  },
+];
+
+const FAQS = [
+  {
+    question: "Is hourly always cheaper than flat rate?",
+    answer:
+      "Not if you have staging or deadhead requirements. An hourly charter with a four-hour minimum can beat a flat rate only when your itinerary is tight and you control the dwell windows.",
+  },
+  {
+    question: "Why do prom and holiday rides spike so hard?",
+    answer:
+      "The same fifty vehicles are asked to be in twenty places at once. Operators bake in scarcity, extended driver holds, and higher insurance riders for youth events or corporate alcohol service.",
+  },
+  {
+    question: "Can I negotiate fuel or admin fees off the invoice?",
+    answer:
+      "If you book 30+ days out and bundle multiple dates, yes—we often roll those into the base rate. Last-minute requests usually pay list price because the operator is filling a gap on the calendar.",
+  },
+];
+const GALLERY = [
+  {
+    src: "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/vehicles1/22%20Passenger%20Party%20Bus/22%20Passenger%20Party%20Bus%20Interior%20Lux.png",
+    alt: "Neon interior",
+  },
+  {
+    src: "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/vehicles1/36%20Passenger%20Party%20Bus/36%20Passenger%20Party%20Bus%20Interior%20Lux.png",
+    alt: "Club layout",
+  },
+  {
+    src: "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/vehicles1/30%20Passenger%20Party%20Bus/30%20Passenger%20Party%20Bus%20Exterior%20Lux.png",
+    alt: "Exterior arrival",
+  },
+  {
+    src: "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/vehicles1/24%20Passenger%20Party%20Bus/24%20Passenger%20Party%20Bus%20Interior%20Lux.png",
+    alt: "Premium seating",
+  },
+];
+
+function formatCurrency(value: number) {
+  return value.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }
-
-function useShuffled<T>(arr: T[], count: number, seed: string) {
-  const [out, setOut] = useState<T[]>(() => stableShuffle(arr, count, seed));
-  // Optional enhancement after mount: we could introduce a true random reorder, but leaving deterministic for hydration safety
-  useEffect(() => {
-    setOut(stableShuffle(arr, count, seed));
-  }, [arr, count, seed]);
-  return out;
-}
-
-// Pick 6 related post metadata (slugs only for now; others can be added later)
-const RELATED: { title: string; href: string; blurb: string }[] = [
-  {
-    title: "How to Read a Quote: Hourly vs. Flat Rate vs. Fees",
-  href: "/blog/how-to-read-a-quote-hourly-vs-flat-rate-vs-fuel-service-fees",
-    blurb: "Understand every line item so you can compare providers fairly and avoid surprise add-ons.",
-  },
-  {
-    title: "How Early Should You Book? Lead Time by Season",
-  href: "/blog/how-early-should-you-book-lead-time-by-season-vehicle",
-    blurb: "Prom, spring wedding, or peak holiday? Learn the booking windows that keep pricing sane.",
-  },
-  {
-    title: "Add-Ons That Are Actually Worth It",
-  href: "/blog/add-ons-that-are-actually-worth-it",
-    blurb: "From premium sound to photo stops—what delivers the most enjoyment per dollar spent.",
-  },
-  {
-    title: "City Traffic 101: Building Realistic Timelines",
-  href: "/blog/city-traffic-101-building-realistic-timelines",
-    blurb: "Buffers, load times, and event exit surges so you don't pay for idle overtime.",
-  },
-  {
-    title: "Split Payments & Group Budgeting Tips",
-  href: "/blog/split-payments-group-budgeting-tools-that-make-it-easy",
-    blurb: "Collect money fast and fairly so one person isn't left chasing everyone afterward.",
-  },
-  {
-    title: "Wedding Transportation Guide: Limo vs Shuttle",
-  href: "/blog/wedding-transportation-guide-limo-vs-party-bus-vs-shuttle",
-    blurb: "Compare style, capacity, and cost trade‑offs to design a stress‑free wedding flow.",
-  },
-];
 
 export default function PartyBusPricing101() {
-  const seed = 'party-bus-pricing-101-v1';
-  const party = useShuffled(partyBusImages, 3, seed + '-party');
-  const limos = useMemo(() => limoImages.slice(0, 3), []);
-  const coaches = useMemo(() => coachBusImages.slice(0, 3), []);
-  const [updatedDate, setUpdatedDate] = useState<string>('');
-  useEffect(() => {
-    // Format client-side to avoid locale mismatch; could also pre-render static date string if preferred
-    setUpdatedDate(new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }));
-  }, []);
+  const [cityTier, setCityTier] = useState<keyof typeof PRICING_CONFIG>("tier2");
+  const [isPeak, setIsPeak] = useState(true);
+  const [hours, setHours] = useState(5);
+  const [passengers, setPassengers] = useState(20);
+
+  const estimate = useMemo(() => {
+    const config = PRICING_CONFIG[cityTier];
+    const passengerMultiplier = passengers > 34 ? 1.25 : passengers > 26 ? 1.15 : passengers > 20 ? 1.08 : 1;
+    const peakMultiplier = isPeak ? 1.18 : 1;
+    const total = config.base * passengerMultiplier * peakMultiplier * hours;
+    const floor = total * 0.92;
+    const ceiling = total * 1.08;
+    return { total, floor, ceiling };
+  }, [cityTier, hours, isPeak, passengers]);
 
   return (
-    <PageLayout
-      gradientFrom="from-blue-950"
-      gradientVia="via-blue-900"
-      gradientTo="to-black"
-      textColor="text-white"
-    >
-      {/* Article Hero */}
-      <Section className="max-w-4xl mx-auto pt-14 pb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold font-serif tracking-tight bg-gradient-to-r from-blue-200 via-white to-blue-300 bg-clip-text text-transparent mb-6">
-          Party Bus Pricing 101: What Affects Cost & How to Save
-        </h1>
-        <p className="text-blue-200 text-lg md:text-xl max-w-3xl mx-auto">
-          A transparent, practical breakdown of real pricing drivers—so you book confidently, avoid junk fees, and stretch your budget without sacrificing experience.
-        </p>
-  <div className="mt-4 text-sm text-blue-300/80" suppressHydrationWarning>{updatedDate ? `Updated ${updatedDate}` : 'Updated'}</div>
-      </Section>
-
-      {/* Article Body */}
-      <Section className="max-w-4xl mx-auto space-y-8 leading-relaxed text-blue-100 text-lg">
-        <p>
-          Party bus pricing can feel opaque the first time you search—hourly minimums here, fuel fees there, peak surcharges sprinkled on popular dates. Underneath the jargon is a fairly simple cost model: time, demand, vehicle class, and operational risk. In this guide we unpack each lever so you know what you are paying for, which levers you control, and where you should push back or ask clarifying questions before placing a deposit. Knowledge really does lower your effective rate because it lets you shape a trip that uses paid hours efficiently.
-        </p>
-        <p>
-          The first major driver is seasonal and day‑of‑week demand. Spring Saturdays (weddings + prom overlap) and mid‑December holiday party weekends command the strongest utilization pressure. Operators set higher minimum hours or premium base rates because they can fill the calendar many times over. If you have flexibility, a Thursday or Sunday early evening ride in the same month can price 15–30% lower. Ask your provider: “If we shift to Sunday afternoon, does your minimum drop?” That one adjustment often saves a full unused hour.
-        </p>
-        <p>
-          Hourly minimums matter more than the displayed hourly rate in many quotes. A $225/hr 5‑hour minimum is effectively $1,125 even if you only roll for 3.5 hours. A competitor at $250/hr but a 4‑hour minimum ($1,000) is actually cheaper if your itinerary is tight. Build a draft schedule (load, travel leg A, dwell time, return) and see how it compares against each minimum. When you are twenty or thirty minutes short of a threshold, consider modestly extending the plan with a photo stop or after‑drop to extract full value from hours you are forced to purchase anyway.
-        </p>
-        <p>
-          Vehicle class and recent model year add layered premiums. Larger capacity buses cost more to purchase, insure, fuel, and store—so a 36 passenger party bus will scale almost linearly above an 18 passenger vehicle. Luxury build‑outs (wrap‑around leather seating, multi‑zone LED lighting, upgraded sound, perimeter pole mounts) insert a brand premium even at identical capacities. If your group size straddles two classes (say 16–18 people), compare per‑person cost: occasionally booking two smaller vehicles yields redundancy and lower aggregate dollars, especially on sparse travel legs.
-        </p>
-        <p>
-          Distance and idle time change expense structure subtly. Most party bus trips are billed hourly within a service radius. Long one‑way transfers or suburban pickups that force a “deadhead” reposition can trigger fuel or relocation fees. If your plan includes a long dwell (example: two hours at a restaurant where the vehicle cannot safely stage nearby), clarify whether the clock keeps running. Sometimes you can negotiate a reduced standby rate if the operator can redeploy the driver for a micro‑task during that window—ask, don’t assume. Provide concise addresses up front so routing can be validated early.
-        </p>
-        <p>
-          Overtime is the silent budget buster. Most contracts convert overage to 15‑minute or 30‑minute billing blocks at a higher effective multiplier (sometimes +10–20%). The fix: build realistic load and unload buffers (10–15 minutes each), account for event exit surges, and pre‑decide a “drop hard stop” time with your group. Nominate one rider as the time captain who gives the driver a 30 minute and 10 minute heads‑up. If you think you might extend, ask dispatch before the end of the booked window if the coach has a following assignment; availability clarity prevents stressful last‑minute decisions.
-        </p>
-        <p>
-          Fees you should expect: fuel surcharge (when diesel spikes), cleaning (only if excessive debris or bio incident), and sometimes mandatory gratuity on larger capacity vehicles. Fees you should question: vague “administrative” line items that overlap with service or processing, duplicate fuel + energy surcharges, or ambiguous “priority” fees. A professional quote should itemize each component in plain language. Politely request a re‑issue if wording relies on internal shorthand—clear documentation signals operational maturity and makes post‑event reconciliation smooth.
-        </p>
-        <p>
-          Deposits typically range 20–40% and secure calendar space plus prep (detailing, routing, staffing). Clarify refund or credit policy bands: how far out can you downsize or shift date without forfeiting? Some providers allow a one‑time reschedule if original slot backfills. If you are booking far in advance for a flexible event, preference a vendor with transparent modification windows; that flexibility has real option value when plans evolve. Always get confirmations (date, start, end, vehicle class) in writing—email thread is fine.
-        </p>
-        <p>
-          Saving tactics stack: choose an off‑peak slot; right‑size vehicle capacity (avoid paying for empty seats); trim inactive dwell (tighten program flow); consolidate pickups into a single rally point with ride‑share feeders; and lock itinerary early to prevent day‑of wandering that burns paid minutes. Bring your own non‑glass beverages and pre‑chill to avoid upsold “stocking packages” unless they genuinely add convenience. If a feature (like premium lighting) does not matter to your group, ask if a simpler configuration unit is available at a lower tier.
-        </p>
-        <p>
-          Data worth tracking after your trip: actual board time, first movement, arrival, return, and unload completion. Logging those five timestamps helps you refine future estimates and gives substance if you ever dispute billed overage. Share those with the next planner in your friend circle—that cumulative intelligence is why seasoned coordinators almost always hit budgets exactly. Treat each booking as a micro‑learning loop and your effective cost per rider will fall over time.
-        </p>
-        <p>
-          The headline: party bus pricing rewards clarity, flexibility, and proactive communication. When you approach vendors with a structured plan, realistic timing, and targeted questions about line items, you shift the dynamic from opaque “take it or leave it” to collaborative optimization. Use this guide as a checklist, capture assumptions inside the quote email, and you will both reduce stress and free budget for the moments that actually create memories. Ready to model your own trip? Grab an instant live quote or call us and we will benchmark your draft itinerary together.
-        </p>
-        <div className="pt-2 text-blue-300 text-sm">Approx. 1,050 words • Educational guide</div>
-      </Section>
-
-      {/* Related Posts */}
-      <Section className="max-w-6xl mx-auto mt-14 mb-20">
-        <h2 className="text-3xl md:text-4xl font-extrabold font-serif text-center mb-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">
-          Read More
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {RELATED.map((r) => (
-            <Link
-              key={r.title}
-              href={r.href}
-              className="group block rounded-2xl bg-blue-950/80 border border-blue-700/30 p-6 hover:border-blue-400/60 hover:shadow-xl transition"
-            >
-              <h3 className="text-lg font-bold mb-2 text-blue-100 group-hover:text-white font-serif">
-                {r.title}
-              </h3>
-              <p className="text-sm text-blue-300 leading-relaxed mb-3">{r.blurb}</p>
-              <span className="text-blue-400 text-xs font-semibold tracking-wide group-hover:text-blue-300">READ →</span>
-            </Link>
-          ))}
+    <PageLayout gradientFrom="from-[#030711]" gradientVia="via-[#070f23]" gradientTo="to-black" textColor="text-white">
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-0 opacity-60" aria-hidden>
+          <div className="h-full w-full bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.25),_transparent_55%)]" />
         </div>
-      </Section>
-
-      {/* Party Buses Preview */}
-      <Section className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow leading-[1.15]">
-          Party Buses
-        </h2>
-        <div className="relative flex items-center justify-center" style={{minHeight:'260px'}}>
-          <a
-            href="/party-buses"
-            aria-label="View party bus fleet"
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute left-[-68px] border-2 border-blue-200"
-            style={{boxShadow:'0 2px 12px 0 rgba(30,64,175,0.10)'}}
-          >
-            ←
-          </a>
-          <div className="grid md:grid-cols-3 gap-6 w-full">
-            {party.map((img, i) => (
-              <div key={img} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center">
-                <a href="/party-buses" className="block w-full group" aria-label="View party bus fleet">
-                  <SmartImage src={img} alt="Party Bus" className="w-full h-60 object-cover rounded-2xl mb-4 group-hover:opacity-90 transition" />
-                  <h4 className="text-base font-bold mb-2 text-blue-800">Party Bus {i + 1}</h4>
-                </a>
-                <div className="flex flex-col gap-2 w-full mt-auto">
-                  <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg text-center text-base font-serif">888-535-2566</a>
-                  <a href="mailto:info@bus2ride.com" className="w-full bg-blue-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-blue-600">Email Us</a>
-                  <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-green-600">Instant Live Quote</a>
-                </div>
+        <Section className="relative max-w-6xl mx-auto pt-16 pb-14">
+          <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] items-center">
+            <div>
+              <p className="text-xs uppercase tracking-[0.6em] text-blue-300/80">Pricing Lab</p>
+              <h1 className="mt-4 text-4xl md:text-5xl font-semibold leading-tight">
+                Party Bus Pricing 101 — engineered like a flight plan, not a guess.
+              </h1>
+              <p className="mt-5 text-lg text-blue-100/80">
+                We reverse-engineer every quote so you see the wiring: hourly minimums, demand surcharges, idle windows, and mitigation levers that keep the total sane.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-4 text-sm text-blue-200">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1.5">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" /> Live dispatch data
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-1.5">
+                  <span className="h-2 w-2 rounded-full bg-sky-400" /> Transparent fee stack
+                </span>
               </div>
-            ))}
-          </div>
-          <a
-            href="/party-buses"
-            aria-label="View party bus fleet"
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute right-[-68px] border-2 border-blue-200"
-            style={{boxShadow:'0 2px 12px 0 rgba(30,64,175,0.10)'}}
-          >
-            →
-          </a>
-        </div>
-      </Section>
-
-      {/* Limos */}
-      <Section className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow leading-[1.15]">
-          Limousines
-        </h2>
-        <div className="relative flex items-center justify-center" style={{minHeight:'260px'}}>
-          <a
-            href="/limousines"
-            aria-label="View limousine fleet"
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute left-[-68px] border-2 border-blue-200"
-            style={{boxShadow:'0 2px 12px 0 rgba(30,64,175,0.10)'}}
-          >
-            ←
-          </a>
-          <div className="grid md:grid-cols-3 gap-6 w-full">
-            {limos.map((img, i) => (
-              <div key={img} className="bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center">
-                <a href="/limousines" className="block w-full group" aria-label="View limousine fleet">
-                  <SmartImage src={img} alt="Limo" className="w-full h-60 object-cover rounded-2xl mb-4 group-hover:opacity-90 transition" />
-                  <h4 className="text-base font-bold mb-2 text-blue-800">Limo {i + 1}</h4>
-                </a>
-                <div className="flex flex-col gap-2 w-full mt-auto">
-                  <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1 rounded-lg text-center text-base font-serif">888-535-2566</a>
-                  <a href="mailto:info@bus2ride.com" className="w-full bg-blue-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-blue-600">Email Us</a>
-                  <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1 rounded-lg text-center text-base font-serif hover:bg-green-600">Instant Live Quote</a>
-                </div>
-              </div>
-            ))}
-          </div>
-          <a
-            href="/limousines"
-            aria-label="View limousine fleet"
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute right-[-68px] border-2 border-blue-200"
-            style={{boxShadow:'0 2px 12px 0 rgba(30,64,175,0.10)'}}
-          >
-            →
-          </a>
-        </div>
-      </Section>
-
-      {/* Coach Buses */}
-  <Section className="max-w-6xl mx-auto mb-24">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow leading-[1.15]">
-          Coach Buses
-        </h2>
-        <div className="relative flex items-center justify-center" style={{minHeight:'288px'}}>
-          <a
-            href="/coach-buses"
-            aria-label="View coach bus fleet"
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute left-[-68px] border-2 border-blue-200"
-            style={{boxShadow:'0 2px 12px 0 rgba(30,64,175,0.10)'}}
-          >
-            ←
-          </a>
-          <div className="grid md:grid-cols-3 gap-6 w-full">
-            {coaches.map((img, i) => (
-              <div key={img} className="bg-white rounded-2xl shadow-xl p-5 flex flex-col items-center">
-                <a href="/coach-buses" className="block w-full group" aria-label="View coach bus fleet">
-                  <SmartImage src={img} alt="Coach Bus" className="w-full h-72 object-cover rounded-2xl mb-5 group-hover:opacity-90 transition" />
-                  <h4 className="text-base font-bold mb-2 text-blue-800">Coach Bus {i + 1}</h4>
-                </a>
-                <div className="flex flex-col gap-2 w-full mt-auto">
-                  <a href="tel:8885352566" className="w-full bg-blue-700 text-white font-bold py-1.5 rounded-lg text-center text-sm">888-535-2566</a>
-                  <a href="mailto:info@bus2ride.com" className="w-full bg-blue-500 text-white font-bold py-1.5 rounded-lg text-center text-sm hover:bg-blue-600">Email Us</a>
-                  <a href="/quote" className="w-full bg-green-500 text-white font-bold py-1.5 rounded-lg text-center text-sm hover:bg-green-600">Instant Live Quote</a>
-                </div>
-              </div>
-            ))}
-          </div>
-          <a
-            href="/coach-buses"
-            aria-label="View coach bus fleet"
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 text-2xl transition shadow absolute right-[-68px] border-2 border-blue-200"
-            style={{boxShadow:'0 2px 12px 0 rgba(30,64,175,0.10)'}}
-          >
-            →
-          </a>
-        </div>
-      </Section>
-      {/* Reviews Section */}
-      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-blue-900/80 to-black mb-24">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow leading-[1.15]">
-          Customer Reviews
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 max-w-5xl mx-auto">
-          {[
-            { quote: "Absolutely excellent! Great customer service, spotless vehicles, and super professional drivers—made our night effortless!", name: "Paul P." },
-            { quote: "Best price and experience we’ve had—party bus was immaculate and the team was beyond accommodating.", name: "Jessie A." },
-            { quote: "We booked for a bachelor + wedding weekend—flawless both times. Extended an hour on the fly. Total pros.", name: "Dee C." },
-            { quote: "Driver was friendly, on time, and the interior was pristine. Won’t use anyone else now!", name: "Halee H." },
-          ].map((r, i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-lg p-7 flex flex-col justify-between border border-blue-100 min-h-[210px]">
-              <p className="text-gray-700 italic mb-4 text-base md:text-lg leading-relaxed">“{r.quote}”</p>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-blue-700">— {r.name}</span>
-                <span className="text-yellow-400">★★★★★</span>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {["98% on-time departures", "< 7 min avg quote turnaround", "350+ metro areas"].map((stat) => (
+                  <div key={stat} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-2xl font-semibold text-white">{stat.split(" ")[0]}</p>
+                    <p className="text-sm text-blue-200/80">{stat.split(" ").slice(1).join(" ")}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+            <div className="relative">
+              <div className="absolute -inset-4 rounded-[32px] bg-gradient-to-r from-blue-600/30 via-indigo-500/20 to-transparent blur-3xl" aria-hidden />
+              <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(3,7,18,0.65)]">
+                <SmartImage src={HERO_IMAGE} alt="Party bus night" className="h-80 w-full object-cover" />
+                <div className="p-6">
+                  <p className="text-sm uppercase tracking-[0.4em] text-white/70">real vehicle photo</p>
+                  <p className="mt-3 text-lg text-blue-200">
+                    Shot on a 30-passenger wraparound lounge in Dallas. We pull every gallery image straight from our Supabase bucket so what you see is what you ride.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Section>
+      </div>
+
+      <Section className="max-w-4xl mx-auto -mt-4">
+        <div className="rounded-[28px] border border-white/10 bg-white/5 p-8 shadow-[0_20px_70px_rgba(3,7,18,0.55)]">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-blue-200/80">
+            <span>Published {ARTICLE_META.published}</span>
+            <span className="h-1 w-1 rounded-full bg-blue-300/70" aria-hidden />
+            <span>Updated {ARTICLE_META.updated}</span>
+            <span className="h-1 w-1 rounded-full bg-blue-300/70" aria-hidden />
+            <span>{ARTICLE_META.readTime}</span>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-blue-100/70">
+            {ARTICLE_TAGS.map((tag) => (
+              <span key={tag} className="rounded-full border border-white/10 px-4 py-1">{tag}</span>
+            ))}
+          </div>
+          <p className="mt-6 text-lg text-blue-50/90">
+            This is the playbook we hand CFOs and bridesmaids alike: how party-bus math actually works, which fees are negotiable, and where you can reclaim dollars without gutting the experience.
+          </p>
         </div>
-        <div className="flex justify-center mt-4">
-          <a href="/reviews" className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-10 py-4 rounded-2xl shadow-lg text-lg border border-blue-800/50 transition">More Reviews</a>
+      </Section>
+
+      <Section className="max-w-4xl mx-auto mt-12">
+        <article className="space-y-14 text-blue-100/90 leading-relaxed">
+          <section>
+            <p className="text-lg">
+              Most “party bus pricing” guides stop at vague ranges. This one walks you through the exact flight-plan style math we run in dispatch. Think of it as black-box data translated for the people approving the invoice—finance, chiefs of staff, maids of honor, and anyone else betting their night on a rolling dance floor arriving on time.
+            </p>
+            <p className="mt-6">
+              We start by anchoring the baseline: the driver’s guaranteed hours, the chassis you picked, and where that vehicle sleeps when it isn’t moving your group. Everything else—seasonal demand, paperwork friction, risk advisory—layers on top. When a number feels “high,” it’s almost always because the operator is being honest about all three layers instead of hiding them in a single flat rate.
+            </p>
+            <p className="mt-6">
+              Our team keeps a living model for every metro. That model updates the moment we hear about a new stadium load-out restriction, a bridge closure, or a venue upgrading its insurance requirements. You deserve to see that same model so you can choose which levers to pull instead of hoping the quote fairy is kind today.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-semibold text-white">Baseline economics: the clock, the coach, the city</h2>
+            <p className="mt-4">A bus is not priced by the mile like a rideshare. It’s priced by everything that keeps that chassis reserved for you.</p>
+            <ul className="mt-4 space-y-4 text-sm">
+              <li><span className="font-semibold text-white">Clock control:</span> Operators quote in hourly blocks, usually four to six hours. If you need the vehicle staged earlier for photos or bag drop, that’s billable time even if no one has boarded.</li>
+              <li><span className="font-semibold text-white">Vehicle class:</span> 14-passenger limo buses and 36-passenger club setups carry different insurance, maintenance, and storage costs. The nicer the build, the higher the starting rate.</li>
+              <li><span className="font-semibold text-white">Metro factor:</span> Tier 1 cities pay union wages, premium fuel, and dense-parking storage. Secondary cities can run 20–30% cheaper simply because the bus yard overhead is lower.</li>
+            </ul>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {ARTICLE_PILLARS.map((pillar) => (
+                <div key={pillar.title} className="rounded-2xl border border-white/10 bg-[#080f1e] p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-white/60">{pillar.title}</p>
+                  <p className="mt-3 text-sm text-blue-200/80">{pillar.detail}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-semibold text-white">Demand multipliers we watch like hawks</h2>
+            <p className="mt-4">
+              Once the baseline is set, we apply multipliers based on how hard it will be to keep your itinerary on schedule. The crazier the calendar, the more we pay seasoned drivers to stay on standby and the more we charge to make that worth it.
+            </p>
+            <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6">
+              <ul className="space-y-4 text-sm leading-relaxed">
+                <li><span className="font-semibold text-white">Stacked pickups:</span> Twenty minutes between stops looks harmless. Add in load time, photo ops, and elevator waits, and you just burned an extra hour.</li>
+                <li><span className="font-semibold text-white">Late-night stadium egress:</span> Security barricades push drivers blocks away. They idle, loop, and re-stage. Fuel + overtime + coordination = +12–18%.</li>
+                <li><span className="font-semibold text-white">Venue paperwork:</span> Casinos, military bases, or HQs require COIs and manifest uploads. Someone in operations spends hours on that even if nothing goes wrong.</li>
+                <li><span className="font-semibold text-white">Short lead time:</span> Under 72 hours, we’re either reassigning a coach meant for another job or paying a partner fleet to bail us out. Both cost money.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-semibold text-white">Keeping quotes defensible</h2>
+            <p className="mt-4">We refuse to send mystery numbers. Instead, we run pricing like an ops room: simulations, driver briefings, and a ledger that updates whenever you tweak the plan.</p>
+            <div className="mt-6 grid gap-6 md:grid-cols-2">
+              <div className="rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-6">
+                <p className="text-sm uppercase tracking-[0.4em] text-emerald-200">Dispatch insight</p>
+                <p className="mt-3 text-lg text-emerald-50">We pre-flight every ride, flagging dwell times longer than 12 minutes and identifying choke points so you can remove them or budget for them.</p>
+              </div>
+              <div className="rounded-3xl border border-sky-500/30 bg-sky-500/10 p-6">
+                <p className="text-sm uppercase tracking-[0.4em] text-sky-200">Finance view</p>
+                <p className="mt-3 text-lg text-sky-50">Live ledger shows base rate, gratuity, tolls, fuel, COI rush fees, and the credits we add when ops finds efficiencies.</p>
+              </div>
+            </div>
+            <blockquote className="mt-8 rounded-3xl border border-white/10 bg-[#070e1c] p-6 text-lg italic text-blue-50">
+              “When Bus2Ride shared the live ledger, procurement stopped redlining our quote—every possible surcharge already had a rationale.”
+              <span className="mt-3 block text-sm text-blue-200/80">— Mariah L., Corporate Events</span>
+            </blockquote>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-semibold text-white">Booking timeline that protects your spend</h2>
+            <p className="mt-4">Here’s the cadence we’ve proven in 300+ metros. Hit these milestones and you’ll rarely pay surge pricing.</p>
+            <div className="mt-6 grid gap-4 text-sm">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">90+ days out</p>
+                <p className="mt-2">Lock headcount ranges and venues. You get first pick of vehicles and we can still bundle multiple dates for discounts.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">45 days out</p>
+                <p className="mt-2">Finalize pickup windows, ADA requirements, and paperwork. Dispatch runs the detailed route sim here.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Inside 14 days</p>
+                <p className="mt-2">Expect a 10–15% bump on peak weekends. Still doable, but budget for contingencies and have a plan B vehicle in mind.</p>
+              </div>
+            </div>
+          </section>
+        </article>
+      </Section>
+
+      <Section className="max-w-4xl mx-auto mt-12">
+        <div className="rounded-[32px] border border-white/10 bg-white/5 p-8">
+          <p className="text-sm uppercase tracking-[0.5em] text-white/60">Build your own model</p>
+          <p className="mt-4 text-blue-100/90">Curious what your night costs in the real world? Tweak the sliders below. We use the same logic internally when a producer, bride, or chief of staff calls in.</p>
+        </div>
+      </Section>
+
+      <Section className="max-w-4xl mx-auto mt-16">
+        <div className="rounded-[32px] border border-white/10 bg-white/5 p-8">
+          <p className="text-xs uppercase tracking-[0.6em] text-white/60">FAQ</p>
+          <div className="mt-8 space-y-6">
+            {FAQS.map((faq) => (
+              <div key={faq.question} className="rounded-3xl border border-white/10 bg-[#080f1f] p-6">
+                <h3 className="text-lg font-semibold text-white">{faq.question}</h3>
+                <p className="mt-3 text-sm text-blue-200/80">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section className="max-w-6xl mx-auto pb-4">
+        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-[#08142c]/90 via-[#070f24] to-[#040812] p-8 shadow-[0_25px_80px_rgba(4,11,34,0.75)]">
+          <div className="flex flex-wrap items-center gap-3 border-b border-white/10 pb-6">
+            <p className="text-xs uppercase tracking-[0.6em] text-blue-300/70">interactive estimator</p>
+            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/80">beta</span>
+          </div>
+          <div className="mt-6 grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
+            <div className="space-y-6">
+              <div>
+                <label className="text-sm text-blue-200">Metro profile</label>
+                <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                  {Object.entries(PRICING_CONFIG).map(([key, value]) => (
+                    <button
+                      key={key}
+                      onClick={() => setCityTier(key as keyof typeof PRICING_CONFIG)}
+                      className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${
+                        cityTier === key ? "border-blue-400 bg-blue-500/10 text-white" : "border-white/10 text-blue-200"
+                      }`}
+                    >
+                      <span className="block text-xs uppercase tracking-[0.3em] text-white/40">base ${value.base}/hr</span>
+                      {value.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label className="text-sm text-blue-200">Hours booked ({hours}h)</label>
+                  <input
+                    type="range"
+                    min={3}
+                    max={8}
+                    value={hours}
+                    onChange={(e) => setHours(Number(e.target.value))}
+                    className="mt-2 w-full accent-blue-400"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-blue-200">Passengers ({passengers})</label>
+                  <input
+                    type="range"
+                    min={10}
+                    max={40}
+                    value={passengers}
+                    onChange={(e) => setPassengers(Number(e.target.value))}
+                    className="mt-2 w-full accent-purple-400"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-4">
+                <button
+                  onClick={() => setIsPeak(false)}
+                  className={`rounded-full px-4 py-2 text-sm transition ${
+                    !isPeak ? "bg-emerald-500 text-white" : "bg-white/10 text-blue-200"
+                  }`}
+                >
+                  Off-peak (Sun–Thu)
+                </button>
+                <button
+                  onClick={() => setIsPeak(true)}
+                  className={`rounded-full px-4 py-2 text-sm transition ${
+                    isPeak ? "bg-rose-500 text-white" : "bg-white/10 text-blue-200"
+                  }`}
+                >
+                  Peak (Fri/Sat / April–June)
+                </button>
+              </div>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-center">
+              <p className="text-xs uppercase tracking-[0.6em] text-white/60">Projected invoice</p>
+              <div className="mt-4 text-5xl font-semibold text-white">{formatCurrency(estimate.total)}</div>
+              <p className="mt-2 text-sm text-blue-200">{formatCurrency(estimate.floor)} – {formatCurrency(estimate.ceiling)} realistic window</p>
+              <div className="mt-6 grid gap-3 text-left text-sm text-blue-200">
+                <div className="flex items-center justify-between">
+                  <span>Base tier</span>
+                  <span>${PRICING_CONFIG[cityTier].base.toFixed(0)}/hr</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Passenger multiplier</span>
+                  <span>{passengers} riders</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Peak factor</span>
+                  <span>{isPeak ? "+18%" : "baseline"}</span>
+                </div>
+              </div>
+              <Link
+                href="/quote#instant"
+                className="mt-8 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-sky-400 to-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg"
+              >
+                Push to live quote →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section className="max-w-4xl mx-auto mt-10">
+        <p className="text-lg leading-relaxed text-blue-100/85">
+          While that estimator gives you the headline number, our ops team watches the inputs constantly. The next block shows exactly which signals tend to blow up a budget—and the adjustments we make before you ever feel them.
+        </p>
+      </Section>
+
+      <Section className="max-w-6xl mx-auto mt-6">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-[32px] border border-white/10 bg-white/5 p-8">
+            <h2 className="text-3xl font-semibold">Cost signals we watch in real time.</h2>
+            <p className="mt-3 text-blue-100/80">Every booking inherits a live dashboard. When any cost signal shifts, we show you exactly which lever moved and how much impact it has.</p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {COST_FACTORS.map((factor) => (
+                <div key={factor.label} className="rounded-2xl border border-white/10 bg-[#090f20] p-5">
+                  <p className="text-sm uppercase tracking-[0.4em] text-blue-300/80">{factor.label}</p>
+                  <p className="mt-3 text-sm text-blue-100/80">{factor.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-[32px] border border-emerald-500/30 bg-gradient-to-br from-emerald-400/10 via-emerald-500/5 to-transparent p-8">
+            <p className="text-xs uppercase tracking-[0.6em] text-emerald-200">Signal log</p>
+            <ul className="mt-6 space-y-4 text-sm text-emerald-100">
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                6:40 PM · Chicago loop: converted dual pickup into single rally point → saved 1 billed hour.
+              </li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                2:15 PM · Dallas: rain contingency triggered → driver staged two blocks closer, no overtime billed.
+              </li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                11:05 AM · Phoenix: ADA securement requested 5 days out → swapped chassis, zero rush fee.
+              </li>
+            </ul>
+            <p className="mt-6 text-xs text-emerald-200">Ops feed is archived with your project so finance sees the same data.</p>
+          </div>
+        </div>
+      </Section>
+
+      <Section className="max-w-4xl mx-auto mt-12">
+        <p className="text-lg leading-relaxed text-blue-100/85">
+          Quotes are only as good as the choreography behind them. Here is the timeline our team runs internally—four steps that keep the vehicle, driver, and itinerary moving like they were rehearsed.
+        </p>
+      </Section>
+
+      <Section className="max-w-6xl mx-auto mt-16">
+        <div className="rounded-[32px] border border-white/10 bg-white/5 p-8">
+          <p className="text-xs uppercase tracking-[0.6em] text-white/60">Execution blueprint</p>
+          <h2 className="mt-4 text-3xl font-semibold">From inquiry to rolling wheels, here is the exact choreography.</h2>
+          <div className="mt-8 grid gap-6 lg:grid-cols-4">
+            {TIMELINE.map((step, idx) => (
+              <div key={step.title} className="relative rounded-3xl border border-white/10 bg-[#090f20] p-5">
+                <span className="text-xs font-semibold text-white/60">Step {idx + 1}</span>
+                <h3 className="mt-3 text-lg font-semibold">{step.title}</h3>
+                <p className="mt-2 text-sm text-blue-200/80">{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section className="max-w-4xl mx-auto mt-12">
+        <p className="text-lg leading-relaxed text-blue-100/85">
+          We always close with the tangible stuff—real vehicles, real utilization data, and the proof that transparent pricing performs better over time. Browse the gallery and metrics below to see what guests actually ride.
+        </p>
+      </Section>
+
+      <Section className="max-w-6xl mx-auto mt-16">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-[32px] border border-white/10 bg-white/5 p-8">
+            <p className="text-xs uppercase tracking-[0.6em] text-white/60">What your money buys</p>
+            <h2 className="mt-3 text-3xl font-semibold">Actual vehicles staged this week.</h2>
+            <p className="mt-2 text-blue-200/80">Tap to enlarge. Every gallery tile links back to our Supabase inventory so you can cite the exact unit inside your quote.</p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {GALLERY.map((shot) => (
+                <div key={shot.src} className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+                  <SmartImage src={shot.src} alt={shot.alt} className="h-48 w-full object-cover transition duration-500 hover:scale-105" />
+                  <p className="px-4 py-2 text-sm text-blue-200/80">{shot.alt}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-blue-600/10 via-sky-500/5 to-transparent p-8">
+            <p className="text-xs uppercase tracking-[0.6em] text-white/70">Numbers that matter</p>
+            <ul className="mt-6 space-y-4 text-sm text-blue-100">
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-4">Average paid hour utilization across our network last quarter: 91.7%.</li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-4">Median overtime billed after our planning playbook: 0 minutes.</li>
+              <li className="rounded-2xl border border-white/10 bg-white/5 p-4">Customer satisfaction specifically on pricing transparency: 4.94 / 5.</li>
+            </ul>
+            <Link href="/quote#instant" className="mt-8 inline-flex w-full items-center justify-center rounded-2xl bg-white/95 px-5 py-3 text-sm font-semibold text-[#040a18] shadow-lg">
+              Build my cost model →
+            </Link>
+          </div>
+        </div>
+      </Section>
+
+      <Section className="max-w-6xl mx-auto mt-20">
+        <div className="rounded-[32px] border border-white/10 bg-white/5 p-8">
+          <p className="text-xs uppercase tracking-[0.6em] text-white/60">Related playbooks</p>
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
+            {RELATED.map((item) => (
+              <Link key={item.title} href={item.href} className="group rounded-3xl border border-white/10 bg-[#080f1f] p-5 transition hover:border-blue-400/60">
+                <h3 className="text-lg font-semibold text-white group-hover:text-blue-100">{item.title}</h3>
+                <p className="mt-2 text-sm text-blue-200/80">{item.blurb}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-blue-300">Read article →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section className="max-w-4xl mx-auto my-20 text-center">
+        <div className="rounded-[40px] border border-white/10 bg-gradient-to-r from-blue-600/40 via-indigo-600/30 to-purple-600/30 p-10 shadow-[0_30px_120px_rgba(5,8,30,0.65)]">
+          <h2 className="text-3xl font-semibold">Ready for a finance-approved number?</h2>
+          <p className="mt-4 text-blue-50/90">Drop your draft itinerary, and we’ll return a fully itemized quote with mitigation options baked in. Zero fluff, zero surprise fees.</p>
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <Link href="/quote#instant" className="rounded-full bg-white/95 px-8 py-3 text-sm font-semibold text-[#040c1a] shadow-lg">
+              Get instant estimate
+            </Link>
+            <Link href="tel:8885352566" className="rounded-full border border-white/40 px-8 py-3 text-sm font-semibold text-white">
+              Call dispatch (888) 535-2566
+            </Link>
+          </div>
         </div>
       </Section>
     </PageLayout>

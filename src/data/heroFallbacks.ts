@@ -17,6 +17,19 @@ export type HeroFallback = {
   images?: string[];
 };
 
+const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/+$/, "");
+const BLOG_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_BLOG_BUCKET || "Blog";
+const buildBlogImageUrl = (filename: string) => {
+  if (SUPABASE_URL) {
+    const encoded = filename
+      .split("/")
+      .map((segment) => encodeURIComponent(segment))
+      .join("/");
+    return `${SUPABASE_URL}/storage/v1/object/public/${BLOG_BUCKET}/${encoded}`;
+  }
+  return `/images/blog/${filename}`;
+};
+
 const HERO_FALLBACKS = {
   home: {
     page_slug: "home",
@@ -153,9 +166,9 @@ const HERO_FALLBACKS = {
     wave_fill: "#0b1934",
     autoplay_ms: 6000,
     images: [
-      "/images/blog/wedding shuttle.jpg",
-      "/images/blog/pricing.jpg",
-      "/images/blog/college gameday.jpg",
+      buildBlogImageUrl("How Many Fit.jpg"),
+      buildBlogImageUrl("wedding shuttle.jpg"),
+      buildBlogImageUrl("pricing.jpg"),
     ],
   },
   fleet: {
