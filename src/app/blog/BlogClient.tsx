@@ -27,6 +27,19 @@ const IMAGE_POOL = [
 
 const imgAt = (i: number) => IMAGE_POOL[i % IMAGE_POOL.length];
 
+const SUPABASE_BASE = (() => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+  const bucket = process.env.NEXT_PUBLIC_SUPABASE_IMAGE_BUCKET;
+  if (!url || !bucket) return null;
+  return `${url}/storage/v1/object/public/${bucket}`;
+})();
+
+const fromSupabase = (key: string) => {
+  const normalized = key.replace(/^\/+/, "");
+  if (SUPABASE_BASE) return `${SUPABASE_BASE}/${encodeURI(normalized)}`;
+  return `/${normalized}`;
+};
+
 const POSTS = [
   { slug: "party-bus-pricing-101", title: "Party Bus Pricing 101: What Affects the Cost (and How to Save)", excerpt: "Peak dates, group size, and hours all impact price. Learn the levers you can pull to lock a great deal on your party bus.", date: "2025-08-01", author: "Bus2Ride Team" },
   { slug: "wedding-transportation-guide-limo-vs-party-bus-vs-shuttle", title: "Wedding Transportation Guide: Limo vs. Party Bus vs. Shuttle", excerpt: "Capacity, style, timeline, and budget—see which wedding ride is best for your ceremony, photos, and reception exit.", date: "2025-07-28", author: "Wedding Planner Pro" },
@@ -145,21 +158,72 @@ export default function BlogClient() {
       </Section>
 
       <Section className="max-w-6xl mx-auto -mt-4 mb-8">
-        <div className="relative overflow-hidden rounded-3xl p-8 md:p-10 bg-gradient-to-br from-blue-800 via-blue-900 to-black border border-blue-600/30 shadow-2xl">
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,rgba(96,165,250,0.35),transparent_60%)]" />
-          <div className="relative">
-            <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-white font-serif tracking-tight">Explore the Fleet</h3>
-            <p className="text-blue-200 text-base md:text-lg max-w-3xl leading-relaxed mb-5">
-              Ready to compare vehicles? Jump straight into our core categories:
-              <a href="/party-buses" className="font-semibold text-blue-300 hover:text-white underline decoration-blue-400/60 decoration-2 underline-offset-4 transition-colors"> Party Buses</a>,
-              <a href="/limousines" className="font-semibold text-blue-300 hover:text-white underline decoration-blue-400/60 decoration-2 underline-offset-4 transition-colors"> Limousines</a>, and
-              <a href="/coach-buses" className="font-semibold text-blue-300 hover:text-white underline decoration-blue-400/60 decoration-2 underline-offset-4 transition-colors"> Coach Buses</a>. Browse interiors, capacities, comfort features, and get a feel for pricing.
+        <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#050f24] py-14 px-6 sm:px-10 text-center shadow-[0_35px_80px_rgba(5,15,36,0.55)]">
+          <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),_transparent_55%)]" aria-hidden />
+          <div className="relative max-w-4xl mx-auto">
+            <p className="text-xs uppercase tracking-[0.5em] text-white/60 font-semibold">Fleet preview</p>
+            <h3 className="mt-4 text-3xl md:text-4xl font-extrabold text-white leading-tight">Explore party buses, limos, and coach buses in one place</h3>
+            <p className="mt-4 text-base md:text-lg text-white/70">
+              Compare interiors, amenities, and capacity ranges. Tap a card to jump directly into that vehicle collection and grab real photos plus pricing context.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <a href="/party-buses" className="px-5 py-2.5 rounded-full bg-white text-blue-900 font-bold text-sm shadow hover:shadow-lg transition">View Party Buses →</a>
-              <a href="/limousines" className="px-5 py-2.5 rounded-full bg-blue-600 text-white font-bold text-sm shadow hover:bg-blue-500 hover:shadow-lg transition">View Limousines →</a>
-              <a href="/coach-buses" className="px-5 py-2.5 rounded-full bg-blue-950 text-white font-bold text-sm border border-blue-500/40 shadow hover:bg-blue-900 transition">View Coach Buses →</a>
-            </div>
+          </div>
+
+          <div className="relative mt-10 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                title: "Party Buses",
+                href: "/party-buses",
+                img: "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/vehicles1/22%20Passenger%20Party%20Bus/22%20Passenger%20Party%20Bus%20Interior%20Lux.png",
+                vibe: "LED lounges, BYOB-friendly setups",
+              },
+              {
+                title: "Limousines",
+                href: "/limousines",
+                img: "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/vehicles1/10%20Passenger%20White%20Chrysler%20300%20Limo/10%20Passenger%20White%20Chrysler%20300%20Limo%20Exterior%20Lux.png",
+                vibe: "Stretch style, leather seating, bar setups",
+              },
+              {
+                title: "Coach Buses",
+                href: "/coach-buses",
+                img: "https://scnmubytflrxvokmrfnc.supabase.co/storage/v1/object/public/vehicles1/26%20Passenger%20Shuttle%20Bus/26%20Passenger%20Shuttle%20Bus%20Interior%20Lux.png",
+                vibe: "Reclining seats, luggage bays, climate control",
+              },
+            ].map((card) => (
+              <a
+                key={card.title}
+                href={card.href}
+                className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/5 p-4 text-left backdrop-blur-sm transition hover:-translate-y-1"
+                aria-label={`View ${card.title}`}
+              >
+                <div className="aspect-[4/2.2] w-full overflow-hidden rounded-xl">
+                  <SmartImage
+                    src={card.img}
+                    alt={card.title}
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                    sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+                  />
+                </div>
+                <div className="mt-4">
+                  <h4 className="text-xl font-bold text-white">{card.title}</h4>
+                  <p className="mt-1 text-sm text-white/70">{card.vibe}</p>
+                </div>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-200">
+                  Browse {card.title} <span aria-hidden>→</span>
+                </span>
+              </a>
+            ))}
+          </div>
+
+          <div className="relative mt-10 flex flex-wrap justify-center gap-4">
+            <a href="/party-buses" className="rounded-full bg-white text-blue-900 px-6 py-2.5 text-sm font-semibold shadow">
+              Party Buses →
+            </a>
+            <a href="/limousines" className="rounded-full border border-white/30 px-6 py-2.5 text-sm font-semibold text-white hover:bg-white/10">
+              Limousines →
+            </a>
+            <a href="/coach-buses" className="rounded-full bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow hover:bg-blue-500">
+              Coach Buses →
+            </a>
           </div>
         </div>
       </Section>
