@@ -1,197 +1,132 @@
-import path from "node:path";
-import { promises as fs } from "node:fs";
 import { createClient } from "@/lib/supabase/server";
 import type { HomePollColumn, RawPoll } from "@/lib/home-polls";
 
-const SOURCE_TABLES = ["v_polls_public", "v_polls", "polls1"];
-const OPTION_TABLES = ["v_poll_options_label", "poll_options1"];
 const MAX_ROWS = 50000;
-const PAGE_SIZE = 1000;
 const MAX_OPTION_ROWS = 200000;
-const OPTION_PAGE_SIZE = 2000;
 
-function toStringArray(value: unknown): string[] | null {
-  if (Array.isArray(value)) {
-    return value
-      .map((entry) => (typeof entry === "string" ? entry.trim() : ""))
-      .filter(Boolean);
+type OptionRow = Record<string, unknown>;
+
+function coerceString(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  const str = typeof value === "string" ? value : String(value);
+  const trimmed = str.trim();
+  return trimmed.length ? trimmed : null;
+}
+
+function normalizePollId(row: OptionRow): string | null {
+  const fields = [
+    "poll_id_uuid",
+    "poll_uuid",
+    "poll_id",
+    "pollid",
+    "poll",
+    "poll_pk",
+    "pollId",
+  ];
+  for (const field of fields) {
+    const value = coerceString(row[field]);
+    if (value) return value;
   }
   return null;
 }
 
-function asRawPoll(row: Record<string, unknown>): RawPoll | null {
-  const question =
-    (row.question as string | undefined) ||
-    (row.prompt as string | undefined) ||
-    (row.title as string | undefined) ||
-    "";
-
-  const id =
-    (row.poll_id_uuid as string | undefined) ||
-    (row.poll_uuid as string | undefined) ||
-    (row.poll_id as string | undefined) ||
-    (row.id as string | undefined) ||
-    (row.uuid as string | undefined) ||
-    null;
-
-  const slug = (row.poll_slug as string | undefined) || (row.slug as string | undefined) || null;
-
-  if (!id || !question.trim()) {
-    return null;
+function normalizeLabel(row: OptionRow): string | null {
+  const fields = [
+    "label",
+    "option_label",
+    "text",
+    "title",
+    "value",
+    "option",
+    "name",
+    "option_value",
+  ];
+  for (const field of fields) {
+    const value = coerceString(row[field]);
+    if (value) return value;
   }
-
-  return {
-    id: String(id),
-    slug: slug ? String(slug) : `poll-${String(id)}`,
-    question: question.trim(),
-    options:
-      toStringArray(row.options) ||
-      toStringArray(row.choices) ||
-      toStringArray(row.answers) ||
-      null,
-    tags: toStringArray(row.tags) || toStringArray(row.categories) || null,
-  };
+  return null;
 }
 
-async function fetchPaginatedRows(
-  supabase: ReturnType<typeof createClient>,
-  table: string,
-  selectColumns = "*",
-  pageSize = PAGE_SIZE,
-  maxRows = MAX_ROWS
-) {
-  const rows: Record<string, unknown>[] = [];
-  let page = 0;
-  while (page * pageSize < maxRows) {
-    const from = page * pageSize;
-    const to = Math.min(maxRows - 1, from + pageSize - 1);
-    const { data, error } = await supabase.from(table).select(selectColumns).range(from, to);
-
-    if (error) {
-      console.warn(`[all-polls] ${table} -> ${error.message}`);
-      break;
-    }
-
-    if (!data?.length) {
-      break;
-    }
-
-    rows.push(...(data as Record<string, unknown>[]));
-
-    if (data.length < pageSize) {
-      break;
-    }
-
-    page += 1;
+function normalizeSort(row: OptionRow): number {
+  const fields = ["sort_order", "ord", "order", "position", "rank", "idx"];
+  for (const field of fields) {
+    const raw = row[field];
+    const num = typeof raw === "number" ? raw : raw != null ? Number(raw) : Number.NaN;
+    if (!Number.isNaN(num)) return num;
   }
-  return rows;
-}
-
-type OptionRow = { poll_id?: string | null; label?: string | null; sort_order?: number | null };
-
-async function fetchOptionsMap(supabase: ReturnType<typeof createClient>) {
-  for (const table of OPTION_TABLES) {
-    try {
-      const rows = (await fetchPaginatedRows(
-        supabase,
-        table,
-        "poll_id, label, sort_order",
-        OPTION_PAGE_SIZE,
-        MAX_OPTION_ROWS
-      )) as OptionRow[];
-
-      if (!rows.length) continue;
-
-      const map = new Map<string, { label: string; order: number }[]>();
-      for (const row of rows) {
-        const pollId = row.poll_id ? String(row.poll_id) : null;
-        const label = row.label ? String(row.label) : null;
-        const order = typeof row.sort_order === "number" ? row.sort_order : Number(row.sort_order ?? 0);
-        if (!pollId || !label) continue;
-        if (!map.has(pollId)) map.set(pollId, []);
-        map.get(pollId)!.push({ label, order });
-      }
-
-      if (!map.size) continue;
-
-      const normalized = new Map<string, string[]>();
-      map.forEach((list, pollId) => {
-        const sorted = list
-          .sort((a, b) => a.order - b.order)
-          .map((entry) => entry.label)
-          .filter(Boolean);
-        if (sorted.length) normalized.set(pollId, sorted);
-      });
-
-      if (normalized.size) {
-        return normalized;
-      }
-    } catch (err) {
-      console.warn(`[all-polls] options ${table} fetch failed`, err);
-    }
-  }
-  return new Map<string, string[]>();
-}
-
-async function loadFallbackPolls() {
-  try {
-    const file = await fs.readFile(path.join(process.cwd(), "public", "polls.json"), "utf8");
-    const json = JSON.parse(file);
-    if (Array.isArray(json)) {
-      return json
-        .map((row) => asRawPoll(row as Record<string, unknown>))
-        .filter(Boolean) as RawPoll[];
-    }
-  } catch (err) {
-    console.warn("[all-polls] fallback read failed", err);
-  }
-  return [];
-}
-
-async function mergeFallbackMetadata(polls: RawPoll[]) {
-  const fallback = await loadFallbackPolls();
-  if (!fallback.length) return;
-  const index = new Map(fallback.map((poll) => [poll.id, poll]));
-  polls.forEach((poll) => {
-    const cached = index.get(poll.id);
-    if (!cached) return;
-    if ((!poll.options || !poll.options.length) && cached.options?.length) {
-      poll.options = cached.options;
-    }
-    if ((!poll.tags || !poll.tags.length) && cached.tags?.length) {
-      poll.tags = cached.tags;
-    }
-  });
+  return 0;
 }
 
 export async function getAllPolls(): Promise<RawPoll[]> {
   const supabase = createClient();
 
-  for (const table of SOURCE_TABLES) {
-    try {
-      const rows = (await fetchPaginatedRows(supabase, table))
-        .map((row) => asRawPoll(row))
-        .filter(Boolean) as RawPoll[];
+  const { data: pollRows, error: pollError } = await supabase
+    .from("polls1")
+    .select("id, slug, question")
+    .limit(MAX_ROWS);
 
-      if (rows.length) {
-        const optionsMap = await fetchOptionsMap(supabase);
-        if (optionsMap.size) {
-          rows.forEach((poll) => {
-            const next = optionsMap.get(poll.id);
-            if (next?.length) poll.options = next;
-          });
-        }
-
-        await mergeFallbackMetadata(rows);
-
-        return rows.slice(0, MAX_ROWS);
-      }
-    } catch (err) {
-      console.warn(`[all-polls] ${table} fetch failed`, err);
-    }
+  if (pollError) {
+    console.error("getAllPolls: error fetching polls1", pollError.message);
+    return [];
   }
 
-  return await loadFallbackPolls();
+  if (!pollRows?.length) {
+    console.warn("getAllPolls: no polls found in polls1");
+    return [];
+  }
+
+  const { data: optionRows, error: optionError } = await supabase
+    .from("poll_options1")
+    .select("*")
+    .limit(MAX_OPTION_ROWS);
+
+  if (optionError) {
+    console.error("getAllPolls: error fetching poll_options1", optionError.message);
+    return pollRows.map((poll) => ({
+      id: String(poll.id),
+      slug: poll.slug ?? null,
+      question: poll.question ?? "",
+      options: [],
+    }));
+  }
+
+  type NormalizedOption = { label: string; sort: number };
+  const optionsByPoll = new Map<string, NormalizedOption[]>();
+  for (const row of optionRows ?? []) {
+    const optionRow = row as OptionRow;
+    const pollId = normalizePollId(optionRow);
+    const label = normalizeLabel(optionRow);
+    if (!pollId || !label) continue;
+    const normalized: NormalizedOption = { label, sort: normalizeSort(optionRow) };
+    if (!optionsByPoll.has(pollId)) optionsByPoll.set(pollId, []);
+    optionsByPoll.get(pollId)!.push(normalized);
+  }
+
+  for (const [, list] of optionsByPoll.entries()) {
+    list.sort((a, b) => {
+      if (a.sort !== b.sort) return a.sort - b.sort;
+      return a.label.localeCompare(b.label);
+    });
+  }
+
+  const result: RawPoll[] = (pollRows as any[]).map((poll) => {
+    const pollId = String(poll.id);
+    const optionLabels = (optionsByPoll.get(pollId) ?? []).map((opt) => opt.label);
+
+    return {
+      id: pollId,
+      slug: poll.slug ?? null,
+      question: poll.question ?? "",
+      options: optionLabels,
+    } satisfies RawPoll;
+  });
+
+  if (result.length) {
+    console.log("getAllPolls result sample:", result[0]);
+  }
+
+  return result;
 }
 
 export async function getAllPollColumns(numColumns = 3): Promise<HomePollColumn[]> {

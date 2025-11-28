@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import type { MegaPollGroup } from "@/components/polls/AllPollsSection";
 import type { RawPoll } from "../../lib/home-polls";
+import { fetchOptionsForPoll } from "@/lib/client-helpers";
 
 function slugForPoll(id?: string | null, slug?: string | null) {
   return slug || id || "poll";
@@ -25,9 +26,41 @@ function deriveChips(poll: { slug?: string | null; tags?: string[] | null }): st
     .slice(0, 3);
 }
 
-function renderOptions(options?: string[] | null) {
-  const safeOptions = options && options.length ? options : ["Yes", "No"];
-  return safeOptions.slice(0, 5);
+function PollOptionsPreview({ pollId, fallback }: { pollId: string; fallback?: string[] | null }) {
+  const [labels, setLabels] = useState<string[]>(() => (fallback?.length ? fallback : []));
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const options = await fetchOptionsForPoll(pollId);
+        if (cancelled) return;
+        const derived = options.map((opt) => opt.label).filter((label) => label.trim().length);
+        if (derived.length) {
+          setLabels(derived);
+        }
+      } catch (error) {
+        console.warn(`[AllPollGroupsClient] options fetch failed for ${pollId}`, error);
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [pollId]);
+
+  const safeOptions = (labels.length ? labels : fallback?.length ? fallback : ["Yes", "No"]).slice(0, 5);
+
+  return (
+    <ul className="mt-4 space-y-1 text-sm text-white/80">
+      {safeOptions.map((option) => (
+        <li key={`${pollId}-${option}`} className="flex items-center gap-2">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-white/60" aria-hidden />
+          <span>{option}</span>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export default function AllPollGroupsClient({
@@ -193,14 +226,7 @@ export default function AllPollGroupsClient({
                             ))}
                           </div>
 
-                          <ul className="mt-4 space-y-1 text-sm text-white/80">
-                            {renderOptions(poll.options).map((option) => (
-                              <li key={option} className="flex items-center gap-2">
-                                <span className="inline-block h-1.5 w-1.5 rounded-full bg-white/60" aria-hidden />
-                                <span>{option}</span>
-                              </li>
-                            ))}
-                          </ul>
+                          <PollOptionsPreview pollId={poll.id} fallback={poll.options} />
 
                           <div className="mt-4 flex flex-wrap items-center gap-2">
                             <a
