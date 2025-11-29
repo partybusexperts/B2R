@@ -29,6 +29,12 @@ export default async function AllPollsSection() {
     }
   }
 
+  // Find popular polls (top 6 by votes)
+  const pollsWithVotes = allRows.filter(row => typeof row.votes === 'number' && row.votes > 0);
+  const popularPolls = pollsWithVotes
+    .sort((a, b) => b.votes - a.votes)
+    .slice(0, 6);
+
   // Debug: show raw data count and sample
   if (typeof window === "undefined") {
     console.log("Total poll rows:", allRows.length);
@@ -43,22 +49,34 @@ export default async function AllPollsSection() {
   unique.sort((a, b) => a.localeCompare(b));
 
   return (
-    <section className="bg-[#030817] py-14 text-white">
+    <section className="bg-gradient-to-b from-[#08112a] via-[#050c1b] to-[#04060f] py-16 text-white">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="rounded-[40px] border border-white/10 bg-gradient-to-b from-[#08112a] via-[#050c1b] to-[#04060f] px-6 py-10 shadow-[0_60px_160px_rgba(0,0,0,0.6)] md:px-12">
-          <header className="text-center space-y-3 mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.5em] text-white/50">
-              The Poll Observatory
+        <div className="rounded-[40px] border border-white/10 bg-[#050c1b] px-6 py-12 shadow-[0_60px_160px_rgba(0,0,0,0.6)] md:px-12">
+          <header className="text-center space-y-6 mb-12">
+            <h1 className="text-5xl font-extrabold tracking-tight text-white mb-2">Poll Category Explorer</h1>
+            <p className="mx-auto max-w-2xl text-lg text-white/80 font-medium">
+              Instantly browse every poll category in our system. Discover insights, trends, and real rider decisions across cities, states, vehicles, events, and more. Use the search and filters to find what matters most to you.
             </p>
-            <h2 className="text-3xl md:text-4xl font-semibold">
-              Explore every poll category
-            </h2>
-            <p className="mx-auto max-w-3xl text-sm md:text-base text-white/70">
-              {unique.length.toLocaleString()}+ categories pulled straight
-              from our Supabase firehose. Tap a category to drill down. For now,
-              this page is your master index of everything.
-            </p>
+            <div className="mt-6 flex flex-col items-center gap-2">
+              <span className="inline-block rounded-full bg-sky-500/20 px-4 py-2 text-base font-semibold text-sky-200 shadow">{unique.length.toLocaleString()} categories indexed</span>
+              <span className="inline-block text-xs text-white/50">Updated live from our poll database</span>
+            </div>
           </header>
+          {/* Popular Polls Section */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold text-sky-300 mb-4 text-center">Popular Polls</h2>
+            <div className="grid gap-6 md:grid-cols-3">
+              {popularPolls.map((poll) => (
+                <div key={poll.id} className="rounded-2xl border-2 border-sky-500/30 bg-[#06122a] p-6 shadow-lg flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">{poll.question}</h3>
+                    <p className="text-sm text-white/70 mb-4">Category: <span className="font-bold text-sky-300">{poll.category_slug}</span></p>
+                  </div>
+                  <a href={`/polls/results?focus=${encodeURIComponent(poll.id)}`} className="mt-auto inline-block rounded-full bg-sky-500/80 px-4 py-2 text-white font-bold shadow hover:bg-sky-400 transition">See Results →</a>
+                </div>
+              ))}
+            </div>
+          </section>
           <CategoriesExplorer categories={unique} />
         </div>
       </div>
