@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Section from "../../../components/Section";
 import HeroHeader from "../../../components/HeroHeader";
 import { findState, slugifyState } from "../locationData";
@@ -17,6 +18,10 @@ const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 export default function StatePage({ params }: Props) {
+  if (params.state?.toLowerCase() === "alaska") {
+    redirect("/locations/anchorage-alaska");
+  }
+
   const entry = findState(params.state);
   const stateSlug = slugifyState(params.state);
   const content = getStateContent(stateSlug);

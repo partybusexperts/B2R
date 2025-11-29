@@ -161,13 +161,21 @@ export default function LocationsPage() {
 
                 {cities.length > 0 ? (
                   <ul className="flex flex-wrap gap-3">
-                    {cities.map((city) => (
-                      <li key={city}>
-                        <span className="inline-block text-blue-100 bg-[#12244e] border border-blue-800/30 rounded-full px-4 py-2 shadow">
-                          {city}
-                        </span>
-                      </li>
-                    ))}
+                    {cities.map((city) => {
+                      const chipClass = "inline-block text-blue-100 bg-[#12244e] border border-blue-800/30 rounded-full px-4 py-2 shadow";
+                      const isAnchorage = city === 'Anchorage' && state === 'Alaska';
+                      return (
+                        <li key={city}>
+                          {isAnchorage ? (
+                            <Link href="/locations/anchorage" className={`${chipClass} hover:bg-blue-700/50 hover:text-white transition`}>
+                              {city}
+                            </Link>
+                          ) : (
+                            <span className={chipClass}>{city}</span>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 ) : (
                   <p className="text-blue-200/80 italic">Coming soon</p>
