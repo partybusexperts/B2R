@@ -590,6 +590,38 @@ const TOP_GROUP_CONFIG: { key: TopGroup; label: string; icon: string }[] = [
   { key: "booking", label: "Booking & Planning", icon: "🗓️" },
 ];
 
+// Accent type for category styling
+export type Accent = 'purple' | 'blue' | 'green' | 'amber' | 'red';
+
+// Accent color classes
+export const accentToClasses: Record<Accent, { badge: string; border: string; glow: string }> = {
+  purple: {
+    badge: 'bg-purple-100 text-purple-700',
+    border: 'border-purple-200',
+    glow: 'shadow-[0_0_30px_rgba(168,85,247,0.25)]',
+  },
+  blue: {
+    badge: 'bg-blue-100 text-blue-700',
+    border: 'border-blue-200',
+    glow: 'shadow-[0_0_30px_rgba(59,130,246,0.25)]',
+  },
+  green: {
+    badge: 'bg-emerald-100 text-emerald-700',
+    border: 'border-emerald-200',
+    glow: 'shadow-[0_0_30px_rgba(16,185,129,0.25)]',
+  },
+  amber: {
+    badge: 'bg-amber-100 text-amber-700',
+    border: 'border-amber-200',
+    glow: 'shadow-[0_0_30px_rgba(245,158,11,0.25)]',
+  },
+  red: {
+    badge: 'bg-rose-100 text-rose-700',
+    border: 'border-rose-200',
+    glow: 'shadow-[0_0_30px_rgba(244,63,94,0.25)]',
+  },
+};
+
 export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
   const [activeGroup, setActiveGroup] = useState<TopGroup>("all");
   const [search, setSearch] = useState("");

@@ -9,9 +9,13 @@ import AllPollsSection from "@/components/polls/AllPollsSection";
 
 export default function PollsPage() {
   return (
-    <main className="min-h-screen bg-[#050f25] text-white">
-      <HeroHeaderServer pageSlug="polls" fallback={getHeroFallback("polls")} />
-      <AllPollsSection />
+    <main className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="text-center space-y-2">
+        <div className="text-2xl font-bold text-slate-900">Polls Page Debug</div>
+        <p className="text-sm text-slate-500">
+          If you can see this, the core Next.js routing is fine.
+        </p>
+      </div>
     </main>
   );
 }
