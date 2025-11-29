@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   MapPin,
@@ -11,6 +11,7 @@ import {
   ClipboardList,
   HeartHandshake,
   Info,
+  Search,
 } from 'lucide-react';
 
 // ---------- Types ----------
@@ -36,6 +37,10 @@ type CategoryGroup = {
   icon: React.ComponentType<{ className?: string }>;
   sections: CategorySection[];
 };
+
+interface CategoriesExplorerProps {
+  searchQuery?: string;
+}
 
 // ---------- Helpers ----------
 
@@ -162,7 +167,29 @@ const LOCATION_STATES: StateConfig[] = [
     name: 'Delaware',
     abbr: 'de',
     region: 'northeast',
-    cities: ['Wilmington'],
+    cities: [
+      'Elkhart',
+      'Evansville',
+      'Fall Creek',
+      'Fishers',
+      'Fort Wayne',
+      'Gary',
+      'Greenwood',
+      'Hammond',
+      'Indianapolis',
+      'Knight',
+      'Lafayette',
+      'Kokomo',
+      'Muncie',
+      'Noblesville',
+      'North',
+      'Penn',
+      'South Bend',
+      'St. Joseph',
+      'Terre Haute',
+      'Wayne',
+      'Wilmington',
+    ],
   },
   {
     name: 'Florida',
@@ -477,7 +504,7 @@ const LOCATION_STATES: StateConfig[] = [
     name: 'Alaska',
     abbr: 'ak',
     region: 'west',
-    cities: ['Anchorage'],
+    cities: ['Anchorage', 'Anchorage Municipality', 'Badger', 'Fairbanks', 'Juneau', 'Knik-Fairview'],
   },
   {
     name: 'Arizona',
@@ -799,7 +826,7 @@ const LOCATION_STATES: StateConfig[] = [
     name: 'Maine',
     abbr: 'me',
     region: 'northeast',
-    cities: ['Portland'],
+    cities: ['Mount Prospect', 'Naperville', 'New Trier', 'Oak Lawn', 'Orland Park', 'Palatine', 'Palos', 'Peoria', 'Portland', 'Proviso', 'Rockford', 'Schaumburg', 'Skokie', 'Springfield', 'St. Clair', 'Tinley Park', 'Waukegan', 'Wheaton'],
   },
   {
     name: 'Massachusetts',
@@ -1322,6 +1349,7 @@ const EVENTS_GROUP: CategoryGroup = {
         { slug: 'casino-tours', label: 'Casino Tours' },
         { slug: 'church-outings', label: 'Church Outings' },
         { slug: 'concerts', label: 'Concerts' },
+        { slug: 'entertainment-tours', label: 'Entertainment Tours' },
         { slug: 'dinners-out', label: 'Dinners Out' },
         { slug: 'festivals', label: 'Festivals' },
         { slug: 'haunted-houses', label: 'Haunted Houses' },
@@ -1336,6 +1364,7 @@ const EVENTS_GROUP: CategoryGroup = {
       label: 'Corporate & Professional',
       accent: 'amber',
       items: [
+        { slug: 'charter-services', label: 'Charter Services' },
         { slug: 'corporate-services', label: 'Corporate Services' },
         { slug: 'employee-shuttles', label: 'Employee Shuttles' },
         { slug: 'rehearsal-dinners', label: 'Rehearsal Dinners' },
@@ -1403,6 +1432,7 @@ const AMENITIES_GROUP: CategoryGroup = {
         { slug: 'karaoke-system', label: 'Karaoke System' },
         { slug: 'led-light-show', label: 'LED Light Show' },
         { slug: 'laser-lights', label: 'Laser Lights' },
+        { slug: 'lighting', label: 'Lighting' },
         { slug: 'mood-lighting', label: 'Mood Lighting' },
         { slug: 'neon-accents', label: 'Neon Accents' },
         { slug: 'satellite-radio', label: 'Satellite Radio' },
@@ -1582,6 +1612,7 @@ const EXPERIENCE_GROUP: CategoryGroup = {
       accent: 'green',
       items: [
         { slug: 'best-driver-moments', label: 'Best Driver Moments' },
+        { slug: 'customer-experience', label: 'Customer Experience' },
         { slug: 'overall-satisfaction', label: 'Overall Satisfaction' },
       ],
     },
@@ -1717,35 +1748,97 @@ const ALL_GROUPS: CategoryGroup[] = [
   ...buildLocationGroups(),
 ];
 
+export const TOTAL_CATEGORY_TILES = ALL_GROUPS.reduce(
+  (sum, group) => sum + group.sections.reduce((s, sec) => s + sec.items.length, 0),
+  0
+);
+
+export const TOTAL_SECTION_COUNT = ALL_GROUPS.reduce(
+  (sum, group) => sum + group.sections.length,
+  0
+);
+
+export const TOTAL_FAMILY_COUNT = ALL_GROUPS.length;
+
+const NAV_GROUPS: CategoryGroup[] = (() => {
+  const mergedSections: CategorySection[] = ALL_GROUPS.flatMap((group) =>
+    group.sections.map((section) => ({
+      ...section,
+      id: `${group.id}-${section.id}`,
+      items: section.items.map((item) => ({ ...item })),
+    }))
+  );
+
+  return [
+    {
+      id: 'all',
+      label: 'All Categories',
+      icon: Sparkles,
+      sections: mergedSections,
+    },
+    ...ALL_GROUPS,
+  ];
+})();
+
 // ---------- UI COMPONENT ----------
 
-export default function CategoriesExplorer() {
-  const [activeGroupId, setActiveGroupId] = useState<string>(ALL_GROUPS[0]?.id ?? '');
+export default function CategoriesExplorer({ searchQuery = '' }: CategoriesExplorerProps) {
+  const [activeGroupId, setActiveGroupId] = useState<string>(NAV_GROUPS[0]?.id ?? '');
+  const [searchTerm, setSearchTerm] = useState(searchQuery);
 
-  const activeGroup = ALL_GROUPS.find((g) => g.id === activeGroupId) ?? ALL_GROUPS[0];
+  useEffect(() => {
+    setSearchTerm(searchQuery);
+  }, [searchQuery]);
+
+  const activeGroup = NAV_GROUPS.find((g) => g.id === activeGroupId) ?? NAV_GROUPS[0];
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  const filteredSections = useMemo(() => {
+    return activeGroup.sections
+      .map((section) => {
+        if (!normalizedSearch) return section;
+
+        const items = section.items.filter((item) => {
+          const haystack = `${item.label} ${item.description ?? ''} ${item.slug}`.toLowerCase();
+          return haystack.includes(normalizedSearch);
+        });
+
+        return { ...section, items };
+      })
+      .filter((section) => section.items.length > 0 || !normalizedSearch);
+  }, [activeGroup, normalizedSearch]);
+
+  const visibleTileCount = filteredSections.reduce(
+    (sum, section) => sum + section.items.length,
+    0
+  );
+  const totalTilesInGroup = activeGroup.sections.reduce(
+    (sum, section) => sum + section.items.length,
+    0
+  );
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+    <div className="mx-auto w-full max-w-[1400px] px-2 pb-16 pt-8 text-white sm:px-6 lg:px-10">
       <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Poll Categories
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-600">
+          <p className="mt-2 max-w-2xl text-sm text-white/80">
             Browse all {ALL_GROUPS.length} category families — vehicles, events, amenities,
             customer stories, and every major US city we serve.
           </p>
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[260px,minmax(0,1fr)]">
+      <div className="grid gap-6 lg:grid-cols-[300px,minmax(0,1fr)]">
         {/* Left: group selector */}
-        <aside className="rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm backdrop-blur">
-          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <aside className="rounded-3xl border border-white/15 bg-white/5 p-3 shadow-lg shadow-slate-950/30 backdrop-blur">
+          <div className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-white/70">
             Category Families
           </div>
-          <div className="flex flex-col gap-1">
-            {ALL_GROUPS.map((group) => {
+          <div className="flex flex-col gap-1.5">
+            {NAV_GROUPS.map((group) => {
               const Icon = group.icon;
               const isActive = group.id === activeGroupId;
               return (
@@ -1754,21 +1847,25 @@ export default function CategoriesExplorer() {
                   type="button"
                   onClick={() => setActiveGroupId(group.id)}
                   className={
-                    'flex items-center gap-2 rounded-xl px-2.5 py-2 text-sm transition ' +
+                    'flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm transition ' +
                     (isActive
-                      ? 'bg-slate-900 text-white shadow'
-                      : 'text-slate-700 hover:bg-slate-100')
+                      ? 'bg-white text-slate-900 shadow-lg shadow-slate-900/40'
+                      : 'text-white/80 hover:bg-white/10')
                   }
                 >
                   <span
                     className={
-                      'flex h-7 w-7 items-center justify-center rounded-full border text-[0.7rem] ' +
-                      (isActive ? 'border-slate-700 bg-slate-800/90' : 'border-slate-200 bg-white')
+                      'flex h-8 w-8 items-center justify-center rounded-full border text-[0.7rem] transition ' +
+                      (isActive
+                        ? 'border-slate-900 bg-slate-900/5 text-slate-900'
+                        : 'border-white/30 bg-white/5 text-white/80 group-hover:border-white/60')
                     }
                   >
-                    <Icon className="h-3.5 w-3.5" />
+                    <Icon className="h-4 w-4" />
                   </span>
-                  <span className="flex-1 text-left">{group.label}</span>
+                  <span className="flex-1 text-left text-base font-semibold tracking-tight">
+                    {group.label}
+                  </span>
                 </button>
               );
             })}
@@ -1776,18 +1873,56 @@ export default function CategoriesExplorer() {
         </aside>
 
         {/* Right: active group content */}
-        <main className="space-y-8">
-          <div>
-            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-              {activeGroup.label}
-            </h2>
-            <p className="mt-1 text-xs text-slate-500">
-              Click any tile to jump into polls for that vehicle, amenity, policy, or location.
-            </p>
+        <main className="space-y-10">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-slate-950/30 backdrop-blur">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/60">
+                  {activeGroup.label}
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">
+                  {visibleTileCount.toLocaleString()} of {totalTilesInGroup.toLocaleString()} tiles visible
+                </h2>
+                <p className="mt-1 text-sm text-white/70">
+                  Search across every vehicle, event, amenity, policy, accessibility detail, and city/state slug.
+                </p>
+              </div>
+              {normalizedSearch && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  className="rounded-full border border-white/30 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/70 hover:border-white"
+                >
+                  Clear search
+                </button>
+              )}
+            </div>
+            <form
+              className="mt-4 flex flex-col gap-3 md:flex-row"
+              onSubmit={(event) => event.preventDefault()}
+            >
+              <div className="flex flex-1 items-center gap-3 rounded-2xl border border-white/20 bg-black/50 px-4 py-3">
+                <Search className="h-5 w-5 text-slate-200" />
+                <input
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder="Search polls by keyword, vehicle, amenity, city, or state"
+                  className="w-full bg-transparent text-base text-white placeholder:text-white/60 focus:outline-none"
+                />
+              </div>
+              <div className="flex gap-2 text-xs text-white/70">
+                <div className="rounded-2xl border border-white/25 px-3 py-2">
+                  {filteredSections.length.toLocaleString()} sections
+                </div>
+                <div className="rounded-2xl border border-white/25 px-3 py-2">
+                  {visibleTileCount.toLocaleString()} tiles
+                </div>
+              </div>
+            </form>
           </div>
 
           <div className="space-y-8">
-            {activeGroup.sections.map((section) => {
+            {filteredSections.map((section) => {
               const styles = accentToClasses[section.accent] || accentToClasses.blue;
 
               return (
