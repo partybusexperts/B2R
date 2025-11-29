@@ -1,7 +1,7 @@
 // src/components/polls/CategoriesExplorer.tsx
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 interface CategoriesExplorerProps {
   categories: string[];
@@ -19,8 +19,7 @@ type TopGroup =
   | "accessibility"
   | "experiences"
   | "policies"
-  | "booking"
-  | "other";
+  | "booking";
 
 type RegionKey = "Northeast" | "Midwest" | "South" | "West" | "Unknown";
 
@@ -127,6 +126,7 @@ const VEHICLE_KEYWORDS = [
   "bus",
   "trolley",
   "sprinter",
+  "executive-sprinter",
   "limo",
   "stretch-limo",
   "suv-limo",
@@ -135,6 +135,7 @@ const VEHICLE_KEYWORDS = [
   "black-car-sedan",
   "luxury-suv",
   "party-van",
+  "classic-car",
 ];
 
 // Events & occasions
@@ -339,6 +340,8 @@ const EXPERIENCE_KEYWORDS = [
   "operations-logistics",
   "pickup-dropoff-zones",
   "seasonality-trends",
+  // moved from "other"
+  "myths-vs-facts",
 ];
 
 // Policies
@@ -371,12 +374,7 @@ const BOOKING_KEYWORDS = [
   "travel-distance",
   "vip-protocol",
   "wait-time-windows",
-];
-
-// Misc / other
-const OTHER_KNOWN = [
-  "fleet-size-stats",
-  "myths-vs-facts",
+  // moved from "other"
   "pricing",
 ];
 
@@ -448,10 +446,11 @@ function classifyTopGroup(slug: string): TopGroup {
   // Booking
   if (BOOKING_KEYWORDS.some((k) => lower.includes(k))) return "booking";
 
-  // Other known
-  if (OTHER_KNOWN.includes(lower)) return "other";
+  // Fleet stats clearly belongs with vehicles
+  if (lower === "fleet-size-stats") return "vehicles";
 
-  return "other";
+  // Anything truly unknown → booking/planning as a catch-all
+  return "booking";
 }
 
 /**
@@ -589,7 +588,6 @@ const TOP_GROUP_CONFIG: { key: TopGroup; label: string; icon: string }[] = [
   { key: "experiences", label: "Experiences & Issues", icon: "📖" },
   { key: "policies", label: "Policies & Procedures", icon: "📜" },
   { key: "booking", label: "Booking & Planning", icon: "🗓️" },
-  { key: "other", label: "Other / Misc", icon: "📊" },
 ];
 
 export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
@@ -597,10 +595,7 @@ export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
   const [search, setSearch] = useState("");
   const [openBlocks, setOpenBlocks] = useState<Record<string, boolean>>({});
 
-  const metas = useMemo(
-    () => buildCategoryMeta(categories),
-    [categories]
-  );
+  const metas = useMemo(() => buildCategoryMeta(categories), [categories]);
 
   const searchLower = search.trim().toLowerCase();
 
@@ -638,7 +633,6 @@ export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
   const experiences = filteredMetas.filter((m) => m.topGroup === "experiences");
   const policies = filteredMetas.filter((m) => m.topGroup === "policies");
   const booking = filteredMetas.filter((m) => m.topGroup === "booking");
-  const other = filteredMetas.filter((m) => m.topGroup === "other");
 
   const toggleBlock = (key: string) => {
     setOpenBlocks((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -663,7 +657,7 @@ export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
                 "px-4 py-2 rounded-full border text-sm md:text-base font-semibold transition-all flex items-center gap-2",
                 activeGroup === key
                   ? "bg-sky-400 text-slate-900 border-sky-400 shadow-lg shadow-sky-500/30"
-                  : "bg-[#050c1f] text-white/75 border-white/10 hover:bg-[#09122d]"
+                  : "bg-[#050c1f] text-white/75 border-white/10 hover:bg-[#09122d]",
               ].join(" ")}
             >
               <span>{icon}</span>
@@ -717,9 +711,7 @@ export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
             openBlocks={openBlocks}
             onToggle={toggleBlock}
           >
-            {locationRegions.length === 0 && (
-              <EmptyMessage />
-            )}
+            {locationRegions.length === 0 && <EmptyMessage />}
 
             <div className="grid gap-5">
               {locationRegions.map((region) => (
@@ -750,7 +742,9 @@ export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
                           </div>
                           <span className="text-xs text-white/50">
                             {state.items.length.toLocaleString()}{" "}
-                            {state.items.length === 1 ? "category" : "categories"}
+                            {state.items.length === 1
+                              ? "category"
+                              : "categories"}
                           </span>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
@@ -844,20 +838,8 @@ export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
             id="booking"
             icon="🗓️"
             title="Booking & Planning"
-            subtitle="Lead times, routes, payment methods, peak days, VIP protocols."
+            subtitle="Lead times, routes, payment methods, peak days, VIP protocols, pricing."
             items={booking}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {(activeGroup === "all" || activeGroup === "other") && (
-          <SimpleGroupBlock
-            id="other"
-            icon="📊"
-            title="Other Categories"
-            subtitle="Stats, pricing, myths vs facts, and anything that didn’t fit neatly above."
-            items={other}
             openBlocks={openBlocks}
             onToggle={toggleBlock}
           />
@@ -899,7 +881,7 @@ function CategoryBlock(props: {
   title: string;
   subtitle?: string;
   count: number;
-  children: React.ReactNode;
+  children: any;
   openBlocks: Record<string, boolean>;
   onToggle: (id: string) => void;
 }) {
@@ -924,9 +906,7 @@ function CategoryBlock(props: {
             {count.toLocaleString()}{" "}
             {count === 1 ? "category" : "categories"}
           </span>
-          <span className="text-lg md:text-2xl">
-            {isOpen ? "▴" : "▾"}
-          </span>
+          <span className="text-lg md:text-2xl">{isOpen ? "▴" : "▾"}</span>
         </div>
       </button>
       {isOpen && (
@@ -972,9 +952,7 @@ function SimpleGroupBlock(props: {
             {items.length.toLocaleString()}{" "}
             {items.length === 1 ? "category" : "categories"}
           </span>
-          <span className="text-lg md:text-2xl">
-            {isOpen ? "▴" : "▾"}
-          </span>
+          <span className="text-lg md:text-2xl">{isOpen ? "▴" : "▾"}</span>
         </div>
       </button>
       {isOpen && (
