@@ -73,9 +73,23 @@ export default function FleetPage() {
             {topCategoryOrder.map((group) => {
               const vehicles = catalog.filter((v) => group.match(v.category)).slice(0, 3);
               if (!vehicles.length) return null;
+              const chryslerCandidate =
+                group.key === "limousines"
+                  ? vehicles.find((v) => v.name?.toLowerCase().includes("chrysler 300")) ?? vehicles[0]
+                  : null;
+              const primaryVehicle = chryslerCandidate ?? vehicles[0];
+              const chryslerDetailHref =
+                group.key === "limousines" && primaryVehicle?.name?.toLowerCase().includes("chrysler 300")
+                  ? "/vehicles/10-passenger-white-chrysler-300-limo"
+                  : undefined;
               return (
                 <div key={group.key} className="block" aria-label={`View ${group.label}`}>
-                  <VehicleGalleryCard vehicle={vehicles[0]} showCTA={false} cardHref={group.href} />
+                  <VehicleGalleryCard
+                    vehicle={primaryVehicle}
+                    showCTA={false}
+                    cardHref={chryslerDetailHref ?? group.href}
+                    highlightDetailCta
+                  />
                   <div className="px-6 pb-6 pt-4 -mt-2">
                     <a href={group.href} className="w-full inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-bold bg-blue-600 text-white hover:bg-blue-700 border border-blue-700 transition">View {group.label}</a>
                   </div>

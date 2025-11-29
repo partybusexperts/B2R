@@ -115,7 +115,12 @@ export default function LimousinesClient({ vehicles }: Props) {
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {catalogLimousines.map((vehicle) => (
-              <VehicleGalleryCard key={vehicle.id} vehicle={vehicle} />
+              <VehicleGalleryCard
+                key={vehicle.id}
+                vehicle={vehicle}
+                cardHref={getLimousineDetailHref(vehicle)}
+                highlightDetailCta
+              />
             ))}
           </div>
         </div>
@@ -268,4 +273,12 @@ export default function LimousinesClient({ vehicles }: Props) {
       </section>
     </main>
   );
+}
+
+function getLimousineDetailHref(vehicle: HomepageVehicle) {
+  const name = vehicle.name?.toLowerCase() ?? '';
+  if (name.includes('chrysler 300') && name.includes('10')) {
+    return '/vehicles/10-passenger-white-chrysler-300-limo';
+  }
+  return undefined;
 }

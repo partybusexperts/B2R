@@ -17,6 +17,7 @@ interface Props {
   phoneTel?: string;
   quoteHref?: string;
   cardHref?: string;
+  highlightDetailCta?: boolean;
 }
 
 const CATEGORY_LABEL: Record<"party-buses" | "limousines" | "coach-buses", string> = {
@@ -48,10 +49,13 @@ export default function VehicleGalleryCard({
   phoneTel,
   quoteHref,
   cardHref,
+  highlightDetailCta = false,
 }: Props) {
   const capacity = vehicle.capacityMax ?? vehicle.capacityMin;
   const router = useRouter();
-  const clickable = Boolean(cardHref);
+  const detailHref = getVehicleDetailHref(vehicle);
+  const destinationHref = cardHref ?? detailHref;
+  const clickable = Boolean(destinationHref);
 
   const fallbackAmenities = getVehicleAmenities(vehicle);
   const normalizedAmenities = normalizeAmenities(amenityLabels?.length ? amenityLabels : fallbackAmenities);
@@ -84,8 +88,8 @@ export default function VehicleGalleryCard({
   }, [vehicle.id, imageUrls.length]);
 
   const handleCardNavigate = () => {
-    if (!cardHref) return;
-    router.push(cardHref);
+    if (!destinationHref) return;
+    router.push(destinationHref);
   };
 
   const handleCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -136,6 +140,18 @@ export default function VehicleGalleryCard({
           <div className="absolute right-4 top-4 rounded-full bg-blue-600/90 px-3 py-1 text-xs font-bold uppercase text-white shadow-lg">
             {capacity ? `${capacity} Pax` : "Ask Us"}
           </div>
+
+          {highlightDetailCta && destinationHref && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-end px-4">
+              <a
+                href={destinationHref}
+                onClick={(event) => event.stopPropagation()}
+                className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-emerald-300/80 bg-emerald-400/90 px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-wide text-slate-900 shadow-lg transition hover:bg-white animate-pulse"
+              >
+                Learn More!
+              </a>
+            </div>
+          )}
         </div>
 
         <div className="border-t border-blue-900/60 bg-[#050d22]/95 px-4 pb-4 pt-3">
@@ -284,6 +300,28 @@ function hashString(value: string) {
     hash |= 0;
   }
   return hash;
+}
+
+function getVehicleDetailHref(vehicle: VehicleCardVehicle): string | undefined {
+  const id = typeof vehicle.id === "string" ? vehicle.id.toLowerCase() : "";
+  const name = (vehicle.name ?? "").toLowerCase();
+
+  const idMatches = [
+    "limo-chrysler-300-10",
+    "limo-esc-10-chrysler",
+    "10-passenger-white-chrysler-300-limo",
+  ].some((needle) => id === needle);
+
+  const nameMatchesChrysler300 = name.includes("chrysler 300");
+  const mentionsTenPassenger = name.includes("10 passenger") || name.includes("10-passenger");
+  const mentionsChryslerPage = name.includes("white chrysler") || name.includes("white limo") || name.includes("white stretch");
+  const fuzzyMatch = nameMatchesChrysler300 && mentionsTenPassenger;
+
+  if (idMatches || (fuzzyMatch && (mentionsChryslerPage || nameMatchesChrysler300))) {
+    return "/vehicles/10-passenger-white-chrysler-300-limo";
+  }
+
+  return undefined;
 }
 
 

@@ -123,7 +123,7 @@ export default function CoachBusesClient({ vehicles }: Props) {
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {catalogCoaches.map((vehicle) => (
-              <VehicleGalleryCard key={vehicle.id} vehicle={vehicle} />
+              <VehicleGalleryCard key={vehicle.id} vehicle={vehicle} highlightDetailCta />
             ))}
           </div>
         </div>
