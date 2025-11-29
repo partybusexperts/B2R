@@ -1,600 +1,45 @@
-// src/components/polls/CategoriesExplorer.tsx
-"use client";
+'use client';
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import {
+  MapPin,
+  Bus,
+  CalendarRange,
+  Sparkles,
+  ShieldCheck,
+  ClipboardList,
+  HeartHandshake,
+  Info,
+} from 'lucide-react';
 
-interface CategoriesExplorerProps {
-  categories: string[];
-}
+// ---------- Types ----------
 
-/**
- * High-level groups the user can toggle between
- */
-type TopGroup =
-  | "all"
-  | "locations"
-  | "vehicles"
-  | "events"
-  | "amenities"
-  | "accessibility"
-  | "experiences"
-  | "policies"
-  | "booking";
+type Accent = 'purple' | 'blue' | 'green' | 'amber';
 
-type RegionKey = "Northeast" | "Midwest" | "South" | "West" | "Unknown";
-
-interface CategoryMeta {
+type CategoryItem = {
   slug: string;
   label: string;
-  topGroup: TopGroup;
-  region?: RegionKey;
-  stateCode?: string;
-  kind?: "state" | "city" | "topic";
-}
-
-interface LocationStateGroup {
-  stateCode: string;
-  stateName: string;
-  stateSlug?: string;
-  items: CategoryMeta[]; // state + cities
-}
-
-interface LocationRegionGroup {
-  region: RegionKey;
-  states: LocationStateGroup[];
-}
-
-/**
- * STATE + REGION METADATA
- */
-const STATE_META: Record<
-  string,
-  { code: string; slug: string; name: string; region: RegionKey }
-> = {
-  AL: { code: "AL", slug: "alabama", name: "Alabama", region: "South" },
-  AK: { code: "AK", slug: "alaska", name: "Alaska", region: "West" },
-  AZ: { code: "AZ", slug: "arizona", name: "Arizona", region: "West" },
-  AR: { code: "AR", slug: "arkansas", name: "Arkansas", region: "South" },
-  CA: { code: "CA", slug: "california", name: "California", region: "West" },
-  CO: { code: "CO", slug: "colorado", name: "Colorado", region: "West" },
-  CT: { code: "CT", slug: "connecticut", name: "Connecticut", region: "Northeast" },
-  DE: { code: "DE", slug: "delaware", name: "Delaware", region: "South" },
-  FL: { code: "FL", slug: "florida", name: "Florida", region: "South" },
-  GA: { code: "GA", slug: "georgia", name: "Georgia", region: "South" },
-  HI: { code: "HI", slug: "hawaii", name: "Hawaii", region: "West" },
-  ID: { code: "ID", slug: "idaho", name: "Idaho", region: "West" },
-  IL: { code: "IL", slug: "illinois", name: "Illinois", region: "Midwest" },
-  IN: { code: "IN", slug: "indiana", name: "Indiana", region: "Midwest" },
-  IA: { code: "IA", slug: "iowa", name: "Iowa", region: "Midwest" },
-  KS: { code: "KS", slug: "kansas", name: "Kansas", region: "Midwest" },
-  KY: { code: "KY", slug: "kentucky", name: "Kentucky", region: "South" },
-  LA: { code: "LA", slug: "louisiana", name: "Louisiana", region: "South" },
-  ME: { code: "ME", slug: "maine", name: "Maine", region: "Northeast" },
-  MD: { code: "MD", slug: "maryland", name: "Maryland", region: "South" },
-  MA: { code: "MA", slug: "massachusetts", name: "Massachusetts", region: "Northeast" },
-  MI: { code: "MI", slug: "michigan", name: "Michigan", region: "Midwest" },
-  MN: { code: "MN", slug: "minnesota", name: "Minnesota", region: "Midwest" },
-  MS: { code: "MS", slug: "mississippi", name: "Mississippi", region: "South" },
-  MO: { code: "MO", slug: "missouri", name: "Missouri", region: "Midwest" },
-  MT: { code: "MT", slug: "montana", name: "Montana", region: "West" },
-  NE: { code: "NE", slug: "nebraska", name: "Nebraska", region: "Midwest" },
-  NV: { code: "NV", slug: "nevada", name: "Nevada", region: "West" },
-  NH: { code: "NH", slug: "new-hampshire", name: "New Hampshire", region: "Northeast" },
-  NJ: { code: "NJ", slug: "new-jersey", name: "New Jersey", region: "Northeast" },
-  NM: { code: "NM", slug: "new-mexico", name: "New Mexico", region: "West" },
-  NY: { code: "NY", slug: "new-york", name: "New York", region: "Northeast" },
-  NC: { code: "NC", slug: "north-carolina", name: "North Carolina", region: "South" },
-  ND: { code: "ND", slug: "north-dakota", name: "North Dakota", region: "Midwest" },
-  OH: { code: "OH", slug: "ohio", name: "Ohio", region: "Midwest" },
-  OK: { code: "OK", slug: "oklahoma", name: "Oklahoma", region: "South" },
-  OR: { code: "OR", slug: "oregon", name: "Oregon", region: "West" },
-  PA: { code: "PA", slug: "pennsylvania", name: "Pennsylvania", region: "Northeast" },
-  RI: { code: "RI", slug: "rhode-island", name: "Rhode Island", region: "Northeast" },
-  SC: { code: "SC", slug: "south-carolina", name: "South Carolina", region: "South" },
-  SD: { code: "SD", slug: "south-dakota", name: "South Dakota", region: "Midwest" },
-  TN: { code: "TN", slug: "tennessee", name: "Tennessee", region: "South" },
-  TX: { code: "TX", slug: "texas", name: "Texas", region: "South" },
-  UT: { code: "UT", slug: "utah", name: "Utah", region: "West" },
-  VT: { code: "VT", slug: "vermont", name: "Vermont", region: "Northeast" },
-  VA: { code: "VA", slug: "virginia", name: "Virginia", region: "South" },
-  WA: { code: "WA", slug: "washington", name: "Washington", region: "West" },
-  WV: { code: "WV", slug: "west-virginia", name: "West Virginia", region: "South" },
-  WI: { code: "WI", slug: "wisconsin", name: "Wisconsin", region: "Midwest" },
-  WY: { code: "WY", slug: "wyoming", name: "Wyoming", region: "West" },
+  description?: string;
 };
 
-const STATE_SLUG_TO_CODE: Record<string, string> = Object.values(STATE_META).reduce(
-  (acc, s) => {
-    acc[s.slug] = s.code;
-    return acc;
-  },
-  {} as Record<string, string>
-);
+type CategorySection = {
+  id: string;
+  label: string;
+  accent: Accent;
+  items: CategoryItem[];
+};
 
-/**
- * QUICK LOOKUP SETS FOR NON-LOCATION TYPES
- */
+type CategoryGroup = {
+  id: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  sections: CategorySection[];
+};
 
-// Vehicles (party bus, limos, shuttles, etc.)
-const VEHICLE_KEYWORDS = [
-  "party-bus",
-  "coach-bus",
-  "minibus",
-  "mini-coach",
-  "shuttle-bus",
-  "motorcoach",
-  "bus",
-  "trolley",
-  "sprinter",
-  "executive-sprinter",
-  "limo",
-  "stretch-limo",
-  "suv-limo",
-  "sedan",
-  "suv",
-  "black-car-sedan",
-  "luxury-suv",
-  "party-van",
-  "classic-car",
-];
+// ---------- Helpers ----------
 
-// Events & occasions
-const EVENT_KEYWORDS = [
-  "after-parties",
-  "anniversary-parties",
-  "bachelor-parties",
-  "bachelorette-parties",
-  "bar-bat-mitzvahs",
-  "birthday-parties",
-  "corporate-parties",
-  "girls-nights-out",
-  "guys-nights-out",
-  "kids-parties",
-  "quinceanera-parties",
-  "retirement-parties",
-  "sweet-sixteen",
-  "graduation",
-  "homecoming",
-  "prom",
-  "school-field-trips",
-  "winter-formals",
-  "bar-crawls",
-  "brewery-tours",
-  "casino-tours",
-  "church-outings",
-  "concerts",
-  "dinners-out",
-  "festivals",
-  "haunted-houses",
-  "holiday-lights-tours",
-  "parades",
-  "sporting-events",
-  "wine-tours",
-  "corporate-services",
-  "employee-shuttles",
-  "rehearsal-dinners",
-  "team-building",
-  "weddings",
-  "christmas",
-  "new-years-eve",
-  "thanksgiving",
-  "events",
-];
-
-// Amenities & features
-const AMENITY_KEYWORDS = [
-  // seating & comfort
-  "armrests",
-  "cushioned-seats",
-  "footrests",
-  "headrests",
-  "heated-seats",
-  "leather-seating",
-  "leg-rests",
-  "massage-seats",
-  "plush-reclining-seats",
-  "reclining-seats",
-  "seating",
-  "ventilated-seats",
-  "wrap-around-seating",
-  // entertainment
-  "audio",
-  "bluetooth-connectivity",
-  "bluetooth-sound",
-  "built-in-screens",
-  "dance-pole",
-  "dropdown-screens",
-  "dvd-player",
-  "entertainment",
-  "flat-screen-tvs",
-  "karaoke-system",
-  "led-light-show",
-  "laser-lights",
-  "mood-lighting",
-  "neon-accents",
-  "satellite-radio",
-  "strobe-lights",
-  "surround-sound-system",
-  "surround-sound-speakers",
-  "tv-screens",
-  "video-game-console",
-  // bar & refreshments
-  "bar-area",
-  "bottle-holders",
-  "champagne-glasses",
-  "coolers",
-  "coolers-ice",
-  "ice-buckets",
-  "mini-bar",
-  "refrigerator",
-  // storage
-  "coat-hooks",
-  "cup-holders",
-  "luggage-storage",
-  "overhead-bins",
-  "overhead-compartments",
-  "overhead-storage",
-  "tray-tables",
-  "under-bus-luggage-bays",
-  "undercarriage-luggage-space",
-  // climate
-  "air-conditioning",
-  "air-purifier",
-  "climate-control",
-  "heating",
-  "individual-airflow-controls",
-  "individual-overhead-vents",
-  // power
-  "power-charging",
-  "power-outlets",
-  "usb-charging",
-  "usb-ports",
-  "wi-fi",
-  "wifi-connectivity",
-  "wifi-hotspot",
-  // restroom
-  "compact-bathroom",
-  "hand-sanitizer-dispenser",
-  "hand-soap-in-restroom",
-  "onboard-restrooms",
-  "paper-towels-in-restroom",
-  "restroom",
-  "trash-receptacle",
-  "uv-sanitizer",
-  "wastebasket",
-  "wipes-container",
-  // safety & exterior
-  "emergency-exits",
-  "emergency-kit",
-  "first-aid-kits",
-  "first-aid-supplies",
-  "seat-belts",
-  "tire-pressure-monitoring",
-  "vehicle-tracking",
-  "alloy-wheels",
-  "backup-camera",
-  "chrome-accents",
-  "custom-interiors",
-  "custom-paint-job",
-  "extended-wheelbase",
-  "fiber-optic-roof",
-  "parking-sensors",
-  "plush-carpeting",
-  "privacy-shades",
-  "starlight-ceiling",
-  "stretch-design",
-  "sunroof",
-  "tinted-windows",
-  // misc amenities
-  "bottle-openers",
-  "fog-machine",
-  "gps-navigation",
-  "intercom-system",
-  "mint-dispenser",
-  "photo-booth-setup",
-  "privacy-divider",
-  "reading-lights",
-  "smoke-machine",
-  "tissue-box",
-  "touchscreen-controls",
-  "trash-receptacles",
-  "waste-receptacle",
-];
-
-// Accessibility
-const ACCESSIBILITY_KEYWORDS = [
-  "accessibility-experience",
-  "booster-seats",
-  "child-seats",
-  "handicap-seating",
-  "pet-friendly-options",
-  "ramp-access",
-  "seatbelts-child-seats",
-  "wheelchair",
-  "wheelchair-lift",
-];
-
-// Experiences & issues
-const EXPERIENCE_KEYWORDS = [
-  "best-driver-moments",
-  "overall-satisfaction",
-  "damage-cleanup-stories",
-  "double-booked-snafus",
-  "equipment-failures",
-  "found-items-stories",
-  "issue-resolution",
-  "nightmare-traffic",
-  "overcapacity-problems",
-  "payment-issues",
-  "weather-disaster-stories",
-  "worst-pickup-experience",
-  "wrong-destination",
-  "comfort-cleanliness",
-  "driver-professionalism",
-  "reliability-punctuality",
-  "airport-procedures",
-  "cross-border-travel",
-  "event-staging-parking",
-  "luggage-handling",
-  "music-preferences",
-  "operations-logistics",
-  "pickup-dropoff-zones",
-  "seasonality-trends",
-  // moved from "other"
-  "myths-vs-facts",
-];
-
-// Policies
-const POLICY_KEYWORDS = [
-  "alcohol-policy",
-  "cancellations",
-  "deposits",
-  "driver-hours-regs",
-  "emergency-procedures",
-  "gratuity",
-  "incident-reporting",
-  "lost-and-found",
-  "minimum-hours",
-  "overtime",
-  "smoking-policy",
-];
-
-// Booking & planning
-const BOOKING_KEYWORDS = [
-  "booking-experience",
-  "booking-lead-times",
-  "communication-preferences",
-  "corporate-discounts",
-  "multi-stop-itineraries",
-  "peak-days-times",
-  "payment-methods",
-  "pickup-window",
-  "route-planning",
-  "traffic-weather-mitigation",
-  "travel-distance",
-  "vip-protocol",
-  "wait-time-windows",
-  // moved from "other"
-  "pricing",
-];
-
-/**
- * Helper: nice label from slug.
- * - "phoenix-az" -> "Phoenix, AZ"
- * - "party-bus" -> "Party Bus"
- */
-function humanizeSlug(slug: string): string {
-  if (!slug) return "";
-
-  const lower = slug.toLowerCase();
-  const cityMatch = lower.match(/^(.+)-([a-z]{2})$/);
-
-  // City, ST format
-  if (cityMatch && STATE_META[cityMatch[2].toUpperCase()]) {
-    const city = cityMatch[1].replace(/-/g, " ");
-    const stateCode = cityMatch[2].toUpperCase();
-    return `${titleCase(city)}, ${stateCode}`;
-  }
-
-  // State full name
-  if (STATE_SLUG_TO_CODE[lower]) {
-    const code = STATE_SLUG_TO_CODE[lower];
-    return STATE_META[code].name;
-  }
-
-  // Fallback: just title case
-  return titleCase(lower.replace(/-/g, " "));
-}
-
-function titleCase(str: string): string {
-  return str.replace(/\b([a-z])/g, (m) => m.toUpperCase());
-}
-
-/**
- * Determine if slug is a location (state/city) or a topic
- */
-function classifyTopGroup(slug: string): TopGroup {
-  const lower = slug.toLowerCase();
-
-  // Location: exact state slug
-  if (STATE_SLUG_TO_CODE[lower]) return "locations";
-
-  // Location: city ending in -[state]
-  const cityMatch = lower.match(/.+-([a-z]{2})$/);
-  if (cityMatch && STATE_META[cityMatch[1].toUpperCase()]) {
-    return "locations";
-  }
-
-  // Vehicles
-  if (VEHICLE_KEYWORDS.some((k) => lower.includes(k))) return "vehicles";
-
-  // Events
-  if (EVENT_KEYWORDS.some((k) => lower.includes(k))) return "events";
-
-  // Amenities
-  if (AMENITY_KEYWORDS.some((k) => lower.includes(k))) return "amenities";
-
-  // Accessibility
-  if (ACCESSIBILITY_KEYWORDS.some((k) => lower.includes(k))) return "accessibility";
-
-  // Experiences
-  if (EXPERIENCE_KEYWORDS.some((k) => lower.includes(k))) return "experiences";
-
-  // Policies
-  if (POLICY_KEYWORDS.some((k) => lower.includes(k))) return "policies";
-
-  // Booking
-  if (BOOKING_KEYWORDS.some((k) => lower.includes(k))) return "booking";
-
-  // Fleet stats clearly belongs with vehicles
-  if (lower === "fleet-size-stats") return "vehicles";
-
-  // Anything truly unknown → booking/planning as a catch-all
-  return "booking";
-}
-
-/**
- * Build CategoryMeta for every slug
- */
-function buildCategoryMeta(slugs: string[]): CategoryMeta[] {
-  return slugs.map((raw) => {
-    const slug = raw.toLowerCase().trim();
-    const topGroup = classifyTopGroup(slug);
-    const label = humanizeSlug(slug);
-
-    let region: RegionKey | undefined;
-    let stateCode: string | undefined;
-    let kind: CategoryMeta["kind"] = "topic";
-
-    if (topGroup === "locations") {
-      // State?
-      if (STATE_SLUG_TO_CODE[slug]) {
-        stateCode = STATE_SLUG_TO_CODE[slug];
-        region = STATE_META[stateCode].region;
-        kind = "state";
-      } else {
-        // City: ends with -ST
-        const match = slug.match(/.+-([a-z]{2})$/);
-        if (match && STATE_META[match[1].toUpperCase()]) {
-          stateCode = match[1].toUpperCase();
-          region = STATE_META[stateCode].region;
-          kind = "city";
-        }
-      }
-      if (!region) region = "Unknown";
-    }
-
-    return { slug, label, topGroup, region, stateCode, kind };
-  });
-}
-
-/**
- * Group location metas into Region > State > Items
- */
-function buildLocationRegions(metas: CategoryMeta[]): LocationRegionGroup[] {
-  const byState: Record<string, LocationStateGroup> = {};
-
-  for (const meta of metas) {
-    if (!meta.stateCode) continue;
-    const stateCode = meta.stateCode;
-    const stateMeta = STATE_META[stateCode];
-    if (!stateMeta) continue;
-
-    if (!byState[stateCode]) {
-      byState[stateCode] = {
-        stateCode,
-        stateName: stateMeta.name,
-        stateSlug: stateMeta.slug,
-        items: [],
-      };
-    }
-    byState[stateCode].items.push(meta);
-  }
-
-  // Ensure state itself is present if its slug exists in metas
-  for (const stateCode of Object.keys(STATE_META)) {
-    const state = STATE_META[stateCode];
-    const hasStateMeta = metas.find((m) => m.slug === state.slug);
-
-    if (hasStateMeta) {
-      if (!byState[stateCode]) {
-        byState[stateCode] = {
-          stateCode,
-          stateName: state.name,
-          stateSlug: state.slug,
-          items: [],
-        };
-      }
-      // Make sure state entry is first
-      const list = byState[stateCode].items;
-      const existing = list.find((m) => m.slug === state.slug);
-      if (!existing) {
-        list.unshift({
-          slug: state.slug,
-          label: state.name,
-          topGroup: "locations",
-          region: state.region,
-          stateCode,
-          kind: "state",
-        });
-      }
-    }
-  }
-
-  // Build regions
-  const regions: Record<RegionKey, LocationRegionGroup> = {
-    Northeast: { region: "Northeast", states: [] },
-    Midwest: { region: "Midwest", states: [] },
-    South: { region: "South", states: [] },
-    West: { region: "West", states: [] },
-    Unknown: { region: "Unknown", states: [] },
-  };
-
-  Object.values(byState).forEach((stateGroup) => {
-    const stateMeta = STATE_META[stateGroup.stateCode];
-    const regionKey = stateMeta?.region || "Unknown";
-
-    // Sort items inside state: state first, then cities
-    stateGroup.items.sort((a, b) => {
-      if (a.kind === "state" && b.kind !== "state") return -1;
-      if (b.kind === "state" && a.kind !== "state") return 1;
-      return a.label.localeCompare(b.label);
-    });
-
-    regions[regionKey].states.push(stateGroup);
-  });
-
-  // Sort states alphabetically
-  (Object.values(regions) as LocationRegionGroup[]).forEach((r) => {
-    r.states.sort((a, b) => a.stateName.localeCompare(b.stateName));
-  });
-
-  // Only return regions that actually have states
-  return (Object.values(regions) as LocationRegionGroup[]).filter(
-    (r) => r.states.length > 0
-  );
-}
-
-/**
- * UI CONFIG
- */
-const TOP_GROUP_CONFIG: { key: TopGroup; label: string; icon: string }[] = [
-  { key: "all", label: "All Types", icon: "🌎" },
-  { key: "locations", label: "Locations (Cities & States)", icon: "📍" },
-  { key: "vehicles", label: "Vehicles", icon: "🚌" },
-  { key: "events", label: "Events & Occasions", icon: "🎉" },
-  { key: "amenities", label: "Amenities & Features", icon: "✨" },
-  { key: "accessibility", label: "Accessibility", icon: "♿" },
-  { key: "experiences", label: "Experiences & Issues", icon: "📖" },
-  { key: "policies", label: "Policies & Procedures", icon: "📜" },
-  { key: "booking", label: "Booking & Planning", icon: "🗓️" },
-];
-
-// Accent type for category styling
-export type Accent = 'purple' | 'blue' | 'green' | 'amber' | 'red';
-
-// Accent color classes
-export const accentToClasses: Record<Accent, { badge: string; border: string; glow: string }> = {
+const accentToClasses: Record<Accent, { badge: string; border: string; glow: string }> = {
   purple: {
     badge: 'bg-purple-100 text-purple-700',
     border: 'border-purple-200',
@@ -615,404 +60,1791 @@ export const accentToClasses: Record<Accent, { badge: string; border: string; gl
     border: 'border-amber-200',
     glow: 'shadow-[0_0_30px_rgba(245,158,11,0.25)]',
   },
-  red: {
-    badge: 'bg-rose-100 text-rose-700',
-    border: 'border-rose-200',
-    glow: 'shadow-[0_0_30px_rgba(244,63,94,0.25)]',
-  },
 };
 
-export function CategoriesExplorer({ categories }: CategoriesExplorerProps) {
-  const [activeGroup, setActiveGroup] = useState<TopGroup>("all");
-  const [search, setSearch] = useState("");
-  const [openBlocks, setOpenBlocks] = useState<Record<string, boolean>>({});
+function slugify(raw: string): string {
+  return raw
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/['’.]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
-  const metas = useMemo(() => buildCategoryMeta(categories), [categories]);
+// ---------- LOCATION DATA (states + cities) ----------
 
-  const searchLower = search.trim().toLowerCase();
+type RegionId = 'northeast' | 'midwest' | 'south' | 'west';
 
-  const filteredMetas = useMemo(() => {
-    let list = metas;
+type StateAbbr =
+  | 'al'
+  | 'ak'
+  | 'az'
+  | 'ar'
+  | 'ca'
+  | 'co'
+  | 'ct'
+  | 'de'
+  | 'fl'
+  | 'ga'
+  | 'hi'
+  | 'id'
+  | 'il'
+  | 'in'
+  | 'ia'
+  | 'ks'
+  | 'ky'
+  | 'la'
+  | 'me'
+  | 'md'
+  | 'ma'
+  | 'mi'
+  | 'mn'
+  | 'ms'
+  | 'mo'
+  | 'mt'
+  | 'ne'
+  | 'nv'
+  | 'nh'
+  | 'nj'
+  | 'nm'
+  | 'ny'
+  | 'nc'
+  | 'nd'
+  | 'oh'
+  | 'ok'
+  | 'or'
+  | 'pa'
+  | 'ri'
+  | 'sc'
+  | 'sd'
+  | 'tn'
+  | 'tx'
+  | 'ut'
+  | 'vt'
+  | 'va'
+  | 'wa'
+  | 'wv'
+  | 'wi'
+  | 'wy';
 
-    if (activeGroup !== "all") {
-      list = list.filter((m) => m.topGroup === activeGroup);
-    }
+type StateConfig = {
+  name: string;
+  abbr: StateAbbr;
+  region: RegionId;
+  cities: string[];
+};
 
-    if (searchLower) {
-      list = list.filter(
-        (m) =>
-          m.label.toLowerCase().includes(searchLower) ||
-          m.slug.toLowerCase().includes(searchLower)
-      );
-    }
+const LOCATION_STATES: StateConfig[] = [
+  // --- SOUTH ---
+  {
+    name: 'Alabama',
+    abbr: 'al',
+    region: 'south',
+    cities: ['Auburn', 'Birmingham', 'Decatur', 'Dothan', 'Hoover', 'Huntsville', 'Madison', 'Mobile', 'Montgomery', 'Tuscaloosa'],
+  },
+  {
+    name: 'Arkansas',
+    abbr: 'ar',
+    region: 'south',
+    cities: [
+      'Bentonville',
+      'Conway',
+      'Fayetteville',
+      'Fort Smith',
+      'Jonesboro',
+      'Little Rock',
+      'North Little Rock',
+      'Rogers',
+      'Springdale',
+    ],
+  },
+  {
+    name: 'Delaware',
+    abbr: 'de',
+    region: 'northeast',
+    cities: ['Wilmington'],
+  },
+  {
+    name: 'Florida',
+    abbr: 'fl',
+    region: 'south',
+    cities: [
+      'Apopka',
+      'Boca Raton',
+      'Bonita Springs',
+      'Boynton Beach',
+      'Bradenton',
+      'Brandon',
+      'Cape Coral',
+      'Clearwater',
+      'Coconut Creek',
+      'Coral Springs',
+      'Davie',
+      'Daytona Beach',
+      'Deerfield Beach',
+      'Delray Beach',
+      'Deltona',
+      'Doral',
+      'Fort Lauderdale',
+      'Fort Myers',
+      'Fountainebleau',
+      'Gainesville',
+      'Hialeah',
+      'Hollywood',
+      'Homestead',
+      'Jacksonville',
+      'Jupiter',
+      'Kendale Lakes',
+      'Kendall',
+      'Kissimmee',
+      'Lakeland',
+      'Largo',
+      'Lauderhill',
+      'Lehigh Acres',
+      'Margate',
+      'Melbourne',
+      'Miami',
+      'Miami Beach',
+      'Miami Gardens',
+      'Miramar',
+      'North Miami',
+      'North Port',
+      'Ocala',
+      'Orlando',
+      'Palm Bay',
+      'Palm Beach Gardens',
+      'Palm Coast',
+      'Palm Harbor',
+      'Pembroke Pines',
+      'Pensacola',
+      'Pine Hills',
+      'Pinellas Park',
+      'Plantation',
+      'Poinciana',
+      'Pompano Beach',
+      'Port Charlotte',
+      'Port Orange',
+      'Port St. Lucie',
+      'Riverview',
+      'Sanford',
+      'Sarasota',
+      'Spring Hill',
+      'St. Cloud',
+      'St. Petersburg',
+      'Sunrise',
+      'Tallahassee',
+      'Tamarac',
+      'Tampa',
+      'The Villages',
+      'Wellington',
+      'Wesley Chapel',
+      'West Palm Beach',
+      'Weston',
+    ],
+  },
+  {
+    name: 'Georgia',
+    abbr: 'ga',
+    region: 'south',
+    cities: [
+      'Albany',
+      'Alpharetta',
+      'Athens',
+      'Atlanta',
+      'Augusta',
+      'Columbus',
+      'Johns Creek',
+      'Macon',
+      'Marietta',
+      'Roswell',
+      'Sandy Springs',
+      'Savannah',
+      'Smyrna',
+      'Valdosta',
+      'Warner Robins',
+    ],
+  },
+  {
+    name: 'Kentucky',
+    abbr: 'ky',
+    region: 'south',
+    cities: ['Bowling Green', 'Lexington', 'Louisville', 'Owensboro'],
+  },
+  {
+    name: 'Louisiana',
+    abbr: 'la',
+    region: 'south',
+    cities: ['Baton Rouge', 'Bossier City', 'Kenner', 'Lafayette', 'Lake Charles', 'Metairie', 'New Orleans', 'Shreveport'],
+  },
+  {
+    name: 'Maryland',
+    abbr: 'md',
+    region: 'south',
+    cities: [
+      'Baltimore',
+      'Bel Air South',
+      'Bethesda',
+      'Bowie',
+      'Columbia',
+      'Dundalk',
+      'Ellicott City',
+      'Frederick',
+      'Gaithersburg',
+      'Germantown',
+      'Glen Burnie',
+      'Rockville',
+      'Severn',
+      'Silver Spring',
+      'Towson',
+      'Waldorf',
+    ],
+  },
+  {
+    name: 'Mississippi',
+    abbr: 'ms',
+    region: 'south',
+    cities: ['Gulfport', 'Jackson', 'Southaven'],
+  },
+  {
+    name: 'North Carolina',
+    abbr: 'nc',
+    region: 'south',
+    cities: [
+      'Apex',
+      'Asheville',
+      'Burlington',
+      'Cary',
+      'Chapel Hill',
+      'Charlotte',
+      'Concord',
+      'Durham',
+      'Fayetteville',
+      'Gastonia',
+      'Greensboro',
+      'Greenville',
+      'High Point',
+      'Huntersville',
+      'Jacksonville',
+      'Raleigh',
+      'Rocky Mount',
+      'Wilmington',
+      'Winston Salem',
+    ],
+  },
+  {
+    name: 'Oklahoma',
+    abbr: 'ok',
+    region: 'south',
+    cities: ['Broken Arrow', 'Edmond', 'Enid', 'Lawton', 'Moore', 'Norman', 'Oklahoma City', 'Stillwater', 'Tulsa'],
+  },
+  {
+    name: 'South Carolina',
+    abbr: 'sc',
+    region: 'south',
+    cities: ['Charleston', 'Columbia', 'Greenville', 'Mount Pleasant', 'North Charleston', 'Rock Hill', 'Summerville'],
+  },
+  {
+    name: 'Tennessee',
+    abbr: 'tn',
+    region: 'south',
+    cities: [
+      'Bartlett',
+      'Chattanooga',
+      'Clarksville',
+      'Collierville',
+      'Franklin',
+      'Hendersonville',
+      'Jackson',
+      'Johnson City',
+      'Kingsport',
+      'Knoxville',
+      'Memphis',
+      'Murfreesboro',
+      'Nashville',
+      'Smyrna',
+    ],
+  },
+  {
+    name: 'Texas',
+    abbr: 'tx',
+    region: 'south',
+    cities: [
+      'Abilene',
+      'Allen',
+      'Amarillo',
+      'Arlington',
+      'Atascocita',
+      'Austin',
+      'Baytown',
+      'Beaumont',
+      'Brownsville',
+      'Bryan',
+      'Carrollton',
+      'Cedar Park',
+      'College Station',
+      'Conroe',
+      'Corpus Christi',
+      'Dallas',
+      'Denton',
+      'Desoto',
+      'Edinburg',
+      'El Paso',
+      'Euless',
+      'Flower Mound',
+      'Fort Worth',
+      'Frisco',
+      'Galveston',
+      'Garland',
+      'Georgetown',
+      'Grand Prairie',
+      'Grapevine',
+      'Harlingen',
+      'Houston',
+      'Irving',
+      'Killeen',
+      'Laredo',
+      'League City',
+      'Leander',
+      'Lewisville',
+      'Longview',
+      'Lubbock',
+      'Mansfield',
+      'McAllen',
+      'McKinney',
+      'Mesquite',
+      'Midland',
+      'Mission',
+      'Missouri City',
+      'New Braunfels',
+      'North Richland Hills',
+      'Odessa',
+      'Pasadena',
+      'Pearland',
+      'Pflugerville',
+      'Pharr',
+      'Plano',
+      'Port Arthur',
+      'Richardson',
+      'Round Rock',
+      'Rowlett',
+      'San Angelo',
+      'San Antonio',
+      'San Marcos',
+      'Spring',
+      'Sugar Land',
+      'Temple',
+      'The Woodlands',
+      'Tyler',
+      'Victoria',
+      'Waco',
+      'Wichita Falls',
+      'Wylie',
+    ],
+  },
+  {
+    name: 'Virginia',
+    abbr: 'va',
+    region: 'south',
+    cities: [
+      'Arlington',
+      'Alexandria',
+      'Centreville',
+      'Chesapeake',
+      'Dale City',
+      'Hampton',
+      'Harrisonburg',
+      'Leesburg',
+      'Lynchburg',
+      'Newport News',
+      'Norfolk',
+      'Portsmouth',
+      'Reston',
+      'Richmond',
+      'Roanoke',
+      'Suffolk',
+      'Virginia Beach',
+    ],
+  },
+  {
+    name: 'West Virginia',
+    abbr: 'wv',
+    region: 'south',
+    cities: [],
+  },
 
-    return list;
-  }, [metas, activeGroup, searchLower]);
+  // --- WEST ---
+  {
+    name: 'Alaska',
+    abbr: 'ak',
+    region: 'west',
+    cities: ['Anchorage'],
+  },
+  {
+    name: 'Arizona',
+    abbr: 'az',
+    region: 'west',
+    cities: [
+      'Avondale',
+      'Buckeye',
+      'Casa Grande',
+      'Catalina Foothills',
+      'Chandler',
+      'Flagstaff',
+      'Gilbert',
+      'Glendale',
+      'Goodyear',
+      'Lake Havasu City',
+      'Maricopa',
+      'Mesa',
+      'Peoria',
+      'Phoenix',
+      'Queen Creek',
+      'Scottsdale',
+      'Surprise',
+      'Tempe',
+      'Tucson',
+      'Yuma',
+    ],
+  },
+  {
+    name: 'California',
+    abbr: 'ca',
+    region: 'west',
+    cities: [
+      'Alameda',
+      'Aliso Viejo',
+      'Anaheim',
+      'Antioch',
+      'Apple Valley',
+      'Arcadia',
+      'Bakersfield',
+      'Baldwin Park',
+      'Bellflower',
+      'Berkeley',
+      'Brentwood',
+      'Buena Park',
+      'Burbank',
+      'Camarillo',
+      'Carlsbad',
+      'Carmichael',
+      'Carson',
+      'Castro Valley',
+      'Cathedral City',
+      'Chico',
+      'Chino',
+      'Chino Hills',
+      'Chula Vista',
+      'Citrus Heights',
+      'Clovis',
+      'Colton',
+      'Compton',
+      'Concord',
+      'Corona',
+      'Costa Mesa',
+      'Daly City',
+      'Davis',
+      'Delano',
+      'Diamond Bar',
+      'Downey',
+      'Dublin',
+      'East Los Angeles',
+      'Eastvale',
+      'El Cajon',
+      'El Monte',
+      'Elk Grove',
+      'Encinitas',
+      'Escondido',
+      'Fairfield',
+      'Folsom',
+      'Fontana',
+      'Fountain Valley',
+      'Fremont',
+      'Fresno',
+      'Fullerton',
+      'Garden Grove',
+      'Gardena',
+      'Gilroy',
+      'Glendale',
+      'Glendora',
+      'Hacienda Heights',
+      'Hanford',
+      'Hawthorne',
+      'Hayward',
+      'Hemet',
+      'Hesperia',
+      'Huntington Beach',
+      'Huntington Park',
+      'Indio',
+      'Inglewood',
+      'Irvine',
+      'Jurupa Valley',
+      'La Habra',
+      'Laguna Niguel',
+      'Lake Elsinore',
+      'Lakewood',
+      'Lancaster',
+      'Livermore',
+      'Lodi',
+      'Long Beach',
+      'Los Angeles',
+      'Lynwood',
+      'Madera',
+      'Manteca',
+      'Menifee',
+      'Merced',
+      'Mission Viejo',
+      'Modesto',
+      'Montebello',
+      'Moreno Valley',
+      'Mountain View',
+      'Murrieta',
+      'Napa',
+      'Newport Beach',
+      'Norwalk',
+      'Novato',
+      'Oakland',
+      'Oceanside',
+      'Ontario',
+      'Orange',
+      'Oxnard',
+      'Palm Desert',
+      'Palmdale',
+      'Palo Alto',
+      'Paramount',
+      'Pasadena',
+      'Perris',
+      'Petaluma',
+      'Pico Rivera',
+      'Pittsburg',
+      'Placentia',
+      'Pleasanton',
+      'Pomona',
+      'Porterville',
+      'Rancho Cordova',
+      'Rancho Cucamonga',
+      'Redding',
+      'Redlands',
+      'Redondo Beach',
+      'Redwood City',
+      'Rialto',
+      'Richmond',
+      'Riverside',
+      'Rocklin',
+      'Roseville',
+      'Sacramento',
+      'Salinas',
+      'San Bernardino',
+      'San Buenaventura Ventura',
+      'San Clemente',
+      'San Diego',
+      'San Francisco',
+      'San Jose',
+      'San Leandro',
+      'San Marcos',
+      'San Mateo',
+      'San Rafael',
+      'San Ramon',
+      'Santa Ana',
+      'Santa Barbara',
+      'Santa Clara',
+      'Santa Clarita',
+      'Santa Cruz',
+      'Santa Maria',
+      'Santa Monica',
+      'Santa Rosa',
+      'Simi Valley',
+      'South Gate',
+      'South San Francisco',
+      'South Whittier',
+      'Stockton',
+      'Sunnyvale',
+      'Temecula',
+      'Thousand Oaks',
+      'Torrance',
+      'Tracy',
+      'Tulare',
+      'Turlock',
+      'Tustin',
+      'Union City',
+      'Upland',
+      'Vacaville',
+      'Vallejo',
+      'Victorville',
+      'Visalia',
+      'Vista',
+      'Walnut Creek',
+      'Watsonville',
+      'West Covina',
+      'West Sacramento',
+      'Whittier',
+      'Woodland',
+      'Yorba Linda',
+      'Yuba City',
+      'Yucaipa',
+    ],
+  },
+  {
+    name: 'Colorado',
+    abbr: 'co',
+    region: 'west',
+    cities: [
+      'Arvada',
+      'Aurora',
+      'Boulder',
+      'Broomfield',
+      'Castle Rock',
+      'Centennial',
+      'Colorado Springs',
+      'Commerce City',
+      'Denver',
+      'Fort Collins',
+      'Grand Junction',
+      'Greeley',
+      'Lakewood',
+      'Longmont',
+      'Loveland',
+      'Parker',
+      'Pueblo',
+      'Thornton',
+      'Westminster',
+    ],
+  },
+  {
+    name: 'Hawaii',
+    abbr: 'hi',
+    region: 'west',
+    cities: ['Honolulu', 'Maui', 'Oahu'],
+  },
+  {
+    name: 'Idaho',
+    abbr: 'id',
+    region: 'west',
+    cities: ['Boise', 'Caldwell', 'Coeur dAlene', 'Idaho Falls', 'Meridian', 'Nampa', 'Pocatello'],
+  },
+  {
+    name: 'Montana',
+    abbr: 'mt',
+    region: 'west',
+    cities: ['Billings', 'Great Falls', 'Missoula'],
+  },
+  {
+    name: 'Nevada',
+    abbr: 'nv',
+    region: 'west',
+    cities: ['Carson City', 'Henderson', 'Las Vegas', 'North Las Vegas', 'Reno'],
+  },
+  {
+    name: 'New Mexico',
+    abbr: 'nm',
+    region: 'west',
+    cities: ['Albuquerque', 'Las Cruces', 'Rio Rancho', 'Santa Fe'],
+  },
+  {
+    name: 'Oregon',
+    abbr: 'or',
+    region: 'west',
+    cities: ['Albany', 'Beaverton', 'Bend', 'Corvallis', 'Eugene', 'Gresham', 'Hillsboro', 'Medford', 'Portland', 'Salem', 'Springfield', 'Tigard'],
+  },
+  {
+    name: 'Utah',
+    abbr: 'ut',
+    region: 'west',
+    cities: ['Layton', 'Lehi', 'Logan', 'Ogden', 'Orem', 'Provo', 'Salt Lake City', 'Sandy', 'South Jordan', 'St George', 'Taylorsville', 'West Jordan', 'West Valley City'],
+  },
+  {
+    name: 'Washington',
+    abbr: 'wa',
+    region: 'west',
+    cities: [
+      'Auburn',
+      'Bellevue',
+      'Bellingham',
+      'Everett',
+      'Federal Way',
+      'Kennewick',
+      'Kent',
+      'Kirkland',
+      'Lacey',
+      'Lakewood',
+      'Marysville',
+      'Olympia',
+      'Pasco',
+      'Redmond',
+      'Renton',
+      'Richland',
+      'Sammamish',
+      'Seattle',
+      'Spokane',
+      'Spokane Valley',
+      'Tacoma',
+      'Vancouver',
+      'Yakima',
+    ],
+  },
+  {
+    name: 'Wyoming',
+    abbr: 'wy',
+    region: 'west',
+    cities: ['Casper', 'Cheyenne'],
+  },
 
-  const totalCount = metas.length;
-  const visibleCount = filteredMetas.length;
+  // --- NORTHEAST ---
+  {
+    name: 'Connecticut',
+    abbr: 'ct',
+    region: 'northeast',
+    cities: ['Bridgeport', 'Bristol', 'Danbury', 'Hartford', 'Meriden', 'Milford', 'New Britain', 'New Haven', 'Norwalk', 'Stamford', 'Waterbury', 'West Haven'],
+  },
+  {
+    name: 'Maine',
+    abbr: 'me',
+    region: 'northeast',
+    cities: ['Portland'],
+  },
+  {
+    name: 'Massachusetts',
+    abbr: 'ma',
+    region: 'northeast',
+    cities: [
+      'Boston',
+      'Brockton',
+      'Cambridge',
+      'Chicopee',
+      'Fall River',
+      'Framingham',
+      'Haverhill',
+      'Lawrence',
+      'Lowell',
+      'Lynn',
+      'Medford',
+      'Methuen',
+      'New Bedford',
+      'Newton',
+      'Peabody',
+      'Plymouth',
+      'Quincy',
+      'Revere',
+      'Somerville',
+      'Springfield',
+      'Taunton',
+      'Waltham',
+      'Weymouth',
+      'Worcester',
+    ],
+  },
+  {
+    name: 'New Hampshire',
+    abbr: 'nh',
+    region: 'northeast',
+    cities: ['Manchester', 'Nashua'],
+  },
+  {
+    name: 'New Jersey',
+    abbr: 'nj',
+    region: 'northeast',
+    cities: [
+      'Bayonne',
+      'Brick',
+      'Camden',
+      'Cherry Hill',
+      'Clifton',
+      'East Orange',
+      'Edison',
+      'Elizabeth',
+      'Gloucester',
+      'Hoboken',
+      'Howell',
+      'Irvington',
+      'Jackson',
+      'Jersey City',
+      'Lakewood',
+      'Middletown',
+      'New Brunswick',
+      'Newark',
+      'North Bergen',
+      'Old Bridge',
+      'Parsippany-Troy Hills',
+      'Passaic',
+      'Paterson',
+      'Perth Amboy',
+      'Piscataway',
+      'Plainfield',
+      'Toms River',
+      'Trenton',
+      'Union City',
+      'Vineland',
+      'Wayne',
+      'West New York',
+      'Woodbridge',
+    ],
+  },
+  {
+    name: 'New York',
+    abbr: 'ny',
+    region: 'northeast',
+    cities: [
+      'Albany',
+      'Amherst',
+      'Babylon',
+      'Brentwood',
+      'Brookhaven',
+      'Brooklyn',
+      'Buffalo',
+      'Cheektowaga',
+      'Clarkstown',
+      'Greece',
+      'Hempstead',
+      'Huntington',
+      'Islip',
+      'Levittown',
+      'Long Island NY',
+      'Manhattan',
+      'Mount Vernon',
+      'New Rochelle',
+      'New York City',
+      'Oyster Bay',
+      'Queens',
+      'Rochester',
+      'Schenectady',
+      'Smithtown',
+      'Southampton',
+      'Staten Island',
+      'Syracuse',
+      'The Bronx',
+      'Utica',
+      'White Plains',
+      'Yonkers',
+    ],
+  },
+  {
+    name: 'Pennsylvania',
+    abbr: 'pa',
+    region: 'northeast',
+    cities: ['Abington', 'Allentown', 'Armstrong', 'Bensalem', 'Bethlehem', 'Erie', 'Lancaster', 'Philadelphia', 'Pittsburgh', 'Reading', 'Scranton'],
+  },
+  {
+    name: 'Rhode Island',
+    abbr: 'ri',
+    region: 'northeast',
+    cities: ['Cranston', 'Pawtucket', 'Providence', 'Warwick'],
+  },
+  {
+    name: 'Vermont',
+    abbr: 'vt',
+    region: 'northeast',
+    cities: [],
+  },
 
-  // Sub-grouped collections
-  const locationRegions = useMemo(
-    () => buildLocationRegions(filteredMetas.filter((m) => m.topGroup === "locations")),
-    [filteredMetas]
-  );
+  // --- MIDWEST ---
+  {
+    name: 'Illinois',
+    abbr: 'il',
+    region: 'midwest',
+    cities: [
+      'Arlington Heights',
+      'Aurora',
+      'Berwyn',
+      'Bloomington',
+      'Bolingbrook',
+      'Capital',
+      'Champaign',
+      'Chicago',
+      'Cicero',
+      'Decatur',
+      'Des Plaines',
+      'Elgin',
+      'Evanston',
+      'Hoffman Estates',
+      'Joliet',
+      'Leyden',
+      'Mount Prospect',
+      'Naperville',
+      'New Trier',
+      'Oak Lawn',
+      'Orland',
+      'Orland Park',
+      'Palatine',
+      'Palos',
+      'Peoria',
+      'Proviso',
+      'Rockford',
+      'Schaumburg',
+      'Skokie',
+      'Springfield',
+      'St. Clair',
+      'Tinley Park',
+      'Waukegan',
+      'Wheaton',
+    ],
+  },
+  {
+    name: 'Indiana',
+    abbr: 'in',
+    region: 'midwest',
+    cities: [
+      'Anderson',
+      'Bloomington',
+      'Calumet',
+      'Carmel',
+      'Concord',
+      'Delaware',
+      'Elkhart',
+      'Evansville',
+      'Fall Creek',
+      'Fishers',
+      'Fort Wayne',
+      'Gary',
+      'Greenwood',
+      'Hammond',
+      'Indianapolis',
+      'Knight',
+      'Kokomo',
+      'Lafayette',
+      'Muncie',
+      'Noblesville',
+      'North',
+      'Penn',
+      'South Bend',
+      'St. Joseph',
+      'Terre Haute',
+      'Wayne',
+    ],
+  },
+  {
+    name: 'Iowa',
+    abbr: 'ia',
+    region: 'midwest',
+    cities: ['Ames', 'Ankeny', 'Cedar Rapids', 'Council Bluffs', 'Davenport', 'Des Moines', 'Dubuque', 'Iowa City', 'Sioux City', 'Waterloo', 'West Des Moines'],
+  },
+  {
+    name: 'Kansas',
+    abbr: 'ks',
+    region: 'midwest',
+    cities: ['Kansas City', 'Lawrence', 'Lenexa', 'Manhattan', 'Olathe', 'Overland Park', 'Shawnee', 'Topeka', 'Wichita'],
+  },
+  {
+    name: 'Michigan',
+    abbr: 'mi',
+    region: 'midwest',
+    cities: [
+      'Ann Arbor',
+      'Battle Creek',
+      'Canton',
+      'Dearborn',
+      'Dearborn Heights',
+      'Detroit',
+      'Farmington Hills',
+      'Grand Rapids',
+      'Kentwood',
+      'Lansing',
+      'Livonia',
+      'Macomb',
+      'Novi',
+      'Pontiac',
+      'Rochester Hills',
+      'Royal Oak',
+      'Southfield',
+      'St. Clair Shores',
+      'Sterling Heights',
+      'Taylor',
+      'Troy',
+      'Warren',
+      'Waterford',
+      'West Bloomfield',
+      'Westland',
+    ],
+  },
+  {
+    name: 'Minnesota',
+    abbr: 'mn',
+    region: 'midwest',
+    cities: [
+      'Apple Valley',
+      'Blaine',
+      'Bloomington',
+      'Brooklyn Park',
+      'Burnsville',
+      'Coon Rapids',
+      'Duluth',
+      'Eagan',
+      'Eden Prairie',
+      'Edina',
+      'Lakeville',
+      'Maple Grove',
+      'Minneapolis',
+      'Minnetonka',
+      'Plymouth',
+      'Rochester',
+      'St. Cloud',
+      'St. Paul',
+      'Woodbury',
+    ],
+  },
+  {
+    name: 'Missouri',
+    abbr: 'mo',
+    region: 'midwest',
+    cities: ['Blue Springs', 'Columbia', 'Florissant', 'Independence', 'Joplin', 'Kansas City', 'Lees Summit', 'O Fallon', 'Springfield', 'St Louis', 'St. Charles', 'St. Joseph', 'St. Peters'],
+  },
+  {
+    name: 'Nebraska',
+    abbr: 'ne',
+    region: 'midwest',
+    cities: ['Bellevue', 'Grand Island', 'Lincoln', 'Omaha'],
+  },
+  {
+    name: 'North Dakota',
+    abbr: 'nd',
+    region: 'midwest',
+    cities: ['Bismarck', 'Fargo', 'Grand Forks'],
+  },
+  {
+    name: 'Ohio',
+    abbr: 'oh',
+    region: 'midwest',
+    cities: [
+      'Akron',
+      'Canton',
+      'Cincinnati',
+      'Cleveland',
+      'Columbus',
+      'Dayton',
+      'Elyria',
+      'Hamilton',
+      'Lake',
+      'Lakewood',
+      'Lawrence',
+      'Lorain',
+      'Parma',
+      'Springfield',
+      'Toledo',
+      'West Chester',
+      'Youngstown',
+    ],
+  },
+  {
+    name: 'South Dakota',
+    abbr: 'sd',
+    region: 'midwest',
+    cities: ['Rapid City', 'Sioux Falls'],
+  },
+  {
+    name: 'Wisconsin',
+    abbr: 'wi',
+    region: 'midwest',
+    cities: ['Appleton', 'Eau Claire', 'Green Bay', 'Janesville', 'Kenosha', 'La Crosse', 'Madison', 'Milwaukee', 'Oshkosh', 'Racine', 'Waukesha', 'West Allis'],
+  },
+];
 
-  const vehicles = filteredMetas.filter((m) => m.topGroup === "vehicles");
-  const events = filteredMetas.filter((m) => m.topGroup === "events");
-  const amenities = filteredMetas.filter((m) => m.topGroup === "amenities");
-  const accessibility = filteredMetas.filter((m) => m.topGroup === "accessibility");
-  const experiences = filteredMetas.filter((m) => m.topGroup === "experiences");
-  const policies = filteredMetas.filter((m) => m.topGroup === "policies");
-  const booking = filteredMetas.filter((m) => m.topGroup === "booking");
+// region accents
+const REGION_ACCENT: Record<RegionId, Accent> = {
+  northeast: 'purple',
+  midwest: 'blue',
+  south: 'green',
+  west: 'amber',
+};
 
-  const toggleBlock = (key: string) => {
-    setOpenBlocks((prev) => ({ ...prev, [key]: !prev[key] }));
+// ---------- Build LOCATION groups from state data ----------
+
+function buildLocationGroups(): CategoryGroup[] {
+  const regionBuckets: Record<RegionId, CategorySection[]> = {
+    northeast: [],
+    midwest: [],
+    south: [],
+    west: [],
   };
 
+  for (const state of LOCATION_STATES) {
+    const accent = REGION_ACCENT[state.region];
+    const sectionId = slugify(state.name);
+
+    const uniqueCities = Array.from(new Set(state.cities));
+
+    const items: CategoryItem[] = [];
+
+    // State-level item
+    items.push({
+      slug: slugify(state.name),
+      label: state.name,
+      description: `All polls for ${state.name}`,
+    });
+
+    // City items
+    uniqueCities
+      .slice()
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((city) => {
+        items.push({
+          slug: `${slugify(city)}-${state.abbr}`,
+          label: city,
+          description: `${city}, ${state.name} polls`,
+        });
+      });
+
+    regionBuckets[state.region].push({
+      id: sectionId,
+      label: state.name,
+      accent,
+      items,
+    });
+  }
+
+  // sort states within each region
+  (Object.keys(regionBuckets) as RegionId[]).forEach((region) => {
+    regionBuckets[region].sort((a, b) => a.label.localeCompare(b.label));
+  });
+
+  const groups: CategoryGroup[] = [
+    {
+      id: 'locations-northeast',
+      label: 'Northeast Locations',
+      icon: MapPin,
+      sections: regionBuckets.northeast,
+    },
+    {
+      id: 'locations-midwest',
+      label: 'Midwest Locations',
+      icon: MapPin,
+      sections: regionBuckets.midwest,
+    },
+    {
+      id: 'locations-south',
+      label: 'South Locations',
+      icon: MapPin,
+      sections: regionBuckets.south,
+    },
+    {
+      id: 'locations-west',
+      label: 'West Locations',
+      icon: MapPin,
+      sections: regionBuckets.west,
+    },
+  ].filter((g) => g.sections.length > 0);
+
+  return groups;
+}
+
+// ---------- OTHER CATEGORY GROUPS (vehicles, events, etc.) ----------
+
+const FLEET_GROUP: CategoryGroup = {
+  id: 'fleet',
+  label: 'Vehicles & Fleet',
+  icon: Bus,
+  sections: [
+    {
+      id: 'buses-shuttles',
+      label: 'Buses & Shuttles',
+      accent: 'blue',
+      items: [
+        { slug: 'coach-bus', label: 'Coach Bus' },
+        { slug: 'minibus', label: 'Minibus' },
+        { slug: 'party-bus', label: 'Party Bus' },
+        { slug: 'party-van', label: 'Party Van' },
+        { slug: 'shuttle-bus', label: 'Shuttle Bus' },
+      ],
+    },
+    {
+      id: 'limousines',
+      label: 'Limousines',
+      accent: 'purple',
+      items: [
+        { slug: 'stretch-limo', label: 'Stretch Limo' },
+        { slug: 'suv-limo', label: 'SUV Limo' },
+      ],
+    },
+    {
+      id: 'sedans-suvs',
+      label: 'Sedans & SUVs',
+      accent: 'green',
+      items: [
+        { slug: 'black-car-sedan', label: 'Black Car Sedan' },
+        { slug: 'luxury-suv', label: 'Luxury SUV' },
+        { slug: 'sedan', label: 'Sedan' },
+      ],
+    },
+    {
+      id: 'specialty-vehicles',
+      label: 'Specialty Vehicles',
+      accent: 'amber',
+      items: [
+        { slug: 'classic-car', label: 'Classic Car' },
+        { slug: 'executive-sprinter', label: 'Executive Sprinter' },
+        { slug: 'trolley', label: 'Trolley' },
+      ],
+    },
+  ],
+};
+
+const EVENTS_GROUP: CategoryGroup = {
+  id: 'events',
+  label: 'Events & Occasions',
+  icon: CalendarRange,
+  sections: [
+    {
+      id: 'parties-celebrations',
+      label: 'Parties & Celebrations',
+      accent: 'purple',
+      items: [
+        { slug: 'after-parties', label: 'After Parties' },
+        { slug: 'anniversary-parties', label: 'Anniversary Parties' },
+        { slug: 'bachelor-parties', label: 'Bachelor Parties' },
+        { slug: 'bachelorette-parties', label: 'Bachelorette Parties' },
+        { slug: 'bar-bat-mitzvahs', label: 'Bar/Bat Mitzvahs' },
+        { slug: 'birthday-parties', label: 'Birthday Parties' },
+        { slug: 'corporate-parties', label: 'Corporate Parties' },
+        { slug: 'girls-nights-out', label: 'Girls Nights Out' },
+        { slug: 'guys-nights-out', label: 'Guys Nights Out' },
+        { slug: 'kids-parties', label: 'Kids Parties' },
+        { slug: 'quinceanera-parties', label: 'Quinceañera Parties' },
+        { slug: 'retirement-parties', label: 'Retirement Parties' },
+        { slug: 'sweet-sixteen', label: 'Sweet Sixteen' },
+      ],
+    },
+    {
+      id: 'school-youth',
+      label: 'School & Youth',
+      accent: 'blue',
+      items: [
+        { slug: 'graduation', label: 'Graduation' },
+        { slug: 'homecoming', label: 'Homecoming' },
+        { slug: 'prom', label: 'Prom' },
+        { slug: 'school-field-trips', label: 'School Field Trips' },
+        { slug: 'winter-formals', label: 'Winter Formals' },
+      ],
+    },
+    {
+      id: 'tours-outings',
+      label: 'Tours & Outings',
+      accent: 'green',
+      items: [
+        { slug: 'bar-crawls', label: 'Bar Crawls' },
+        { slug: 'brewery-tours', label: 'Brewery Tours' },
+        { slug: 'casino-tours', label: 'Casino Tours' },
+        { slug: 'church-outings', label: 'Church Outings' },
+        { slug: 'concerts', label: 'Concerts' },
+        { slug: 'dinners-out', label: 'Dinners Out' },
+        { slug: 'festivals', label: 'Festivals' },
+        { slug: 'haunted-houses', label: 'Haunted Houses' },
+        { slug: 'holiday-lights-tours', label: 'Holiday Lights Tours' },
+        { slug: 'parades', label: 'Parades' },
+        { slug: 'sporting-events', label: 'Sporting Events' },
+        { slug: 'wine-tours', label: 'Wine Tours' },
+      ],
+    },
+    {
+      id: 'corporate-professional',
+      label: 'Corporate & Professional',
+      accent: 'amber',
+      items: [
+        { slug: 'corporate-services', label: 'Corporate Services' },
+        { slug: 'employee-shuttles', label: 'Employee Shuttles' },
+        { slug: 'rehearsal-dinners', label: 'Rehearsal Dinners' },
+        { slug: 'team-building', label: 'Team Building' },
+      ],
+    },
+    {
+      id: 'weddings-special',
+      label: 'Weddings & Special Days',
+      accent: 'purple',
+      items: [{ slug: 'weddings', label: 'Weddings' }],
+    },
+    {
+      id: 'holidays-seasonal',
+      label: 'Holidays & Seasonal',
+      accent: 'green',
+      items: [
+        { slug: 'christmas', label: 'Christmas' },
+        { slug: 'new-years-eve', label: 'New Years Eve' },
+        { slug: 'thanksgiving', label: 'Thanksgiving' },
+      ],
+    },
+  ],
+};
+
+const AMENITIES_GROUP: CategoryGroup = {
+  id: 'amenities',
+  label: 'Amenities & Features',
+  icon: Sparkles,
+  sections: [
+    {
+      id: 'seating-comfort',
+      label: 'Seating & Comfort',
+      accent: 'green',
+      items: [
+        { slug: 'armrests', label: 'Armrests' },
+        { slug: 'cushioned-seats', label: 'Cushioned Seats' },
+        { slug: 'footrests', label: 'Footrests' },
+        { slug: 'headrests', label: 'Headrests' },
+        { slug: 'heated-seats', label: 'Heated Seats' },
+        { slug: 'leather-seating', label: 'Leather Seating' },
+        { slug: 'leg-rests', label: 'Leg Rests' },
+        { slug: 'massage-seats', label: 'Massage Seats' },
+        { slug: 'plush-reclining-seats', label: 'Plush Reclining Seats' },
+        { slug: 'reclining-seats', label: 'Reclining Seats' },
+        { slug: 'seating', label: 'General Seating' },
+        { slug: 'ventilated-seats', label: 'Ventilated Seats' },
+        { slug: 'wrap-around-seating', label: 'Wrap-Around Seating' },
+      ],
+    },
+    {
+      id: 'entertainment-media',
+      label: 'Entertainment & Media',
+      accent: 'purple',
+      items: [
+        { slug: 'audio', label: 'Audio' },
+        { slug: 'bluetooth-connectivity', label: 'Bluetooth Connectivity' },
+        { slug: 'bluetooth-sound', label: 'Bluetooth Sound' },
+        { slug: 'built-in-screens', label: 'Built-In Screens' },
+        { slug: 'dance-pole', label: 'Dance Pole' },
+        { slug: 'dropdown-screens', label: 'Dropdown Screens' },
+        { slug: 'dvd-player', label: 'DVD Player' },
+        { slug: 'entertainment', label: 'General Entertainment' },
+        { slug: 'flat-screen-tvs', label: 'Flat-Screen TVs' },
+        { slug: 'karaoke-system', label: 'Karaoke System' },
+        { slug: 'led-light-show', label: 'LED Light Show' },
+        { slug: 'laser-lights', label: 'Laser Lights' },
+        { slug: 'mood-lighting', label: 'Mood Lighting' },
+        { slug: 'neon-accents', label: 'Neon Accents' },
+        { slug: 'satellite-radio', label: 'Satellite Radio' },
+        { slug: 'strobe-lights', label: 'Strobe Lights' },
+        { slug: 'surround-sound-system', label: 'Surround Sound System' },
+        { slug: 'surround-sound-speakers', label: 'Surround Sound Speakers' },
+        { slug: 'tv-screens', label: 'TV Screens' },
+        { slug: 'video-game-console', label: 'Video Game Console' },
+      ],
+    },
+    {
+      id: 'bar-refreshments',
+      label: 'Bar & Refreshments',
+      accent: 'amber',
+      items: [
+        { slug: 'bar-area', label: 'Bar Area' },
+        { slug: 'bottle-holders', label: 'Bottle Holders' },
+        { slug: 'champagne-glasses', label: 'Champagne Glasses' },
+        { slug: 'coolers', label: 'Coolers' },
+        { slug: 'coolers-ice', label: 'Coolers & Ice' },
+        { slug: 'ice-buckets', label: 'Ice Buckets' },
+        { slug: 'mini-bar', label: 'Mini Bar' },
+        { slug: 'refrigerator', label: 'Refrigerator' },
+      ],
+    },
+    {
+      id: 'storage-convenience',
+      label: 'Storage & Convenience',
+      accent: 'blue',
+      items: [
+        { slug: 'coat-hooks', label: 'Coat Hooks' },
+        { slug: 'cup-holders', label: 'Cup Holders' },
+        { slug: 'luggage-storage', label: 'Luggage Storage' },
+        { slug: 'overhead-bins', label: 'Overhead Bins' },
+        { slug: 'overhead-compartments', label: 'Overhead Compartments' },
+        { slug: 'overhead-storage', label: 'Overhead Storage' },
+        { slug: 'tray-tables', label: 'Tray Tables' },
+        { slug: 'under-bus-luggage-bays', label: 'Under-Bus Luggage Bays' },
+        { slug: 'undercarriage-luggage-space', label: 'Undercarriage Luggage Space' },
+      ],
+    },
+    {
+      id: 'climate-environment',
+      label: 'Climate & Environment',
+      accent: 'green',
+      items: [
+        { slug: 'air-conditioning', label: 'Air Conditioning' },
+        { slug: 'air-purifier', label: 'Air Purifier' },
+        { slug: 'climate-control', label: 'Climate Control' },
+        { slug: 'heating', label: 'Heating' },
+        { slug: 'individual-airflow-controls', label: 'Individual Airflow Controls' },
+        { slug: 'individual-overhead-vents', label: 'Individual Overhead Vents' },
+      ],
+    },
+    {
+      id: 'power-connectivity',
+      label: 'Power & Connectivity',
+      accent: 'blue',
+      items: [
+        { slug: 'power-charging', label: 'Power & Charging' },
+        { slug: 'power-outlets', label: 'Power Outlets' },
+        { slug: 'usb-charging', label: 'USB Charging' },
+        { slug: 'usb-ports', label: 'USB Ports' },
+        { slug: 'wi-fi', label: 'Wi-Fi' },
+        { slug: 'wifi-connectivity', label: 'WiFi Connectivity' },
+        { slug: 'wifi-hotspot', label: 'WiFi Hotspot' },
+      ],
+    },
+    {
+      id: 'restroom-hygiene',
+      label: 'Restroom & Hygiene',
+      accent: 'amber',
+      items: [
+        { slug: 'compact-bathroom', label: 'Compact Bathroom' },
+        { slug: 'hand-sanitizer-dispenser', label: 'Hand Sanitizer Dispenser' },
+        { slug: 'hand-soap-in-restroom', label: 'Hand Soap in Restroom' },
+        { slug: 'onboard-restrooms', label: 'Onboard Restrooms' },
+        { slug: 'paper-towels-in-restroom', label: 'Paper Towels in Restroom' },
+        { slug: 'restroom', label: 'Restroom' },
+        { slug: 'trash-receptacle', label: 'Trash Receptacle' },
+        { slug: 'uv-sanitizer', label: 'UV Sanitizer' },
+        { slug: 'wastebasket', label: 'Wastebasket' },
+        { slug: 'wipes-container', label: 'Wipes Container' },
+      ],
+    },
+    {
+      id: 'safety-emergency',
+      label: 'Safety & Emergency',
+      accent: 'red' as Accent, // tailwind-wise it's fine; styling will still work
+      items: [
+        { slug: 'emergency-exits', label: 'Emergency Exits' },
+        { slug: 'emergency-kit', label: 'Emergency Kit' },
+        { slug: 'first-aid-kits', label: 'First Aid Kits' },
+        { slug: 'first-aid-supplies', label: 'First Aid Supplies' },
+        { slug: 'seat-belts', label: 'Seat Belts' },
+        { slug: 'tire-pressure-monitoring', label: 'Tire Pressure Monitoring' },
+        { slug: 'vehicle-tracking', label: 'Vehicle Tracking' },
+      ],
+    },
+    {
+      id: 'exterior-design',
+      label: 'Exterior & Design',
+      accent: 'purple',
+      items: [
+        { slug: 'alloy-wheels', label: 'Alloy Wheels' },
+        { slug: 'backup-camera', label: 'Backup Camera' },
+        { slug: 'chrome-accents', label: 'Chrome Accents' },
+        { slug: 'custom-interiors', label: 'Custom Interiors' },
+        { slug: 'custom-paint-job', label: 'Custom Paint Job' },
+        { slug: 'extended-wheelbase', label: 'Extended Wheelbase' },
+        { slug: 'fiber-optic-roof', label: 'Fiber Optic Roof' },
+        { slug: 'parking-sensors', label: 'Parking Sensors' },
+        { slug: 'plush-carpeting', label: 'Plush Carpeting' },
+        { slug: 'privacy-shades', label: 'Privacy Shades' },
+        { slug: 'starlight-ceiling', label: 'Starlight Ceiling' },
+        { slug: 'stretch-design', label: 'Stretch Design' },
+        { slug: 'sunroof', label: 'Sunroof' },
+        { slug: 'tinted-windows', label: 'Tinted Windows' },
+      ],
+    },
+    {
+      id: 'other-amenities',
+      label: 'Other Amenities',
+      accent: 'green',
+      items: [
+        { slug: 'bottle-openers', label: 'Bottle Openers' },
+        { slug: 'fog-machine', label: 'Fog Machine' },
+        { slug: 'gps-navigation', label: 'GPS Navigation' },
+        { slug: 'intercom-system', label: 'Intercom System' },
+        { slug: 'mint-dispenser', label: 'Mint Dispenser' },
+        { slug: 'photo-booth-setup', label: 'Photo Booth Setup' },
+        { slug: 'privacy-divider', label: 'Privacy Divider' },
+        { slug: 'reading-lights', label: 'Reading Lights' },
+        { slug: 'smoke-machine', label: 'Smoke Machine' },
+        { slug: 'tissue-box', label: 'Tissue Box' },
+        { slug: 'touchscreen-controls', label: 'Touchscreen Controls' },
+        { slug: 'trash-receptacles', label: 'Trash Receptacles' },
+        { slug: 'waste-receptacle', label: 'Waste Receptacle' },
+      ],
+    },
+  ],
+};
+
+// Accessibility, experiences, booking/planning, etc.
+const ACCESSIBILITY_GROUP: CategoryGroup = {
+  id: 'accessibility',
+  label: 'Accessibility & Handicap',
+  icon: ShieldCheck,
+  sections: [
+    {
+      id: 'accessibility-core',
+      label: 'Accessibility',
+      accent: 'blue',
+      items: [
+        { slug: 'accessibility-experience', label: 'Accessibility Experience' },
+        { slug: 'booster-seats', label: 'Booster Seats' },
+        { slug: 'child-seats', label: 'Child Seats' },
+        { slug: 'handicap-seating', label: 'Handicap Seating' },
+        { slug: 'pet-friendly-options', label: 'Pet-Friendly Options' },
+        { slug: 'ramp-access', label: 'Ramp Access' },
+        { slug: 'seatbelts-child-seats', label: 'Seatbelts & Child Seats' },
+        { slug: 'wheelchair', label: 'Wheelchair' },
+        { slug: 'wheelchair-lift', label: 'Wheelchair Lift' },
+      ],
+    },
+  ],
+};
+
+const EXPERIENCE_GROUP: CategoryGroup = {
+  id: 'experiences',
+  label: 'Customer Experiences',
+  icon: HeartHandshake,
+  sections: [
+    {
+      id: 'positive-experiences',
+      label: 'Positive Experiences',
+      accent: 'green',
+      items: [
+        { slug: 'best-driver-moments', label: 'Best Driver Moments' },
+        { slug: 'overall-satisfaction', label: 'Overall Satisfaction' },
+      ],
+    },
+    {
+      id: 'negative-experiences',
+      label: 'Negative Experiences & Issues',
+      accent: 'amber',
+      items: [
+        { slug: 'damage-cleanup-stories', label: 'Damage/Cleanup Stories' },
+        { slug: 'double-booked-snafus', label: 'Double-Booked Snafus' },
+        { slug: 'equipment-failures', label: 'Equipment Failures' },
+        { slug: 'found-items-stories', label: 'Found Items Stories' },
+        { slug: 'issue-resolution', label: 'Issue Resolution' },
+        { slug: 'nightmare-traffic', label: 'Nightmare Traffic' },
+        { slug: 'overcapacity-problems', label: 'Overcapacity Problems' },
+        { slug: 'payment-issues', label: 'Payment Issues' },
+        { slug: 'weather-disaster-stories', label: 'Weather Disaster Stories' },
+        { slug: 'worst-pickup-experience', label: 'Worst Pickup Experience' },
+        { slug: 'wrong-destination', label: 'Wrong Destination' },
+      ],
+    },
+    {
+      id: 'comfort-safety',
+      label: 'Comfort & Safety',
+      accent: 'blue',
+      items: [
+        { slug: 'comfort-cleanliness', label: 'Comfort & Cleanliness' },
+        { slug: 'driver-professionalism', label: 'Driver Professionalism' },
+        { slug: 'reliability-punctuality', label: 'Reliability & Punctuality' },
+      ],
+    },
+    {
+      id: 'other-experiences',
+      label: 'Other Experiences & Logistics',
+      accent: 'purple',
+      items: [
+        { slug: 'airport-procedures', label: 'Airport Procedures' },
+        { slug: 'cross-border-travel', label: 'Cross-State/Border Travel' },
+        { slug: 'event-staging-parking', label: 'Event Staging & Parking' },
+        { slug: 'luggage-handling', label: 'Luggage Handling' },
+        { slug: 'music-preferences', label: 'Music Preferences' },
+        { slug: 'operations-logistics', label: 'Operations & Logistics' },
+        { slug: 'pickup-dropoff-zones', label: 'Pickup/Dropoff Zones' },
+        { slug: 'seasonality-trends', label: 'Seasonality Trends' },
+      ],
+    },
+  ],
+};
+
+const POLICY_GROUP: CategoryGroup = {
+  id: 'policies',
+  label: 'Policies & Procedures',
+  icon: ClipboardList,
+  sections: [
+    {
+      id: 'core-policies',
+      label: 'Policies',
+      accent: 'amber',
+      items: [
+        { slug: 'alcohol-policy', label: 'Alcohol Policy' },
+        { slug: 'cancellations', label: 'Cancellations' },
+        { slug: 'deposits', label: 'Deposits' },
+        { slug: 'driver-hours-regs', label: 'Driver Hours & Regulations' },
+        { slug: 'emergency-procedures', label: 'Emergency Procedures' },
+        { slug: 'gratuity', label: 'Gratuity/Tips' },
+        { slug: 'incident-reporting', label: 'Incident Reporting' },
+        { slug: 'lost-and-found', label: 'Lost & Found' },
+        { slug: 'minimum-hours', label: 'Minimum Hours' },
+        { slug: 'overtime', label: 'Overtime' },
+        { slug: 'smoking-policy', label: 'Smoking Policy' },
+      ],
+    },
+  ],
+};
+
+const BOOKING_GROUP: CategoryGroup = {
+  id: 'booking-planning',
+  label: 'Booking & Planning',
+  icon: Info,
+  sections: [
+    {
+      id: 'booking-planning-core',
+      label: 'Booking & Planning',
+      accent: 'blue',
+      items: [
+        { slug: 'booking-experience', label: 'Booking Experience' },
+        { slug: 'booking-lead-times', label: 'Booking Lead Times' },
+        { slug: 'communication-preferences', label: 'Communication Preferences' },
+        { slug: 'corporate-discounts', label: 'Corporate Discounts' },
+        { slug: 'multi-stop-itineraries', label: 'Multi-Stop Itineraries' },
+        { slug: 'peak-days-times', label: 'Peak Days & Times' },
+        { slug: 'payment-methods', label: 'Payment Methods' },
+        { slug: 'pickup-window', label: 'Pickup Window' },
+        { slug: 'route-planning', label: 'Route Planning' },
+        { slug: 'traffic-weather-mitigation', label: 'Traffic & Weather Mitigation' },
+        { slug: 'travel-distance', label: 'Travel Distance' },
+        { slug: 'vip-protocol', label: 'VIP Protocol' },
+        { slug: 'wait-time-windows', label: 'Wait-Time Windows' },
+        { slug: 'pricing', label: 'Pricing' }, // moved here from "Other"
+      ],
+    },
+  ],
+};
+
+const STATS_GROUP: CategoryGroup = {
+  id: 'stats-facts',
+  label: 'Stats & Myths',
+  icon: Info,
+  sections: [
+    {
+      id: 'stats-facts-core',
+      label: 'Statistics & Facts',
+      accent: 'purple',
+      items: [
+        { slug: 'fleet-size-stats', label: 'Fleet Size Statistics' },
+        { slug: 'myths-vs-facts', label: 'Myths vs Facts' },
+      ],
+    },
+  ],
+};
+
+// ---------- BUILD ALL GROUPS ----------
+
+const ALL_GROUPS: CategoryGroup[] = [
+  FLEET_GROUP,
+  EVENTS_GROUP,
+  AMENITIES_GROUP,
+  ACCESSIBILITY_GROUP,
+  EXPERIENCE_GROUP,
+  POLICY_GROUP,
+  BOOKING_GROUP,
+  STATS_GROUP,
+  ...buildLocationGroups(),
+];
+
+// ---------- UI COMPONENT ----------
+
+export default function CategoriesExplorer() {
+  const [activeGroupId, setActiveGroupId] = useState<string>(ALL_GROUPS[0]?.id ?? '');
+
+  const activeGroup = ALL_GROUPS.find((g) => g.id === activeGroupId) ?? ALL_GROUPS[0];
+
   return (
-    <div className="space-y-10">
-      {/* Filter chips */}
-      <div className="flex flex-wrap gap-2 justify-center mb-4">
-        {TOP_GROUP_CONFIG.map(({ key, label, icon }) => {
-          const count =
-            key === "all"
-              ? totalCount
-              : metas.filter((m) => m.topGroup === key).length;
-
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setActiveGroup(key)}
-              className={[
-                "px-4 py-2 rounded-full border text-sm md:text-base font-semibold transition-all flex items-center gap-2",
-                activeGroup === key
-                  ? "bg-sky-400 text-slate-900 border-sky-400 shadow-lg shadow-sky-500/30"
-                  : "bg-[#050c1f] text-white/75 border-white/10 hover:bg-[#09122d]",
-              ].join(" ")}
-            >
-              <span>{icon}</span>
-              <span>{label}</span>
-              <span className="text-xs text-white/70 bg-black/30 px-2 py-0.5 rounded-full">
-                {count.toLocaleString()}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Search */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex-1 flex items-center gap-3 rounded-3xl bg-[#06122a] border border-sky-500/30 px-5 py-4 shadow-xl shadow-sky-500/20">
-          <span className="text-sky-400 text-2xl">🔎</span>
-          <input
-            type="search"
-            placeholder="Search by city, state, vehicle, event, amenity, or keyword…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none text-base md:text-lg text-white placeholder:text-sky-300"
-          />
+    <div className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Poll Categories
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-600">
+            Browse all {ALL_GROUPS.length} category families — vehicles, events, amenities,
+            customer stories, and every major US city we serve.
+          </p>
         </div>
-        <p className="text-sm text-white/70 text-center md:text-right">
-          Showing{" "}
-          <span className="font-bold text-sky-300">
-            {visibleCount.toLocaleString()}
-          </span>{" "}
-          of{" "}
-          <span className="font-bold text-sky-300">
-            {totalCount.toLocaleString()}
-          </span>{" "}
-          categories
-        </p>
-      </div>
+      </header>
 
-      {/* CONTENT BLOCKS */}
-      <div className="space-y-8">
-        {(activeGroup === "all" || activeGroup === "locations") && (
-          <CategoryBlock
-            id="locations"
-            title="Locations (Cities & States)"
-            subtitle="Browse by region → state → city."
-            count={locationRegions.reduce(
-              (sum, r) =>
-                sum +
-                r.states.reduce((s2, st) => s2 + st.items.length, 0),
-              0
-            )}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          >
-            {locationRegions.length === 0 && <EmptyMessage />}
-
-            <div className="grid gap-5">
-              {locationRegions.map((region) => (
-                <div
-                  key={region.region}
-                  className="rounded-3xl bg-gradient-to-br from-[#050b1d] via-[#07132b] to-[#050b1d] border border-white/10 p-4 md:p-5"
+      <div className="grid gap-6 lg:grid-cols-[260px,minmax(0,1fr)]">
+        {/* Left: group selector */}
+        <aside className="rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm backdrop-blur">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Category Families
+          </div>
+          <div className="flex flex-col gap-1">
+            {ALL_GROUPS.map((group) => {
+              const Icon = group.icon;
+              const isActive = group.id === activeGroupId;
+              return (
+                <button
+                  key={group.id}
+                  type="button"
+                  onClick={() => setActiveGroupId(group.id)}
+                  className={
+                    'flex items-center gap-2 rounded-xl px-2.5 py-2 text-sm transition ' +
+                    (isActive
+                      ? 'bg-slate-900 text-white shadow'
+                      : 'text-slate-700 hover:bg-slate-100')
+                  }
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg md:text-xl font-bold flex items-center gap-2">
-                      <span>📍</span>
-                      <span>{region.region} Region</span>
-                    </h3>
-                    <span className="text-xs text-white/60">
-                      {region.states.length} states
-                    </span>
+                  <span
+                    className={
+                      'flex h-7 w-7 items-center justify-center rounded-full border text-[0.7rem] ' +
+                      (isActive ? 'border-slate-700 bg-slate-800/90' : 'border-slate-200 bg-white')
+                    }
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="flex-1 text-left">{group.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </aside>
+
+        {/* Right: active group content */}
+        <main className="space-y-8">
+          <div>
+            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+              {activeGroup.label}
+            </h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Click any tile to jump into polls for that vehicle, amenity, policy, or location.
+            </p>
+          </div>
+
+          <div className="space-y-8">
+            {activeGroup.sections.map((section) => {
+              const styles = accentToClasses[section.accent] || accentToClasses.blue;
+
+              return (
+                <section key={section.id} className="space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={
+                          'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ' +
+                          styles.badge
+                        }
+                      >
+                        {section.label}
+                      </div>
+                      <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                        {section.items.length} options
+                      </span>
+                    </div>
                   </div>
-                  <div className="grid gap-4 max-h-[360px] overflow-y-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                    {region.states.map((state) => (
-                      <div key={state.stateCode}>
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-sky-300">
-                              {state.stateName}
-                            </span>
-                            <span className="text-[10px] uppercase tracking-widest text-white/50 border border-white/10 rounded-full px-2 py-0.5">
-                              {state.stateCode}
+
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {section.items.map((item) => (
+                      <Link
+                        key={item.slug}
+                        href={`/polls?category=${encodeURIComponent(item.slug)}`}
+                        className={
+                          'group relative overflow-hidden rounded-2xl border bg-white/90 p-3 text-left text-sm shadow-sm transition ' +
+                          styles.border +
+                          ' hover:-translate-y-0.5 hover:bg-white hover:' +
+                          styles.glow
+                        }
+                      >
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="font-medium text-slate-900 group-hover:text-slate-950">
+                              {item.label}
+                            </div>
+                            <span className="text-[10px] uppercase tracking-wide text-slate-400">
+                              View polls
                             </span>
                           </div>
-                          <span className="text-xs text-white/50">
-                            {state.items.length.toLocaleString()}{" "}
-                            {state.items.length === 1
-                              ? "category"
-                              : "categories"}
-                          </span>
+                          {item.description && (
+                            <p className="line-clamp-2 text-[11px] text-slate-500">
+                              {item.description}
+                            </p>
+                          )}
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                          {state.items.map((cat) => (
-                            <CategoryButton key={cat.slug} meta={cat} />
-                          ))}
-                        </div>
-                      </div>
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 opacity-0 transition group-hover:opacity-100 bg-gradient-to-r from-slate-900/80 via-slate-700/80 to-slate-900/80" />
+                      </Link>
                     ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          </CategoryBlock>
-        )}
-
-        {(activeGroup === "all" || activeGroup === "vehicles") && (
-          <SimpleGroupBlock
-            id="vehicles"
-            icon="🚌"
-            title="Vehicles"
-            subtitle="Party buses, limos, shuttles, sedans, SUVs & more."
-            items={vehicles}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {(activeGroup === "all" || activeGroup === "events") && (
-          <SimpleGroupBlock
-            id="events"
-            icon="🎉"
-            title="Events & Occasions"
-            subtitle="Parties, weddings, tours, proms, concerts, sporting events & more."
-            items={events}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {(activeGroup === "all" || activeGroup === "amenities") && (
-          <SimpleGroupBlock
-            id="amenities"
-            icon="✨"
-            title="Amenities & Features"
-            subtitle="Seating, lighting, sound systems, bars, climate control, storage & more."
-            items={amenities}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {(activeGroup === "all" || activeGroup === "accessibility") && (
-          <SimpleGroupBlock
-            id="accessibility"
-            icon="♿"
-            title="Accessibility & Handicap Features"
-            subtitle="Wheelchairs, lifts, child seats, ramps, pet-friendly options."
-            items={accessibility}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {(activeGroup === "all" || activeGroup === "experiences") && (
-          <SimpleGroupBlock
-            id="experiences"
-            icon="📖"
-            title="Customer Experiences & Issues"
-            subtitle="Best moments, nightmare stories, traffic, cleanups, overcapacity & more."
-            items={experiences}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {(activeGroup === "all" || activeGroup === "policies") && (
-          <SimpleGroupBlock
-            id="policies"
-            icon="📜"
-            title="Policies & Procedures"
-            subtitle="Alcohol, cancellations, deposits, smoking, hours, incidents."
-            items={policies}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {(activeGroup === "all" || activeGroup === "booking") && (
-          <SimpleGroupBlock
-            id="booking"
-            icon="🗓️"
-            title="Booking & Planning"
-            subtitle="Lead times, routes, payment methods, peak days, VIP protocols, pricing."
-            items={booking}
-            openBlocks={openBlocks}
-            onToggle={toggleBlock}
-          />
-        )}
-
-        {visibleCount === 0 && (
-          <p className="text-center text-sm text-white/70">
-            No categories match that search yet. Try another keyword.
-          </p>
-        )}
+                </section>
+              );
+            })}
+          </div>
+        </main>
       </div>
     </div>
-  );
-}
-
-/**
- * Reusable category pill button
- */
-function CategoryButton({ meta }: { meta: CategoryMeta }) {
-  const href = `/polls/category/${meta.slug}`;
-  return (
-    <a
-      href={href}
-      className="group inline-flex items-center justify-between gap-2 rounded-full border border-sky-500/30 bg-gradient-to-r from-[#06122a] via-[#081a36] to-[#06122a] px-3 py-2 text-xs md:text-sm font-semibold text-white shadow-md hover:border-sky-400 hover:bg-[#081a36] hover:shadow-sky-500/40 transition-all"
-    >
-      <span className="truncate">{meta.label}</span>
-      <span className="opacity-70 group-hover:opacity-100 text-lg leading-none">
-        →
-      </span>
-    </a>
-  );
-}
-
-/**
- * Collapsible block wrapper
- */
-function CategoryBlock(props: {
-  id: string;
-  title: string;
-  subtitle?: string;
-  count: number;
-  children: any;
-  openBlocks: Record<string, boolean>;
-  onToggle: (id: string) => void;
-}) {
-  const { id, title, subtitle, count, children, openBlocks, onToggle } = props;
-  const isOpen = openBlocks[id] ?? true;
-
-  return (
-    <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#050b1d] via-[#07122b] to-[#050b1d] shadow-xl shadow-black/40 overflow-hidden">
-      <button
-        type="button"
-        onClick={() => onToggle(id)}
-        className="w-full flex items-center justify-between px-5 md:px-6 py-4 md:py-5 bg-black/10 hover:bg-black/20 transition-colors"
-      >
-        <div className="flex flex-col items-start gap-1">
-          <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
-          {subtitle && (
-            <p className="text-xs md:text-sm text-white/70">{subtitle}</p>
-          )}
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-white/60 bg-white/5 border border-white/10 rounded-full px-3 py-1">
-            {count.toLocaleString()}{" "}
-            {count === 1 ? "category" : "categories"}
-          </span>
-          <span className="text-lg md:text-2xl">{isOpen ? "▴" : "▾"}</span>
-        </div>
-      </button>
-      {isOpen && (
-        <div className="px-4 md:px-6 pb-5 md:pb-6 pt-3">{children}</div>
-      )}
-    </section>
-  );
-}
-
-/**
- * Simple flat group block (Vehicles, Events, etc.)
- */
-function SimpleGroupBlock(props: {
-  id: string;
-  icon: string;
-  title: string;
-  subtitle?: string;
-  items: CategoryMeta[];
-  openBlocks: Record<string, boolean>;
-  onToggle: (id: string) => void;
-}) {
-  const { id, icon, title, subtitle, items, openBlocks, onToggle } = props;
-  const isOpen = openBlocks[id] ?? true;
-
-  return (
-    <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#050b1d] via-[#07122b] to-[#050b1d] shadow-xl shadow-black/40 overflow-hidden">
-      <button
-        type="button"
-        onClick={() => onToggle(id)}
-        className="w-full flex items-center justify-between px-5 md:px-6 py-4 md:py-5 bg-black/10 hover:bg-black/20 transition-colors"
-      >
-        <div className="flex flex-col items-start gap-1">
-          <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-            <span>{icon}</span>
-            <span>{title}</span>
-          </h2>
-          {subtitle && (
-            <p className="text-xs md:text-sm text-white/70">{subtitle}</p>
-          )}
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-white/60 bg-white/5 border border-white/10 rounded-full px-3 py-1">
-            {items.length.toLocaleString()}{" "}
-            {items.length === 1 ? "category" : "categories"}
-          </span>
-          <span className="text-lg md:text-2xl">{isOpen ? "▴" : "▾"}</span>
-        </div>
-      </button>
-      {isOpen && (
-        <div className="px-4 md:px-6 pb-5 md:pb-6 pt-3">
-          {items.length === 0 ? (
-            <EmptyMessage />
-          ) : (
-            <div className="max-h-[420px] overflow-y-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                {items
-                  .slice()
-                  .sort((a, b) => a.label.localeCompare(b.label))
-                  .map((cat) => (
-                    <CategoryButton key={cat.slug} meta={cat} />
-                  ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-    </section>
-  );
-}
-
-function EmptyMessage() {
-  return (
-    <p className="text-xs md:text-sm text-white/60">
-      No categories in this section match your filters yet.
-    </p>
   );
 }
