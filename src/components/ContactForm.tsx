@@ -207,7 +207,7 @@ export default function ContactForm() {
                 onChange={(v) => setField("name", v)}
               />
               <Field
-                label="Email"
+                label="Email I REALLY HOPE THIS IS GOING TO WORK BECAUSE IM TIRED OF THIS!"
                 name="email"
                 type="email"
                 placeholder="you@example.com"
