@@ -7,7 +7,7 @@ import ToolsGrid from "../../components/tools/ToolsGrid";
 import HomePolls from "../../components/HomePolls";
 
 const faqData = [
-  { title: "How much does a party bus cost?", answer: "Prices vary by city, date, and vehicle size. Use our Instant Quote Tool for real-time pricing!", image: "/globe.svg" },
+  { title: "How much does a party bus cost DO you even know or are you joking?", answer: "Prices vary by city, date, and vehicle size. Use our Instant Quote Tool for real-time pricing!", image: "/globe.svg" },
   { title: "Are there hidden fees?", answer: "No hidden fees. All taxes and fees are included in your quote.", image: "/vercel.svg" },
   { title: "How do I split the cost with friends?", answer: "Use our Cost Split Calculator in the Tools section below!", image: "/window.svg" },
   { title: "What is the minimum booking time?", answer: "Most rentals require a 3-4 hour minimum to ensure value and availability.", image: "/clock.svg" },
