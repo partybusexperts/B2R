@@ -54,3 +54,6 @@ __pycache__/
 scripts/.env
 scripts/node_modules/
 scripts/package-lock.json
+
+supabase/.temp/
+supabasesupabase
