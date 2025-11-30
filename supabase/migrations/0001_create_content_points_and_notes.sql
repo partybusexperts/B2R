@@ -9,10 +9,11 @@ CREATE TABLE IF NOT EXISTS content_points (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   key text NOT NULL UNIQUE,
   title text,
+  page_slug text,
   body jsonb DEFAULT '{}'::jsonb,
   metadata jsonb DEFAULT '{}'::jsonb,
-  created_at timestamptz WITH TIME ZONE DEFAULT now(),
-  updated_at timestamptz WITH TIME ZONE DEFAULT now()
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
 );
 
 -- Table for ad-hoc notes about points (comments, tasks, follow-ups)
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS content_notes (
   point_id uuid REFERENCES content_points(id) ON DELETE CASCADE,
   note text NOT NULL,
   created_by text,
-  created_at timestamptz WITH TIME ZONE DEFAULT now()
+  created_at timestamptz DEFAULT now()
 );
 
 -- Example seed (optional)
