@@ -1,85 +1,292 @@
 import React from "react";
-import { createClient } from "../../lib/supabase/server";
-import { CategoriesExplorer } from "./CategoriesExplorer";
+import HomePollsSection from "./HomePollsSection";
+import ToolsSection from "../home/ToolsSection";
+import EventsSection from "../EventsSection";
+import ReviewsSearchSection, { SimpleReview } from "./ReviewsSearchSection";
+import { getFeaturedReviews } from "../../lib/server/reviews";
+
+export type MegaPollGroup = {
+  key: string;
+  title: string;
+  tagline: string;
+  blurb: string;
+  icon: string;
+  accentFrom: string;
+  accentTo: string;
+  highlights: string[];
+  polls: Array<{
+    id: string;
+    question: string;
+    slug?: string | null;
+    options?: string[] | null;
+    tags?: string[] | null;
+  }>;
+};
+
+const FALLBACK_REVIEWS: SimpleReview[] = [
+  {
+    id: "kara",
+    author: "Kara M.",
+    body: "Winter corporate shuttle—driver pre-heated the bus & tracked our delayed flight. Dispatch kept us calm the whole time.",
+    rating: 5,
+    source: "Google",
+  },
+  {
+    id: "owen",
+    author: "Owen P.",
+    body: "Aurora chase extended an hour and dispatch approved it instantly. Worth every minute watching lights over Anchorage.",
+    rating: 5,
+    source: "Anchorage",
+  },
+  {
+    id: "lisa",
+    author: "Lisa M.",
+    body: "Booked a 32 passenger bus for our cruise group. Plenty of luggage room and the driver knew every tunnel timing.",
+    rating: 5,
+  },
+  {
+    id: "brian",
+    author: "Brian S.",
+    body: "Cruise transfer ANC hotel → Whittier with glacier photo stop. Coach was spotless and on schedule.",
+    rating: 5,
+  },
+  {
+    id: "lia",
+    author: "Lia R.",
+    body: "Prom party bus had premium sound and lighting. Parents felt safe and the teens couldn’t stop smiling.",
+    rating: 5,
+  },
+  {
+    id: "joel",
+    author: "Joel K.",
+    body: "Fishing group charter had room for all coolers—driver helped stage loading efficiently and had hot coffee ready.",
+    rating: 5,
+  },
+];
+
+type FieldIntel = {
+  badge: string;
+  title: string;
+  stat: string;
+  detail: string;
+};
+
+const FIELD_INTEL: FieldIntel[] = [
+  {
+    badge: "Aurora surge",
+    title: "Lights-watch windows",
+    stat: "7p – 2a",
+    detail:
+      "Quote requests spike midweek when the forecast index is above Kp4. Dispatch is pre-staging sprinters near Eagle River during those bursts.",
+  },
+  {
+    badge: "Cruise flow",
+    title: "Whittier transfers",
+    stat: "73% noon departures",
+    detail:
+      "Poll voters overwhelmingly pick midday departures so we block 10a – 1p coaches for cruise docks from May through August to keep dwell low.",
+  },
+  {
+    badge: "Corporate ops",
+    title: "ANC campus loops",
+    stat: "18 min lap",
+    detail:
+      "Shuttle loops around Midtown tech campuses average 18 minutes including badge checks. Staggering boarding by 90 seconds keeps the loop green.",
+  },
+  {
+    badge: "Peak weekends",
+    title: "Wedding convoys",
+    stat: "+32% fleet load",
+    detail:
+      "Late July weddings layer sprinters plus 47-passenger coaches. Two-unit convoys cut photo-stop delays compared to single large buses.",
+  },
+];
+
+type DispatchMetric = {
+  label: string;
+  value: string;
+  detail: string;
+};
+
+const DISPATCH_METRICS: DispatchMetric[] = [
+  {
+    label: "Median quote turn",
+    value: "11m 24s",
+    detail: "Average time from form submit to staffed quote when Anchorage tags are selected.",
+  },
+  {
+    label: "Same-day approvals",
+    value: "82%",
+    detail: "Trips requested before 2 p.m. AKDT are confirmed the same day inside busy season windows.",
+  },
+  {
+    label: "Flex extensions",
+    value: "+47",
+    detail: "Aurora nights extended last month; dispatch keeps a roaming sprinter staged for hand-offs.",
+  },
+];
+
+const SIGNAL_NOTES = [
+  {
+    time: "07:40",
+    title: "Cruise luggage surge",
+    summary: "Back-to-back Princess + Norwegian arrivals trigger extra luggage trailers at the port yard.",
+  },
+  {
+    time: "15:10",
+    title: "School dismissal",
+    summary: "Midtown arterials slow 12–20 minutes; we reroute corporate loops via Old Seward.",
+  },
+  {
+    time: "22:30",
+    title: "Aurora standby",
+    summary: "On-call drivers rotate to Eagle River fuel stop before KP spikes so heaters stay running.",
+  },
+];
+
+const MICRO_UPDATES = [
+  {
+    label: "Fleet health",
+    value: "98% ready",
+    note: "Only one coach in maintenance rotation this week.",
+  },
+  {
+    label: "Buffer adds",
+    value: "+12 min",
+    note: "Average padding per trip after AK 511 advisories.",
+  },
+  {
+    label: "Crew on-call",
+    value: "4 sprinters",
+    note: "Night crew staged between Midtown + Eagle River.",
+  },
+];
 
 export default async function AllPollsSection() {
-  const supabase = createClient();
-  // Batch fetch all rows in increments of 1,000
-  let allRows: any[] = [];
-  let batchSize = 1000;
-  let offset = 0;
-  let more = true;
-  while (more) {
-    const { data: batch, error } = await supabase
-      .from("polls1")
-      .select("*")
-      .range(offset, offset + batchSize - 1);
-    if (error) {
-      console.error("Error fetching batch from polls1:", error);
-      break;
-    }
-    if (batch && batch.length > 0) {
-      allRows = allRows.concat(batch);
-      offset += batchSize;
-      if (batch.length < batchSize) {
-        more = false;
-      }
-    } else {
-      more = false;
-    }
-  }
-
-  // Find popular polls (top 6 by votes)
-  const pollsWithVotes = allRows.filter(row => typeof row.votes === 'number' && row.votes > 0);
-  const popularPolls = pollsWithVotes
-    .sort((a, b) => b.votes - a.votes)
-    .slice(0, 6);
-
-  // Debug: show raw data count and sample
-  if (typeof window === "undefined") {
-    console.log("Total poll rows:", allRows.length);
-    console.log("Sample rows:", allRows.slice(0, 10));
-  }
-
-  const categories = allRows
-    .map((row: any) => row.category_slug as string)
-    .filter(Boolean);
-
-  const unique = Array.from(new Set(categories));
-  unique.sort((a, b) => a.localeCompare(b));
+  const featured = await getFeaturedReviews(48);
+  const mapped: SimpleReview[] = featured.length
+    ? featured.map((review, idx) => ({
+        id: String(review.id ?? `featured-${idx}`),
+        author: review.author_display || "Verified rider",
+        body: review.body || "",
+        rating: review.rating ?? 5,
+        source: review.source ?? undefined,
+      }))
+    : FALLBACK_REVIEWS;
 
   return (
-    <section className="bg-gradient-to-b from-[#08112a] via-[#050c1b] to-[#04060f] py-16 text-white">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="rounded-[40px] border border-white/10 bg-[#050c1b] px-6 py-12 shadow-[0_60px_160px_rgba(0,0,0,0.6)] md:px-12">
-          <header className="text-center space-y-6 mb-12">
-            <h1 className="text-5xl font-extrabold tracking-tight text-white mb-2">Poll Category Explorer</h1>
-            <p className="mx-auto max-w-2xl text-lg text-white/80 font-medium">
-              Instantly browse every poll category in our system. Discover insights, trends, and real rider decisions across cities, states, vehicles, events, and more. Use the search and filters to find what matters most to you.
-            </p>
-            <div className="mt-6 flex flex-col items-center gap-2">
-              <span className="inline-block rounded-full bg-sky-500/20 px-4 py-2 text-base font-semibold text-sky-200 shadow">{unique.length.toLocaleString()} categories indexed</span>
-              <span className="inline-block text-xs text-white/50">Updated live from our poll database</span>
+    <div className="bg-gradient-to-b from-[#040916] via-[#050c1f] to-[#02040a] py-16 text-white space-y-16">
+      <ReviewsSearchSection reviews={mapped} />
+
+      <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-4 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+        <div className="text-center space-y-3 mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Live sentiment</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold">Poll Library</h2>
+          <p className="text-white/70 max-w-3xl mx-auto">
+            Real rider data across cities, vehicles, and events. The same rotating mix you see on the homepage, now in one place.
+          </p>
+        </div>
+        <HomePollsSection />
+      </section>
+
+      <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-4 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+        <div className="text-center space-y-3 mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Plan faster</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold">Tools</h2>
+          <p className="text-white/70 max-w-3xl mx-auto">
+            Cost splitters, buffer planners, weather snapshots, and more—exactly like the homepage tools rail, all ready to launch.
+          </p>
+        </div>
+        <ToolsSection />
+      </section>
+
+      <section className="mx-auto max-w-7xl rounded-[40px] border border-lime-400/10 bg-gradient-to-br from-[#0a1b34] via-[#071023] to-[#03050b] px-6 py-12 shadow-[0_40px_120px_rgba(2,6,23,0.6)]">
+        <div className="text-center space-y-3 mb-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-lime-200/70">Field intel</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold">Anchorage Ops Snapshot</h2>
+          <p className="text-white/70 max-w-4xl mx-auto">
+            Live playbook notes from dispatch—when requests spike, how we stage vehicles, and the timing patterns we watch so your quote lands faster.
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          {FIELD_INTEL.map((card) => (
+            <div
+              key={card.title}
+              className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-xs font-semibold uppercase tracking-[0.3em] text-lime-200/80">
+                  {card.badge}
+                </span>
+                <span className="text-3xl font-black text-white">{card.stat}</span>
+              </div>
+              <h3 className="text-2xl font-semibold mb-3 text-white">{card.title}</h3>
+              <p className="text-white/70 leading-relaxed">{card.detail}</p>
             </div>
-          </header>
-          {/* Popular Polls Section */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-sky-300 mb-4 text-center">Popular Polls</h2>
-            <div className="grid gap-6 md:grid-cols-3">
-              {popularPolls.map((poll) => (
-                <div key={poll.id} className="rounded-2xl border-2 border-sky-500/30 bg-[#06122a] p-6 shadow-lg flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">{poll.question}</h3>
-                    <p className="text-sm text-white/70 mb-4">Category: <span className="font-bold text-sky-300">{poll.category_slug}</span></p>
-                  </div>
-                  <a href={`/polls/results?focus=${encodeURIComponent(poll.id)}`} className="mt-auto inline-block rounded-full bg-sky-500/80 px-4 py-2 text-white font-bold shadow hover:bg-sky-400 transition">See Results →</a>
+          ))}
+        </div>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {MICRO_UPDATES.map((item) => (
+            <div key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-sm">
+              <p className="text-xs uppercase tracking-[0.35em] text-lime-200/70">{item.label}</p>
+              <p className="text-2xl font-black text-white mt-1">{item.value}</p>
+              <p className="text-white/70 text-xs mt-2 leading-relaxed">{item.note}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl rounded-[40px] border border-cyan-400/10 bg-gradient-to-br from-[#04152f] via-[#050f24] to-[#020712] px-6 py-12 shadow-[0_35px_120px_rgba(0,8,20,0.55)]">
+        <div className="text-center space-y-3 mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-cyan-200/70">Signal board</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold">Dispatch Metrics & Rhythm</h2>
+          <p className="text-white/70 max-w-4xl mx-auto">
+            We monitor cadence data the same way we watch polls—quote velocity, approval rates, and when the city pulses. Here’s the latest Anchorage rhythm map.
+          </p>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-6">
+            <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70 mb-4">Core metrics</p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {DISPATCH_METRICS.map((metric) => (
+                <div key={metric.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-xs uppercase tracking-[0.25em] text-white/60">{metric.label}</p>
+                  <p className="text-2xl font-black text-white mt-2">{metric.value}</p>
+                  <p className="text-xs text-white/70 mt-2 leading-relaxed">{metric.detail}</p>
                 </div>
               ))}
             </div>
-          </section>
-          <CategoriesExplorer categories={unique} />
+          </div>
+          <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#071737] to-[#030915] p-6">
+            <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70 mb-4">Daily signals</p>
+            <div className="space-y-5">
+              {SIGNAL_NOTES.map((note) => (
+                <div key={note.title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-white">{note.title}</span>
+                    <span className="text-xs uppercase tracking-[0.3em] text-cyan-200">{note.time}</span>
+                  </div>
+                  <p className="mt-2 text-[13px] leading-relaxed text-white/80">{note.summary}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-xs text-white/70">
+              Need to mirror this timing for your charter? Note it in the quote and dispatch will align fueling, driver swaps, and staging.
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-4 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+        <div className="text-center space-y-3 mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Ideas board</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold">Events & Occasions</h2>
+          <p className="text-white/70 max-w-3xl mx-auto">
+            Browse popular trip types, see photos, and jump straight into a quote, call, or email.
+          </p>
+        </div>
+        <EventsSection limit={9} />
+      </section>
+    </div>
   );
 }

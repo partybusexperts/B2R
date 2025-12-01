@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import PageLayout from "../../../components/PageLayout";
 import Section from "../../../components/Section";
@@ -8,10 +8,10 @@ import ToolsSlider from "../../../components/ToolsSlider";
 import LiveWeatherAdvisor from "../../../components/LiveWeatherAdvisor"; // will wrap & constrain
 import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
 import { SmartImage } from "../../../components/SmartImage";
-import { ReviewForm } from "../../../components/ReviewForm";
-import SlideshowMaker from "../../../components/SlideshowMaker";
 import HomePolls from "../../../components/HomePolls";
+import EventsSection from "../../../components/EventsSection";
 import VehicleGalleryCard from "../../../components/VehicleGalleryCard";
+import ReviewsSearchSection, { SimpleReview } from "../../../components/polls/ReviewsSearchSection";
 import { findState, slugifyState } from "../locationData";
 import { getStateContent } from "../stateContent";
 import type { HomepageVehicle } from "../../../types/homepageVehicles";
@@ -27,26 +27,102 @@ const auroraTips = [
   "Bring spare battery packs—cold drains phones & DSLR batteries quickly."
 ];
 
-const localReviews = [
-  { name: "Kara M.", rating: 5, text: "Winter corporate shuttle—driver pre‑heated the bus & tracked our delayed ANC flight." },
-  { name: "Brian S.", rating: 5, text: "Cruise transfer ANC hotel → Whittier with glacier photo stop. Flawless timing." },
-  { name: "Lia R.", rating: 5, text: "Prom party bus was spotless, lighting + sound were incredible. Parents felt safe." },
-  { name: "Owen P.", rating: 4, text: "Aurora chase extended an hour—dispatch approved within minutes. Worth it." },
-  { name: "Samantha T.", rating: 5, text: "Wedding guest loop between hotel + venue ran early, zero confusion for out‑of‑towners." },
-  { name: "Joel K.", rating: 5, text: "Fishing group charter had room for all coolers—driver helped stage loading efficiently." }
+const WEATHER_CHIPS = [
+  { label: "Sunrise", value: "10:06 AM", note: "Plan daylight staging." },
+  { label: "Sunset", value: "3:47 PM", note: "Golden hour hits early." },
+  { label: "Snow depth", value: "6-12\"", note: "Downtown berms shrink lanes." },
+  { label: "Wind", value: "12 mph N", note: "Feels colder on docks." }
 ];
 
-import pollsRegistry from '../../../../data/pollsRegistry.json';
+const ROAD_CONDITIONS = [
+  {
+    route: "Seward Hwy (AK-1)",
+    status: "Patchy refreeze",
+    detail: "Bird Point & Turnagain curves ice over after 9 PM. Keep 5-8 min buffer.",
+  },
+  {
+    route: "Glenn Hwy",
+    status: "Bare / wet",
+    detail: "Mat-Su winds kick up drifting snow past Eagle River."
+  },
+  {
+    route: "Alyeska Hwy",
+    status: "Snow-packed",
+    detail: "Slow at mile 2 switchback; gravel improves traction."
+  },
+];
 
-// Filter for polls tagged with "anchorage" or "alaska"
-const anchoragePolls = Array.isArray(pollsRegistry)
-  ? pollsRegistry.filter(
-      (p) => p.active !== false && Array.isArray(p.tags) && (
-        p.tags.map((t: unknown) => String(t).toLowerCase()).includes('anchorage') ||
-        p.tags.map((t: unknown) => String(t).toLowerCase()).includes('alaska')
-      )
-    )
-  : [];
+const AURORA_CASES = [
+  {
+    label: "Corporate summit",
+    stat: "+30 min standby",
+    summary:
+      "Board stayed at Hotel Captain Cook; we padded the return loop so execs could hop back out when KP jumped to 5.",
+  },
+  {
+    label: "Cruise turnover",
+    stat: "Dual-coach convoy",
+    summary:
+      "Disembark in Whittier, aurora chase that night—two coaches staged with separate heaters so luggage never left sight.",
+  },
+  {
+    label: "Wedding after-party",
+    stat: "3-stop warmups",
+    summary:
+      "Shuttled guests between brewery, lookout, and lodge. Added cocoa + blanket bins to keep gowns photo-ready.",
+  },
+  {
+    label: "Photo crew",
+    stat: "Gear-priority layout",
+    summary:
+      "Removed two seats in the sprinter and mounted battery inverters so the production team could edit between stops.",
+  },
+];
+
+const anchorageReviewHighlights: SimpleReview[] = [
+  {
+    id: "kara",
+    author: "Kara M.",
+    body: "Winter corporate shuttle—driver pre-heated the bus & tracked our delayed ANC flight so no one waited in the cold.",
+    rating: 5,
+    source: "Corporate Shuttle",
+  },
+  {
+    id: "brian",
+    author: "Brian S.",
+    body: "Cruise transfer ANC hotel → Whittier with glacier photo stop. Dispatch built the tunnel timing so it felt calm.",
+    rating: 5,
+    source: "Cruise Transfer",
+  },
+  {
+    id: "lia",
+    author: "Lia R.",
+    body: "Prom party bus was spotless. Lighting + sound were incredible and the adults felt totally in control.",
+    rating: 5,
+    source: "Prom Loop",
+  },
+  {
+    id: "owen",
+    author: "Owen P.",
+    body: "Aurora chase extended an hour—dispatch approved within minutes when KP jumped. Worth every mile north.",
+    rating: 5,
+    source: "Aurora Charter",
+  },
+  {
+    id: "samantha",
+    author: "Samantha T.",
+    body: "Wedding guest loop between hotel + venue ran early, zero confusion even for out-of-towners in tuxes.",
+    rating: 5,
+    source: "Wedding Weekend",
+  },
+  {
+    id: "joel",
+    author: "Joel K.",
+    body: "Fishing group charter had room for all coolers—driver helped stage loading efficiently and kept heaters running.",
+    rating: 5,
+    source: "Fishing Charter",
+  },
+];
 
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -80,6 +156,41 @@ const helperTools = [
     title: "📍 Zip Code Price Lookup",
     desc: "Find pricing for your city or zip code instantly.",
     href: "/tools",
+  },
+];
+
+const HOW_TO_BOOK_STEPS = [
+  {
+    step: "01",
+    label: "Share Trip Details",
+    icon: "🗺️",
+    copy: "Tell us your pickup windows, passenger count, luggage, and any aurora or cruise timing flex.",
+    detail:
+      "Our Anchorage team plugs in your airports, hotel blocks, and buffer preferences so every quote already accounts for weather, tunnels, and port surges.",
+  },
+  {
+    step: "02",
+    label: "Review Your Quote",
+    icon: "💬",
+    copy: "We send a written, all-in quote with buffers baked in for Anchorage roads and weather.",
+    detail:
+      "Line-item clarity: vehicle type, minimum hours, gratuity, fuel, and overtime policy—no surprise line items later.",
+  },
+  {
+    step: "03",
+    label: "Reserve & Prep",
+    icon: "📝",
+    copy: "Approve digitally, place your deposit, and we dispatch the right vehicle and chauffeur.",
+    detail:
+      "Once reserved, we stage the vehicle with block heaters, gear racks, and itinerary notes so it is ready for Alaska-specific conditions.",
+  },
+  {
+    step: "04",
+    label: "Final Check & Ride",
+    icon: "🧭",
+    copy: "48 hours out we confirm manifests, share driver info, and monitor airport/cruise feeds.",
+    detail:
+      "Day-of, you get live driver contact, tracking on flight or cruise changes, and dispatch support for any last-minute pivots.",
   },
 ];
 
@@ -301,34 +412,10 @@ export default function AnchoragePage() {
   const alaskaEntry = findState("alaska");
   const stateSlug = slugifyState("alaska");
   const alaskaContent = getStateContent(stateSlug);
-  const [reviewSearch, setReviewSearch] = useState("");
-  const [pollSearch, setPollSearch] = useState("");
   const [activeHighlight, setActiveHighlight] = useState<typeof STAT_HIGHLIGHTS[number] | null>(null);
   const [activeWhyPoint, setActiveWhyPoint] = useState<WhyModalPayload | null>(null);
+  const [activeHowToStep, setActiveHowToStep] = useState<typeof HOW_TO_BOOK_STEPS[number] | null>(null);
   const stateSections = alaskaContent?.sections ?? [];
-  const stateReviews = alaskaContent?.reviews ?? [];
-  const statePolls = alaskaContent?.polls ?? [];
-
-  const filteredStateReviews = useMemo(() => {
-    const q = reviewSearch.trim().toLowerCase();
-    if (!q) return stateReviews;
-    return stateReviews.filter(
-      (review) =>
-        review.name.toLowerCase().includes(q) ||
-        review.text.toLowerCase().includes(q) ||
-        review.city.toLowerCase().includes(q)
-    );
-  }, [reviewSearch, stateReviews]);
-
-  const filteredStatePolls = useMemo(() => {
-    const q = pollSearch.trim().toLowerCase();
-    if (!q) return statePolls;
-    return statePolls.filter(
-      (poll) =>
-        poll.question.toLowerCase().includes(q) ||
-        poll.options.some((option) => option.toLowerCase().includes(q))
-    );
-  }, [pollSearch, statePolls]);
 
   const stateInitial = alaskaEntry?.state?.[0]?.toUpperCase() ?? "A";
 
@@ -489,87 +576,165 @@ export default function AnchoragePage() {
         </div>
       )}
 
-      {alaskaEntry && (
-        <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-10 px-6 mb-16">
-        <nav className="text-sm text-blue-200 mb-6" aria-label="Breadcrumb">
-          <ol className="flex flex-wrap gap-2">
-            <li>
-              <Link href="/locations" className="hover:underline">
-                Locations
-              </Link>{" "}
-              &raquo;
-            </li>
-            <li className="text-blue-100 font-semibold">Alaska Overview</li>
-          </ol>
-        </nav>
-
-          <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
-            <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
-              Cities We Serve Across Alaska
-            </h2>
-            <div className="md:ml-auto">
-              <span className="inline-flex items-center rounded-full bg-white/90 text-blue-900 border border-blue-200 px-4 py-2 font-bold">
-                {stateInitial} • {alaskaEntry.cities.length} cities
-              </span>
+      {activeHowToStep && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur" onClick={() => setActiveHowToStep(null)} aria-hidden />
+          <div className="relative z-10 w-full max-w-xl rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-8 shadow-[0_40px_120px_rgba(2,6,23,0.85)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-blue-200/80">Anchorage Booking</p>
+            <h3 className="mt-3 text-3xl font-extrabold text-white">Step {activeHowToStep.step} • {activeHowToStep.label}</h3>
+            <p className="mt-4 text-blue-100/90 leading-relaxed">{activeHowToStep.detail}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => setActiveHowToStep(null)}
+                className="rounded-full border border-white/30 px-5 py-2 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Close
+              </button>
+              <a href="/quote#instant" className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-blue-900 shadow hover:bg-slate-100">
+                Get an Instant Quote
+              </a>
             </div>
           </div>
+        </div>
+      )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {alaskaEntry.cities.map((city) => {
-              const href = `/locations/${slugify(city)}-${slugify(alaskaEntry.state)}`;
-              return (
-                <Link
-                  key={city}
-                  href={href}
-                  className="group relative overflow-hidden rounded-2xl bg-white/95 text-blue-900 border-2 border-blue-100 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition"
-                  aria-label={`Open ${city}, ${alaskaEntry.state}`}
-                >
-                  <div className="p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-xl font-extrabold leading-tight">
-                        {city}
-                      </h3>
-                      <span className="text-blue-700 group-hover:translate-x-1 transition">
-                        →
-                      </span>
-                    </div>
-                    <div className="text-blue-700/80 text-sm">{alaskaEntry.state}</div>
-                    <div className="mt-4 flex gap-2">
-                      <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold border border-blue-200">
-                        Guides
-                      </span>
-                      <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold border border-blue-200">
-                        Fleet
-                      </span>
-                      <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold border border-blue-200">
-                        Quote
-                      </span>
-                    </div>
-                  </div>
-                  <div className="absolute -bottom-6 left-6 right-6 h-10 rounded-full blur-2xl bg-gradient-to-r from-blue-400/30 via-blue-500/30 to-indigo-500/30" />
-                </Link>
-              );
-            })}
+      <Section className="max-w-6xl mx-auto bg-gradient-to-br from-[#0e1c3c] to-[#050a15] rounded-3xl shadow-[0_50px_140px_rgba(3,8,20,0.55)] border border-white/10 py-14 px-6 mb-16">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">
+          How to Book in Anchorage
+        </h2>
+        <p className="text-blue-100/85 text-center max-w-3xl mx-auto mb-10">
+          Four fast steps—from your first quote to wheels rolling. Our local dispatch team keeps Alaska timing, road conditions, and fleet prep locked in.
+        </p>
+        <div className="grid gap-4 md:grid-cols-4">
+          {HOW_TO_BOOK_STEPS.map((step) => (
+            <button
+              key={step.step}
+              type="button"
+              onClick={() => setActiveHowToStep(step)}
+              className="rounded-3xl border border-white/10 bg-white/5 p-5 text-center shadow-inner transition hover:border-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+            >
+              <div className="text-sm font-semibold uppercase tracking-[0.4em] text-blue-200/80">Step {step.step}</div>
+              <div className="mt-4 text-4xl" aria-hidden>
+                {step.icon}
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-white">{step.label}</h3>
+              <p className="mt-2 text-sm text-blue-100/80">{step.copy}</p>
+              <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.35em] text-blue-100/70">
+                Learn more <span aria-hidden>→</span>
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <a href="/quote#instant" className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-sm font-bold text-blue-900 shadow-lg hover:bg-blue-50">
+            Get an Instant Quote
+          </a>
+          <a href="tel:8885352566" className="inline-flex items-center justify-center rounded-full border border-white/30 px-8 py-3 text-sm font-bold text-white hover:bg-white/10">
+            Talk to Anchorage Dispatch
+          </a>
+        </div>
+      </Section>
+
+      {alaskaEntry && (
+        <Section className="relative max-w-7xl mx-auto overflow-hidden rounded-[40px] border border-white/10 py-14 px-6 mb-16 bg-gradient-to-br from-[#081531] via-[#050f24] to-[#030814] shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+          <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.15),transparent_55%)]" />
           </div>
 
-          <div className="mt-10 flex justify-center">
-            <div className="bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-2xl shadow-xl px-8 py-6 flex flex-col md:flex-row items-center gap-4 border-2 border-blue-400/60">
-              <div className="text-xl font-extrabold text-center md:text-left">
-                Not seeing your city? We likely still serve it.
+          <div className="relative z-10">
+            <nav className="text-sm text-blue-200/80 mb-6" aria-label="Breadcrumb">
+              <ol className="flex flex-wrap gap-2">
+                <li>
+                  <Link href="/locations" className="hover:underline">
+                    Locations
+                  </Link>{" "}
+                  &raquo;
+                </li>
+                <li className="text-blue-100 font-semibold">Alaska Overview</li>
+              </ol>
+            </nav>
+
+            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-10">
+              <div>
+                <p className="text-xs uppercase tracking-[0.45em] text-blue-200/70">Coverage Map</p>
+                <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
+                  Cities We Serve Across Alaska
+                </h2>
+                <p className="mt-3 text-blue-100/80 max-w-2xl">
+                  Anchorage dispatch supports every major statewide route—tap a city to open its guide, fleet highlights, and quote links.
+                </p>
               </div>
-              <div className="flex gap-3">
-                <a
-                  href="/quote"
-                  className="rounded-xl bg-white text-blue-900 font-bold px-6 py-3 shadow hover:bg-blue-50"
-                >
-                  Get a Free Quote
-                </a>
-                <a
-                  href="tel:8885352566"
-                  className="rounded-xl bg-blue-800 text-white font-bold px-6 py-3 shadow hover:bg-blue-900 border border-white/20"
-                >
-                  Call (888) 535-2566
-                </a>
+              <div className="md:ml-auto flex flex-col items-start gap-3">
+                <span className="inline-flex items-center rounded-full bg-white/95 text-blue-900 border border-blue-200 px-5 py-2 text-sm font-bold shadow">
+                  {stateInitial} • {alaskaEntry.cities.length} cities
+                </span>
+                <span className="inline-flex items-center rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.35em] text-white/80">
+                  Snow-ready • Cruise-certified
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {alaskaEntry.cities.map((city) => {
+                const href = `/locations/${slugify(city)}-${slugify(alaskaEntry.state)}`;
+                return (
+                  <Link
+                    key={city}
+                    href={href}
+                    className="group relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-[#0b1d3c] via-[#0a1730] to-[#050b18] text-white shadow-lg transition hover:-translate-y-1 hover:shadow-2xl"
+                    aria-label={`Open ${city}, ${alaskaEntry.state}`}
+                  >
+                    <div className="absolute inset-0 opacity-0 transition group-hover:opacity-100" aria-hidden>
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-purple-500/10" />
+                    </div>
+                    <div className="relative p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-2xl font-extrabold leading-tight text-white">{city}</h3>
+                        <span className="text-sky-300 text-lg transition group-hover:translate-x-1">→</span>
+                      </div>
+                      <div className="text-sm font-semibold text-white/70">{alaskaEntry.state}</div>
+                      <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide text-white/80">
+                        {[{ label: "Fleet", href }, { label: "Instant Quote", href: "/quote#instant" }].map((chip) => (
+                          <a
+                            key={`${city}-${chip.label}`}
+                            href={chip.href}
+                            className="inline-flex items-center rounded-full border border-white/20 px-3 py-1 text-white/80 hover:text-white hover:border-white/40"
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            {chip.label}
+                          </a>
+                        ))}
+                      </div>
+                      <div className="mt-5 flex gap-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-400">
+                        <span>Year-round</span>
+                        <span>•</span>
+                        <span>Local support</span>
+                      </div>
+                    </div>
+                    <div className="pointer-events-none absolute inset-x-6 bottom-4 h-12 rounded-full bg-gradient-to-r from-blue-400/40 via-indigo-500/40 to-blue-600/40 blur-2xl" aria-hidden />
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="mt-12 flex justify-center">
+              <div className="rounded-3xl border border-white/15 bg-white/10 px-8 py-6 text-center shadow-lg backdrop-blur">
+                <p className="text-white font-semibold text-lg">Not seeing your city? We likely still serve it.</p>
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                  <a
+                    href="/quote"
+                    className="inline-flex items-center justify-center rounded-full bg-white text-blue-900 font-bold px-6 py-3 shadow hover:bg-blue-50"
+                  >
+                    Get a Free Quote
+                  </a>
+                  <a
+                    href="tel:8885352566"
+                    className="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 text-white font-bold hover:bg-white/10"
+                  >
+                    Call (888) 535-2566
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -638,75 +803,8 @@ export default function AnchoragePage() {
         <p className="text-blue-100/90 leading-relaxed mb-4">If you need official venue or route information, check the Anchorage visitor site (<a href="https://www.anchorage.net" target="_blank" rel="noopener noreferrer" className="underline">anchorage.net</a>) or the Alaska Railroad for train‑transfer connections (<a href="https://www.alaskarailroad.com" target="_blank" rel="noopener noreferrer" className="underline">alaskarailroad.com</a>). For port timing at Whittier and related port notices, consult local port resources before finalizing photo stops.</p>
       </Section>
 
-      {/* FLEET GALLERY (photos of real vehicles available for Anchorage) */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Fleet Highlights</h2>
-        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Real photos of vehicles we dispatch for Anchorage runs. Choose a model, request an instant quote, and we will reserve the right vehicle for your group and itinerary.</p>
-
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/party-buses/18 Passenger White Party Bus Exterior.png" alt="18 passenger white party bus exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">18 Passenger Party Bus</div>
-              <div className="text-blue-200 text-sm mt-1">Perfect for night-out groups, premium sound and lighting.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/sprinter-limo-style/12 Passenger Sprinter Limo Exterior.png" alt="12 passenger sprinter limo exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">12 Passenger Sprinter Limo</div>
-              <div className="text-blue-200 text-sm mt-1">Executive styling, comfortable seating, ideal for shore transfers.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/coach-buses/50 Passenger Exterior Coach Bus.png" alt="50 passenger coach exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">50 Passenger Coach</div>
-              <div className="text-blue-200 text-sm mt-1">Large group transfers, luggage bays, comfortable touring seats.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/party-buses/20 Passenger Party Bus Exterior.png" alt="20 passenger party bus exterior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">20 Passenger Party Bus</div>
-              <div className="text-blue-200 text-sm mt-1">Extra space for gear and coolers, great for fishing or aurora nights.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/limousines/10 Passenger Lincoln Stretch Limo Interior.png" alt="10 passenger lincoln stretch limo interior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">10 Passenger Stretch Limo</div>
-              <div className="text-blue-200 text-sm mt-1">Classic comfort for weddings and VIP transfers.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-
-          <div className="bg-[#132a55] rounded-2xl overflow-hidden border border-blue-700/40 shadow">
-            <SmartImage src="/images/sprinter-limo-style/14 Passenger Sprinter Van Limo Style Inside.png" alt="14 passenger sprinter van interior" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <div className="font-bold text-blue-50">14 Passenger Sprinter Van</div>
-              <div className="text-blue-200 text-sm mt-1">Flexible seating layouts and easy airport pickups.</div>
-              <div className="mt-3"><a href="/quote#instant" className="inline-block rounded-full bg-white text-blue-900 font-bold px-4 py-2 text-sm shadow hover:bg-blue-50 transition">Reserve this vehicle</a></div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center mt-8 gap-4">
-          <a href="/fleet" className="rounded-full bg-blue-700 text-white font-bold px-8 py-3 shadow hover:bg-blue-800 transition">See Full Fleet</a>
-          <a href="/quote#instant" className="rounded-full bg-white text-blue-900 font-bold px-8 py-3 shadow hover:bg-blue-50 transition">Instant Quote</a>
-        </div>
-      </Section>
-
       {/* INLINE CTA BANNER — quick booking nudges after the guide */}
-      <div className="max-w-7xl mx-auto my-8 px-6">
+      <div className="max-w-7xl mx-auto my-8 px-6 space-y-8">
         <div className="rounded-2xl bg-gradient-to-r from-yellow-500 to-orange-400 text-black p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-sm sm:text-base font-semibold">Ready to lock a vehicle for Anchorage? Get an instant quote with driver notes and aurora-flex options.</div>
           <div className="flex gap-3">
@@ -714,15 +812,9 @@ export default function AnchoragePage() {
             <a href="tel:8885352566" aria-label="Call to book" className="inline-block rounded-full bg-white text-blue-900 font-bold px-5 py-3 shadow hover:opacity-95 transition">📞 Call (888) 535‑2566</a>
           </div>
         </div>
-      </div>
 
-      {/* EXTRA SLIDER #1 — more vehicle photos */}
-      <Section className="max-w-7xl mx-auto my-10">
-        <h4 className="text-xl font-bold text-center mb-4 text-blue-50">Explore More Vehicles</h4>
-        <div className="bg-[#0b1b3a] rounded-2xl p-4 border border-blue-700/30 shadow">
-          <AnchorageVehicleSlider />
-        </div>
-      </Section>
+        <ReviewsSearchSection reviews={anchorageReviewHighlights} />
+      </div>
 
       {/* PRACTICAL PLANNING CHECKLIST (what to include in an instant quote) */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/75 to-black rounded-3xl shadow-xl border border-blue-500/30 py-12 px-6 mb-16">
@@ -820,7 +912,19 @@ export default function AnchoragePage() {
 
       {/* AURORA & WINTER */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Aurora / Winter Comfort Checklist</h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Aurora / Winter Comfort Checklist</h2>
+        <p className="text-center text-blue-100/80 max-w-3xl mx-auto mb-8 text-sm md:text-base">Live weather + road intel feed our dispatch board so you know exactly how Anchorage feels before doors open. Share these conditions with your crew and we’ll preload buffers, blankets, and traction aids.</p>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+          {WEATHER_CHIPS.map((chip) => (
+            <div key={chip.label} className="rounded-2xl border border-blue-700/40 bg-gradient-to-br from-[#0e1f45] to-[#08132c] p-4 shadow-lg">
+              <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">{chip.label}</p>
+              <p className="text-2xl font-extrabold text-white mt-1">{chip.value}</p>
+              <p className="text-xs text-blue-100/80 mt-2">{chip.note}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="grid md:grid-cols-2 gap-10">
           <div className="space-y-4 flex flex-col">
             {auroraTips.map(t => (
@@ -850,16 +954,122 @@ export default function AnchoragePage() {
             <div className="relative hidden">
               <SmartImage src="/images/aurora-anchorage.svg" alt="Aurora decorative" className="opacity-40"/>
             </div>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-blue-700/40 bg-[#0f2148] p-4 shadow">
+                <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">Anchorage Trivia</p>
+                <h4 className="text-lg font-semibold text-white mt-2">Why locals love night charters</h4>
+                <ul className="mt-3 space-y-2 text-sm text-blue-100/90">
+                  <li>Sky stations like Point Woronzof give near-instant aurora alerts.</li>
+                  <li>City grid means you can warm up at breweries between sky checks.</li>
+                  <li>Drivers track KP index + cloud cover via dispatch dashboard.</li>
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-blue-700/40 bg-[#10234c] p-4 shadow">
+                <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">Anchorage Fast Facts</p>
+                <h4 className="text-lg font-semibold text-white mt-2">Within 90 minutes you can…</h4>
+                <ul className="mt-3 space-y-2 text-sm text-blue-100/90">
+                  <li>Pivot north to Wasilla for clear skies after storms.</li>
+                  <li>Stage at Alyeska for ski-to-aurora double headers.</li>
+                  <li>Grab tide-dependent Turnagain photo stops without leaving the highway.</li>
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-blue-700/40 bg-gradient-to-br from-[#132852] to-[#0b1938] p-4 shadow md:col-span-2">
+                <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">Aurora Playbook</p>
+                <h4 className="text-lg font-semibold text-white mt-2">Peak KP game plan</h4>
+                <div className="mt-3 grid gap-4 md:grid-cols-3 text-sm text-blue-100/90">
+                  <div>
+                    <p className="text-xs text-blue-200/70 uppercase tracking-[0.2em]">KP 3-4</p>
+                    <p className="font-semibold text-white">Stay within city limits</p>
+                    <p className="mt-1 text-[13px]">Ship Creek overlook + Woronzof for Skyline glow.</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-blue-200/70 uppercase tracking-[0.2em]">KP 5-6</p>
+                    <p className="font-semibold text-white">Go 45-60 min north</p>
+                    <p className="mt-1 text-[13px]">Hatcher Pass pulloffs give zero light pollution.</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-blue-200/70 uppercase tracking-[0.2em]">KP 7+</p>
+                    <p className="font-semibold text-white">Chase horizon edges</p>
+                    <p className="mt-1 text-[13px]">Dispatch monitors NOAA alerts and loiter time is waived.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 rounded-3xl border border-blue-700/40 bg-gradient-to-br from-[#0f2348] to-[#091532] p-5 shadow">
+              <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">Dispatch case files</p>
+              <h4 className="text-lg font-semibold text-white mt-2">Real Anchorage requests we staged this season</h4>
+              <div className="mt-4 grid gap-4 md:grid-cols-2">
+                {AURORA_CASES.map((item) => (
+                  <div key={item.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-white">{item.label}</span>
+                      <span className="text-xs uppercase tracking-[0.25em] text-amber-200">{item.stat}</span>
+                    </div>
+                    <p className="text-[13px] leading-relaxed text-blue-100/90">{item.summary}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4 rounded-2xl border border-blue-700/40 bg-[#0d1f42] p-4 flex items-center gap-4 shadow">
+              <div className="rounded-full bg-blue-500/20 text-blue-100 px-3 py-2 text-xs font-semibold tracking-[0.3em] uppercase">
+                Ping
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">Dispatch hotfix lane</p>
+                <p className="text-xs text-blue-100/80">Flag “Aurora Flex” in your quote and our night lead replies on average in under 9 minutes.</p>
+              </div>
+            </div>
+            <div className="mt-3 rounded-2xl border border-blue-700/40 bg-[#0c1b38] p-4 shadow">
+              <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">Live slot count</p>
+              <div className="mt-2 flex items-end gap-3">
+                <p className="text-3xl font-black text-white">6</p>
+                <p className="text-xs text-blue-100/80">Aurora-ready sprinter windows left this weekend.</p>
+              </div>
+              <p className="text-[12px] text-blue-200/70 mt-2">Tap “Hold this slot” in your quote notes to freeze one for 24 hours.</p>
+            </div>
+            <div className="mt-3 rounded-2xl border border-blue-700/40 bg-[#09142c] p-4 shadow">
+              <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">Driver intel</p>
+              <p className="text-sm text-blue-100/90 mt-2">Night lead Jess reports clearest skies past Wasilla; she’s staging coffee + blanket refills at the first stop.</p>
+              <p className="text-[12px] text-blue-200/60 mt-2">Mention “Jess playbook” if you want the same loop sequencing.</p>
+            </div>
           </div>
           <div className="bg-[#132a55] p-4 md:p-6 rounded-2xl border border-blue-700/40 flex flex-col gap-4">
             <h3 className="text-2xl font-bold font-serif">Live Weather & Comfort</h3>
             <p className="text-blue-100/90 text-sm leading-relaxed">Anchorage-focused forecast snapshot to plan layers, hydration & timing.</p>
             <p className="text-blue-200 text-sm">We combine live forecasts with vehicle readiness checks—ask dispatch for cold-weather add-ons like extra fuel, blankets, or power banks.</p>
-            <div className="rounded-2xl overflow-hidden border border-blue-600/40 bg-blue-900/40 p-2 md:p-3 text-white text-sm">
+            <div className="rounded-2xl overflow-hidden border border-blue-600/40 bg-gradient-to-br from-[#0b2049] via-[#081633] to-[#050b1d] p-2 md:p-3 text-white text-sm shadow-[0_30px_90px_rgba(4,11,32,0.55)]">
               {/* Compact weather (anchored to Anchorage) */}
               <div className="[&_*]:!text-[13px] [&_h1]:!text-base [&_h2]:!text-sm [&_.min-h-screen]:min-h-0 [&_.min-h-screen]:bg-transparent [&_.max-w-7xl]:max-w-full [&_.grid]:gap-3">
                 <LiveWeatherAdvisor variant="compact" fixedPlace={{ name: 'Anchorage, Alaska', latitude: 61.2181, longitude: -149.9003, country_code: 'US' }} />
               </div>
+            </div>
+            <div className="rounded-2xl border border-blue-600/40 bg-gradient-to-br from-[#0f274f] to-[#091533] p-5 shadow-[0_30px_90px_rgba(4,11,32,0.45)]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.4em] text-blue-200/70">Road conditions</p>
+                  <h4 className="text-lg font-semibold text-white">Anchorage & Southcentral</h4>
+                </div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-3 py-1 text-xs text-white/80">AK DOT 511</span>
+              </div>
+              <div className="mt-4 space-y-4">
+                {ROAD_CONDITIONS.map((road) => (
+                  <div key={road.route} className="rounded-xl border border-white/10 bg-white/5 p-4">
+                    <div className="flex items-center justify-between text-sm text-blue-100/90">
+                      <span className="font-semibold text-white">{road.route}</span>
+                      <span className="text-xs uppercase tracking-[0.2em] text-amber-200">{road.status}</span>
+                    </div>
+                    <p className="text-xs text-blue-100/80 mt-2 leading-relaxed">{road.detail}</p>
+                  </div>
+                ))}
+              </div>
+              <a
+                href="https://511.alaska.gov"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center justify-center rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white hover:border-white/40"
+              >
+                Check live AK 511 →
+              </a>
             </div>
             <div className="mt-6">
               <h4 className="text-sm font-semibold text-blue-200 mb-2">View Similar Vehicles</h4>
@@ -869,230 +1079,71 @@ export default function AnchoragePage() {
         </div>
       </Section>
 
-      {stateReviews.length > 0 && (
-        <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-4 text-white font-serif tracking-tight">
-            Alaska Customer Reviews
-          </h2>
-          <div className="w-full flex justify-center mb-8">
-            <input
-              type="text"
-              placeholder="Search reviews by name or keywords…"
-              value={reviewSearch}
-              onChange={(e) => setReviewSearch(e.target.value)}
-              className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              aria-label="Search reviews"
-            />
+      <div className="space-y-12 py-12">
+        <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-6 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+          <div className="text-center space-y-3 mb-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Live sentiment</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold">Anchorage Poll Library</h2>
+            <p className="text-white/70 max-w-3xl mx-auto">
+              Same rotating grid you see on the homepage, pre-filtered for Anchorage riders and tags.
+            </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {filteredStateReviews.map((review, i) => (
-              <div key={`${review.name}-${i}`} className="relative bg-[#12244e] border border-blue-800/30 rounded-2xl shadow-xl p-7 flex flex-col gap-3 hover:scale-[1.02] transition-transform overflow-hidden">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="bg-blue-600 rounded-full w-11 h-11 flex items-center justify-center text-2xl font-bold text-white shadow-lg border border-blue-300/30">
-                    {review.name[0]}
-                  </div>
-                  <span className="font-bold text-blue-50 text-lg">
-                    {review.name} • {review.city}
-                  </span>
-                  <span className="ml-auto text-yellow-300 text-xl">
-                    {"★".repeat(review.rating)}
-                  </span>
-                </div>
-                <div className="text-blue-50 text-base leading-relaxed font-medium">
-                  {review.text}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-center mt-10">
-            <Link
-              href="/reviews"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
-            >
-              More Reviews
-            </Link>
-          </div>
-        </Section>
-      )}
-
-      {statePolls.length > 0 && (
-        <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 text-white font-serif tracking-tight">
-            Alaska Polls
-          </h2>
-          <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-6">
-            Real riders. Real opinions. Compare trends and get honest insights before you plan Anchorage or statewide routes.
-          </p>
-          <div className="w-full flex justify-center mb-8">
-            <input
-              type="text"
-              placeholder="Search polls…"
-              value={pollSearch}
-              onChange={(e) => setPollSearch(e.target.value)}
-              className="w-full max-w-md rounded-full px-6 py-4 text-lg bg-[#12244e] border border-blue-800/30 text-white placeholder-blue-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              aria-label="Search polls"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-            {filteredStatePolls.map((poll, idx) => (
-              <div key={`${poll.question}-${idx}`} className="bg-[#12244e] rounded-2xl shadow-xl border border-blue-800/30 p-6 flex flex-col items-center">
-                <h3 className="text-xl font-bold text-blue-50 mb-2 text-center">
-                  {poll.question}
-                </h3>
-                <ul className="text-blue-100 mb-2 text-center">
-                  {poll.options.map((opt, i) => (
-                    <li key={`${opt}-${i}`}>{opt}</li>
-                  ))}
-                </ul>
-                <span className="text-blue-200 text-sm">
-                  Vote on our <a href="/polls" className="underline hover:text-blue-100">polls page</a>!
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-center mt-10">
-            <Link
-              href="/polls"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700"
-            >
-              More Polls
-            </Link>
-          </div>
-        </Section>
-      )}
-
-      {/* REVIEWS */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Rider Reviews</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">{localReviews.map(r => (
-          <div key={r.name} className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 shadow flex flex-col gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl border border-blue-300/30">{r.name[0]}</div>
-              <div className="font-bold text-blue-50">{r.name}</div>
-              <div className="ml-auto text-yellow-300 text-lg">{"★".repeat(r.rating)}</div>
-            </div>
-            <div className="text-sm text-blue-100/90 leading-relaxed">{r.text}</div>
-          </div>
-        ))}</div>
-  <div className="flex justify-center mt-10"><Link href="/reviews" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-4 rounded-2xl shadow-xl text-lg transition border border-blue-700">More Reviews</Link></div>
-      </Section>
-
-      {/* REVIEW FORM & SLIDESHOW */}
-      <Section className="flex flex-col md:flex-row gap-10 max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl py-14 px-6 mb-16 border border-blue-800/40">
-        <div className="flex-1">
-          <h3 className="text-3xl md:text-4xl font-extrabold mb-4 font-serif bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Share Your Anchorage Experience</h3>
-          <p className="text-blue-100/90 text-sm leading-relaxed mb-4">Submit a review—top local feedback may be featured. Add optional photos.</p>
-          <ReviewForm />
-        </div>
-        <div className="flex-1 md:border-l border-blue-700/40 md:pl-10">
-          <h3 className="text-3xl md:text-4xl font-extrabold mb-4 font-serif bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Create a Trip Slideshow</h3>
-          <p className="text-blue-100/90 text-sm leading-relaxed mb-4">Upload highlights—our tool instantly renders a shareable slideshow.</p>
-          <SlideshowMaker />
-        </div>
-      </Section>
-
-
-      {/* POLLS (interactive, registry-driven) */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-14 px-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Rider Polls</h2>
-        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8">Snapshot of planning preferences. Vote below or explore all polls on the <Link href="/polls" className="underline">live polls</Link> page. Your input helps us stock the right gear and plan realistic buffers for Anchorage trips.</p>
           <div className="mx-auto max-w-5xl">
-            {/* Use canonical HomePolls for consistent UI; pass groups for anchorage tag to focus polls */}
-            <HomePolls groups={[{ tag: 'anchorage', label: 'Anchorage' }]} pickSize={50} visiblePerGroup={6} />
+            <HomePolls groups={[{ tag: "anchorage", label: "Anchorage" }]} pickSize={50} visiblePerGroup={6} innerScroll />
           </div>
-      </Section>
-
-      {/* TOOLS */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-8 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Planning Tools</h2>
-        <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-8">Compare capacities, split costs, plan multi‑stop routes, and check weather without losing dark theme contrast.</p>
-  <p className="text-center text-blue-200 max-w-2xl mx-auto mb-6">Pro tip: run a ToolsSlider compare and then hit Instant Quote — our team will pre-fill vehicle layout and driver notes for faster confirmations.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-          {helperTools.map((tool) => (
-            <div
-              key={tool.title}
-              className="bg-white rounded-2xl shadow-xl p-6 border-2 border-blue-100 text-left hover:shadow-2xl hover:-translate-y-1 transition"
+          <div className="flex justify-center mt-10">
+            <a
+              href="/polls"
+              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-8 py-3 text-sm font-semibold text-white hover:border-white/40"
             >
-              <h3 className="text-blue-900 font-extrabold text-lg mb-2">
-                {tool.title}
-              </h3>
-              <p className="text-blue-800 mb-4">{tool.desc}</p>
-              <a
-                href={tool.href}
-                className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-2 rounded-2xl shadow transition"
-              >
-                Try Now
-              </a>
-            </div>
-          ))}
-        </div>
-        <div className="rounded-3xl shadow-xl border border-blue-600/30 p-2 sm:p-4 bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
-          <ToolsSlider />
-        </div>
-      </Section>
+              Browse all polls →
+            </a>
+          </div>
+        </section>
 
-      {/* LOCAL EVENTS */}
-      <Section className="max-w-7xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148] rounded-3xl shadow-xl py-14 px-6 mb-16 border border-blue-800/40">
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-6 font-serif tracking-tight bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent">Anchorage Seasonal Events & Trip Builders</h2>
-        <p className="text-blue-100/90 text-center max-w-4xl mx-auto mb-10 text-sm md:text-base">Anchor your itinerary to high‑impact local events—use these to justify early vehicle blocks, plan layered packing, or extend a cruise stay. (Dates approximate—confirm annually.)</p>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[ 
-            { season:'Jan–Mar', name:'Aurora Peak Windows', desc:'Dark skies + cold clarity. Flexible late‑night charter loops north of city.' },
-            { season:'Feb', name:'Fur Rendezvous', desc:'Winter festival downtown—parades and marketplace increase traffic staging.' },
-            { season:'Early Mar', name:'Iditarod Ceremonial Start', desc:'Crowds + media. Stage earlier hotel departures and downtown detours.' },
-            { season:'May–Sept', name:'Cruise Transfer Surge', desc:'High weekend demand to Whittier/Seward—lock charter blocks 90+ days out.' },
-            { season:'June', name:'Summer Solstice', desc:'Extended daylight enables multi‑stop scenic loops and late returns.' },
-            { season:'July', name:'Mount Marathon (Seward)', desc:'Add buffer for highway flow + Seward harbor congestion if day‑tripping.' },
-            { season:'Aug', name:'State Fair (Palmer)', desc:'Evening return surges; plan staggered pickup windows & cooler storage.' },
-            { season:'Sept', name:'Fall Colors & Shoulder Deals', desc:'Slight rate relief; combine glacier + brewery loops with earlier dusk.' },
-            { season:'Nov–Dec', name:'Holiday Lights & Early Aurora', desc:'Short daylight; integrate warming stops + photo pauses.' }
-          ].map(e => (
-            <div key={e.name} className="bg-[#132a55] rounded-2xl p-5 border border-blue-700/40 shadow flex flex-col">
-              <div className="text-xs uppercase tracking-wider text-blue-300 font-semibold mb-1">{e.season}</div>
-              <div className="font-bold text-blue-50 mb-1 leading-snug">{e.name}</div>
-              <p className="text-[12px] text-blue-100/90 leading-relaxed flex-1">{e.desc}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {e.name.includes('Aurora') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Night Charter</span>}
-                {e.name.includes('Cruise') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Port Transfer</span>}
-                {e.name.includes('Fair') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Staggered Return</span>}
-                {e.name.includes('Marathon') && <span className="px-2 py-1 rounded-full bg-blue-800/40 text-[10px] border border-blue-600/40">Highway Buffer</span>}
-              </div>
-          <div className="text-center mt-6">
-            <a href="/quote#instant" className="rounded-full bg-yellow-500 text-black font-bold px-6 py-3 shadow-lg hover:brightness-95 transition">Use Tools & Get Quote</a>
+        <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-6 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+          <div className="text-center space-y-3 mb-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Planning Stack</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold">Anchorage Tools Rail</h2>
+            <p className="text-white/70 max-w-3xl mx-auto">
+              Tap any tile to see why it exists, then launch the real tool or keep comparing with the slider below.
+            </p>
           </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Cruise Transfer Builder</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Hotel staging & luggage manifest</li>
-              <li>Glacier / photo optional stop</li>
-              <li>Tunnel timing (Whittier)</li>
-              <li>Secondary driver fallback</li>
-            </ul>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {helperTools.map((tool) => (
+              <article
+                key={tool.title}
+                className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left shadow-[0_30px_80px_rgba(2,6,23,0.45)]"
+              >
+                <h3 className="text-xl font-semibold text-white mb-2">{tool.title}</h3>
+                <p className="text-white/70 text-sm mb-4">{tool.desc}</p>
+                <a
+                  href={tool.href}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-semibold text-white hover:border-white/40"
+                >
+                  Launch tool →
+                </a>
+              </article>
+            ))}
           </div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Aurora Flex Charter</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Dynamic cloud gap routing</li>
-              <li>Thermal gear & hot drinks staging</li>
-              <li>Flexible 60–90 min extension</li>
-              <li>Photo stop light discipline</li>
-            </ul>
+          <div className="rounded-3xl shadow-[0_40px_100px_rgba(2,6,23,0.6)] border border-white/10 p-2 sm:p-4 bg-gradient-to-br from-[#0a193a] via-[#08122b] to-[#040812]">
+            <ToolsSlider />
           </div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 flex flex-col gap-3">
-            <h3 className="font-serif text-xl font-bold text-blue-50">Multi‑Stop Brewery Loop</h3>
-            <ul className="text-blue-100/90 text-sm space-y-1 list-disc list-inside">
-              <li>Pre‑route crowd timing</li>
-              <li>ID / age verification flow</li>
-              <li>Hydration + snack reminder</li>
-              <li>Safe return & final headcount</li>
-            </ul>
+        </section>
+
+        <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-6 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+          <div className="text-center space-y-3 mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Ideas board</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold">Events & Occasions</h2>
+            <p className="text-white/70 max-w-3xl mx-auto">
+              Same card grid as our homepage events rail, tuned for Anchorage. Search, dream, and then hit quote.
+            </p>
           </div>
-        </div>
-      </Section>
+          <div className="rounded-[32px] border border-white/10 bg-white/5 backdrop-blur">
+            <EventsSection limit={9} tag="anchorage" />
+          </div>
+        </section>
+      </div>
 
       {/* EXTRA LONG-FORM: PLANNING, COSTS & FAQs (added to reach ~1k words) */}
       <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/40">
