@@ -4,7 +4,6 @@ import Link from "next/link";
 import PageLayout from "../../../components/PageLayout";
 import Section from "../../../components/Section";
 import WhyRentWithUs from "../../../components/WhyRentWithUs";
-import ToolsSlider from "../../../components/ToolsSlider";
 import LiveWeatherAdvisor from "../../../components/LiveWeatherAdvisor"; // will wrap & constrain
 import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
 import { SmartImage } from "../../../components/SmartImage";
@@ -457,6 +456,14 @@ export default function AnchoragePage() {
   const stateInitial = alaskaEntry?.state?.[0]?.toUpperCase() ?? "A";
 
   return (
+    // Copilot:
+    // Restyle this Anchorage page to visually match the Event cards layout.
+    // - Create a grid of 6 boxes styled exactly like the event cards on /events.
+    // - Each block should have a title (e.g. "Party Buses", "Weddings", etc.), short text, and a hover effect identical to the event cards.
+    // - Use the same border glow, background blur, rounded corners, and hover lift.
+    // - Arrange the 6 cards in a responsive grid: 1 column on mobile, 2 on tablet, 3 on desktop.
+    // - Below the grid, add a centered "More Events →" button with the same gradient or accent color as other call-to-action buttons.
+    // - Keep top padding, spacing, and typography consistent with the Events page hero section.
     <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
       <section className="relative px-4 pt-4">
         <div className="mx-auto max-w-6xl overflow-hidden rounded-[40px] border border-blue-500/30 bg-gradient-to-br from-[#081b3d] via-[#041029] to-black shadow-[0_40px_120px_rgba(3,9,23,0.6)]">
@@ -1164,9 +1171,6 @@ export default function AnchoragePage() {
               See more tools
             </a>
           </div>
-          <div className="rounded-3xl shadow-[0_40px_100px_rgba(2,6,23,0.6)] border border-white/10 p-2 sm:p-4 bg-gradient-to-br from-[#0a193a] via-[#08122b] to-[#040812]">
-            <ToolsSlider />
-          </div>
         </section>
 
         <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-6 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
@@ -1192,14 +1196,6 @@ export default function AnchoragePage() {
   <p className="text-blue-100/90 leading-relaxed mb-4">Planning checklist quick hits: include passenger count, luggage & gear list, exact pickup/drop addresses, any timed connections, and a note about mobility needs. If you are coordinating with cruise lines or event venues, include terminal names and expected disembark windows so we can model real-world buffer times. Need help? Contact our Anchorage dispatch at <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> or call <a href="tel:8885352566" className="underline">(888) 535‑2566</a>.</p>
   <p className="text-blue-100/90 leading-relaxed">Local resource links: visitor info at <a href="https://www.anchorage.net" target="_blank" rel="noopener noreferrer" className="underline">anchorage.net</a>, train connections at <a href="https://www.alaskarailroad.com" target="_blank" rel="noopener noreferrer" className="underline">alaskarailroad.com</a>, and port timing notices through local port authorities. When in doubt, add extra buffer on the quote and we will convert it to guaranteed time in the confirmation.</p>
       </Section>
-      {/* EXTRA SLIDER #3 — before final CTA */}
-      <Section className="max-w-7xl mx-auto my-10">
-        <h4 className="text-xl font-bold text-center mb-4 text-blue-50">More Photos from Our Anchorage Fleet</h4>
-        <div className="bg-[#08142a] rounded-2xl p-4 border border-blue-700/30 shadow">
-          <AnchorageVehicleSlider />
-        </div>
-      </Section>
-
       {/* FINAL CTA */}
     <Section className="bg-gradient-to-r from-blue-800 via-blue-900 to-black">
         <div className="max-w-5xl mx-auto text-center py-6">

@@ -1,9 +1,8 @@
 import React from "react";
 import HomePollsSection from "./HomePollsSection";
-import EventsSection from "../EventsSection";
+import EventsExplorer from "../events/EventsExplorer";
 import ReviewsSearchSection, { SimpleReview } from "./ReviewsSearchSection";
 import { getFeaturedReviews } from "../../lib/server/reviews";
-import ToolsComingSoonGrid, { RoadmapTool } from "./ToolsComingSoonGrid";
 
 export type MegaPollGroup = {
   key: string;
@@ -162,74 +161,6 @@ const MICRO_UPDATES = [
   },
 ];
 
-const TOOL_ROADMAP: RoadmapTool[] = [
-  {
-    key: "anchorage-cost-split",
-    name: "Anchorage Cost Splitter",
-    eta: "Ships soon",
-    summary: "Drop in your total charter quote and let the tool auto-split by passenger counts or seat blocks.",
-    bullets: [
-      "Handles uneven VIP vs general seating",
-      "Auto-add tip + tax buffers",
-      "One tap to copy the per-rider math",
-    ],
-  },
-  {
-    key: "weather-window",
-    name: "Aurora Weather Window",
-    eta: "In QA",
-    summary: "KP index + low cloud overlay tailored to Anchorage pickup zones so you know when to roll north.",
-    bullets: [
-      "KP + NOAA feed blended",
-      "Route-based cloud gates",
-      "Shareable standby alert",
-    ],
-  },
-  {
-    key: "buffer-buddy",
-    name: "Buffer Buddy",
-    eta: "Early access",
-    summary: "Suggests realistic load/unload padding once you pick a route, vehicle, and luggage profile.",
-    bullets: [
-      "Learns from past Anchorage trips",
-      "Adds Seward/Glenn highway advisories",
-      "Exports straight into your quote",
-    ],
-  },
-  {
-    key: "gear-manifest",
-    name: "Gear Manifest Builder",
-    eta: "Design",
-    summary: "Drag-and-drop bins for skis, coolers, and AV kits so dispatch can pre-stage the right racks.",
-    bullets: [
-      "Visual bin counts",
-      "Flag overweight loads",
-      "Send to driver packet",
-    ],
-  },
-  {
-    key: "road-status",
-    name: "Road Status Ping",
-    eta: "Prototype",
-    summary: "Pick recurring routes and get one-click AK 511 + Mat-Su wind alerts before you depart.",
-    bullets: [
-      "SMS + email hooks",
-      "Preset favorite corridors",
-      "Color-coded severity cues",
-    ],
-  },
-  {
-    key: "crew-shift-sync",
-    name: "Crew Shift Sync",
-    eta: "Concept",
-    summary: "Align driver swaps, relief vehicles, and venue curfews in one Gantt-like view.",
-    bullets: [
-      "Drag blocks to adjust",
-      "Auto-warn on CDL hour limits",
-      "Exports PDF handoffs",
-    ],
-  },
-];
 
 export default async function AllPollsSection() {
   const featured = await getFeaturedReviews(48);
@@ -248,25 +179,6 @@ export default async function AllPollsSection() {
       <ReviewsSearchSection reviews={mapped} />
 
       <HomePollsSection />
-
-      <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#07142f] via-[#040c1f] to-[#010308] px-4 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
-        <div className="text-center space-y-3 mb-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Plan faster</p>
-          <h2 className="text-4xl md:text-5xl font-extrabold">Tools Lab</h2>
-          <p className="text-white/70 max-w-3xl mx-auto">
-            Tap any tile to see the modal with what the tool will ship with, why it matters, and how to request early access. Every tool in this rail is marked as coming soon because the Anchorage ops team is tuning them right now.
-          </p>
-        </div>
-        <ToolsComingSoonGrid tools={TOOL_ROADMAP} />
-        <div className="mt-10 text-center">
-          <a
-            href="/tools"
-            className="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white hover:border-white/40"
-          >
-            See more tools
-          </a>
-        </div>
-      </section>
 
       <section className="mx-auto max-w-7xl rounded-[40px] border border-lime-400/10 bg-gradient-to-br from-[#0a1b34] via-[#071023] to-[#03050b] px-6 py-12 shadow-[0_40px_120px_rgba(2,6,23,0.6)]">
         <div className="text-center space-y-3 mb-12">
@@ -345,16 +257,9 @@ export default async function AllPollsSection() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-4 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
-        <div className="text-center space-y-3 mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Ideas board</p>
-          <h2 className="text-4xl md:text-5xl font-extrabold">Events & Occasions</h2>
-          <p className="text-white/70 max-w-3xl mx-auto">
-            Browse popular trip types, see photos, and jump straight into a quote, call, or email.
-          </p>
-        </div>
-        <EventsSection limit={9} />
-      </section>
+      <div className="mx-auto max-w-7xl">
+        <EventsExplorer limit={6} showInfoBanners={false} showMoreButton showSchema={false} />
+      </div>
     </div>
   );
 }

@@ -1,13 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import SmartImage from "../../components/SmartImage";
 import { eventDetails as fallbackEventDetails } from "./eventDetails";
 import { getCategoryImages } from "../../utils/optimizedImages";
-
-const PHONE_DISPLAY = "(888) 535-2566";
-const PHONE_TEL = "8885352566";
-const EMAIL = "info@bus2ride.com";
+import EventCard from "../../components/events/EventCard";
 
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -67,15 +63,6 @@ const INFO_BANNERS = [
     cta: { label: "Game Day Planning", href: "/events/sporting-events" },
   },
 ];
-
-const CTA = {
-  base:
-    "inline-flex items-center justify-center rounded-full font-bold text-sm tracking-tight shadow-md transition border min-w-[160px] h-10 px-5 active:translate-y-[1px]",
-  primary:
-    "bg-blue-600 text-white border-blue-700 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500",
-  secondary: "bg-white text-blue-900 border-blue-200 hover:bg-blue-50",
-  accent: "bg-blue-700 text-white border-blue-700 hover:bg-blue-800",
-};
 
 function InfoBanner({
   title,
@@ -171,115 +158,11 @@ export default function EventsClient() {
             </label>
 
             <input
-              id="event-search"
-              placeholder="Search events…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="rounded-lg px-4 py-2 bg-[#0f1f46] text-blue-50 border border-blue-800/40 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[240px]"
-            />
+              "use client";
 
+              import EventsExplorer from "../../components/events/EventsExplorer";
+
+              export default function EventsClient() {
+                return <EventsExplorer />;
+              }
             <select
-              className="rounded-lg px-4 py-2 bg-[#0f1f46] text-blue-50 border border-blue-800/40 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[240px]"
-              value={selectedEvent}
-              onChange={(e) => setSelectedEvent(e.target.value)}
-            >
-              <option value="">Select an event…</option>
-              {filtered.map((event) => (
-                <option key={event.name} value={event.href || `/events/${slugify(event.name)}`}>
-                  {event.name}
-                </option>
-              ))}
-            </select>
-
-            <button
-              type="button"
-              className="rounded-full font-bold px-6 py-2 text-base shadow-lg transition border flex items-center justify-center bg-blue-600 text-white border-blue-700 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleGo}
-              disabled={!selectedEvent && filtered.length === 0}
-            >
-              Go
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {filtered.map((event, i) => {
-              const href = event.href || `/events/${slugify(event.name)}`;
-              const card = (
-                <article
-                  key={event.name}
-                  className="relative bg-[#0f1f46] rounded-3xl border border-blue-800/40 p-6 min-h-[480px] flex flex-col items-center shadow-[0_10px_28px_-4px_rgba(0,0,0,.45)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-6px_rgba(0,0,0,.55)]"
-                >
-                  <div className="w-full group">
-                    <a
-                      href={href}
-                      aria-label={`Learn more about ${event.name}`}
-                      className="block no-underline"
-                    >
-                      <SmartImage
-                        src={pickImageForEvent(event.name, i)}
-                        alt={event.name}
-                        className="rounded-2xl shadow-lg w-full h-64 object-cover object-center mb-4 border border-blue-800/40"
-                      />
-                      <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 font-serif text-center group-hover:text-blue-100 transition-colors">
-                        {event.name}
-                      </h3>
-                      <p className="text-base md:text-lg text-blue-100/90 text-center mb-6">
-                        {event.description}
-                      </p>
-                    </a>
-                  </div>
-
-                  <div className="flex flex-row flex-wrap gap-2 justify-center items-center w-full mt-auto">
-                    <a href="/quote#instant" className={`${CTA.base} ${CTA.primary}`}>
-                      Quote
-                    </a>
-                    <a href={`tel:${PHONE_TEL}`} className={`${CTA.base} ${CTA.secondary}`}>
-                      📞 {PHONE_DISPLAY}
-                    </a>
-                    <a href={`mailto:${EMAIL}`} className={`${CTA.base} ${CTA.primary}`}>
-                      Email
-                    </a>
-                    <a
-                      href={`/polls?tag=${encodeURIComponent(slugify(event.name))}`}
-                      className={`${CTA.base} ${CTA.accent}`}
-                    >
-                      Related Polls
-                    </a>
-                  </div>
-                </article>
-              );
-
-              const needsBanner = (i + 1) % 6 === 0 && i !== filtered.length - 1;
-              if (!needsBanner) return card;
-              const bannerIndex = Math.floor((i + 1) / 6 - 1) % INFO_BANNERS.length;
-              const b = INFO_BANNERS[bannerIndex];
-              return (
-                <React.Fragment key={`${event.name}-${i}`}>
-                  {card}
-                  <InfoBanner title={b.title} body={b.body} cta={b.cta} key={`info-banner-${i}`} />
-                </React.Fragment>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: "Events & Occasions",
-            itemListElement: filtered.map((e, i) => ({
-              "@type": "ListItem",
-              position: i + 1,
-              name: e.name,
-              url: e.href ?? `/events/${slugify(e.name)}`,
-            })),
-          }),
-        }}
-      />
-    </>
-  );
-}
