@@ -10,6 +10,7 @@ import AnchorageVehicleSlider from "../../../components/AnchorageVehicleSlider";
 import { SmartImage } from "../../../components/SmartImage";
 import HomePolls from "../../../components/HomePolls";
 import EventsSection from "../../../components/EventsSection";
+import ToolsComingSoonGrid, { RoadmapTool } from "../../../components/polls/ToolsComingSoonGrid";
 import VehicleGalleryCard from "../../../components/VehicleGalleryCard";
 import ReviewsSearchSection, { SimpleReview } from "../../../components/polls/ReviewsSearchSection";
 import { findState, slugifyState } from "../locationData";
@@ -126,36 +127,72 @@ const anchorageReviewHighlights: SimpleReview[] = [
 
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-const helperTools = [
+const ANCHORAGE_TOOL_ROADMAP: RoadmapTool[] = [
   {
-    title: "⚡ Instant Quote Tool",
-    desc: "Get a real-time quote for your trip in seconds. No hidden fees.",
-    href: "/quote",
+    key: "instant-quote",
+    name: "Instant Quote Refresh",
+    eta: "Beta soon",
+    summary: "Cleaner flow that keeps aurora buffer prompts front and center while you price Anchorage routes.",
+    bullets: [
+      "Auto-suggests Seward & Glenn Highway padding",
+      "Highlights overtime rules before checkout",
+      "Exports a draft PDF with driver notes",
+    ],
   },
   {
-    title: "🚌 Vehicle Capacity Finder",
-    desc: "Enter your group size and see which vehicles fit best.",
-    href: "/tools",
+    key: "capacity-matcher",
+    name: "Capacity Matcher",
+    eta: "QA",
+    summary: "Drop in headcounts + luggage and it will recommend real Anchorage fleet combos (sprinter + coach, etc.).",
+    bullets: [
+      "Understands VIP vs general seating",
+      "Flags when a trailer is smart",
+      "One tap to push into Instant Quote",
+    ],
   },
   {
-    title: "💸 Cost Split Calculator",
-    desc: "Know your per-person cost instantly by entering the total and group size.",
-    href: "/tools",
+    key: "cost-split",
+    name: "Cost Split Studio",
+    eta: "Design",
+    summary: "Lets you split costs per rider tier, add gratuity or standby time, and share the math right to email.",
+    bullets: [
+      "Multiple tiers (wedding party vs guests)",
+      "Auto-add tip, tax, standby",
+      "Generates Venmo-ready summary",
+    ],
   },
   {
-    title: "📅 Date Price Checker",
-    desc: "See how prices change by date, season, or holiday.",
-    href: "/tools",
+    key: "date-price",
+    name: "Date Price Checker",
+    eta: "Prototype",
+    summary: "Heat-map calendar that combines cruise surge, aurora demand, and fleet availability so you can pick smarter dates.",
+    bullets: [
+      "Weekend vs weekday pricing curves",
+      "Notes blackout / port surge periods",
+      "Suggests alternate vehicle mixes",
+    ],
   },
   {
-    title: "🧭 Distance & Buffer Helper",
-    desc: "Smart time padding for Alaska routes & conditions.",
-    href: "/tools",
+    key: "buffer-buddy",
+    name: "Buffer Buddy",
+    eta: "Early access",
+    summary: "A wizard that suggests realistic buffers once you pick route, vehicle, luggage, and weather risk.",
+    bullets: [
+      "Learns from Anchorage dispatch logs",
+      "Adds wildlife + photo-stop pauses",
+      "Exports directly into your quote",
+    ],
   },
   {
-    title: "📍 Zip Code Price Lookup",
-    desc: "Find pricing for your city or zip code instantly.",
-    href: "/tools",
+    key: "zip-lookup",
+    name: "Zip Lookup Mini",
+    eta: "Concept",
+    summary: "Type a zip or neighborhood and get representative pricing bands plus the closest depots we stage from.",
+    bullets: [
+      "Shows pickup radius + travel fee cues",
+      "Suggests nearby hubs for faster staging",
+      "Links out to matching polls + case studies",
+    ],
   },
 ];
 
@@ -1113,25 +1150,19 @@ export default function AnchoragePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Planning Stack</p>
             <h2 className="text-4xl md:text-5xl font-extrabold">Anchorage Tools Rail</h2>
             <p className="text-white/70 max-w-3xl mx-auto">
-              Tap any tile to see why it exists, then launch the real tool or keep comparing with the slider below.
+              Tap any tile to see what the Anchorage team is building next, why it matters, and when you can try it. The live tools slider is still below when you are ready to launch something today.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {helperTools.map((tool) => (
-              <article
-                key={tool.title}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 text-left shadow-[0_30px_80px_rgba(2,6,23,0.45)]"
-              >
-                <h3 className="text-xl font-semibold text-white mb-2">{tool.title}</h3>
-                <p className="text-white/70 text-sm mb-4">{tool.desc}</p>
-                <a
-                  href={tool.href}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-semibold text-white hover:border-white/40"
-                >
-                  Launch tool →
-                </a>
-              </article>
-            ))}
+          <div className="rounded-[32px] border border-white/10 bg-white/[0.04] p-4 shadow-[0_40px_120px_rgba(2,6,23,0.6)]">
+            <ToolsComingSoonGrid tools={ANCHORAGE_TOOL_ROADMAP} />
+          </div>
+          <div className="mt-6 text-center">
+            <a
+              href="/tools"
+              className="inline-flex items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-6 py-3 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg transition hover:bg-blue-500"
+            >
+              See more tools
+            </a>
           </div>
           <div className="rounded-3xl shadow-[0_40px_100px_rgba(2,6,23,0.6)] border border-white/10 p-2 sm:p-4 bg-gradient-to-br from-[#0a193a] via-[#08122b] to-[#040812]">
             <ToolsSlider />
