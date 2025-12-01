@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import PollCardPro from "../components/PollCardPro";
+import PollInlineCard from "./polls/PollInlineCard";
 
 type Poll = { id: string; question: string; options: string[]; tags?: string[]; active?: boolean; };
 type PollsPayload = { polls: Poll[]; votes: Record<string, Record<string, number>>; };
@@ -41,7 +42,25 @@ function formatLabel(label?: string) {
     .join(" ");
 }
 
-export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, innerScroll = false, innerScrollClass }: { groups?: { tag: string; label?: string }[]; pickSize?: number; visiblePerGroup?: number; innerScroll?: boolean; innerScrollClass?: string }) {
+type HomePollGroup = { tag: string; label?: string };
+
+type HomePollsProps = {
+  groups?: HomePollGroup[];
+  pickSize?: number;
+  visiblePerGroup?: number;
+  innerScroll?: boolean;
+  innerScrollClass?: string;
+  variant?: "grid" | "columns";
+};
+
+export default function HomePolls({
+  groups,
+  pickSize = 8,
+  visiblePerGroup = 3,
+  innerScroll = false,
+  innerScrollClass,
+  variant = "grid",
+}: HomePollsProps) {
   const [data, setData] = useState<PollsPayload | null>(null);
   const [groupsPicked, setGroupsPicked] = useState<({ label?: string; tag: string; items: { poll: Poll; counts: Record<string, number> }[] }[]) | null>(null);
 
@@ -95,21 +114,81 @@ export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, i
       };
     };
 
-    let out: { label?: string; tag: string; items: { poll: Poll; counts: Record<string, number> }[] }[] = [];
-    if (groups?.length) {
-      out = groups.map(g => build(g.tag, g.label));
-    } else {
+    const assemble = (collection?: HomePollGroup[]) => {
+      if (collection && collection.length) {
+        return collection
+          .map((g) => build(g.tag, g.label))
+          .filter((entry) => entry.items.length);
+      }
+
       const tagCount = new Map<string, number>();
-      all.forEach(p => (p.tags || []).forEach(t => tagCount.set(t, (tagCount.get(t) || 0) + 1)));
-      const sorted = Array.from(tagCount.entries()).sort((a,b)=>b[1]-a[1]).map(([t])=>t);
-      const chosen = sorted.slice(0,3);
-      out = chosen.map(t => build(t, t));
+      all.forEach((p) => (p.tags || []).forEach((t) => tagCount.set(t, (tagCount.get(t) || 0) + 1)));
+      const sorted = Array.from(tagCount.entries())
+        .sort((a, b) => b[1] - a[1])
+        .map(([t]) => t);
+      const chosen = sorted.slice(0, 3);
+      return chosen.map((t) => build(t, t)).filter((entry) => entry.items.length);
+    };
+
+    let out = assemble(groups);
+    if (!out.length) {
+      out = assemble();
+    } else if (variant === "columns") {
+      const target = 3;
+      if (out.length < target) {
+        const fallback = assemble();
+        const seen = new Set(out.map((entry) => entry.tag.toLowerCase()));
+        for (const entry of fallback) {
+          if (out.length >= target) break;
+          if (seen.has(entry.tag.toLowerCase())) continue;
+          out.push(entry);
+          seen.add(entry.tag.toLowerCase());
+        }
+        if (out.length < target && !fallback.length) {
+          out = assemble();
+        }
+      }
     }
 
     setGroupsPicked(out);
   }, [data, groups, pickSize]);
 
   if (!data || groupsPicked === null) return <div className="text-center text-blue-200/80 py-6">Loading polls</div>;
+  if (!groupsPicked.length) return <div className="text-center text-blue-200/80 py-6">No polls available right now.</div>;
+
+  if (variant === "columns") {
+    return (
+      <div suppressHydrationWarning className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {groupsPicked.map((g, gi) => (
+          <div key={gi} className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl md:text-2xl font-semibold text-white">{formatLabel(g.label)}</h3>
+              <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 text-xs text-white/80" aria-hidden>
+                Scroll for more ↓
+              </span>
+            </div>
+            <div className="relative rounded-2xl border border-white/10 bg-white/5 p-2">
+              <div className="max-h-[640px] overflow-y-auto pr-2 space-y-3">
+                {g.items.map(({ poll }) => (
+                  <PollInlineCard key={poll.id} pollId={poll.id} question={poll.question} slug={poll.slug}
+                  />
+                ))}
+              </div>
+              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-12 rounded-b-2xl bg-gradient-to-t from-black/40 to-transparent" />
+            </div>
+            <div className="text-center">
+              <a
+                href={`/polls?tag=${encodeURIComponent(g.tag)}`}
+                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:border-white/40"
+              >
+                More polls
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div suppressHydrationWarning className="max-w-6xl mx-auto">
@@ -118,21 +197,18 @@ export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, i
           <div key={gi}>
             <h3 className="text-xl font-bold text-blue-50 mb-4">{formatLabel(g.label)}</h3>
             <div className="grid grid-cols-1 gap-4">
-              {
-                innerScroll ? (
-                  <div className={innerScrollClass || "max-h-[60vh] overflow-y-auto no-scrollbar p-1 -mr-2"}>
-                    {g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
-                      <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
-                    ))}
-                  </div>
-                ) : (
-                  g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
+              {innerScroll ? (
+                <div className={innerScrollClass || "max-h-[60vh] overflow-y-auto no-scrollbar p-1 -mr-2"}>
+                  {g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
                     <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
-                  ))
-                )
-              }
+                  ))}
+                </div>
+              ) : (
+                g.items.slice(0, visiblePerGroup).map(({ poll, counts }) => (
+                  <PollCardPro key={poll.id} poll={poll} initialCounts={counts} />
+                ))
+              )}
             </div>
-            {/* rail of the rest */}
             {g.items.length > visiblePerGroup && (
               <div className="mt-4">
                 <div className="text-blue-200 text-sm mb-2">More in {g.label}</div>
@@ -145,10 +221,13 @@ export default function HomePolls({ groups, pickSize = 8, visiblePerGroup = 3, i
                     ))}
                   </div>
                 </div>
-            </div>
+              </div>
             )}
             <div className="mt-4 text-center">
-              <a href={`/polls?tag=${encodeURIComponent(g.tag)}`} className="inline-block px-4 py-2 rounded-full bg-white text-blue-900 font-semibold hover:bg-blue-50">
+              <a
+                href={`/polls?tag=${encodeURIComponent(g.tag)}`}
+                className="inline-block px-4 py-2 rounded-full bg-white text-blue-900 font-semibold hover:bg-blue-50"
+              >
                 More polls
               </a>
             </div>

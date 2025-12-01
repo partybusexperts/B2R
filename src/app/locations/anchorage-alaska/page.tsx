@@ -1080,23 +1080,30 @@ export default function AnchoragePage() {
       </Section>
 
       <div className="space-y-12 py-12">
-        <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-6 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
-          <div className="text-center space-y-3 mb-10">
+        <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#06163a] via-[#04102a] to-[#010307] px-4 sm:px-6 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
+          <div className="flex flex-col gap-2">
             <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Live sentiment</p>
             <h2 className="text-4xl md:text-5xl font-extrabold">Anchorage Poll Library</h2>
-            <p className="text-white/70 max-w-3xl mx-auto">
-              Same rotating grid you see on the homepage, pre-filtered for Anchorage riders and tags.
-            </p>
+            <p className="text-white/70 max-w-3xl">Same rotating mix as the homepage polls rail—this view favors Anchorage riders, party crews, and winter planners.</p>
           </div>
-          <div className="mx-auto max-w-5xl">
-            <HomePolls groups={[{ tag: "anchorage", label: "Anchorage" }]} pickSize={50} visiblePerGroup={6} innerScroll />
+          <div className="mt-10">
+            <HomePolls
+              variant="columns"
+              pickSize={60}
+              groups={[
+                { tag: "anchorage", label: "Anchorage" },
+                { tag: "party-bus", label: "Party buses" },
+                { tag: "winter", label: "Winter ops" },
+              ]}
+            />
           </div>
-          <div className="flex justify-center mt-10">
+          <div className="mt-10 text-center">
+            <p className="text-base text-white/80">Need a deeper cut? Jump into the full poll archive and slice by vehicle, city, or trip type.</p>
             <a
               href="/polls"
-              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-8 py-3 text-sm font-semibold text-white hover:border-white/40"
+              className="mt-4 inline-flex items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-6 py-3 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg transition hover:bg-blue-500"
             >
-              Browse all polls →
+              See all polls
             </a>
           </div>
         </section>

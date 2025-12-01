@@ -178,16 +178,7 @@ export default async function AllPollsSection() {
     <div className="bg-gradient-to-b from-[#040916] via-[#050c1f] to-[#02040a] py-16 text-white space-y-16">
       <ReviewsSearchSection reviews={mapped} />
 
-      <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-4 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
-        <div className="text-center space-y-3 mb-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-white/50">Live sentiment</p>
-          <h2 className="text-4xl md:text-5xl font-extrabold">Poll Library</h2>
-          <p className="text-white/70 max-w-3xl mx-auto">
-            Real rider data across cities, vehicles, and events. The same rotating mix you see on the homepage, now in one place.
-          </p>
-        </div>
-        <HomePollsSection />
-      </section>
+      <HomePollsSection />
 
       <section className="mx-auto max-w-7xl rounded-[40px] border border-white/10 bg-gradient-to-br from-[#08132b] via-[#050d1f] to-[#030712] px-4 py-12 shadow-[0_60px_160px_rgba(2,6,23,0.65)]">
         <div className="text-center space-y-3 mb-10">
