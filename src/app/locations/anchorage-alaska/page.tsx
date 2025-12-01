@@ -82,6 +82,7 @@ const helperTools = [
 ];
 
 
+
 export default function AnchoragePage() {
   const alaskaEntry = findState("alaska");
   const stateSlug = slugifyState("alaska");
@@ -117,60 +118,121 @@ export default function AnchoragePage() {
 
   return (
     <PageLayout gradientFrom="from-blue-950" gradientVia="via-blue-900" gradientTo="to-black" textColor="text-white">
-  <section className="relative">
-      {/* TOP MICRO-CTA BAR */}
-      <div className="w-full bg-gradient-to-r from-blue-900 to-blue-800 text-sm text-blue-100 py-2">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4 text-[13px]"><span className="font-semibold">Instant Quote:</span> <a href="/quote#instant" className="underline">Get a live price</a> — <a href="tel:8885352566" className="underline">(888) 535‑2566</a> • <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a></div>
-          <div className="hidden md:flex items-center gap-3 text-[12px]"><span className="px-2 py-1 bg-blue-700 rounded-full">Local Experts</span><span className="px-2 py-1 bg-blue-700 rounded-full">Winter-Ready Fleet</span><span className="px-2 py-1 bg-blue-700 rounded-full">24/7 Support</span></div>
-  </div>
-  </div>
-  {/* Salesy booster line */}
-  <p className="relative z-10 max-w-3xl mx-auto text-md md:text-lg mt-4 text-yellow-200 font-semibold leading-relaxed">Book smarter: instant quotes in seconds, attentive local dispatch, flexible aurora-ready windows, and guaranteed on-time pickups. Call <a href="tel:8885352566" className="underline">(888) 535‑2566</a> or <a href="mailto:info@bus2ride.com" className="underline">info@bus2ride.com</a> — we will handle the weather, routing, and gear.</p>
-        {/* Hero benefits & urgency chips */}
-        <div className="relative z-10 mt-6 flex flex-wrap gap-3 items-center justify-center">
-          <span className="px-3 py-1 rounded-full bg-yellow-600 text-black font-semibold text-sm">Instant Quotes</span>
-          <span className="px-3 py-1 rounded-full bg-blue-700 text-white font-semibold text-sm">Local Dispatch</span>
-          <span className="px-3 py-1 rounded-full bg-blue-700 text-white font-semibold text-sm">Winter-Ready Fleet</span>
-          <span className="ml-4 px-3 py-1 rounded-full bg-red-600 text-white font-bold text-sm">Limited vehicles for peak cruise dates — reserve early</span>
-        </div>
-        <div className="relative z-10 mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-3xl justify-center">
-          <a href="/quote#instant" className="rounded-full bg-white text-blue-900 font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-50 transition">⚡ Instant Quote</a>
-          <a href="/fleet" className="rounded-full bg-blue-700 text-white font-bold px-8 py-4 text-lg shadow-lg hover:bg-blue-800 transition">🚌 View Fleet</a>
-          <a href="tel:8885352566" className="rounded-full bg-blue-900 text-white font-bold px-8 py-4 text-lg shadow-lg hover:bg-black transition">📞 (888) 535‑2566</a>
-          {/* Secondary sales CTA */}
-          <a href="mailto:info@bus2ride.com" className="rounded-full bg-transparent border border-blue-500 text-blue-200 font-bold px-6 py-3 text-md shadow-sm hover:bg-blue-900/20 transition hidden sm:inline-block">✉️ Email Us</a>
-        </div>
-  <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none">
-          <svg viewBox="0 0 1440 160" className="w-full h-full" preserveAspectRatio="none"><path d="M0,96 C240,160 480,32 720,80 C960,128 1200,64 1440,112 L1440,160 L0,160 Z" fill="#0c2344" /></svg>
+      <section className="relative px-4 pt-4">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-[40px] border border-blue-500/30 bg-gradient-to-br from-[#081b3d] via-[#041029] to-black shadow-[0_40px_120px_rgba(3,9,23,0.6)]">
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.25),_transparent_55%)]" aria-hidden />
+          <div className="relative z-10 px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-[13px] text-blue-100/80">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="rounded-full border border-blue-400/50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-blue-200">Anchorage • Alaska</span>
+                <span className="text-blue-300/80">Bus2Ride Local Dispatch</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-white/80">
+                <a href="tel:8885352566" className="font-semibold underline decoration-dotted underline-offset-4">(888) 535-2566</a>
+                <span className="hidden sm:inline">•</span>
+                <a href="mailto:info@bus2ride.com" className="font-semibold underline decoration-dotted underline-offset-4 hidden sm:inline">info@bus2ride.com</a>
+              </div>
+            </div>
+
+            <div className="mt-8 text-center space-y-6">
+              <p className="text-xs uppercase tracking-[0.45em] text-blue-200/80">Party Bus & Charter Service</p>
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-white">
+                Anchorage, Alaska transportation made calm—even when the weather shifts.
+              </h1>
+              <p className="mx-auto max-w-3xl text-base md:text-lg text-blue-100/90">
+                Instant quotes, on-the-ground dispatch, and vehicles winterized for aurora runs, ski charters, cruise transfers, and corporate moves. Tell us your schedule; we handle the buffers, route notes, and gear.
+              </p>
+            </div>
+
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
+              <a
+                href="/quote#instant"
+                className="inline-flex items-center justify-center rounded-full bg-white px-10 py-5 text-xl font-semibold text-blue-900 shadow-[0_20px_40px_rgba(4,7,16,0.45)] hover:-translate-y-0.5 hover:bg-slate-50 transition"
+              >
+                ⚡ Instant Quote
+              </a>
+              <a
+                href="/fleet"
+                className="inline-flex items-center justify-center rounded-full bg-blue-600 px-10 py-5 text-xl font-semibold text-white shadow-[0_20px_40px_rgba(5,88,255,0.45)] hover:-translate-y-0.5 hover:bg-blue-500 transition"
+              >
+                🚌 View Fleet
+              </a>
+              <a
+                href="tel:8885352566"
+                className="inline-flex items-center justify-center rounded-full bg-slate-900/80 px-10 py-5 text-xl font-semibold text-white shadow-[0_20px_40px_rgba(2,6,23,0.6)] hover:-translate-y-0.5 hover:bg-black transition"
+              >
+                📞 Call (888) 535-2566
+              </a>
+              <a
+                href="mailto:info@bus2ride.com"
+                className="inline-flex items-center justify-center rounded-full border border-white/30 px-10 py-5 text-xl font-semibold text-white shadow-[0_20px_40px_rgba(3,9,23,0.5)] hover:-translate-y-0.5 hover:bg-white/5 transition"
+              >
+                ✉️ Email Us
+              </a>
+            </div>
+
+            <p className="mt-6 text-center text-sm text-yellow-200/90">
+              Book smarter: flexible aurora-ready windows, guaranteed on-time pickups, and crew who already factored in Anchorage roads and temps.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* QUICK STATS & REASONS */}
-      <Section className="max-w-7xl mx-auto -mt-4 bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-12 px-6 mb-16">
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 shadow flex flex-col gap-2"><div className="text-sm tracking-widest text-blue-300 font-semibold">AIRPORT • HUB</div><div className="text-2xl font-extrabold">ANC (Ted Stevens)</div><p className="text-blue-100/90 text-sm leading-relaxed">Flight tracking & buffer planning for cruise + corporate arrivals.</p></div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 shadow flex flex-col gap-2"><div className="text-sm tracking-widest text-blue-300 font-semibold">PEAK DEMAND</div><div className="text-2xl font-extrabold">May–Sept (Cruise + Tours)</div><p className="text-blue-100/90 text-sm">Book popular Saturdays 90+ days out; winter brings aurora & ski transfers.</p></div>
-          <div className="bg-[#132a55] rounded-2xl p-6 border border-blue-700/40 shadow flex flex-col gap-2"><div className="text-sm tracking-widest text-blue-300 font-semibold">WINTER LOWS</div><div className="text-2xl font-extrabold">↓ 0°F Typical</div><p className="text-blue-100/90 text-sm">We vet block heaters, tires & emergency kits for cold resiliency.</p></div>
+      <Section className="max-w-6xl mx-auto mt-12 mb-16 rounded-3xl border border-white/10 bg-slate-950/60 px-6 py-12 shadow-[0_30px_90px_rgba(3,7,18,0.55)]">
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            {
+              label: "AIRPORT • HUB",
+              value: "ANC (Ted Stevens)",
+              copy: "Flight tracking and buffer planning for cruise and corporate arrivals.",
+            },
+            {
+              label: "PEAK DEMAND",
+              value: "May–Sept",
+              copy: "Reserve popular Saturdays 90+ days out; winter adds aurora and ski transfers.",
+            },
+            {
+              label: "WINTER LOWS",
+              value: "↓ 0°F Typical",
+              copy: "Fleet checks cover block heaters, tires, and emergency kits for cold resiliency.",
+            },
+          ].map((item) => (
+            <div key={item.label} className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-inner">
+              <div className="text-xs font-semibold uppercase tracking-[0.4em] text-blue-200/80">{item.label}</div>
+              <div className="mt-3 text-2xl font-extrabold text-white">{item.value}</div>
+              <p className="mt-2 text-sm text-blue-100/80 leading-relaxed">{item.copy}</p>
+            </div>
+          ))}
         </div>
-  <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-10 bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">Why Book in Anchorage with Bus2Ride?</h2>
-  <p className="text-center text-blue-200 max-w-3xl mx-auto mb-6">Fast quotes, local dispatch, and a fleet prepped for Alaska’s extremes — we match the right vehicle, driver, and plan to your group so your trip runs flawlessly.</p>
-        <WhyRentWithUs />
+
+        <div className="mt-12 text-center space-y-4">
+          <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow font-serif tracking-tight">
+            Why Book in Anchorage with Bus2Ride?
+          </h2>
+          <p className="mx-auto max-w-3xl text-blue-100/90">
+            Fast quotes, local dispatch, and a fleet prepped for Alaska’s extremes — we match the right vehicle, driver, and plan to your group so your trip runs flawlessly.
+          </p>
+        </div>
+
+        <div className="mt-10">
+          <WhyRentWithUs />
+        </div>
       </Section>
 
       {alaskaEntry && (
         <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-10 px-6 mb-16">
-          <nav className="text-sm text-blue-200 mb-6" aria-label="Breadcrumb">
-            <ol className="flex flex-wrap gap-2">
-              <li>
-                <Link href="/locations" className="hover:underline">
-                  Locations
-                </Link>{" "}
-                &raquo;
-              </li>
-              <li className="text-blue-100 font-semibold">Alaska Overview</li>
-            </ol>
-          </nav>
+        <nav className="text-sm text-blue-200 mb-6" aria-label="Breadcrumb">
+          <ol className="flex flex-wrap gap-2">
+            <li>
+              <Link href="/locations" className="hover:underline">
+                Locations
+              </Link>{" "}
+              &raquo;
+            </li>
+            <li className="text-blue-100 font-semibold">Alaska Overview</li>
+          </ol>
+        </nav>
 
           <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
             <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text text-transparent drop-shadow-lg font-serif tracking-tight">
