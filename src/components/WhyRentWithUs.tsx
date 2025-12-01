@@ -56,31 +56,40 @@ export default function WhyRentWithUs() {
 
       {/* Modal */}
       {openId && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          role="dialog"
-          aria-modal="true"
-          onClick={handleClose}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur" onClick={handleClose} aria-hidden />
           <div
-            className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-7 relative"
+            className="relative z-10 w-full max-w-xl rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-8 shadow-[0_40px_120px_rgba(2,6,23,0.85)]"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="why-rent-modal-title"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={handleClose}
-              className="absolute top-3 right-3 text-gray-500 hover:text-blue-700 text-2xl font-bold focus:outline-none"
+              className="absolute right-4 top-4 rounded-full border border-white/20 p-2 text-white/70 hover:text-white hover:border-white/40"
               aria-label="Close"
             >
-              ×
+              ✕
             </button>
-            <h3 className="text-2xl font-bold mb-3 text-blue-900">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-blue-200/80">Why Book With Us</p>
+            <h3 id="why-rent-modal-title" className="mt-2 text-3xl font-extrabold text-white">
               {features.find((f) => f.id === openId)?.text}
             </h3>
-            <div
-              className="text-blue-900/90 text-base leading-relaxed"
-              style={{ maxHeight: 280, overflowY: "auto" }}
-            >
+            <div className="mt-4 max-h-72 overflow-y-auto text-blue-100/90 text-base leading-relaxed">
               {featureContent[openId]}
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="rounded-full border border-white/30 px-5 py-2 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Close
+              </button>
+              <a href="/quote#instant" className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-blue-900 shadow hover:bg-slate-100">
+                Get an Instant Quote
+              </a>
             </div>
           </div>
         </div>

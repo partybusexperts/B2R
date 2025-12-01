@@ -11,8 +11,10 @@ import { SmartImage } from "../../../components/SmartImage";
 import { ReviewForm } from "../../../components/ReviewForm";
 import SlideshowMaker from "../../../components/SlideshowMaker";
 import HomePolls from "../../../components/HomePolls";
+import VehicleGalleryCard from "../../../components/VehicleGalleryCard";
 import { findState, slugifyState } from "../locationData";
 import { getStateContent } from "../stateContent";
+import type { HomepageVehicle } from "../../../types/homepageVehicles";
 
 const anchorageNeighborhoods = [
   "Downtown","Midtown","South Anchorage","Hillside","Airport / Spenard","Turnagain","Government Hill","University / UMed","Muldoon","Eagle River (extension)"
@@ -81,6 +83,218 @@ const helperTools = [
   },
 ];
 
+type FleetCategoryKey = "party" | "limo" | "coach";
+type WhyCardPoint = { label: string; detail: string };
+type WhyCardContent = { title: string; description: string; points: WhyCardPoint[] };
+type WhyModalPayload = { title: string; label: string; detail: string };
+
+const anchoragePartyFleet: HomepageVehicle[] = [
+  {
+    id: "anc-party-32",
+    name: "32 Passenger Party Bus",
+    category: "party-buses",
+    capacityMin: 32,
+    capacityMax: 32,
+    amenities: ["Hourly & flat-rate", "LED glow interior", "Pro driver included", "BYOB friendly"],
+    imageUrl: "/images/party-buses/32 Passenger Party Bus Exterior Lux.png",
+    secondaryImageUrl: "/images/party-buses/32 Passenger Party Bus Interior Lux.png",
+    thirdImageUrl: "/images/party-buses/32 Passenger Party Bus Interior Lux.png",
+  },
+  {
+    id: "anc-party-22",
+    name: "22 Passenger Party Bus",
+    category: "party-buses",
+    capacityMin: 22,
+    capacityMax: 22,
+    amenities: ["Chauffeur included", "Plug-n-play music", "Chilled coolers", "BYOB friendly"],
+    imageUrl: "/images/party-buses/22 Passenger Party Bus Exterior Lux.png",
+    secondaryImageUrl: "/images/party-buses/22 Passenger Party Bus Interior Lux.png",
+    thirdImageUrl: "/images/party-buses/22 Passenger Party Bus Interior Lux.png",
+  },
+  {
+    id: "anc-party-36",
+    name: "36 Passenger Party Bus",
+    category: "party-buses",
+    capacityMin: 36,
+    capacityMax: 36,
+    amenities: ["Premium sound", "Privacy shades", "USB + outlets", "Room to dance"],
+    imageUrl: "/images/party-buses/36 Passenger Party Bus Exterior Lux.png",
+    secondaryImageUrl: "/images/party-buses/36 Passenger Party Bus Interior Lux.png",
+    thirdImageUrl: "/images/party-buses/36 Passenger Party Bus Interior Lux.png",
+  },
+];
+
+const anchorageLimoFleet: HomepageVehicle[] = [
+  {
+    id: "anc-limo-12-sprinter",
+    name: "12 Passenger Executive Sprinter Van",
+    category: "limousines",
+    capacityMin: 12,
+    capacityMax: 12,
+    amenities: ["Leather captain chairs", "USB + outlets", "Privacy divider", "Chauffeur included"],
+    imageUrl: "/images/executive-sprinters/12 Passenger Executive Sprinter Exterior Lux.png",
+    secondaryImageUrl: "/images/executive-sprinters/12 Passenger Executive Sprinter Interior Lux.png",
+    thirdImageUrl: "/images/executive-sprinters/12 Passenger Executive Sprinter Interior Lux.png",
+  },
+  {
+    id: "anc-limo-18-escalade",
+    name: "18 Passenger Escalade Limo",
+    category: "limousines",
+    capacityMin: 18,
+    capacityMax: 18,
+    amenities: ["Disco ceiling", "Champagne wells", "Bluetooth audio", "Red-carpet arrivals"],
+    imageUrl: "/images/limousines/18 Passenger Escalade Limo Exterior Lux.png",
+    secondaryImageUrl: "/images/limousines/18 Passenger Escalade Limo Interior Lux.png",
+    thirdImageUrl: "/images/limousines/18 Passenger Escalade Limo Interior Lux.png",
+  },
+  {
+    id: "anc-limo-14-nav",
+    name: "14 Passenger Executive Sprinter Van",
+    category: "limousines",
+    capacityMin: 14,
+    capacityMax: 14,
+    amenities: ["Starlight ceiling", "Captain seating", "Partition door", "Pro chauffeur"],
+    imageUrl: "/images/executive-sprinters/14 Passenger Executive Sprinter Exterior Lux.png",
+    secondaryImageUrl: "/images/executive-sprinters/14 Passenger Executive Sprinter Interior Lux.png",
+    thirdImageUrl: "/images/executive-sprinters/14 Passenger Executive Sprinter Interior Lux.png",
+  },
+];
+
+const anchorageCoachFleet: HomepageVehicle[] = [
+  {
+    id: "anc-coach-48",
+    name: "48 Passenger Coach Bus",
+    category: "coach-buses",
+    capacityMin: 48,
+    capacityMax: 48,
+    amenities: ["Forward seating", "Overhead storage", "Climate control", "USB power"],
+    imageUrl: "/images/coach-buses/48 Passenger Coach Bus Exterior Lux.png",
+    secondaryImageUrl: "/images/coach-buses/48 Passenger Coach Bus Interior Lux.png",
+    thirdImageUrl: "/images/coach-buses/48 Passenger Coach Bus Interior Lux.png",
+  },
+  {
+    id: "anc-coach-50",
+    name: "50 Passenger Coach Bus",
+    category: "coach-buses",
+    capacityMin: 50,
+    capacityMax: 50,
+    amenities: ["Under-floor luggage", "Reading lights", "PA system", "Rest stop planning"],
+    imageUrl: "/images/coach-buses/50 Passenger Coach Bus Exterior Lux.png",
+    secondaryImageUrl: "/images/coach-buses/50 Passenger Coach Bus Interior Lux.png",
+    thirdImageUrl: "/images/coach-buses/50 Passenger Coach Bus Interior Lux.png",
+  },
+  {
+    id: "anc-coach-56",
+    name: "56 Passenger Coach Bus",
+    category: "coach-buses",
+    capacityMin: 56,
+    capacityMax: 56,
+    amenities: ["Restroom onboard", "Reclining seats", "WiFi-ready", "Long-haul comfort"],
+    imageUrl: "/images/coach-buses/56 Passenger Coach Bus Exterior Lux.png",
+    secondaryImageUrl: "/images/coach-buses/56 Passenger Coach Bus Interior Lux.png",
+    thirdImageUrl: "/images/coach-buses/56 Passenger Coach Bus Interior Lux.png",
+  },
+];
+
+const FLEET_SECTIONS: Array<{ key: FleetCategoryKey; heading: string; href: string; vehicles: HomepageVehicle[] }> = [
+  { key: "party", heading: "Party Buses", href: "/party-buses", vehicles: anchoragePartyFleet },
+  { key: "limo", heading: "Limousines", href: "/limousines", vehicles: anchorageLimoFleet },
+  { key: "coach", heading: "Coach Buses", href: "/coach-buses", vehicles: anchorageCoachFleet },
+];
+
+const WHY_CARD_CONTENT: Record<FleetCategoryKey, WhyCardContent> = {
+  party: {
+    title: "Why Party Buses Rock",
+    description: "A rolling venue with standing room, LED lighting, and plug‑and‑play audio so the night lifts off the second the door slides shut.",
+    points: [
+      {
+        label: "Mobile dance floor",
+        detail: "Wrap-around seating leaves the center lane open so crews can move, dance, and stage photo moments en route to the next stop.",
+      },
+      {
+        label: "Plug-n-play music",
+        detail: "Bluetooth, HDMI, and aux hookups are pre-tested—hand the DJ their cue and the cabin lighting pulses with the beat.",
+      },
+      {
+        label: "Room to mingle",
+        detail: "Perimeter sofas keep everyone facing each other, which means more cheers, easier toasts, and no split conversations.",
+      },
+      {
+        label: "Best for groups 12–35",
+        detail: "Party buses hit the sweet spot for prom squads, bachelor/ette loops, or cruise crews that want one rolling hangout.",
+      },
+    ],
+  },
+  limo: {
+    title: "Why Limousines Rock",
+    description: "Private cabins, chilled glassware, and pro chauffeurs deliver red-carpet arrivals without the stress.",
+    points: [
+      {
+        label: "Private cabin",
+        detail: "Partitions, tinted glass, and hushed interiors keep vows, briefings, or playlists between you and your guests.",
+      },
+      {
+        label: "Red-carpet arrivals",
+        detail: "Chauffeurs stage curbside so gowns, suits, and camera crews have space to nail that first-look shot.",
+      },
+      {
+        label: "Chilled glassware",
+        detail: "Bar setups are iced before pickup—bring your own bottles and enjoy climate-controlled comfort the whole trip.",
+      },
+      {
+        label: "Photo-ready lighting",
+        detail: "Starlight ceilings, LED accent strips, and polished trims keep every snap and reel looking premium.",
+      },
+    ],
+  },
+  coach: {
+    title: "Why Coach Buses Rock",
+    description: "Comfort-first, forward-facing seating with luggage bays and pro drivers for ski runs, corporate shuttles, and cruise transfers.",
+    points: [
+      {
+        label: "Seats up to 56",
+        detail: "High-capacity coaches consolidate multiple vans into one manifest so everyone departs and arrives together.",
+      },
+      {
+        label: "Under-floor luggage",
+        detail: "Gear, skis, and week-long suitcases load below deck, leaving aisles clear and cabins clutter-free.",
+      },
+      {
+        label: "USB + outlets",
+        detail: "Keep cameras, tablets, and workstations topped off during glacier day trips or multi-hour rail connections.",
+      },
+      {
+        label: "Climate smart",
+        detail: "Dual-zone HVAC and blackout shades keep cabins comfortable whether it’s midnight sun or sub-zero winter.",
+      },
+    ],
+  },
+};
+
+const STAT_HIGHLIGHTS = [
+  {
+    label: "AIRPORT • HUB",
+    value: "ANC (Ted Stevens)",
+    copy: "Flight tracking and buffer planning for cruise and corporate arrivals.",
+    detail:
+      "We sync with ANC arrival feeds, cruise manifests, and charter flight coordinators so your driver is staged with real-time updates. Buffer windows are automatically added when we see gate holds or de-icing delays.",
+  },
+  {
+    label: "PEAK DEMAND",
+    value: "May–Sept",
+    copy: "Reserve popular Saturdays 90+ days out; winter adds aurora and ski transfers.",
+    detail:
+      "Cruise transfers, wedding weekends, and festival traffic compress the calendar. We maintain a rolling allocation board so we can tell you exactly how many coaches and party buses remain for each Saturday.",
+  },
+  {
+    label: "WINTER LOWS",
+    value: "↓ 0°F Typical",
+    copy: "Fleet checks cover block heaters, tires, and emergency kits for cold resiliency.",
+    detail:
+      "Every vehicle we dispatch in Anchorage is inspected for block heaters, winter tires, heated mirrors, and emergency kits. Drivers also receive cold-weather SOPs covering idle limits, door cycles, and guest safety.",
+  },
+];
+
 
 
 export default function AnchoragePage() {
@@ -89,6 +303,8 @@ export default function AnchoragePage() {
   const alaskaContent = getStateContent(stateSlug);
   const [reviewSearch, setReviewSearch] = useState("");
   const [pollSearch, setPollSearch] = useState("");
+  const [activeHighlight, setActiveHighlight] = useState<typeof STAT_HIGHLIGHTS[number] | null>(null);
+  const [activeWhyPoint, setActiveWhyPoint] = useState<WhyModalPayload | null>(null);
   const stateSections = alaskaContent?.sections ?? [];
   const stateReviews = alaskaContent?.reviews ?? [];
   const statePolls = alaskaContent?.polls ?? [];
@@ -181,28 +397,20 @@ export default function AnchoragePage() {
       {/* QUICK STATS & REASONS */}
       <Section className="max-w-6xl mx-auto mt-12 mb-16 rounded-3xl border border-white/10 bg-slate-950/60 px-6 py-12 shadow-[0_30px_90px_rgba(3,7,18,0.55)]">
         <div className="grid gap-6 md:grid-cols-3">
-          {[
-            {
-              label: "AIRPORT • HUB",
-              value: "ANC (Ted Stevens)",
-              copy: "Flight tracking and buffer planning for cruise and corporate arrivals.",
-            },
-            {
-              label: "PEAK DEMAND",
-              value: "May–Sept",
-              copy: "Reserve popular Saturdays 90+ days out; winter adds aurora and ski transfers.",
-            },
-            {
-              label: "WINTER LOWS",
-              value: "↓ 0°F Typical",
-              copy: "Fleet checks cover block heaters, tires, and emergency kits for cold resiliency.",
-            },
-          ].map((item) => (
-            <div key={item.label} className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-inner">
+          {STAT_HIGHLIGHTS.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => setActiveHighlight(item)}
+              className="rounded-2xl border border-white/10 bg-white/5 p-6 text-left shadow-inner transition hover:border-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+            >
               <div className="text-xs font-semibold uppercase tracking-[0.4em] text-blue-200/80">{item.label}</div>
               <div className="mt-3 text-2xl font-extrabold text-white">{item.value}</div>
               <p className="mt-2 text-sm text-blue-100/80 leading-relaxed">{item.copy}</p>
-            </div>
+              <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-blue-100/70">
+                Learn more <span aria-hidden>→</span>
+              </span>
+            </button>
           ))}
         </div>
 
@@ -219,6 +427,67 @@ export default function AnchoragePage() {
           <WhyRentWithUs />
         </div>
       </Section>
+
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-16 text-white" aria-label="Anchorage fleet preview">
+        <div className="space-y-16">
+          {FLEET_SECTIONS.map(({ key, heading, href, vehicles }) => (
+            <FleetShowcase
+              key={key}
+              heading={heading}
+              href={href}
+              vehicles={vehicles}
+              why={WHY_CARD_CONTENT[key]}
+              onPointSelect={(payload) => setActiveWhyPoint(payload)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {activeHighlight && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur" onClick={() => setActiveHighlight(null)} aria-hidden />
+          <div className="relative z-10 w-full max-w-xl rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-8 shadow-[0_40px_120px_rgba(2,6,23,0.85)]">
+            <div className="text-xs font-semibold uppercase tracking-[0.4em] text-blue-200/80">{activeHighlight.label}</div>
+            <h3 className="mt-3 text-3xl font-extrabold text-white">{activeHighlight.value}</h3>
+            <p className="mt-4 text-blue-100/90 leading-relaxed">{activeHighlight.detail}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => setActiveHighlight(null)}
+                className="rounded-full border border-white/30 px-5 py-2 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Close
+              </button>
+              <a href="/quote#instant" className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-blue-900 shadow hover:bg-slate-100">
+                Get an Instant Quote
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeWhyPoint && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur" onClick={() => setActiveWhyPoint(null)} aria-hidden />
+          <div className="relative z-10 w-full max-w-xl rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-8 shadow-[0_40px_120px_rgba(2,6,23,0.85)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-blue-200/80">{activeWhyPoint.title}</p>
+            <h3 className="mt-3 text-3xl font-extrabold text-white">{activeWhyPoint.label}</h3>
+            <p className="mt-4 text-blue-100/90 leading-relaxed">{activeWhyPoint.detail}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => setActiveWhyPoint(null)}
+                className="rounded-full border border-white/30 px-5 py-2 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Close
+              </button>
+              <a href="/quote#instant" className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-blue-900 shadow hover:bg-slate-100">
+                Get an Instant Quote
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {alaskaEntry && (
         <Section className="max-w-7xl mx-auto bg-gradient-to-br from-blue-900/80 to-black rounded-3xl shadow-xl border border-blue-500/30 py-10 px-6 mb-16">
@@ -860,6 +1129,62 @@ export default function AnchoragePage() {
       </Section>
       <StickyBookingUI />
     </PageLayout>
+  );
+}
+
+type FleetShowcaseProps = {
+  heading: string;
+  href: string;
+  vehicles: HomepageVehicle[];
+  why: WhyCardContent;
+  onPointSelect: (payload: WhyModalPayload) => void;
+};
+
+function FleetShowcase({ heading, href, vehicles, why, onPointSelect }: FleetShowcaseProps) {
+  const displayVehicles = vehicles.slice(0, 3);
+
+  return (
+    <div className="rounded-[36px] border border-white/10 bg-gradient-to-b from-[#0b1c3f] to-[#060e1f] p-6 shadow-[0_50px_140px_rgba(3,7,18,0.55)] sm:p-8">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 className="text-3xl font-extrabold tracking-tight text-white">{heading}</h3>
+          <p className="text-sm text-white/60">Anchorage-ready vehicles with instant quotes.</p>
+        </div>
+        <a href={href} className="text-sm font-semibold text-sky-300 hover:text-white">
+          View all →
+        </a>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-3">
+        {displayVehicles.map((vehicle) => (
+          <VehicleGalleryCard
+            key={vehicle.id}
+            vehicle={vehicle}
+            cardHref={href}
+            quoteHref="/quote#instant"
+            phoneDisplay="(888) 535-2566"
+            phoneTel="8885352566"
+          />
+        ))}
+      </div>
+
+      <div className="mt-10 rounded-[32px] border border-white/10 bg-white/5 p-6 text-center shadow-inner">
+        <h4 className="text-2xl font-extrabold text-white">{why.title}</h4>
+        <p className="mt-2 text-sm text-white/80">{why.description}</p>
+        <div className="mt-5 flex flex-wrap justify-center gap-3">
+          {why.points.map((point) => (
+            <button
+              key={point.label}
+              type="button"
+              onClick={() => onPointSelect({ title: why.title, label: point.label, detail: point.detail })}
+              className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white/85 transition hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+            >
+              {point.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 // Render StickyBookingUI in the module so the component is active on the page
