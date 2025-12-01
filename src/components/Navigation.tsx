@@ -9,6 +9,41 @@ import { usePathname } from "next/navigation";
 
 type OpenKey = "fleet" | "resources" | null;
 
+type DropdownKey = Exclude<OpenKey, null>;
+
+type DropdownItem = { label: string; href: string };
+
+type NavEntry =
+  | { type: "link"; label: string; href: string }
+  | { type: "dropdown"; key: DropdownKey; label: string };
+
+const DROPDOWN_ITEMS: Record<DropdownKey, DropdownItem[]> = {
+  fleet: [
+    { label: "Party Buses", href: "/party-buses" },
+    { label: "Limousines", href: "/limousines" },
+    { label: "Coach Buses", href: "/coach-buses" },
+  ],
+  resources: [
+    { label: "Blog", href: "/blog" },
+    { label: "Tools", href: "/tools" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Industry Secrets", href: "/industry-secrets" },
+    { label: "Poll Results", href: "/poll-results" },
+    { label: "Reviews", href: "/reviews" },
+  ],
+};
+
+const NAV_ENTRIES: NavEntry[] = [
+  { type: "link", label: "Home", href: "/" },
+  { type: "dropdown", key: "fleet", label: "Fleet" },
+  { type: "link", label: "Events", href: "/events" },
+  { type: "link", label: "Pricing", href: "/pricing" },
+  { type: "link", label: "Locations", href: "/locations" },
+  { type: "link", label: "Limo Polls & Surveys", href: "/polls" },
+  { type: "dropdown", key: "resources", label: "Resources" },
+  { type: "link", label: "Contact", href: "/contact" },
+];
+
 export default function Navigation() {
   const pathname = usePathname();
   // Hide server-rendered header fallback after client hydrates to avoid duplicate navs
@@ -24,6 +59,8 @@ export default function Navigation() {
     };
   }, []);
   const [open, setOpen] = useState<OpenKey>(null);
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState<OpenKey>(null);
 
   // timers to prevent flicker when moving from trigger -> submenu
   const timers = useRef<Record<Exclude<OpenKey, null>, number | null>>({
@@ -46,11 +83,35 @@ export default function Navigation() {
   };
 
   // Close on route change & on Esc
-  useEffect(() => setOpen(null), [pathname]);
+  useEffect(() => {
+    setOpen(null);
+    setMobileMenuOpen(false);
+    setMobileExpanded(null);
+  }, [pathname]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(null);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false);
+        setMobileExpanded(null);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   const Caret = () => (
@@ -60,7 +121,11 @@ export default function Navigation() {
   );
 
   const itemCls = "block px-4 py-2 hover:bg-blue-100";
-  const closeNow: React.MouseEventHandler<HTMLAnchorElement> = () => setOpen(null);
+  const closeNow: React.MouseEventHandler<HTMLAnchorElement> = () => {
+    setOpen(null);
+    setMobileMenuOpen(false);
+    setMobileExpanded(null);
+  };
 
   type DropdownProps = {
     label: string;
@@ -115,38 +180,114 @@ export default function Navigation() {
     );
   };
 
+  const mobileAccordion = (entry: Extract<NavEntry, { type: "dropdown" }>) => (
+    <div key={entry.key} className="border border-white/10 rounded-2xl">
+      <button
+        type="button"
+        className="w-full flex items-center justify-between px-4 py-3 font-semibold"
+        onClick={() => setMobileExpanded((cur) => (cur === entry.key ? null : entry.key))}
+        aria-expanded={mobileExpanded === entry.key}
+      >
+        <span>{entry.label}</span>
+        <svg
+          className={`w-4 h-4 transition-transform ${mobileExpanded === entry.key ? "rotate-180" : "rotate-0"}`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div
+        className={`overflow-hidden transition-[max-height] duration-300 ${
+          mobileExpanded === entry.key ? "max-h-96" : "max-h-0"
+        }`}
+      >
+        <ul className="bg-blue-900/40 text-sm">
+          {DROPDOWN_ITEMS[entry.key].map((item) => (
+            <li key={item.href} className="border-t border-white/5">
+              <Link
+                href={item.href}
+                className="block px-5 py-3"
+                onClick={closeNow}
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+
   return (
-    <nav className="bg-blue-700 text-white py-4 shadow sticky top-0 z-50">
-      <div className="container mx-auto px-4 flex items-center justify-between">
+    <nav className="bg-blue-700 text-white shadow sticky top-0 z-[60]">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="font-bold text-lg tracking-wide">Bus2Ride</Link>
 
-        <ul className="flex gap-6 text-sm md:text-base font-medium items-center">
-          <li><Link href="/" className="hover:text-blue-200 transition">Home</Link></li>
+        <button
+          type="button"
+          className="md:hidden inline-flex items-center gap-2 px-4 py-2 border border-white/30 rounded-full text-sm font-semibold"
+          onClick={() => setMobileMenuOpen((cur) => !cur)}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-nav"
+        >
+          Menu
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
 
-          {/* Fleet (hover-only, gap-safe) */}
-          <Dropdown label="Fleet" k="fleet">
-            <li><Link href="/party-buses" className={itemCls} onClick={closeNow}>Party Buses</Link></li>
-            <li><Link href="/limousines" className={itemCls} onClick={closeNow}>Limousines</Link></li>
-            <li><Link href="/coach-buses" className={itemCls} onClick={closeNow}>Coach Buses</Link></li>
-          </Dropdown>
-
-          <li><Link href="/events" className="hover:text-blue-200 transition">Events</Link></li>
-          <li><Link href="/pricing" className="hover:text-blue-200 transition">Pricing</Link></li>
-          <li><Link href="/locations" className="hover:text-blue-200 transition">Locations</Link></li>
-          <li><Link href="/polls" className="hover:text-blue-200 transition">Limo Polls & Surveys</Link></li>
-
-          {/* Resources (hover-only, gap-safe) */}
-          <Dropdown label="Resources" k="resources">
-            <li><Link href="/blog" className={itemCls} onClick={closeNow}>Blog</Link></li>
-            <li><Link href="/tools" className={itemCls} onClick={closeNow}>Tools</Link></li>
-            <li><Link href="/faq" className={itemCls} onClick={closeNow}>FAQ</Link></li>
-            <li><Link href="/industry-secrets" className={itemCls} onClick={closeNow}>Industry Secrets</Link></li>
-            <li><Link href="/poll-results" className={itemCls} onClick={closeNow}>Poll Results</Link></li>
-            <li><Link href="/reviews" className={itemCls} onClick={closeNow}>Reviews</Link></li>
-          </Dropdown>
-
-          <li><Link href="/contact" className="hover:text-blue-200 transition">Contact</Link></li>
+        <ul className="hidden md:flex gap-6 text-sm md:text-base font-medium items-center">
+          {NAV_ENTRIES.map((entry) => {
+            if (entry.type === "link") {
+              return (
+                <li key={entry.href}>
+                  <Link href={entry.href} className="hover:text-blue-200 transition" onClick={closeNow}>
+                    {entry.label}
+                  </Link>
+                </li>
+              );
+            }
+            return (
+              <Dropdown key={entry.key} label={entry.label} k={entry.key}>
+                {DROPDOWN_ITEMS[entry.key].map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className={itemCls} onClick={closeNow}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </Dropdown>
+            );
+          })}
         </ul>
+      </div>
+
+      <div
+        id="mobile-nav"
+        className={`md:hidden border-t border-blue-500/40 bg-blue-800/95 backdrop-blur-sm transition-[max-height,opacity] duration-300 overflow-hidden ${
+          isMobileMenuOpen ? "max-h-[90vh] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="px-4 py-4 flex flex-col gap-3">
+          {NAV_ENTRIES.map((entry) => {
+            if (entry.type === "link") {
+              return (
+                <Link
+                  key={entry.href}
+                  href={entry.href}
+                  className="block px-4 py-3 rounded-2xl bg-blue-900/30 border border-white/10 font-semibold"
+                  onClick={closeNow}
+                >
+                  {entry.label}
+                </Link>
+              );
+            }
+            return mobileAccordion(entry);
+          })}
+        </div>
       </div>
     </nav>
   );
