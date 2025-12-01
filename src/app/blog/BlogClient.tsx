@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Section from "../../components/Section";
 import { SmartImage } from "../../components/SmartImage";
+import type { BlogPostSummary } from "@/lib/blog/posts";
 
 /** Contact used in header CTAs (match Polls page) */
 const PHONE_DISPLAY = "(888) 535-2566";
@@ -68,52 +69,31 @@ const IMAGE_POOL = [
 
 const imgAt = (i: number) => IMAGE_POOL[i % IMAGE_POOL.length];
 
-const POSTS = [
-  { slug: "party-bus-pricing-101", title: "Party Bus Pricing 101: What Affects the Cost (and How to Save)", excerpt: "Peak dates, group size, and hours all impact price. Learn the levers you can pull to lock a great deal on your party bus.", date: "2025-10-12", author: "Bus2Ride Team" },
-  { slug: "wedding-transportation-guide-limo-vs-party-bus-vs-shuttle", title: "Wedding Transportation Guide: Limo vs. Party Bus vs. Shuttle", excerpt: "Capacity, style, timeline, and budget—see which wedding ride is best for your ceremony, photos, and reception exit.", date: "2025-09-28", author: "Wedding Planner Pro" },
-  { slug: "airport-transfers-black-car-vs-suv-which-should-you-book", title: "Airport Transfers: Black Car vs. SUV—Which Should You Book?", excerpt: "Compare comfort, luggage space, and meet-and-greet options to choose the right vehicle for stress-free airport pickups.", date: "2025-09-02", author: "Bus2Ride Editors" },
-  { slug: "prom-night-safety-checklist-for-parents-teens", title: "Prom Night Safety Checklist for Parents & Teens", excerpt: "Curfew, pick-up plans, chaperones, and the right vehicle. Set expectations early and ride safely.", date: "2025-08-18", author: "Bus2Ride Safety Team" },
-  { slug: "corporate-shuttles-build-a-smooth-event-transportation-plan", title: "Corporate Shuttles: Build a Smooth Event Transportation Plan", excerpt: "Routes, loops, badges, and staging areas—your blueprint for painless guest movement.", date: "2025-08-01", author: "Corporate Travel Expert" },
-  { slug: "how-many-people-fit-seating-comfort-by-vehicle-type", title: "How Many People Fit? Seating & Comfort by Vehicle Type", excerpt: "From sedans to 45-passenger party buses—what 'fits' vs. what feels comfortable for real groups.", date: "2025-07-15", author: "Bus2Ride Team" },
-  { slug: "the-ultimate-bachelor-bachelorette-party-bus-playbook", title: "The Ultimate Bachelor & Bachelorette Party Bus Playbook", excerpt: "Plan the route, pick the vibe, bring the right drinks (and ice). Your zero-stress celebration guide.", date: "2025-06-22", author: "Bus2Ride Editors" },
-  { slug: "city-guide-best-night-out-routes-by-party-bus", title: "City Guide: Best Night-Out Routes by Party Bus", excerpt: "Pro route ideas with time cushions and photo stops—make traffic part of the fun.", date: "2025-06-01", author: "Local Host" },
-  { slug: "wine-brewery-tours-how-to-plan-a-perfect-tasting-day", title: "Wine & Brewery Tours: How to Plan a Perfect Tasting Day", excerpt: "Pacing, reservations, cooler space, and safe timing. Sip without stress.", date: "2025-05-10", author: "Taste Tour Crew" },
-  { slug: "limo-vs-suv-vs-black-car-which-looks-best-for-your-event", title: "Limo vs. SUV vs. Black Car: Which Looks Best for Your Event?", excerpt: "Style, privacy, and first impressions—what each vehicle signals and when to choose it.", date: "2025-04-20", author: "Limo Insider" },
-  { slug: "homecoming-school-dances-group-transportation-tips", title: "Homecoming & School Dances: Group Transportation Tips", excerpt: "Share costs, book early, and choose safe routes. A quick guide for parents and students.", date: "2024-11-05", author: "School Event Coordinator" },
-  { slug: "concert-nights-by-bus-tailgating-parking-drop-zones", title: "Concert Nights by Bus: Tailgating, Parking, and Drop Zones", excerpt: "Beat traffic, stage smart drop-offs, and pre-game safely with the right vehicle size.", date: "2024-09-14", author: "Bus2Ride Team" },
-  { slug: "quinceanera-transportation-timing-photos-grand-entrances", title: "Quinceañera Transportation: Timing, Photos, and Grand Entrances", excerpt: "Build a timeline with buffer, pick a photo-friendly vehicle, and plan your showstopper arrival.", date: "2024-08-01", author: "Event Stylist" },
-  { slug: "casino-trips-by-coach-comfort-perks-that-matter-most", title: "Casino Trips by Coach: Comfort Perks That Matter Most", excerpt: "Restrooms, reclining seats, and onboard power—maximize group comfort on longer rides.", date: "2024-06-18", author: "Coach Captain" },
-  { slug: "how-to-read-a-quote-hourly-vs-flat-rate-vs-fuel-service-fees", title: "How to Read a Quote: Hourly vs. Flat Rate vs. Fuel/Service Fees", excerpt: "Transparent pricing explained—so you can compare apples to apples and avoid surprises.", date: "2024-05-02", author: "Bus2Ride Editors" },
-  { slug: "photogenic-rides-interior-lighting-photo-stop-ideas", title: "Photogenic Rides: Interior Lighting & Photo Stop Ideas", excerpt: "Pick vehicles with the right lighting and plan quick scenic stops for killer group pics.", date: "2024-03-21", author: "Content Creator" },
-  { slug: "how-early-should-you-book-lead-time-by-season-vehicle", title: "How Early Should You Book? Lead Time by Season & Vehicle", excerpt: "Spring weddings and prom sell out fast—know the booking sweet spots for each vehicle type.", date: "2024-02-10", author: "Bus2Ride Team" },
-  { slug: "accessible-group-travel-ada-options-to-request", title: "Accessible Group Travel: ADA Options to Request", excerpt: "Ramps, securements, and aisle widths—how to make sure everyone rides comfortably.", date: "2023-11-30", author: "Accessibility Advocate" },
-  { slug: "airport-meet-and-greet-what-it-includes-when-its-worth-it", title: "Airport Meet-and-Greet: What It Includes & When It’s Worth It", excerpt: "Inside terminal pickup, signage, and wait-time policies—arrive like a VIP without chaos.", date: "2023-10-05", author: "Black Car Pro" },
-  { slug: "byob-on-party-buses-rules-coolers-and-no-glass-tips", title: "BYOB on Party Buses: Rules, Coolers, and No-Glass Tips", excerpt: "What’s allowed, how much ice to bring, and how to keep it tidy and safe.", date: "2023-08-22", author: "Bus2Ride Safety Team" },
-  { slug: "game-day-charters-tailgate-setups-stadium-logistics", title: "Game Day Charters: Tailgate Setups & Stadium Logistics", excerpt: "Lot permits, canopy spots, and post-game pickup—plan like a pro.", date: "2023-06-30", author: "Sports Crew" },
-  { slug: "luxury-vs-standard-limo-what-you-actually-get-for-the-price", title: "Luxury vs. Standard Limo: What You Actually Get for the Price", excerpt: "Materials, lighting, sound, and model year—see what ‘luxury’ really means.", date: "2023-05-12", author: "Limo Insider" },
-  { slug: "neighborhood-pickup-strategy-for-big-groups", title: "Neighborhood Pickup Strategy for Big Groups", excerpt: "One hub or multiple stops? Save time, avoid detours, and keep the schedule tight.", date: "2023-03-27", author: "Route Planner" },
-  { slug: "safety-first-what-a-professional-chauffeur-does-differently", title: "Safety First: What a Professional Chauffeur Does Differently", excerpt: "Pre-trip inspections, passenger briefings, and route changes on the fly—signs you chose right.", date: "2022-12-15", author: "Bus2Ride Team" },
-  { slug: "city-traffic-101-building-realistic-timelines", title: "City Traffic 101: Building Realistic Timelines", excerpt: "Buffer windows, load times, and event exit surges—avoid the most common planning mistake.", date: "2022-10-01", author: "Dispatch Lead" },
-  { slug: "split-payments-group-budgeting-tools-that-make-it-easy", title: "Split Payments & Group Budgeting: Tools That Make It Easy", excerpt: "How to fairly divide costs and collect fast—no awkward follow-ups.", date: "2022-07-19", author: "Bus2Ride Editors" },
-  { slug: "how-to-choose-a-local-vendor-reviews-insurance-fleet-age", title: "How to Choose a Local Vendor: Reviews, Insurance, and Fleet Age", excerpt: "Go beyond stars—what to verify before you book to protect your event.", date: "2022-05-06", author: "Safety Auditor" },
-  { slug: "cold-weather-rides-winter-tips-for-limos-buses", title: "Cold Weather Rides: Winter Tips for Limos & Buses", excerpt: "Warm-up time, door-to-door plans, and footwear—keep guests comfy and on schedule.", date: "2022-02-14", author: "Operations Manager" },
-  { slug: "summer-peak-season-how-to-find-last-minute-availability", title: "Summer Peak Season: How to Find Last-Minute Availability", excerpt: "Vehicle swaps, flexible hours, and city-by-city strategies to snag a great ride.", date: "2021-11-18", author: "Bus2Ride Team" },
-  { slug: "add-ons-that-are-actually-worth-it", title: "Add-Ons That Are Actually Worth It", excerpt: "From aux + premium sound to photo stops and meet-and-greet—what delivers the most joy per dollar.", date: "2021-08-03", author: "Bus2Ride Editors" },
-].map((p, i) => ({ ...p, image: POST_IMAGE_MAP[p.slug] ?? imgAt(i) }));
+const resolveImage = (source: string | null | undefined, fallbackIndex: number) => {
+  if (source) {
+    if (/^https?:/i.test(source)) {
+      return source;
+    }
+    return buildBlogImageUrl(source);
+  }
+  return imgAt(fallbackIndex);
+};
 
-export default function BlogClient() {
-  const [search] = useState("");
+type BlogClientProps = {
+  posts: BlogPostSummary[];
+};
 
-  const filteredPosts = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return POSTS;
-    return POSTS.filter(
-      (post) =>
-        post.title.toLowerCase().includes(q) ||
-        post.excerpt.toLowerCase().includes(q) ||
-        post.author.toLowerCase().includes(q)
-    );
-  }, [search]);
+export default function BlogClient({ posts }: BlogClientProps) {
+  const hydratedPosts = useMemo(
+    () =>
+      posts.map((post, index) => ({
+        ...post,
+        heroImage: resolveImage(post.heroImage, index),
+      })),
+    [posts]
+  );
+
+  const filteredPosts = hydratedPosts;
 
   return (
     <>
