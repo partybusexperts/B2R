@@ -44,6 +44,7 @@ export const PollsBoxByTag: React.FC<PollsBoxByTagProps> = ({
           throw new Error(`HTTP ${res.status}`);
         }
         const json = await res.json();
+        console.log("polls by tag response", tag, json);
         setPolls(json.polls || []);
       } catch (err: any) {
         console.error("Error loading polls by tag:", err);

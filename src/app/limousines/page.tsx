@@ -24,7 +24,7 @@ export default async function LimousinesPage() {
           subtitle="See what limo riders say about interiors, chauffeurs, and upgrade-worthy perks."
         />
         <PollsBoxByTag
-          tag="wedding"
+          tag="weddings"
           title="Wedding Limo Debates"
           subtitle="Ceremony timelines, photo stops, champagne policies—the wedding limo receipts are right here."
         />

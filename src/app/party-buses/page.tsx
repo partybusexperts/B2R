@@ -24,7 +24,7 @@ export default async function PartyBusesPage() {
           subtitle="Fresh rider takes on vibes, upgrades, and rules for modern party buses."
         />
         <PollsBoxByTag
-          tag="wedding"
+          tag="weddings"
           title="Wedding Party Bus Polls"
           subtitle="See what wedding parties loved (or hated) about timelines, routes, and budgets."
         />

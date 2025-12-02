@@ -107,11 +107,14 @@ export async function GET(req: NextRequest) {
     const { data: pollsRaw, error: pollsError } = await supabase
       .from("v_polls_with_tags")
       .select(
-        "id, slug, question, tag_slug, tag_name, show_on_polls, active, created_at"
+        "id, slug, question, tag_slug, tag_name, show_on_polls, created_at"
       )
-      .eq("tag_slug", tagInput)
+      .eq("tag_slug", normalizedTag)
       .eq("show_on_polls", true)
-      .eq("active", true)
+      // 🚫 hide auto-generated junk by slug and question
+      .not("slug", "ilike", "%-auto-%")
+      .not("slug", "ilike", "%autogen%")
+      .not("question", "ilike", "auto-generated%")
       .order("created_at", { ascending: true });
 
     if (pollsError) {
@@ -122,12 +125,20 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    if (!pollsRaw || pollsRaw.length === 0) {
+    const curatedPolls = (pollsRaw ?? []).filter((poll) => {
+      const slug = poll.slug ?? "";
+      const question = poll.question ?? "";
+      const hasAutogenSlug = /autogen/i.test(slug);
+      const hasAutogenQuestion = /^auto-generated/i.test(question);
+      return !hasAutogenSlug && !hasAutogenQuestion;
+    });
+
+    if (!curatedPolls || curatedPolls.length === 0) {
       const fallbackPolls = buildFallbackPolls(normalizedTag);
       return NextResponse.json({ polls: fallbackPolls }, { status: 200 });
     }
 
-    const pollIds = pollsRaw.map((p) => p.id);
+    const pollIds = curatedPolls.map((p) => p.id);
 
     const { data: optionsRaw, error: optionsError } = await supabase
       .from("v_poll_options_label")
@@ -151,7 +162,7 @@ export async function GET(req: NextRequest) {
       optionsByPollId[opt.poll_id].push(opt);
     });
 
-    const polls = pollsRaw.map((p) => ({
+    const polls = curatedPolls.map((p) => ({
       id: p.id,
       slug: p.slug,
       question: p.question,
