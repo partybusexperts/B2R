@@ -1,59 +1,178 @@
 "use client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SmartImage from "../../../components/SmartImage";
 import ToolsGrid from "../../../components/tools/ToolsGrid";
 import HeroHeader from "../../../components/HeroHeader";
+import EventCard from "../../../components/events/EventCard";
+import HomePolls from "../../../components/HomePolls";
+import GlobalReviewStripClient from "@/components/reviews/GlobalReviewStripClient";
+import HauntedFaqSection from "@/components/faq/HauntedFaqSection";
 import { getHeroFallback } from "@/data/heroFallbacks";
+import { resolveVehicles } from "@/data/vehicles";
+import { findByFileName, getCategoryImages } from "@/utils/optimizedImages";
+import { eventDetails as allEventDetails } from "../eventDetails";
 
 /* ===== Contact constants ===== */
 const PHONE_DISPLAY = "(888) 535-2566";
 const PHONE_TEL = "8885352566";
 const EMAIL = "info@bus2ride.com";
 
-/* ===== Vehicle sliders (images use your existing party-bus assets; swap anytime) ===== */
-const VEHICLE_SLIDES_PRIMARY = [
-  { title: "Party Bus 30", img: "/images/party-buses/30 Passenger Party Bus Exterior.png", href: "/fleet#party-bus", desc: "Club lights, perimeter seating, room for props. Great for 18–30 riders." },
-  { title: "Sprinter Limo", img: "/images/party-buses/18 Passenger White Party Bus Interior.png", href: "/fleet#sprinter", desc: "Compact + comfy. Quick load/unload for tight venue lots. Up to ~14." },
-  { title: "Shuttle / Mini Coach", img: "/images/party-buses/36 Passenger Party Bus Inside.png", href: "/fleet#mini-coach", desc: "Easy boarding, overhead space for jackets/merch. 25–40 riders." },
-  { title: "Motorcoach 56", img: "/images/party-buses/24 Passenger Party Bus Exterior.jpg", href: "/fleet#motorcoach", desc: "Max capacity + storage for mega fright nights and long routes." },
+/* ===== Vehicle showcase (auto-rotating from vehicles1 manifest) ===== */
+const VEHICLE_ROTATE_INTERVAL = 3000;
+const VEHICLE_VISIBLE_COUNT = 4;
+const VEHICLE_FALLBACK_IMAGE = "/images/party-buses/30 Passenger Party Bus Exterior.png";
+const VEHICLE_LINKS: Record<string, string> = {
+  "party-buses": "/fleet#party-bus",
+  limousines: "/fleet#limousines",
+  "coach-buses": "/fleet#coach",
+};
+
+const optimizedEventImages = getCategoryImages("eventImages");
+const EVENT_IMAGE_FALLBACKS = [
+  "/images/party-buses/18 Passenger White Party Bus Exterior.png",
+  "/images/party-buses/30 Passenger Party Bus Exterior.png",
+  "/images/party-buses/36 Passenger Party Bus Inside.png",
 ];
 
-const VEHICLE_SLIDES_ALT = [
-  { title: "Party Bus 20", img: "/images/party-buses/20 Passenger Party Bus Exterior.png", href: "/fleet#party-bus", desc: "Perfect for two haunts + a food stop." },
-  { title: "Party Bus 17 (Black)", img: "/images/party-buses/17 Passenger Black Party Bus Exterior.png", href: "/fleet#party-bus", desc: "Small group, big vibe, easy parking footprint." },
-  { title: "Party Bus 18 (White)", img: "/images/party-buses/18 Passenger White Party Bus Exterior.png", href: "/fleet#party-bus", desc: "Crisp style for photo ops and arrival shots." },
-  { title: "Interior View", img: "/images/party-buses/18 Passenger Party Bus Interior 2.png", href: "/fleet#party-bus", desc: "LED lighting, sound, and space for costumes." },
-];
+const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-/* ===== Simple, dependency-free horizontal slider ===== */
-function HorizontalSlider({ items }: { items: { title: string; img: string; href: string; desc?: string }[] }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const scrollBy = (delta: number) => {
-    if (!ref.current) return;
-    ref.current.scrollBy({ left: delta, behavior: "smooth" });
-  };
+type ShowcaseVehicle = {
+  id: string;
+  title: string;
+  desc: string;
+  image: string;
+  href: string;
+};
+
+function buildShowcaseVehicles(): ShowcaseVehicle[] {
+  const resolved = resolveVehicles(findByFileName);
+  return resolved
+    .filter((vehicle) => vehicle.category === "party-buses" || vehicle.category === "coach-buses")
+    .map((vehicle) => {
+      const capacity = vehicle.capacityMin === vehicle.capacityMax
+        ? `${vehicle.capacityMax} riders`
+        : `${vehicle.capacityMin}–${vehicle.capacityMax} riders`;
+      const highlight = vehicle.highlights.slice(0, 2).join(" · ");
+      const desc = highlight ? `${capacity}. ${highlight}.` : capacity;
+      return {
+        id: vehicle.id,
+        title: vehicle.name,
+        desc,
+        image: vehicle.primary?.entry?.original || VEHICLE_FALLBACK_IMAGE,
+        href: VEHICLE_LINKS[vehicle.category] || "/fleet",
+      };
+    });
+}
+
+function RotatingVehicleShowcase() {
+  const vehicles = useMemo(() => buildShowcaseVehicles(), []);
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    if (vehicles.length <= VEHICLE_VISIBLE_COUNT) return;
+    const id = window.setInterval(() => {
+      setOffset((prev) => (prev + 1) % vehicles.length);
+    }, VEHICLE_ROTATE_INTERVAL);
+    return () => window.clearInterval(id);
+  }, [vehicles.length]);
+
+  const count = Math.min(VEHICLE_VISIBLE_COUNT, vehicles.length);
+  const visible = useMemo(() => {
+    if (!vehicles.length) return [] as ShowcaseVehicle[];
+    return Array.from({ length: count }, (_, idx) => vehicles[(offset + idx) % vehicles.length]);
+  }, [vehicles, offset, count]);
+
+  if (!vehicles.length) {
+    return <p className="text-blue-100/80 text-center">Vehicles are loading…</p>;
+  }
+
   return (
-    <div className="relative">
-      <div className="flex justify-end gap-2 mb-2">
-        <button onClick={() => scrollBy(-360)} className="rounded-xl bg-[#173264] border border-blue-800/40 text-white px-3 py-1.5 hover:border-blue-500">‹</button>
-        <button onClick={() => scrollBy(360)} className="rounded-xl bg-blue-600 border border-blue-700 text-white px-3 py-1.5 hover:bg-blue-700">›</button>
-      </div>
-      <div ref={ref} className="overflow-x-auto snap-x snap-mandatory flex gap-4 pb-2">
-        {items.map((s, i) => (
-          <a
-            key={i}
-            href={s.href}
-            className="min-w-[260px] max-w-[320px] snap-start rounded-2xl border border-blue-800/30 bg-[#173264] p-3 shadow-xl no-underline hover:scale-[1.01] transition"
+    <div className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {visible.map((vehicle) => (
+          <article
+            key={vehicle.id}
+            className="rounded-3xl border border-blue-800/30 bg-[#173264] p-4 shadow-xl flex flex-col"
           >
-            <SmartImage src={s.img} alt={s.title} className="w-full h-44 object-cover rounded-xl border border-blue-800/40 mb-3" />
-            <div className="text-white font-bold">{s.title}</div>
-            {s.desc ? <div className="text-blue-100/90 text-sm">{s.desc}</div> : null}
-          </a>
+            <SmartImage
+              src={vehicle.image}
+              alt={vehicle.title}
+              className="w-full h-48 object-cover rounded-2xl border border-blue-800/40 mb-4"
+            />
+            <h3 className="text-xl font-bold text-white">{vehicle.title}</h3>
+            <p className="text-sm text-blue-100/90 mt-1 flex-1">{vehicle.desc}</p>
+            <a
+              href={vehicle.href}
+              className="mt-4 inline-flex items-center justify-center rounded-full bg-blue-600 text-white border border-blue-700 px-4 py-2 font-semibold hover:bg-blue-700"
+            >
+              View fleet option →
+            </a>
+          </article>
         ))}
+      </div>
+      <div className="text-center text-xs uppercase tracking-[0.4em] text-blue-200/70">
+        Rotating every 3 seconds
       </div>
     </div>
   );
+}
 
+function pickEventImage(name: string, idx: number) {
+  if (optimizedEventImages.length) {
+    const norm = slugify(name);
+    const exact = optimizedEventImages.find((entry) =>
+      entry.original.toLowerCase().includes("/" + norm) ||
+      entry.original.toLowerCase().endsWith("/" + norm + ".webp") ||
+      entry.original.toLowerCase().includes(norm)
+    );
+    if (exact) return exact.original;
+    const tokens = norm.split("-").filter(Boolean);
+    for (const token of tokens) {
+      const found = optimizedEventImages.find((entry) => entry.original.toLowerCase().includes(token));
+      if (found) return found.original;
+    }
+    return optimizedEventImages[idx % optimizedEventImages.length].original;
+  }
+  return EVENT_IMAGE_FALLBACKS[idx % EVENT_IMAGE_FALLBACKS.length];
+}
+
+function FeaturedEventsGrid({ limit = 6 }: { limit?: number }) {
+  const featured = useMemo(() => {
+    return allEventDetails
+      .filter((event) => event.name.toLowerCase() !== "haunted house tours")
+      .slice(0, limit);
+  }, [limit]);
+
+  if (!featured.length) return null;
+
+  return (
+    <>
+      <div className="grid gap-6 md:grid-cols-3">
+        {featured.map((event, idx) => {
+          const slug = slugify(event.name);
+          const href = event.href || `/events/${slug}`;
+          return (
+            <EventCard
+              key={event.name}
+              name={event.name}
+              description={event.description}
+              href={href}
+              imageSrc={pickEventImage(event.name, idx)}
+              slug={slug}
+            />
+          );
+        })}
+      </div>
+      <div className="text-center mt-10">
+        <a
+          href="/events"
+          className="inline-flex items-center justify-center rounded-full px-8 py-3 text-base font-bold text-white bg-blue-600 border border-blue-500 shadow-lg hover:bg-blue-500"
+        >
+          More events
+        </a>
+      </div>
+    </>
+  );
 }
 
 /* ===== Quick planner (simple estimator) ===== */
@@ -76,34 +195,6 @@ function calcRecommendedHours(stops: number, avgQueueMin: number, travelMin: num
   return clamp(hours, 3, 10);
 }
 
-/* ===== Mini Polls (grabs from /api/polls if available; filters to haunted keywords) ===== */
-type Poll = { id?: string|number; title?: string; question?: string; prompt?: string; tags?: string[]; options?: string[]; category?: string };
-function useHauntedPolls(limit=9) {
-  const [polls, setPolls] = useState<Poll[]>([]);
-  useEffect(() => {
-    (async () => {
-      try {
-        const r = await fetch("/api/polls");
-        if (!r.ok) return;
-        const data = await r.json();
-        if (!Array.isArray(data)) return;
-        const haunted = (data as Poll[]).filter(p => {
-          const hay = `${p.title||""} ${p.question||""} ${p.prompt||""} ${(p.tags||[]).join(" ")}`.toLowerCase();
-          return /(haunt|scare|spook|halloween|fright|zombie|ghost|night out)/.test(hay);
-        });
-        setPolls(haunted.slice(0, limit));
-      } catch (err) {
-        // Non-fatal: polling is progressive enhancement. Log for debugging.
-        console.debug("useHauntedPolls fetch failed", err);
-      }
-    })();
-  }, [limit]);
-  return polls;
-}
-function PollChip({ text }: { text: string }) {
-  return <span className="inline-block rounded-full bg-[#173264] border border-blue-800/40 text-blue-100 text-xs px-3 py-1 mr-2 mb-2">{text}</span>;
-}
-
 /* ===== Page ===== */
 export default function HauntedHouseToursRichPage() {
   // planner state
@@ -119,8 +210,6 @@ export default function HauntedHouseToursRichPage() {
     const params = new URLSearchParams({ hrs: String(recHours), group: String(groupSize), event: "haunted-house-tour" }).toString();
     return `/quote#instant?${params}`;
   }, [recHours, groupSize]);
-
-  const polls = useHauntedPolls(9);
 
   return (
     <main className="text-slate-100 bg-[#0f1f46]">
@@ -243,16 +332,18 @@ export default function HauntedHouseToursRichPage() {
         </div>
       </section>
 
-      {/* VEHICLE SLIDERS */}
+      {/* VEHICLE SHOWCASE */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
         <h2 className="text-3xl md:text-4xl font-extrabold text-white font-serif tracking-tight text-center mb-4">Popular Vehicles for Fright Night</h2>
-        <HorizontalSlider items={VEHICLE_SLIDES_PRIMARY} />
-        <div className="text-center mt-6">
-          <a href="/fleet" className="inline-flex items-center justify-center rounded-full px-8 py-3 font-bold bg-blue-600 text-white border border-blue-700 hover:bg-blue-700">Browse Full Fleet</a>
-        </div>
-        <div className="mt-10">
-          <h3 className="text-2xl font-extrabold text-white font-serif tracking-tight mb-2">More Options</h3>
-          <HorizontalSlider items={VEHICLE_SLIDES_ALT} />
+        <p className="text-center text-blue-100/80 max-w-3xl mx-auto mb-8">
+          Pulled straight from our vehicles1 library. Cards rotate automatically so you can see which party buses,
+          shuttles, and coaches fit spooky season groups.
+        </p>
+        <RotatingVehicleShowcase />
+        <div className="text-center mt-8">
+          <a href="/fleet" className="inline-flex items-center justify-center rounded-full px-8 py-3 font-bold bg-blue-600 text-white border border-blue-700 hover:bg-blue-700">
+            Browse Full Fleet
+          </a>
         </div>
       </section>
 
@@ -260,53 +351,42 @@ export default function HauntedHouseToursRichPage() {
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-8">
         <div className="rounded-3xl border border-blue-800/30 bg-[#173264] p-6 shadow-xl">
           <h2 className="text-3xl font-extrabold text-white font-serif tracking-tight mb-3">More Event Types</h2>
-          <p className="text-blue-100/90 mb-4">Planning something else this season? Explore our most-booked event pages:</p>
-          <div className="flex flex-wrap">
-            {[
-              { name: "Night Out on the Town", href: "/events/night-out-on-the-town" },
-              { name: "Weddings", href: "/events/weddings" },
-              { name: "Proms", href: "/events/prom" },
-              { name: "Concerts", href: "/events/concerts" },
-              { name: "Sporting Events", href: "/events/sporting-events" },
-              { name: "Brewery Tours", href: "/events/brewery-tours" },
-              { name: "Wine Tours", href: "/events/wine-tours" },
-              { name: "Corporate Events", href: "/events/corporate-events" },
-              { name: "Holiday Lights", href: "/events/holiday-lights" },
-            ].map((e) => <a key={e.name} href={e.href} className="mr-2 mb-2 inline-flex items-center justify-center rounded-full px-4 py-2 font-semibold text-sm bg-[#122a56] text-white border border-blue-800/40 hover:border-blue-500">{e.name}</a>)}
+          <p className="text-blue-100/90 mb-8">Six hand-picked event cards straight from the main Events experience—two rows of inspiration with built-in CTAs.</p>
+          <FeaturedEventsGrid limit={6} />
+        </div>
+      </section>
+
+      {/* POLLS SECTION */}
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+        <div className="rounded-3xl border border-blue-800/30 bg-gradient-to-br from-[#122a5c] to-[#0f2148] p-6 md:p-10 shadow-xl">
+          <div className="text-center mb-8">
+            <p className="text-xs uppercase tracking-[0.35em] text-white/60">Live rider intel</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-extrabold text-white font-serif tracking-tight">Polls powering fright season</h2>
+            <p className="mt-3 text-blue-100/85 max-w-3xl mx-auto">
+              Same layout as the homepage: three columns, three polls each, refreshed straight from the API with live vote counts.
+              Tap any tile to deep-dive haunted demand, night-out timing, and BYOB policies.
+            </p>
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <a href="/events" className="rounded-xl bg-white text-blue-900 px-4 py-2 font-semibold border border-blue-200 hover:bg-blue-50">See All Events</a>
-            <a href="/pricing" className="rounded-xl bg-blue-600 text-white px-4 py-2 font-semibold border border-blue-700 hover:bg-blue-700">Pricing & Packages</a>
+          <HomePolls
+            groups={[
+              { tag: "haunted-house", label: "Haunted" },
+              { tag: "night-out", label: "Night Out" },
+              { tag: "holiday", label: "Seasonal" },
+            ]}
+            variant="columns"
+            pickSize={24}
+            visiblePerGroup={12}
+          />
+          <div className="text-center mt-10">
+            <a href="/polls?tag=haunted-house" className="inline-flex items-center justify-center rounded-full px-8 py-3 font-bold bg-white text-blue-900 border border-blue-200 hover:bg-blue-50">
+              More polls
+            </a>
           </div>
         </div>
       </section>
 
-      {/* MINI POLLS SECTION */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-        <div className="rounded-3xl border border-blue-800/30 bg-[#173264] p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-3xl font-extrabold text-white font-serif tracking-tight">Haunted Polls</h2>
-            <a href="/polls?tag=haunted-house" className="rounded-xl bg-blue-600 text-white px-4 py-2 font-semibold border border-blue-700 hover:bg-blue-700">Open Polls Hub</a>
-          </div>
-          {polls.length === 0 ? (
-            <p className="text-blue-100/90">Live polls will appear here when available. See the full hub for more.</p>
-          ) : (
-            <>
-              <div className="flex flex-wrap mb-3">
-                <PollChip text="Queue Strategy" /><PollChip text="Best Night to Go" /><PollChip text="Food vs. More Haunts" /><PollChip text="BYOB Rules" />
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {polls.map((p, i) => (
-                  <a key={i} href={`/polls?focus=${encodeURIComponent(String(p.id ?? p.title ?? i))}`} className="rounded-2xl border border-blue-800/30 bg-[#122a56] p-4 shadow hover:border-blue-500 no-underline">
-                    <div className="text-white font-semibold mb-2">{p.title || p.question || p.prompt || "Community Poll"}</div>
-                    <div className="text-blue-100/90 text-sm">Vote now →</div>
-                  </a>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </section>
+      {/* REVIEWS SECTION */}
+      <GlobalReviewStripClient />
 
       {/* TOOLS (registry) */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
@@ -319,6 +399,9 @@ export default function HauntedHouseToursRichPage() {
           </div>
         </div>
       </section>
+
+      {/* FAQ SECTION */}
+      <HauntedFaqSection />
 
       {/* CTA RIBBON */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 pb-12">

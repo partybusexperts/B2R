@@ -42,17 +42,17 @@ export default function EventCard({ name, description, href, imageSrc, slug }: P
           <p className="text-base md:text-lg text-blue-100/90 text-center mb-6">{description}</p>
         </a>
       </div>
-      <div className="flex flex-row flex-wrap gap-2 justify-center items-center w-full mt-auto">
-        <a href="/quote#instant" className={`${CTA.base} ${CTA.primary}`}>
+      <div className="mt-auto grid w-full gap-3 grid-cols-2">
+        <a href="/quote#instant" className={`${CTA.base} ${CTA.primary} w-full`}>
           Quote
         </a>
-        <a href={`tel:${PHONE_TEL}`} className={`${CTA.base} ${CTA.secondary}`}>
+        <a href={`tel:${PHONE_TEL}`} className={`${CTA.base} ${CTA.secondary} w-full`}>
           📞 {PHONE_DISPLAY}
         </a>
-        <a href={`mailto:${EMAIL}`} className={`${CTA.base} ${CTA.primary}`}>
+        <a href={`mailto:${EMAIL}`} className={`${CTA.base} ${CTA.primary} w-full`}>
           Email
         </a>
-        <a href={`/polls?tag=${encodeURIComponent(slug)}`} className={`${CTA.base} ${CTA.accent}`}>
+        <a href={`/polls?tag=${encodeURIComponent(slug)}`} className={`${CTA.base} ${CTA.accent} w-full`}>
           Related Polls
         </a>
       </div>
