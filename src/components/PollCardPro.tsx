@@ -48,6 +48,21 @@ type PollCardProProps = {
   showFooterActions?: boolean;
 };
 
+function normalizeCounts(raw?: Record<string, unknown>) {
+  const safe: Record<string, number> = {};
+  if (!raw || typeof raw !== "object") return safe;
+  for (const [key, value] of Object.entries(raw)) {
+    const num = typeof value === "number" ? value : Number(value);
+    if (!Number.isFinite(num) || num < 0) continue;
+    safe[key] = num;
+  }
+  return safe;
+}
+
+function sumCounts(map: Record<string, number>) {
+  return Object.values(map).reduce((sum, val) => sum + val, 0);
+}
+
 export default function PollCardPro({
   poll,
   initialCounts,
@@ -55,8 +70,9 @@ export default function PollCardPro({
   variant = "default",
   showFooterActions = true,
 }: PollCardProProps) {
-  const [counts, setCounts] = useState<Record<string, number>>(initialCounts || {});
-  const [total, setTotal] = useState<number>(() => Object.values(initialCounts || {}).reduce((a, b) => a + b, 0));
+  const sanitizedInitialCounts = normalizeCounts(initialCounts);
+  const [counts, setCounts] = useState<Record<string, number>>(() => sanitizedInitialCounts);
+  const [total, setTotal] = useState<number>(() => sumCounts(sanitizedInitialCounts));
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState(false);
@@ -64,9 +80,10 @@ export default function PollCardPro({
 
   const voted = alreadyVoted(poll.id);
   const pct = (opt: string) => {
-    const c = counts?.[opt] || 0;
-    if (!total) return 0;
-    return Math.round((c / total) * 100);
+    const c = counts?.[opt] ?? 0;
+    if (total <= 0) return 0;
+    const pctValue = Math.round((c / total) * 100);
+    return Number.isFinite(pctValue) ? Math.max(0, pctValue) : 0;
   };
 
   const onVote = async (opt: string) => {
@@ -74,8 +91,9 @@ export default function PollCardPro({
     setBusy(true); setErr("");
     try {
       const res = await castVote(poll.id, opt);
-      setCounts(res.results);
-      setTotal(res.total);
+      const freshCounts = normalizeCounts(res.results);
+      setCounts(freshCounts);
+      setTotal(sumCounts(freshCounts));
       markVoted(poll.id);
       // fire-and-forget analytics
       fetch("/api/analytics", { method: "POST", body: JSON.stringify({ event: "vote", pollId: poll.id, option: opt }) }).catch((e) => console.debug(e));
@@ -140,7 +158,7 @@ export default function PollCardPro({
             : "mt-3 flex items-center justify-between text-sm"
         }
       >
-        <div className={isCompact ? "text-blue-300 text-xs" : "text-blue-300"}>Total votes: {total}</div>
+        <div className={isCompact ? "text-blue-300 text-xs" : "text-blue-300"}>Total votes: {total || 0}</div>
         {showFooterActions && (
           <div className="flex items-center gap-2">
             <button

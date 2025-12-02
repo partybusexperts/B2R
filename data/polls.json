@@ -1,7 +1,7 @@
 {
   "votes": {
     "pricing-factor": {
-      "Group size": 2
+      "Group size": 3
     },
     "important_partybus_feature": {
       "Sound System": 2
@@ -37,7 +37,8 @@
       "No": 2
     },
     "hourly-20p-limo": {
-      "$200": 1
+      "$200": 1,
+      "$100": 1
     },
     "partybus_vs_limo": {},
     "matters_most": {},
@@ -257,7 +258,9 @@
     "results_q_48": {},
     "results_q_49": {},
     "results_q_50": {},
-    "transport_q_01": {},
+    "transport_q_01": {
+      "No": 1
+    },
     "transport_q_02": {},
     "transport_q_03": {},
     "transport_q_04": {},
@@ -325,7 +328,9 @@
     "limo_nightmare_q_16": {},
     "limo_nightmare_q_17": {},
     "limo_nightmare_q_18": {},
-    "limo_nightmare_q_19": {},
+    "limo_nightmare_q_19": {
+      "Yes": 1
+    },
     "limo_nightmare_q_20": {},
     "limo_nightmare_q_22": {},
     "limo_nightmare_q_23": {},
@@ -379,6 +384,9 @@
     },
     "ada-curated-1756621534089-1": {
       "Required": 1
+    },
+    "arizona-curated-1756620576407-1": {
+      "Outdoor adventures": 1
     }
   }
 }
