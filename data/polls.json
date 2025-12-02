@@ -50,7 +50,9 @@
     "partybus_q_05": {},
     "partybus_q_06": {},
     "partybus_q_07": {},
-    "partybus_q_08": {},
+    "partybus_q_08": {
+      "Yes": 1
+    },
     "partybus_q_09": {},
     "partybus_q_10": {},
     "partybus_q_11": {},
@@ -374,6 +376,9 @@
     "results_q_02": {},
     "holiday_autogen_1756620233563_11": {
       "Option A": 1
+    },
+    "ada-curated-1756621534089-1": {
+      "Required": 1
     }
   }
 }
