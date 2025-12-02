@@ -5,6 +5,7 @@ const MAX_ROWS = 50000;
 const MAX_OPTION_ROWS = 200000;
 
 type OptionRow = Record<string, unknown>;
+type PollRow = Record<string, unknown>;
 
 function coerceString(value: unknown): string | null {
   if (value === null || value === undefined) return null;
@@ -58,12 +59,52 @@ function normalizeSort(row: OptionRow): number {
   return 0;
 }
 
+function normalizeTags(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value
+      .map((tag) => (typeof tag === "string" ? tag : String(tag ?? "")))
+      .map((tag) => tag.trim().toLowerCase())
+      .filter(Boolean);
+  }
+
+  if (typeof value === "string" && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return normalizeTags(parsed);
+    } catch {
+      // ignore JSON parse failures and fall through to split
+    }
+    return value
+      .split(/[,|]/g)
+      .map((t) => t.trim().toLowerCase())
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
+function normalizeActiveFlag(row: PollRow): boolean {
+  const raw =
+    row.active ??
+    row.is_active ??
+    row.enabled ??
+    row.status ??
+    row.published ??
+    true;
+
+  if (typeof raw === "boolean") return raw;
+  const str = String(raw ?? "true").trim().toLowerCase();
+  if (!str) return true;
+  if (["false", "0", "inactive", "disabled"].includes(str)) return false;
+  return true;
+}
+
 export async function getAllPolls(): Promise<RawPoll[]> {
   const supabase = createClient();
 
   const { data: pollRows, error: pollError } = await supabase
     .from("polls1")
-    .select("id, slug, question")
+    .select("id, slug, question, tags, active, is_active, status")
     .limit(MAX_ROWS);
 
   if (pollError) {
@@ -110,15 +151,19 @@ export async function getAllPolls(): Promise<RawPoll[]> {
     });
   }
 
-  const result: RawPoll[] = (pollRows as any[]).map((poll) => {
+  const result: RawPoll[] = (pollRows as PollRow[]).map((raw) => {
+    const poll = raw as PollRow;
     const pollId = String(poll.id);
     const optionLabels = (optionsByPoll.get(pollId) ?? []).map((opt) => opt.label);
+    const tags = normalizeTags(poll.tags);
 
     return {
       id: pollId,
-      slug: poll.slug ?? null,
-      question: poll.question ?? "",
+      slug: (poll.slug ?? null) as string | null,
+      question: (poll.question ?? "") as string,
       options: optionLabels,
+      tags,
+      active: normalizeActiveFlag(poll),
     } satisfies RawPoll;
   });
 

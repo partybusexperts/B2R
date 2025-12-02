@@ -11,3 +11,16 @@
 {"t":1764639981068,"event":"vote","pollId":"hourly-20p-limo","option":"$100"}
 {"t":1764640036646,"event":"vote","pollId":"limo_nightmare_q_19","option":"Yes"}
 {"t":1764641014147,"event":"vote","pollId":"transport_q_01","option":"No"}
+{"t":1764651186114,"event":"vote","pollId":"0b7d88dd-68cf-41d6-822d-3e43d18b8962","option":"Somewhat important"}
+{"t":1764651337839,"event":"vote","pollId":"00082056-dcd4-4b13-9ed6-9a3f70930aa7","option":"Historical reenactments"}
+{"t":1764651379089,"event":"copy_embed","pollId":"00082056-dcd4-4b13-9ed6-9a3f70930aa7"}
+{"t":1764652265675,"event":"vote","pollId":"41903a2d-9c8e-47e4-a62b-0ba20cd757b5","option":"Not preferred"}
+{"t":1764652270038,"event":"vote","pollId":"71377348-a738-4553-aeb5-5cb07b081760","option":"Availability"}
+{"t":1764652379560,"event":"vote","pollId":"0000a519-fa64-4472-b08a-84413a3c5b54","option":"Uncertain"}
+{"t":1764652384077,"event":"copy_embed","pollId":"0000a519-fa64-4472-b08a-84413a3c5b54","embedMode":"results"}
+{"t":1764652648131,"event":"vote","pollId":"096ede98-bb91-4c41-b3d6-4add7de57524","option":"Mexican"}
+{"t":1764652652362,"event":"vote","pollId":"0e2e9e0b-1f1c-4805-9526-beba1ce6f3cd","option":"Thrift"}
+{"t":1764652794479,"event":"vote","pollId":"075f5bd7-28a2-49ed-81d0-05172debecd3","option":"Excellent"}
+{"t":1764652801819,"event":"vote","pollId":"083859a9-1600-48f6-92d8-54c885e200f2","option":"Asian"}
+{"t":1764652818777,"event":"vote","pollId":"0003b17c-4ab8-4a51-82ac-dc4ffd3b3528","option":"Attracting new businesses"}
+{"t":1764653270548,"event":"vote","pollId":"0f29b5b0-ab49-45a3-8aba-29bbddaa3e46","option":"Spring"}

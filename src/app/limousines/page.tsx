@@ -4,10 +4,10 @@ import { fetchFleetVehicles } from "../../lib/server/fleetData";
 
 import LimousinesClient from "./LimousinesClient";
 import GlobalReviewStripServer from "../../components/reviews/GlobalReviewStripServer";
-import LimoPollsSection from "../../components/polls/LimoPollsSection";
 import ToolsSection from "@/components/home/ToolsSection";
 import PartyBusEventsSection from "@/components/party-buses/PartyBusEventsSection";
 import LimoFaqSection from "@/components/limousines/LimoFaqSection";
+import { PollsBoxByTag } from "@/components/PollsBoxByTag";
 
 export default async function LimousinesPage() {
   const fleet = await fetchFleetVehicles();
@@ -17,7 +17,23 @@ export default async function LimousinesPage() {
     <>
       <LimousinesClient vehicles={vehicles} />
       <GlobalReviewStripServer />
-      <LimoPollsSection />
+      <section className="mx-auto mt-12 max-w-6xl space-y-6 px-4">
+        <PollsBoxByTag
+          tag="limo"
+          title="Limousine Rider Polls"
+          subtitle="See what limo riders say about interiors, chauffeurs, and upgrade-worthy perks."
+        />
+        <PollsBoxByTag
+          tag="wedding"
+          title="Wedding Limo Debates"
+          subtitle="Ceremony timelines, photo stops, champagne policies—the wedding limo receipts are right here."
+        />
+        <PollsBoxByTag
+          tag="prom"
+          title="Prom & Formal Night Polls"
+          subtitle="Parents vs. students, curfews vs. after-parties. Real limo bookings for prom season."
+        />
+      </section>
       <ToolsSection />
       <PartyBusEventsSection category="limousines" />
       <LimoFaqSection />

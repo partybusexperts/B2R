@@ -197,21 +197,26 @@ export default async function PartyBusEventsSection({ category = "party-buses" }
         <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           {events.map((event, idx) => {
             const href = event.href || `/events/${slugify(event.name)}`;
+            const pollTag = encodeURIComponent(slugify(event.name));
             return (
-              <a
+              <article
                 key={`${event.name}-${idx}`}
-                href={href}
-                aria-label={`Learn more about ${event.name}`}
                 className="relative bg-[#0f1f46] rounded-3xl border border-blue-800/40 p-6 no-underline min-h-[480px] flex flex-col items-center shadow-[0_10px_28px_-4px_rgba(0,0,0,.45)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_36px_-6px_rgba(0,0,0,.55)] group before:absolute before:inset-0 before:rounded-3xl before:p-[1.5px] before:bg-gradient-to-r before:from-blue-500/20 before:via-cyan-400/20 before:to-indigo-400/20 before:opacity-0 group-hover:before:opacity-100 before:transition-opacity before:duration-200"
               >
-                <SmartImage
-                  src={pickImageForEvent(event.name, idx)}
-                  alt={event.name}
-                  className="rounded-2xl shadow-lg w-full h-64 object-cover object-center mb-4 border border-blue-800/40"
-                />
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 font-serif text-center group-hover:text-blue-100 transition-colors">
-                  {event.name}
-                </h3>
+                <a
+                  href={href}
+                  aria-label={`Learn more about ${event.name}`}
+                  className="w-full flex flex-col items-center"
+                >
+                  <SmartImage
+                    src={pickImageForEvent(event.name, idx)}
+                    alt={event.name}
+                    className="rounded-2xl shadow-lg w-full h-64 object-cover object-center mb-4 border border-blue-800/40"
+                  />
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 font-serif text-center group-hover:text-blue-100 transition-colors">
+                    {event.name}
+                  </h3>
+                </a>
                 <p className="text-base md:text-lg text-blue-100/90 text-center mb-6">
                   {event.description}
                 </p>
@@ -227,13 +232,13 @@ export default async function PartyBusEventsSection({ category = "party-buses" }
                     Email
                   </a>
                   <a
-                    href={`/polls?tag=${encodeURIComponent(slugify(event.name))}`}
+                    href={`/polls?tag=${pollTag}`}
                     className={`${CTA.base} ${CTA.accent}`}
                   >
                     Related Polls
                   </a>
                 </div>
-              </a>
+              </article>
             );
           })}
         </div>

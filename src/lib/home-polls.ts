@@ -7,6 +7,7 @@ export type RawPoll = {
   question: string;
   options?: string[] | null;
   tags?: string[] | null;
+  active?: boolean | null;
 };
 export type HomePollColumn = { key: string; title: string; items: RawPoll[] };
 
