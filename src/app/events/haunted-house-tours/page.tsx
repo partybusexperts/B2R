@@ -44,6 +44,105 @@ type ShowcaseVehicle = {
   href: string;
 };
 
+type ScareStyleKey = "chill" | "classic" | "fullsend";
+
+const SCARE_STYLES: Record<
+  ScareStyleKey,
+  {
+    label: string;
+    tagline: string;
+    hours: string;
+    details: string;
+    bullets: string[];
+  }
+> = {
+  chill: {
+    label: "Chill & Spooky",
+    tagline: "One haunt, cozy bus vibes, and home by midnight.",
+    hours: "3–4 hours",
+    details:
+      "Perfect for first-timers, date nights, or families with teens who want the scares without the exhaustion.",
+    bullets: [
+      "1 main haunted house + optional photo stop",
+      "Short line or timed-entry tickets",
+      "Snacks + playlists on the bus instead of bar-hopping",
+    ],
+  },
+  classic: {
+    label: "Classic Crawl",
+    tagline: "Two haunts, a food stop, and non-stop screaming in between.",
+    hours: "4–6 hours",
+    details:
+      "Our most common haunted night: enough time to hit two big attractions, regroup over food, and still have energy to laugh about it on the ride back.",
+    bullets: [
+      "2 haunted houses in the same general area",
+      "Quick-service food stop in the middle",
+      "Time for group photos, bathroom breaks, and a surprise detour",
+    ],
+  },
+  fullsend: {
+    label: "Full Send Insanity",
+    tagline: "Three haunts, max chaos, everyone loses their voice.",
+    hours: "6–8 hours",
+    details:
+      "For hardcore haunt hunters, birthdays, or friend groups who want the whole night to feel like a movie. You’ll want the extra bus time to recover between scares.",
+    bullets: [
+      "3 haunts or 2 massive attractions + bar/arcade stop",
+      "Built-in buffer for long lines and traffic",
+      "Perfect for costumes, contests, and 'last haunt standing' challenges",
+    ],
+  },
+};
+
+const HAUNT_CITY_DATA = [
+  {
+    city: "Los Angeles",
+    region: "Southern California",
+    picks: [
+      { name: "Universal Horror Nights", vibe: "Blockbuster IPs, movie-caliber sets", tip: "Spring for Express passes on Fridays" },
+      { name: "LA Haunted Hayride", vibe: "Outdoor trail + carnival midway", tip: "Plan for dusty paths—closed-toe shoes" },
+      { name: "Delusion", vibe: "Interactive theatre + actors", tip: "Great add-on for smaller squads that love puzzles" },
+    ],
+  },
+  {
+    city: "Chicago",
+    region: "Midwest",
+    picks: [
+      { name: "Nightmare on Clark Street", vibe: "Multi-level bar haunt", tip: "Book a table for post-scare drinks" },
+      { name: "13th Floor Chicago", vibe: "High production scares", tip: "Pairs well with nearby rooftop bars" },
+      { name: "HellsGate", vibe: "Forest approach + mansion", tip: "Add buffer for shuttle ride from parking lot" },
+    ],
+  },
+  {
+    city: "Dallas",
+    region: "Texas",
+    picks: [
+      { name: "Dark Hour", vibe: "Hollywood-level set changes", tip: "Great for indoor nights when the weather flips" },
+      { name: "Cutting Edge", vibe: "Guinness-record long maze", tip: "Hydrate on the bus; it’s a legit workout" },
+      { name: "Screams Halloween Park", vibe: "Renaissance fairgrounds gone spooky", tip: "Parking is chaos—bus drop-offs save 30+ minutes" },
+    ],
+  },
+];
+
+const GALLERY_IMAGES = [
+  {
+    src: "/images/party-buses/30 Passenger Party Bus Exterior.png",
+    alt: "Party bus staged outside haunted maze",
+  },
+  {
+    src: "/images/party-buses/36 Passenger Party Bus Inside.png",
+    alt: "Interior LEDs set to blood-red theme",
+  },
+  {
+    src: "/images/party-buses/18 Passenger White Party Bus Exterior.png",
+    alt: "Sprinter ready for scare night pickup",
+  },
+  {
+    src: "/images/party-buses/30 Passenger Party Bus Exterior.png",
+    alt: "Motorcoach under fog machines",
+  },
+];
+
 function buildShowcaseVehicles(): ShowcaseVehicle[] {
   const resolved = resolveVehicles(findByFileName);
   return resolved
@@ -195,6 +294,261 @@ function calcRecommendedHours(stops: number, avgQueueMin: number, travelMin: num
   return clamp(hours, 3, 10);
 }
 
+function ScareStyleSection() {
+  const [selected, setSelected] = useState<ScareStyleKey>("classic");
+  const active = SCARE_STYLES[selected];
+
+  return (
+    <section className="max-w-7xl mx-auto px-4 md:px-6 pt-6 pb-4">
+      <div className="rounded-3xl border border-blue-800/40 bg-gradient-to-r from-[#121f45] via-[#0c1634] to-[#050b1f] p-6 md:p-8 shadow-xl">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-white/60">Pick your poison</p>
+            <h2 className="mt-3 text-2xl md:text-3xl font-extrabold text-white font-serif tracking-tight">What kind of haunted night are you planning?</h2>
+            <p className="mt-2 text-sm md:text-base text-blue-100/85 max-w-xl">Choose a style below. We’ll show a typical hours range and how groups usually structure the night with the bus.</p>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {(Object.keys(SCARE_STYLES) as ScareStyleKey[]).map((key) => {
+              const style = SCARE_STYLES[key];
+              const isActive = key === selected;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelected(key)}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold border transition ${
+                    isActive
+                      ? "bg-white text-blue-900 border-blue-200 shadow-lg"
+                      : "bg-white/5 text-blue-100 border-white/15 hover:bg-white/10"
+                  }`}
+                >
+                  {style.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)]">
+          <div className="rounded-2xl border border-white/12 bg-white/5 p-5 md:p-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-blue-200/80 mb-2">Recommended duration</p>
+            <div className="flex items-center gap-4 mb-3">
+              <span className="text-3xl font-extrabold text-white">{active.hours}</span>
+              <span className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-white/80">{active.tagline}</span>
+            </div>
+            <p className="text-sm text-blue-100/90 mb-4">{active.details}</p>
+            <ul className="space-y-2 text-sm text-blue-100/90">
+              {active.bullets.map((b, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="mt-[6px] h-[6px] w-[6px] rounded-full bg-emerald-400 flex-shrink-0" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl border border-blue-700/60 bg-[#050b24] p-5 md:p-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-blue-300/80 mb-2">How this fits Bus2Ride</p>
+            <p className="text-sm text-blue-100/90 mb-3">
+              Use this as a vibe check against the <span className="font-semibold text-white">Quick Planner</span> above. If your group size or number of stops doesn’t line up with this range, we’ll tweak the route.
+            </p>
+            <ul className="space-y-2 text-sm text-blue-100/85">
+              <li>• Share this style in your <a href="#instant" className="underline decoration-blue-300 hover:text-white">Instant Quote</a> notes so your planner knows what you’re going for.</li>
+              <li>• Mix-and-match: start chill, end full send, or vice versa.</li>
+              <li>• Have multiple age groups? We’ll design a route that works for everyone.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+type SampleItinerary = {
+  label: string;
+  blurb: string;
+  items: string[];
+};
+
+const ITINERARIES: SampleItinerary[] = [
+  {
+    label: "Date Night + One Big Haunt",
+    blurb: "Simple, cinematic, and back before the babysitter gets annoyed.",
+    items: [
+      "6:30 PM — Pickup at home or restaurant",
+      "7:00 PM — Arrive at haunted house (timed-entry tickets)",
+      "7:15–8:15 PM — Haunted walkthrough + photos",
+      "8:30 PM — Late dessert or coffee stop",
+      "9:30–10:00 PM — Drop-off and 'we survived' recap on the bus",
+    ],
+  },
+  {
+    label: "Friends’ Night Out Crawl",
+    blurb: "Two haunts, one food stop, and a lot of scream-laughing.",
+    items: [
+      "7:00 PM — Pickup at central meet spot",
+      "7:45 PM — Haunt #1 (shorter line or warm-up scare)",
+      "9:00 PM — Food stop / bar with space for a big group",
+      "10:15 PM — Haunt #2 (the big one with the long line)",
+      "11:45 PM — Drop-off loop home or at an after-party spot",
+    ],
+  },
+  {
+    label: "Birthday / Full Send",
+    blurb: "Costumes, contests, three stops, and a hero’s welcome ride home.",
+    items: [
+      "6:00 PM — Pickup with music + decorations on the bus",
+      "6:45 PM — Haunt #1 (photo-heavy, good lighting)",
+      "8:00 PM — Dinner or arcade / bar stop",
+      "9:30 PM — Haunt #2 (most intense attraction of the night)",
+      "11:00 PM — Scenic drive or bonus stop if everyone’s still alive",
+      "12:00 AM — Final drop-offs and last group photos onboard",
+    ],
+  },
+];
+
+function SampleItinerariesSection() {
+  return (
+    <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+      <div className="rounded-3xl border border-blue-800/30 bg-[#101f3c] p-6 md:p-8 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-white/60">Real-world timelines</p>
+            <h2 className="mt-3 text-2xl md:text-3xl font-extrabold text-white font-serif tracking-tight">Sample haunted house itineraries</h2>
+            <p className="mt-2 text-sm md:text-base text-blue-100/85 max-w-xl">Use these as a starting point. Drop your favorite version into the quote form and we’ll tune it to your city, haunts, and group size.</p>
+          </div>
+          <div className="text-xs md:text-sm text-blue-200/80">Times are examples only — traffic, venue rules, and your haunts change the details.</div>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {ITINERARIES.map((it, idx) => (
+            <article
+              key={idx}
+              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-5 md:px-5 md:py-6 flex flex-col shadow-[0_16px_40px_rgba(3,7,18,0.6)]"
+            >
+              <h3 className="text-lg font-semibold text-white mb-1">{it.label}</h3>
+              <p className="text-sm text-blue-100/90 mb-4">{it.blurb}</p>
+              <ul className="space-y-2 text-sm text-blue-100/90 flex-1">
+                {it.items.map((line, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="mt-[6px] h-[6px] w-[6px] rounded-full bg-blue-300 flex-shrink-0" />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TopHauntsPlaceholder() {
+  const [cityIdx, setCityIdx] = useState(0);
+  const city = HAUNT_CITY_DATA[cityIdx] || HAUNT_CITY_DATA[0];
+
+  return (
+    <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+      <div className="rounded-3xl border border-blue-800/40 bg-gradient-to-br from-[#0e1b3c] to-[#060b1f] p-6 md:p-8 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-white/60">Top haunts near you</p>
+            <h2 className="mt-3 text-2xl md:text-3xl font-extrabold text-white font-serif tracking-tight">Plug in your city—we’ll swap in local intel</h2>
+            <p className="mt-2 text-sm text-blue-100/85 max-w-2xl">Below is placeholder data; once the haunt API is wired up, these cards will auto-update based on your quote form location.</p>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {HAUNT_CITY_DATA.map((entry, idx) => (
+              <button
+                key={entry.city}
+                onClick={() => setCityIdx(idx)}
+                className={`rounded-full px-4 py-2 text-sm font-semibold border transition ${
+                  idx === cityIdx
+                    ? "bg-white text-blue-900 border-blue-200 shadow-lg"
+                    : "bg-white/5 text-blue-100 border-white/15 hover:bg-white/10"
+                }`}
+              >
+                {entry.city}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-white/15 bg-white/5 p-5 md:p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-5">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-blue-200/80">Current focus</p>
+              <h3 className="text-2xl font-bold text-white">{city.city}</h3>
+              <p className="text-sm text-blue-100/80">{city.region}</p>
+            </div>
+            <div className="text-xs text-blue-200/70">API ready · we’ll hydrate this with live haunt feeds soon</div>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {city.picks.map((pick) => (
+              <article key={pick.name} className="rounded-2xl border border-white/10 bg-[#091630]/90 p-4">
+                <p className="text-sm uppercase tracking-[0.25em] text-blue-300/70">Featured haunt</p>
+                <h4 className="text-lg font-semibold text-white mt-1">{pick.name}</h4>
+                <p className="text-sm text-blue-100/85 mt-2">{pick.vibe}</p>
+                <p className="mt-3 text-xs text-blue-200/80">Tip: {pick.tip}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HauntedGalleryStrip() {
+  return (
+    <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+      <div className="rounded-3xl border border-blue-800/30 bg-[#0b1329] p-5 md:p-7 shadow-xl overflow-hidden">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Night ops gallery</p>
+            <h2 className="mt-2 text-2xl md:text-3xl font-semibold text-white">Set the mood before you roll</h2>
+          </div>
+          <a href="/gallery" className="text-sm font-semibold text-blue-200 hover:text-white">See more shots →</a>
+        </div>
+        <div className="flex gap-4 overflow-y-hidden overflow-x-auto pb-2">
+          {GALLERY_IMAGES.map((img, idx) => (
+            <figure key={`${img.src}-${idx}`} className="min-w-[220px] sm:min-w-[260px] rounded-2xl border border-blue-800/40 bg-[#050b19] shadow-lg">
+              <SmartImage src={img.src} alt={img.alt} className="w-full h-40 sm:h-48 object-cover rounded-t-2xl" />
+              <figcaption className="p-3 text-xs text-blue-100/80">{img.alt}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StickyPlanBar({ quoteHref }: { quoteHref: string }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setVisible(window.scrollY > 400);
+    handler();
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  if (!visible) return null;
+
+  return (
+    <div className="fixed bottom-4 left-0 right-0 px-4 pointer-events-none z-40">
+      <div className="max-w-4xl mx-auto pointer-events-auto rounded-3xl border border-blue-500/40 bg-[#050b19]/95 backdrop-blur-lg shadow-[0_20px_60px_rgba(5,10,25,0.65)] px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <p className="text-xs uppercase tracking-[0.35em] text-white/60">Ready when you are</p>
+          <p className="text-sm text-blue-100/85">Lock your haunted itinerary now—planners respond in under 5 minutes.</p>
+        </div>
+        <div className="flex gap-3 flex-col sm:flex-row">
+          <a href={quoteHref} className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-bold bg-white text-blue-900 border border-blue-200 hover:bg-blue-50">⚡ Plan my haunted night</a>
+          <a href="tel:8885352566" className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-bold text-white border border-white/30 hover:bg-white/10">Call {PHONE_DISPLAY}</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ===== Page ===== */
 export default function HauntedHouseToursRichPage() {
   // planner state
@@ -332,6 +686,10 @@ export default function HauntedHouseToursRichPage() {
         </div>
       </section>
 
+      <ScareStyleSection />
+
+      <SampleItinerariesSection />
+
       {/* VEHICLE SHOWCASE */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
         <h2 className="text-3xl md:text-4xl font-extrabold text-white font-serif tracking-tight text-center mb-4">Popular Vehicles for Fright Night</h2>
@@ -347,6 +705,8 @@ export default function HauntedHouseToursRichPage() {
         </div>
       </section>
 
+      <TopHauntsPlaceholder />
+
       {/* EVENT PICKER (Internal linking) */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-8">
         <div className="rounded-3xl border border-blue-800/30 bg-[#173264] p-6 shadow-xl">
@@ -355,6 +715,8 @@ export default function HauntedHouseToursRichPage() {
           <FeaturedEventsGrid limit={6} />
         </div>
       </section>
+
+      <HauntedGalleryStrip />
 
       {/* POLLS SECTION */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
@@ -415,6 +777,7 @@ export default function HauntedHouseToursRichPage() {
           </div>
         </div>
       </section>
+      <StickyPlanBar quoteHref={quoteHref} />
     </main>
   );
 }
