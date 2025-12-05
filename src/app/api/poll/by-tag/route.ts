@@ -6,6 +6,13 @@ import path from "path";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
+console.log("[env-check]", {
+  url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  anon: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.slice(0, 20),
+  serverUrl: process.env.SUPABASE_URL,
+  service: process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 20),
+});
+
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { persistSession: false },
 });
