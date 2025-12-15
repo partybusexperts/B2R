@@ -1,101 +1,265 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Bus2Ride
 
-## Getting Started
+Party bus, limousine, and coach bus rental platform built with **Next.js 16 (App Router)**, **Supabase**, **Tailwind CSS**, and **shadcn/Radix**.
 
-First, run the development server:
+## Tech Stack
+
+| Layer      | Technology                          |
+| ---------- | ----------------------------------- |
+| Framework  | Next.js 16 (App Router, TypeScript) |
+| Styling    | Tailwind CSS, CSS variables         |
+| Theme      | Blue-centric (`#2563eb` primary)    |
+| Components | shadcn UI (Radix primitives)        |
+| Backend    | Supabase (PostgreSQL)               |
+| Auth       | Supabase SSR (cookie-based)         |
+| Storage    | Supabase bucket `vehicles1`         |
+| Icons      | Lucide React                        |
+
+## Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev      # start dev server
+npm run build    # production build
+npm run start    # serve production build
+npm run lint     # ESLint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Global Component Rules
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Hero Section
 
-## Environment Variables
+- **Used on:** All pages **except** Fleet pages, Polls page, Poll Results page.
+- Fetch hero by slug from Supabase.
+- Rotating carousel of 3 vehicle images from `vehicles1` storage.
 
-Create a `.env.local` (not committed) based on `.env.example`.
+### Fleet Preview Section
 
-On macOS/Linux:
-```bash
-cp .env.example .env.local
-```
-On Windows PowerShell:
-```powershell
-Copy-Item .env.example .env.local
-```
+- Large main photo + small thumbnails below.
+- **"Learn More"** button in bottom-right of main photo.
+- Fix pixelated buttons (match hero button quality).
+- Increase contrast for "Chauffeur Included" badge (white text hard to see).
+- **Homepage only:** Show left/right arrows; clicking anywhere routes to fleet page.
+- Never show same vehicle twice across sections.
+- Thumbnail click should instantly update main photo (no stall).
 
-Then edit `.env.local` and fill in the values below. After any change you MUST restart the dev server so Next.js picks them up.
+### "Why X Rocks" Section
 
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `ORS_API_KEY` | Optional (required for Route Planner / Geocode) | Server-side calls to OpenRouteService for distance/duration + geocoding. |
-| `SPOTIFY_CLIENT_ID` | Optional (required for Playlist Starter images + search) | Spotify Client Credentials flow. |
-| `SPOTIFY_CLIENT_SECRET` | Optional (required for Playlist Starter images + search) | Spotify Client Credentials flow. |
+- Use expanded version from fleet pages (not homepage mini version).
+- Store in Supabase as `content_sections`.
+- Modal styling should match Tools page modal (better looking).
 
-Example `.env.local` (DO NOT COMMIT real keys):
-```
-ORS_API_KEY=sk_openrouteservice_xxx
-SPOTIFY_CLIENT_ID=your_spotify_client_id
-SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-```
+### Reviews Section
 
-### Getting Spotify Credentials
-1. Go to https://developer.spotify.com/dashboard
-2. Log in and click "Create app" (name it e.g. "Bus2Ride Playlist Starter").
-3. You do NOT need redirect URIs for the client credentials flow we use.
-4. Copy the Client ID and Client Secret into `.env.local`.
-5. Restart the dev server: stop it (Ctrl+C) then run `npm run dev` again.
+- Add **search bar** + **checkbox filters** (filter by vehicle type, "on time", etc.).
+- AI-assisted tagging for filter categories.
+- Consistent across all pages.
 
-### Verifying Spotify Setup
-After setting the variables and restarting, visit:
-```
-/api/spotify-health
-```
-You should see `{ "ok": true, ... }`. If you get `spotify_auth_failed`, double‑check the ID/Secret and restart.
+### Polls Section
 
-### Security Notes
-* NEVER expose `SPOTIFY_CLIENT_SECRET` or `ORS_API_KEY` in client-side JavaScript.
-* Only access them in server files / API routes (anything under `app/api/**`).
-* Do not commit `.env.local` – it's already ignored. Use `.env.example` for documentation.
+- **3-column layout:**
+  - Column 1 = contextual poll for current page category
+  - Columns 2–3 = AI-suggested/rotated polls
+- Recreate styling to match site theme.
 
-## Route Planner & Geocode Security
+### Tools Section
 
-The client components call internal Next.js API routes which:
-- Validate inputs
-- Use your server-side `ORS_API_KEY`
-- Return normalized JSON (distance in miles, duration in minutes)
-- Avoid leaking the raw provider key or unnecessary payload
+- Grid layout with **modal popups** (use Tools page modal style everywhere).
+- Rotate tools contextually (e.g., pricing tools on pricing page).
+- Store in Supabase for dynamic rotation.
 
-Endpoints:
-- POST `/api/geocode` { address }
-- POST `/api/plan-route` { start, end }
+### Events Section
 
-Responses have shape:
-```
-{ ok: boolean, error?: string, data?: {...} }
-```
+- **Desktop:** 2 rows × 3 columns (6 events), randomized order.
+- **Mobile:** Stacked.
+- "See more events" button below.
+- Change "Related Polls" button → **"Live Quote"**.
 
-If you deploy to Vercel, set `ORS_API_KEY` in the project settings under Environment Variables.
-## Learn More
+### FAQ Section
 
-To learn more about Next.js, take a look at the following resources:
+- Supabase-driven template with "See more" expansion.
+- **Page-context filtering** — vast majority should be unique per page.
+- Some FAQs can repeat across pages but keep it minimal.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Page-Specific Instructions
 
-## Deploy on Vercel
+### Homepage (`/`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Standard Hero
+- Fleet Preview sections: Party Bus → Limo → Coach Bus
+- Replace mini "Why X Rocks" with expanded fleet page version
+- **Stack:** Reviews → Polls → Tools → FAQ → Events (6 events grid)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Fleet Pages (`/party-buses`, `/limousines`, `/coach-buses`)
+
+- **No hero**
+- Search bar + checkbox filters at top for sorting/finding vehicles
+- Thumbnail click instantly updates main photo + "Learn More" button
+- "Why X Rocks" section (expanded)
+- Cross-sell: "We also have [other vehicle types]" section
+- "How the Bus2Ride Booking Process Works" section (from Supabase)
+- **Stack:** Reviews → Polls → Tools → Events → FAQ
+
+### Individual Vehicle Page (`/vehicles/[slug]`)
+
+- **Larger fonts, more blue** styling
+- Remove spec sheet
+- Show 3 related vehicles of same type + "Why X Rocks"
+- Cross-sell other categories (party buses, limos, coach buses)
+- **Stack:** Reviews → Polls → Tools → Events → FAQ
+
+### Events Page (`/events`)
+
+- Standard Hero
+- Grid styling (boxes not rectangles)
+- **Stack:** Reviews → Polls → Fleet sections → Tools → FAQ
+
+### Individual Event Page (`/events/[slug]`)
+
+- Remove: scrolling bar/CTA at bottom, "Plug in your city", "Set mood before you roll"
+- Move "Make the scares fun not stressful" section up near top content
+- Show more related events (not "popular vehicles")
+- **Stack:** Fleet sections → Polls → Tools → Reviews → FAQ
+
+### Pricing Page (`/pricing`)
+
+- Standard Hero
+- Prominent search bar + clickable filters (minimum hours, vehicle type, etc.)
+- **Stack:** Reviews → Polls → Fleet sections → Tools → FAQ → Events (6 grid)
+
+### Locations Directory (`/locations`)
+
+- Current layout is fine
+- **Stack:** Polls → Fleet sections → Tools → Reviews → FAQ
+
+### City Location Page (`/locations/state/[state_slug]/city/[city_slug]`)
+
+- Standard Hero at top
+- **Larger fonts** (match rest of site)
+- Events section: convert to **modals** (square boxes, not rectangles)
+- Sample itinerary section: add photo on left, more detail
+- Neighborhood vibes + Seasonal guide: convert to **modals**
+- Trivia/Fun facts: bigger font, more items, better organization, more "spicy"
+- **Live Conditions:** Expand section with live weather + traffic APIs (free APIs preferred)
+- Remove "Supabase powered social proof" section
+- **Stack:** Reviews → Polls → Fleet sections → Tools → Events → FAQ → "Ready to Plan" CTA
+
+### State Location Page (`/locations/state/[state_slug]`)
+
+- Use **same template as city pages** (apply all city page changes first)
+
+### City Vehicle Pages (`/locations/state/[state_slug]/city/[city_slug]/[fleet_slug]`)
+
+- Create 3 pages per city: party-buses, limousines, coach-buses
+- Follow city location template pattern
+
+### Polls Page (`/polls`)
+
+- **No Hero**
+- Improve UX for faster voting (reduce clicks needed)
+- **Stack:** Reviews → Fleet sections → Tools → Events → FAQ
+
+### Poll Results Page (`/poll-results`)
+
+- **No Hero**
+- Top section: "Cool Stats" (most popular poll, interesting facts)
+- Simple grid for browsing results by category
+- **Stack:** Fleet sections → Polls → Reviews → Tools → Events → FAQ
+
+### Blog Page (`/blog`)
+
+- Standard Hero
+- Fix images from Supabase storage
+- Intersperse CTAs/info blocks between blog rows (break up monotony)
+- Search bar + checkbox filters for blog categories
+- Amenity tags below post images should be **clickable filters**
+- **Stack:** Fleet sections → Reviews → Polls → Tools → Events → FAQ
+
+### Individual Blog Post (`/blog/[slug]`)
+
+- Contextual Hero from Supabase
+- Add proper **title** to blog post
+- Remove: "Build your own model", "From inquiry to rolling wheels", "Actual vehicles staged this week", "Playbooks"
+- Use Supabase FAQ section
+- Keep "Interactive estimator" and "Cost signals" only if relevant to post topic
+- **Stack:** Fleet sections → Polls → Tools → FAQ → Events
+
+### Tools Page (`/tools`)
+
+- Standard Hero
+- Remove "Launch ready charter ops stack" section
+- Fix circle icon UI issue
+- Modal style is great — use this modal pattern elsewhere
+- **Stack:** Fleet sections → Reviews → Polls → FAQ → Events
+
+### FAQ Page (`/faq`)
+
+- Standard Hero
+- FAQ-specific header at top
+- **More blue, less dark** (match site theme)
+- Add "Most Clicked Questions This Week" section
+- **Stack:** Reviews → Fleet sections → Polls → Events → Tools
+
+### Industry Secrets Page (`/industry-secrets`)
+
+- Standard contextual Hero
+- Standardize boxes to match site styling (not current "dumb" look)
+- Modal style should match Tools page modals
+- Keep CTAs/info that break up rows
+- Prominent search bar + checkbox filters by category
+- **Stack:** Fleet sections → Polls → Reviews → Events → Tools → FAQ
+
+### Reviews Page (`/reviews`)
+
+- Standard Hero
+- **More blue, less dark** styling
+- **Stack:** Fleet sections → Polls → Events → Tools → FAQ
+
+### Contact Page (`/contact`)
+
+- Standard Hero
+- Higher contrast form (currently hard to see)
+- Remove "Lock in my quote" (ballpark numbers OK)
+- Replace "Response SLA" with Trivia/Facts
+- Add "How to Book" section from Supabase
+- **Stack:** Fleet sections → Reviews → Polls → Events → FAQ
+
+---
+
+## External APIs Needed
+
+| Feature          | API                         | Notes                |
+| ---------------- | --------------------------- | -------------------- |
+| Live Weather     | OpenWeatherMap / WeatherAPI | Free tier available  |
+| Live Traffic     | Google Maps / TomTom        | May require signup   |
+| Additional feeds | TBD                         | Prioritize free APIs |
+
+---
+
+## Key Files Reference
+
+| Purpose                 | Path                      |
+| ----------------------- | ------------------------- |
+| Supabase server client  | `lib/supabase/server.ts`  |
+| Supabase browser client | `lib/supabase/client.ts`  |
+| Cookie/session proxy    | `lib/supabase/proxy.ts`   |
+| DB types                | `types/database.types.ts` |
+| Vehicle data helpers    | `lib/data/vehicles.ts`    |
+| UI primitives           | `components/ui/`          |
+| Page sections           | `components/sections/`    |
+
+---
+
+## Implementation Priority
+
+1. Fix Fleet Preview section (buttons, contrast, thumbnail click, arrows)
+2. Implement Reviews section with search + filters
+3. Recreate Polls section (3-column layout)
+4. Standardize modal styling (use Tools modal everywhere)
+5. Build Events grid (6 events + "See more")
+6. Apply page-specific stacks
+7. Integrate weather/traffic APIs for location pages
+8. Style consistency pass (more blue, larger fonts where noted)

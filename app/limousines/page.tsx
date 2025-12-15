@@ -1,0 +1,64 @@
+import { FleetList } from "@/components/sections/fleet-list";
+import { WhySection } from "@/components/sections/content-features";
+import { OtherFleets } from "@/components/sections/content-with-images";
+import { ReviewsSection } from "@/components/sections/reviews-section";
+import { PollsGrid } from "@/components/sections/polls-grid";
+import { ToolsGrid } from "@/components/sections/tools-grid";
+import { EventsGrid } from "@/components/sections/events-grid";
+import { FaqSection } from "@/components/sections/faq-section";
+import { getVehiclesByType } from "@/lib/data/vehicles";
+import { getReviews } from "@/lib/data/reviews";
+import { BookingProcessSection } from "@/components/sections/content-booking";
+
+// Helper to fetch page-specific data
+async function getPageData() {
+  // 1. Fetch Fleet
+  const vehicles = (await getVehiclesByType("limo", "min_hours", 10)) ?? [];
+
+  // 2. Fetch Reviews (Generic top reviews for now, later filter by tag)
+  const reviews = (await getReviews()) ?? [];
+
+  return {
+    vehicles: vehicles,
+    reviews: reviews,
+  };
+}
+
+export default async function LimousinesPage() {
+  const { vehicles, reviews } = await getPageData();
+
+  return (
+    <main>
+      {/* 1. Filterable Fleet Inventory */}
+      {/* Search Bar + List of Vehicle Cards */}
+      <FleetList title="Limousine Fleet" vehicles={vehicles} />
+
+      {/* 2. "Why Limousines Rock" (Legacy V2 Style - Grid) */}
+      <WhySection
+        slug="limousines"
+        className="bg-background border-t border-border/40"
+      />
+
+      {/* 3. Cross-Sell Text (We also have party buses...) */}
+      <OtherFleets currentType="limo" />
+
+      {/* 4. Booking Process */}
+      <BookingProcessSection />
+
+      {/* 5. Reviews */}
+      <ReviewsSection reviews={reviews} />
+
+      {/* 6. Polls */}
+      <PollsGrid category="limo" />
+
+      {/* 7. Tools (Context: Limo) */}
+      <ToolsGrid category="limo" />
+
+      {/* 8. Events */}
+      <EventsGrid />
+
+      {/* 9. FAQ (Context: Limousines) */}
+      <FaqSection category="limousines" title="Limousines FAQs" />
+    </main>
+  );
+}
