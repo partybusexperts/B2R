@@ -119,7 +119,7 @@ export function HeroHeader({ hero, slideImageUrls }: HeroHeasderProps) {
               font-serif drop-shadow-lg sm:text-5xl md:text-7xl
               lg:leading-[1.1]"
           >
-            {hero?.title}
+            {"Hows it going"}
           </h1>
         )}
         {hero?.subtitle && (
