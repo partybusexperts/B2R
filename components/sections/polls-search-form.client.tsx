@@ -42,7 +42,11 @@ export function PollsSearchForm({
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+      <div
+        className="rounded-2xl p-4 shadow-[0_35px_120px_rgba(5,10,35,0.65)]
+          border border-white/10 bg-gradient-to-r from-slate-900/80
+          to-slate-950/90"
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -59,7 +63,9 @@ export function PollsSearchForm({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search polls (e.g. party bus, pricing, drivers)…"
-                className="pl-9 bg-background/50 border-border/60"
+                className="pl-9 rounded-2xl border border-white/10
+                  bg-slate-900/70 text-white placeholder:text-white/50
+                  focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/30"
               />
             </div>
 

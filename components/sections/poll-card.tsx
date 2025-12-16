@@ -17,12 +17,16 @@ interface PollCardProps {
   poll: PollWithOptions;
   onAdvance?: () => void;
   advanceDelayMs?: number;
+  backgroundClassName?: string;
+  noLoadSpinner?: boolean;
 }
 
 export function PollCard({
   poll,
   onAdvance,
   advanceDelayMs = 5000,
+  backgroundClassName,
+  noLoadSpinner = false,
 }: PollCardProps) {
   const [hasVoted, setHasVoted] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -93,8 +97,11 @@ export function PollCard({
 
   return (
     <Card
-      className="h-full rounded-2xl border border-white/10 bg-white/5 gap-2
-        shadow-sm flex flex-col bg-[#273659]"
+      className={cn(
+        `h-full rounded-2xl border border-white/10 bg-white/5 gap-2shadow-sm
+        flex flex-col bg-[#273659]`,
+        backgroundClassName,
+      )}
     >
       <CardHeader className="pb-3">
         {/* <Badge
@@ -162,7 +169,7 @@ export function PollCard({
           </p>
         )}
 
-        {hasVoted && isAdvancing && (
+        {hasVoted && isAdvancing && !noLoadSpinner && (
           <div className="mt-3 flex items-center justify-center">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           </div>

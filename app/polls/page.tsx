@@ -47,17 +47,26 @@ export default async function PollsPage({
   return (
     <main>
       {/* No Hero */}
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-16 md:py-24 bg-[#0C163A]">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.3em]
+                text-white/70"
+            >
+              Rider intelligence
+            </p>
             <h1
-              className="text-4xl md:text-5xl font-extrabold tracking-tight
-                text-foreground"
+              className="mt-4 text-4xl font-semibold tracking-tight text-white
+                sm:text-5xl"
             >
               Community Polls
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Vote on the hottest topics in luxury transportation.
+            <p className="mt-3 text-base text-white/75 sm:text-lg">
+              Real riders share what matters most—pricing, safety, vibes,
+              accessibility, and rules. Tap into the nation&apos;s largest party
+              bus panel, vote on new questions, and watch results shift in real
+              time.
             </p>
 
             {normalizedCategory && (
@@ -88,18 +97,25 @@ export default async function PollsPage({
                     gap-8"
                 >
                   {polls.map((poll) => (
-                    <PollCard key={poll.id} poll={poll} />
+                    <PollCard
+                      key={poll.id}
+                      poll={poll}
+                      backgroundClassName="shadow-[0_35px_120px_rgba(5,10,35,0.65)]
+          border border-white/10 bg-gradient-to-r from-slate-900/80
+          to-slate-950/90"
+                      noLoadSpinner
+                    />
                   ))}
                 </div>
               ) : (
                 <div
                   className="rounded-3xl border border-dashed border-border
-                    bg-muted/20 py-16 text-center"
+                    bg-transparent py-16 text-center"
                 >
-                  <h3 className="text-lg font-semibold">No polls found</h3>
-                  <p className="text-muted-foreground">
-                    Try a different search.
-                  </p>
+                  <h3 className="text-lg font-semibold text-white">
+                    No polls found
+                  </h3>
+                  <p className="text-blue-200/85">Try a different search.</p>
                   <Button asChild variant="link" className="mt-2 text-primary">
                     <Link href="/polls">Clear search</Link>
                   </Button>
