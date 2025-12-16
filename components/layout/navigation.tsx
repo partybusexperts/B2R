@@ -174,11 +174,9 @@ export default function Navigation() {
     <li className="relative">
       <div
         className={cn(
-          `flex cursor-pointer items-center gap-1 px-3 py-2 text-sm font-medium
+          `flex cursor-pointer items-center gap-1 px-3 py-2 text-md font-medium
           transition-colors`,
-          open === k
-            ? "text-primary"
-            : "text-muted-foreground hover:text-primary",
+          open === k ? "text-blue-200" : "text-white hover:text-blue-200",
         )}
         role="button"
         tabIndex={0}
@@ -199,7 +197,7 @@ export default function Navigation() {
         role="menu"
         className={cn(
           `absolute left-0 top-full z-50 mt-1 min-w-[14rem] rounded-md border
-          border-border bg-popover p-2 shadow-lg transition-all duration-200`,
+          border-blue-200 bg-popover p-2 shadow-lg transition-all duration-200`,
           open === k
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-2 opacity-0",
@@ -272,21 +270,18 @@ export default function Navigation() {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full border-b border-border/40
-        bg-background supports-[backdrop-filter]:bg-background"
+      className="sticky top-0 z-50 bg-[#1E4ED8]
+        supports-[backdrop-filter]:bg-[#1E4ED8]"
     >
-      <div
-        className="container mx-auto flex h-16 items-center justify-between
-          px-4"
-      >
+      <div className="mx-auto flex h-16 items-center justify-between px-60">
         {/* Logo */}
         <Link
           href="/"
           className="mr-6 flex items-center space-x-2"
           onClick={closeNow}
         >
-          <span className="text-xl font-bold tracking-tight text-foreground">
-            Bus<span className="text-primary">2</span>Ride
+          <span className="font-bold text-lg tracking-wide text-white">
+            Bus2Ride
           </span>
         </Link>
 
@@ -300,11 +295,11 @@ export default function Navigation() {
                     <Link
                       href={entry.href}
                       className={cn(
-                        `block px-3 py-2 text-sm font-medium transition-colors
-                        hover:text-primary`,
+                        `block px-3 py-2 text-md font-medium transition-colors
+                        hover:text-blue-200`,
                         pathname === entry.href
-                          ? "text-foreground"
-                          : "text-muted-foreground",
+                          ? "text-blue-300 hover:text-blue-200"
+                          : "text-white",
                       )}
                       onClick={closeNow}
                     >
@@ -324,8 +319,7 @@ export default function Navigation() {
                       <Link
                         href={item.href}
                         className="block rounded-sm px-3 py-2 text-sm
-                          text-popover-foreground hover:bg-accent
-                          hover:text-accent-foreground"
+                          text-blue-900 hover:bg-[#DBEAFE]"
                         onClick={closeNow}
                       >
                         {item.label}

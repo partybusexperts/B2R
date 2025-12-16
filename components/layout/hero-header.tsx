@@ -4,10 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  clampDarkenIntensity,
-  getButtonVariant,
-} from "@/lib/helpers/hero.helpers";
+import { clampDarkenIntensity } from "@/lib/helpers/hero.helpers";
 import { HeroData } from "@/types/hero.types";
 
 type HeroHeasderProps = {
@@ -137,8 +134,19 @@ export function HeroHeader({ hero, slideImageUrls }: HeroHeasderProps) {
                 key={cta.href}
                 asChild
                 size="lg"
-                variant={getButtonVariant(cta.style)}
-                className="h-12 px-8 text-base font-bold shadow-xl"
+                className={cn(
+                  `rounded-full px-5 py-3 font-bold gap-[8px] text-white
+                  text-center shadow-lg border-[1px] transition-transform
+                  duration-150 ease-in-out hover:translate-y-[-1px]
+                  hover:shadow-xl`,
+                  cta.style === "primary" &&
+                    "bg-blue-600 hover:bg-[#4242ca] border-blue-700",
+                  cta.style === "secondary" &&
+                    `bg-white/90 text-slate-900 hover:bg-[#4242ca]
+                    hover:border-[#4242ca] border-white`,
+                  cta.style === "outline" &&
+                    "bg-transparent border-white hover:bg-white/10",
+                )}
               >
                 <Link href={cta.href}>{cta.label}</Link>
               </Button>
@@ -156,7 +164,7 @@ export function HeroHeader({ hero, slideImageUrls }: HeroHeasderProps) {
         >
           <path
             d="M0,60 C240,110 480,10 720,50 C960,90 1200,30 1440,70 L1440,100 L0,100 Z"
-            fill="currentColor"
+            fill="#122a56"
           />
         </svg>
       </div>
