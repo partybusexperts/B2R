@@ -9,6 +9,7 @@ interface FaqSearchSectionProps {
   initialCount?: number;
   inputPlaceholder?: string;
   searchMode?: "client" | "server" | "hybrid";
+  className?: string;
 }
 
 export async function FaqSearchSection({
@@ -19,6 +20,7 @@ export async function FaqSearchSection({
   inputPlaceholder,
   initialCount,
   searchMode,
+  className,
 }: FaqSearchSectionProps) {
   const faqs = await getFaqs(category);
 
@@ -34,6 +36,7 @@ export async function FaqSearchSection({
       inputPlaceholder={inputPlaceholder}
       initialCount={initialCount}
       searchMode={searchMode}
+      className={className}
     />
   );
 }

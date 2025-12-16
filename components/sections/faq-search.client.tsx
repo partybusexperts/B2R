@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FaqClient } from "@/components/sections/faq-client";
 import type { FaqData } from "@/lib/data/faqs";
+import { cn } from "@/lib/utils";
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, " ");
@@ -43,6 +44,7 @@ export function FaqSearchClient({
   inputPlaceholder = '\'Try "payment", "booking", "safety"…\'',
   initialCount = 8,
   searchMode = "hybrid",
+  className,
 }: {
   category?: string;
   faqs: FaqData[];
@@ -52,6 +54,7 @@ export function FaqSearchClient({
   inputPlaceholder?: string;
   initialCount?: number;
   searchMode?: "client" | "server" | "hybrid";
+  className?: string;
 }) {
   const [query, setQuery] = React.useState("");
   const [serverFaqs, setServerFaqs] = React.useState<FaqData[] | null>(null);
@@ -126,7 +129,7 @@ export function FaqSearchClient({
     : initialCount;
 
   return (
-    <section className="py-20 md:py-24 bg-[#0E1F46]">
+    <section className={cn("py-20 md:py-24 bg-[#0E1F46]", className)}>
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-8 text-center">
           <p className="text-sm uppercase tracking-[0.2em] text-white/60">

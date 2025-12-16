@@ -27,7 +27,7 @@ export async function FaqSection({
           <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">
             {title}
           </h2>
-          <p className="mt-4 text-base text-white/70">
+          <p className="mt-4 text-base text-white/70 text-center">
             Search across the 50 most common things riders ask before they book.
             Everything is curated directly from real conversations, so you get
             honest answers fast.
@@ -35,7 +35,7 @@ export async function FaqSection({
         </div>
 
         {/* FAQ List - No outer card, just the list */}
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto">
           <FaqClient faqs={faqs} />
         </div>
 
