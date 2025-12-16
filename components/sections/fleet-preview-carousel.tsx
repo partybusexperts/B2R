@@ -6,7 +6,7 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VehicleData } from "@/types/vehicle.types";
 import { cn } from "@/lib/utils";
-import { FleetCard } from "./fleet-preview";
+import { FleetCard } from "./fleet-card";
 
 interface FleetPreviewCarouselProps {
   title?: string;

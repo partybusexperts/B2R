@@ -44,7 +44,6 @@ export default async function FleetSection({
           >
             <FleetPreviewServer
               title="Party Buses"
-              description="Turn the journey into the destination. Our party buses come equipped with premium sound systems, LED lighting, and ample space for your entire group."
               viewAllLink={linkFor("party-bus")}
               type="party-bus"
             />
@@ -63,7 +62,6 @@ export default async function FleetSection({
           >
             <FleetPreviewServer
               title="Luxury Limousines"
-              description="Arrive in style and sophistication. Perfect for weddings, corporate events, or an intimate night out on the town."
               viewAllLink={linkFor("limo")}
               type="limo"
             />
@@ -82,7 +80,6 @@ export default async function FleetSection({
           >
             <FleetPreviewServer
               title="Coach Buses"
-              description="Reliable and comfortable transport for large groups. Ideal for corporate shuttles, team travel, and long-distance trips."
               viewAllLink={linkFor("coach")}
               type="coach"
             />

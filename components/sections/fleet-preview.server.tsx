@@ -4,12 +4,10 @@ import { FleetPreview } from "./fleet-preview";
 
 export async function FleetPreviewServer({
   title,
-  description,
   viewAllLink,
   type,
 }: {
   title: string;
-  description?: string;
   viewAllLink: string;
   type: VehicleData["type"];
 }) {
@@ -32,7 +30,6 @@ export async function FleetPreviewServer({
   return (
     <FleetPreview
       title={title}
-      description={description}
       viewAllLink={viewAllLink}
       vehicles={randomDisplayVehicles}
     />
