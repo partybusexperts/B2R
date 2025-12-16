@@ -59,8 +59,9 @@ export function HeroHeader({ hero, slideImageUrls }: HeroHeasderProps) {
         justify-center overflow-hidden text-center md:min-h-[650px]"
     >
       {/* Background Layer */}
+      {/* TEMP: delete mix-blend-overlay */}
       {hasSlideImages ? (
-        <div className="absolute inset-0 z-0 bg-foreground/70 mix-blend-overlay">
+        <div className="absolute inset-0 z-0 bg-foreground/70">
           {slideImageUrls.map((imageUrl, slideIndex) => {
             const isActive = slideIndex === currentSlideIndex;
 
