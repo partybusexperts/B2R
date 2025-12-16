@@ -14,8 +14,6 @@ export async function proxy(request: NextRequest) {
   // --- LOGIC A: Handle 301 Redirects (Legacy URLs) ---
   const destination = redirectMap.get(pathname);
 
-  console.log(destination);
-
   if (destination) {
     // If we find a match, redirect immediately. No need to check Auth.
     const url = request.nextUrl.clone();

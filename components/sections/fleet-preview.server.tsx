@@ -1,7 +1,6 @@
 import { VehicleData } from "@/types/vehicle.types";
-// import { FleetPreview } from "./fleet-preview";
 import { getVehiclesByType } from "@/lib/data/vehicles";
-import { FleetPreviewCarousel } from "./fleet-preview-carousel";
+import { FleetPreview } from "./fleet-preview";
 
 export async function FleetPreviewServer({
   title,
@@ -19,10 +18,19 @@ export async function FleetPreviewServer({
   // Optional: Slice to 3 if you only want a single row
   const randomDisplayVehicles = [...vehicles]
     .sort(() => Math.random() - 0.5)
-    .slice(0, 8);
+    .slice(0, 3);
+
+  // return (
+  //   <FleetPreviewCarousel
+  //     title={title}
+  //     description={description}
+  //     viewAllLink={viewAllLink}
+  //     vehicles={randomDisplayVehicles}
+  //   />
+  // );
 
   return (
-    <FleetPreviewCarousel
+    <FleetPreview
       title={title}
       description={description}
       viewAllLink={viewAllLink}

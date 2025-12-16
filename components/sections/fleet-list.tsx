@@ -64,12 +64,12 @@ export function FleetList({ vehicles, title }: FleetListProps) {
   }, [vehicles, search, selectedAmenities]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0B1938]">
       {/* --- Filter Bar Header (Sticky) --- */}
       <div
         className="sticky top-16 z-40 w-full border-b border-border/60
-          bg-background/95 backdrop-blur
-          supports-[backdrop-filter]:bg-background/60"
+          bg-[#060E23]/95 backdrop-blur
+          supports-[backdrop-filter]:bg-[#060E23]/60"
       >
         <div className="container mx-auto px-4 md:px-6 py-4">
           <div
@@ -77,24 +77,25 @@ export function FleetList({ vehicles, title }: FleetListProps) {
               justify-between"
           >
             <h1
-              className="text-2xl font-bold tracking-tight shrink-0 hidden
-                md:block"
+              className="text-white/90 text-2xl font-bold tracking-tight
+                shrink-0 hidden md:block"
             >
               {title}
             </h1>
 
             <div className="flex w-full md:w-auto gap-3 items-center">
-              <div className="relative w-full md:w-80">
+              <div className="relative w-full md:w-80 text-white">
                 <Search
                   className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4
-                    text-muted-foreground"
+                    text-white/70"
                 />
                 <Input
                   placeholder="Search fleet (e.g. '24 pax')..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9 bg-muted/50 border-border/50
-                    focus:bg-background h-10"
+                  className="pl-9 bg-[#14285D]/50 focus:bg-[#0B1938] h-10
+                    placeholder:text-white/80 border-white/30
+                    focus-visible:ring-white/60 focus-visible:ring-[2px]"
                 />
               </div>
 
@@ -141,7 +142,7 @@ export function FleetList({ vehicles, title }: FleetListProps) {
                       htmlFor={`filter-${amenity}`}
                       className="text-sm cursor-pointer font-medium leading-none
                         peer-disabled:cursor-not-allowed
-                        peer-disabled:opacity-70"
+                        peer-disabled:opacity-70 text-white/90"
                     >
                       {amenity}
                     </Label>
@@ -177,11 +178,13 @@ export function FleetList({ vehicles, title }: FleetListProps) {
         ) : (
           <div className="py-32 text-center container px-4">
             <div
-              className="mx-auto max-w-md bg-card border border-dashed
-                border-border p-8 rounded-2xl"
+              className="mx-auto max-w-2xl border border-dashed border-white p-8
+                rounded-2xl bg-[#0E1F46]"
             >
-              <h3 className="text-xl font-semibold mb-2">No vehicles found</h3>
-              <p className="text-muted-foreground mb-4">
+              <h3 className="text-xl font-semibold mb-2 text-white">
+                No vehicles found
+              </h3>
+              <p className="mb-4 text-blue-100/90">
                 We couldn&apos;t find any vehicles matching &quot;{search}&quot;
                 with those filters.
               </p>

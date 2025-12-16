@@ -30,6 +30,18 @@ export default async function PartyBusPage() {
 
   return (
     <main>
+      <section className="bg-[#0E1F46] py-16 px-4 sm:px-6 lg:px-8">
+        <h2
+          className="text-4xl md:text-5xl font-extrabold text-center text-white
+            font-serif tracking-tight"
+        >
+          Pick Your Party Bus
+        </h2>
+        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mt-3">
+          From minis to mega buses—clean, comfy, and ready for your group.
+        </p>
+      </section>
+
       {/* Filterable Fleet Inventory */}
       {/* Search Bar + List of Vehicle Cards */}
       <FleetList title="Party Bus Fleet" vehicles={vehicles} />

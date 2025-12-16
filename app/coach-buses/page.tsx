@@ -29,6 +29,19 @@ export default async function CoachBusesPage() {
 
   return (
     <main>
+      <section className="bg-[#0E1F46] py-16 px-4 sm:px-6 lg:px-8">
+        <h2
+          className="text-4xl md:text-5xl font-extrabold text-center text-white
+            font-serif tracking-tight"
+        >
+          Choose Your Coach Bus
+        </h2>
+        <p className="text-blue-100/90 text-center max-w-3xl mx-auto mt-3">
+          From 24-passenger mini coaches to double-axle motorcoaches—pick the
+          capacity and amenities your run demands.
+        </p>
+      </section>
+
       {/* 1. Filterable Fleet Inventory */}
       {/* Search Bar + List of Vehicle Cards */}
       <FleetList title="Coach Bus Fleet" vehicles={vehicles} />
