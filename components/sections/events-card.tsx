@@ -2,96 +2,132 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+  // CalendarDays,
+  Mail,
+  Phone,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { getRandomImage } from "@/lib/helpers/storage";
 import { EventData } from "@/lib/data/events";
+// import { Badge } from "@/components/ui/badge";
 
 export function EventCard({ event }: { event: EventData }) {
-  const eventDate = event.date_range
-    ? new Date(event.date_range).toLocaleDateString()
-    : "Upcoming";
+  // const eventDate = event.date_range
+  //   ? new Date(event.date_range).toLocaleDateString()
+  //   : "Upcoming";
+
+  const relatedPollCategory = (event.slug || event.category || "").trim();
 
   return (
     <Card
-      className="group h-full flex flex-col overflow-hidden isolate
-        border-border/50 bg-card transition-all duration-300 hover:shadow-lg
-        hover:-translate-y-1 relative pt-0"
+      className="group relative isolate flex h-full flex-col overflow-hidden
+        rounded-[32px] border border-blue-500/20 bg-[#0E1F46]
+        shadow-[0_18px_60px_rgba(3,7,18,0.45)] transition-all duration-300
+        hover:-translate-y-1"
     >
-      {/* Image Header */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted
-        rounded-t-lg">
-        <Image
-          src={getRandomImage(event.images, "Events1")}
-          alt={event.title}
-          fill
-          className="object-cover transition-transform duration-500
-            group-hover:scale-105"
-        />
-        <div className="absolute top-3 left-3">
-          <Badge
-            variant="secondary"
-            className="bg-background/80 backdrop-blur text-foreground
-              font-semibold shadow-sm"
-          >
-            {event.category || "Event"}
-          </Badge>
+      {/* Image */}
+      <div className="p-6 pb-0">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+          <Image
+            src={getRandomImage(event.images, "Events1")}
+            alt={event.title}
+            fill
+            className="object-cover transition-transform duration-700
+              group-hover:scale-[1.03]"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+
+          {/* Category badge */}
+          {/* <div className="absolute left-4 top-4">
+            <Badge
+              className="rounded-full border border-white/25 bg-white/10 px-3
+                py-1 text-[11px] font-bold uppercase tracking-wide text-white
+                backdrop-blur"
+            >
+              {event.category || "Event"}
+            </Badge>
+          </div> */}
         </div>
       </div>
 
-      {/* Content */}
-      <CardHeader className="p-5 pb-2">
-        <div
-          className="flex items-center gap-2 text-xs font-medium text-primary
-            mb-2"
+      <CardContent className="flex flex-1 flex-col px-8 pb-8 pt-2 text-center">
+        {/* Date line (kept, subtle) */}
+        {/* <div
+          className="mb-3 flex items-center justify-center gap-2 text-xs
+            font-semibold text-white/70"
         >
           <CalendarDays className="h-3.5 w-3.5" />
           <span>{eventDate}</span>
-        </div>
+        </div> */}
+
+        {/* Title (links to details) */}
         <h3
-          className="font-bold text-xl leading-tight text-foreground
-            line-clamp-2 group-hover:text-primary transition-colors"
+          className="font-serif text-4xl font-extrabold tracking-tight
+            text-white leading-none"
         >
-          <Link href={`/events/${event.slug}`} className="focus:outline-none">
-            {/* Absolute overlay for card clickability, excluding buttons */}
-            <span className="absolute inset-0 z-10" aria-hidden="true" />
+          <Link
+            href={`/events/${event.slug}`}
+            className="focus:outline-none hover:opacity-95"
+          >
             {event.title}
           </Link>
         </h3>
-      </CardHeader>
 
-      <CardContent className="p-5 pt-2 flex-1">
-        <p
-          className="text-muted-foreground text-sm line-clamp-3 leading-relaxed"
-        >
+        {/* Description */}
+        <p className="mt-5 text-base leading-relaxed text-white/75 line-clamp-4">
           {event.description}
         </p>
-      </CardContent>
 
-      {/* Footer / Actions */}
-      <CardFooter className="p-5 pt-0 flex gap-3 relative z-20">
-        <Button
-          asChild
-          className="flex-1 font-bold rounded-xl"
-          variant="default"
-        >
-          <Link href="/quote">Live Quote</Link>
-        </Button>
-        <Button
-          asChild
-          variant="outline"
-          className="flex-1 font-bold rounded-xl"
-        >
-          <Link href={`/events/${event.slug}`}>Details</Link>
-        </Button>
-      </CardFooter>
+        {/* Actions */}
+        <div className="mt-8 grid grid-cols-2 gap-4">
+          <Button
+            asChild
+            className="h-12 w-full rounded-full bg-primary font-bold
+              text-primary-foreground hover:bg-primary/90"
+          >
+            <Link href="/quote">Quote</Link>
+          </Button>
+
+          <Button
+            asChild
+            variant="outline"
+            className="h-12 w-full rounded-full border-white/30 bg-white/95
+              font-bold text-[#04132d] hover:bg-white"
+          >
+            <a href="tel:8885352566">
+              <Phone className="mr-2 h-4 w-4" /> (888) 535-2566
+            </a>
+          </Button>
+
+          <Button
+            asChild
+            className="h-12 w-full rounded-full bg-primary font-bold
+              text-primary-foreground hover:bg-primary/90"
+          >
+            <a href="mailto:info@bus2ride.com">
+              <Mail className="mr-2 h-4 w-4" /> Email
+            </a>
+          </Button>
+
+          <Button
+            asChild
+            className="h-12 w-full rounded-full bg-primary font-bold
+              text-primary-foreground hover:bg-primary/90"
+          >
+            <Link
+              href={
+                relatedPollCategory
+                  ? `/polls?category=${encodeURIComponent(relatedPollCategory)}`
+                  : "/polls"
+              }
+            >
+              Related Polls
+            </Link>
+          </Button>
+        </div>
+      </CardContent>
     </Card>
   );
 }

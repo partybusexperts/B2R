@@ -173,6 +173,9 @@ export const getPollsByCategory = cache(
         id,
         question,
         category_slug,
+        category_data:poll_categories1 (
+          name
+        ),
         options:poll_options1 (
           id,
           label,

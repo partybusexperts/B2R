@@ -9,10 +9,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function PollsSearchForm({
   defaultQuery,
+  defaultCategory,
   resultsCount,
   children,
 }: {
   defaultQuery: string;
+  defaultCategory?: string;
   resultsCount: number;
   children: React.ReactNode;
 }) {
@@ -26,13 +28,15 @@ export function PollsSearchForm({
 
   const submit = (nextQuery: string) => {
     const q = nextQuery.trim();
+    const category = (defaultCategory ?? "").trim();
 
     startTransition(() => {
-      if (!q) {
-        router.push("/polls");
-      } else {
-        router.push(`/polls?q=${encodeURIComponent(q)}`);
-      }
+      const params = new URLSearchParams();
+      if (category) params.set("category", category);
+      if (q) params.set("q", q);
+
+      const queryString = params.toString();
+      router.push(queryString ? `/polls?${queryString}` : "/polls");
     });
   };
 

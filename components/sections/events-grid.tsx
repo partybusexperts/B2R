@@ -1,10 +1,14 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { EventCard } from "./events-card";
-import { shuffle } from "@/lib/utils";
+import { capitalize, shuffle } from "@/lib/utils";
 import { getEvents } from "@/lib/data/events";
 
-export async function EventsGrid() {
+interface EventsGridProps {
+  category?: string;
+}
+
+export async function EventsGrid({ category }: EventsGridProps) {
   // 1. Fetch events
   // We fetch a batch (e.g., 20) to ensure we have enough to randomize effectively
   const events = await getEvents();
@@ -18,24 +22,27 @@ export async function EventsGrid() {
   const displayEvents = shuffle(events).slice(0, 6);
 
   return (
-    <section className="py-20 md:py-24 bg-muted/30 border-b border-border/40">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="py-20 md:py-24 w-full bg-[#122a56]">
+      <div className="w-full max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+        <div className="text-center max-w-3xl mx-auto">
+          <p className="text-sm uppercase tracking-[0.2em] text-blue-200">
+            {category && capitalize(category)} Event Playbook
+          </p>
           <h2
-            className="text-3xl md:text-4xl font-extrabold tracking-tight
-              text-foreground"
+            className="mt-2 text-4xl font-extrabold text-white font-serif
+              tracking-tight"
           >
-            Upcoming Events & Experiences
+            6 rotating nights we book every week
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Don{"'"}t miss out on the action. Book your ride for the hottest
-            concerts, games, and festivals in town.
+          <p className="mt-3 text-blue-100/90">
+            These cards rotate on every refresh so you always see fresh
+            inspiration from the party bus calendar.
           </p>
         </div>
 
         {/* The Grid: 1 col mobile, 2 tablet, 3 desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           {displayEvents.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
@@ -45,12 +52,14 @@ export async function EventsGrid() {
         <div className="mt-12 text-center">
           <Button
             asChild
-            variant="outline"
             size="lg"
-            className="rounded-xl px-8 font-bold border-primary/20
-              hover:bg-primary/5 hover:text-primary transition-colors"
+            variant="outline"
+            className="inline-flex items-center justify-center rounded-full
+              bg-white/95 px-9 py-4 text-md font-semibold text-[#04132d]
+              shadow-[0_15px_40px_rgba(10,27,54,0.35)] transition
+              hover:translate-y-0.5 hover:bg-white"
           >
-            <Link href="/events">See More Events</Link>
+            <Link href="/events">See more events</Link>
           </Button>
         </div>
       </div>
