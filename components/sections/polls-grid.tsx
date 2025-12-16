@@ -1,76 +1,102 @@
-import {
-  getPolls,
-  getPollsByCategory,
-  PollWithOptions,
-} from "@/lib/data/polls";
-import { PollCard } from "./poll-card";
+import { getPolls, PollWithOptions } from "@/lib/data/polls";
 import { shuffle } from "@/lib/utils";
+import { PollsColumnsClient } from "./polls-columns.client";
+import Link from "next/link";
 
 interface PollsGridProps {
   category?: string; // e.g. "home", "pricing", "party-bus"
 }
 
 export async function PollsGrid({ category }: PollsGridProps) {
-  // 1. Fetch ALL polls (or a reasonable limit) to handle randomization in JS
-  // Supabase doesn't support .order('random()') easily without RPC,
-  // so fetching ~20 and shuffling is efficient enough for small datasets.
-  const polls = await getPolls(50);
-
-  const pollsByCategory = await getPollsByCategory(category || "");
+  // Fetch enough to build 3 columns of 50.
+  // Supabase doesn't support random ordering easily without RPC.
+  const polls = await getPolls(200);
 
   if (!polls || polls.length === 0) return null;
 
-  // 2. Strategy:
-  // - Find one poll that matches the requested category (Context)
-  // - Fill the rest with random polls (Discovery)
+  const normalizedCategory = (category ?? "").trim().toLowerCase();
 
-  const shuffledCategoryPolls = shuffle(pollsByCategory || []);
+  const contextCandidates = normalizedCategory
+    ? polls.filter((poll) =>
+        (poll.category_slug ?? "").toLowerCase().includes(normalizedCategory),
+      )
+    : [];
 
-  const contextPoll =
-    shuffledCategoryPolls?.[0] ||
-    polls.find(
-      (poll) => poll.category_slug?.toLowerCase() === category?.toLowerCase(),
-    );
+  const shuffledContext = shuffle([...contextCandidates]);
+  const contextIds = new Set(shuffledContext.map((p) => p.id));
 
-  const otherPolls = shuffle(
-    polls.filter((poll) => poll.id !== contextPoll?.id),
+  const shuffledRemainder = shuffle(
+    polls.filter((poll) => !contextIds.has(poll.id)),
   );
 
-  // If no context match found, just take the first random one
-  const col1 = contextPoll || otherPolls.pop();
-  const col2 = otherPolls.pop();
-  const col3 = otherPolls.pop();
+  const buildColumn = (
+    primary: PollWithOptions[],
+    filler: PollWithOptions[],
+    count: number,
+    used: Set<string>,
+  ) => {
+    const result: PollWithOptions[] = [];
 
-  const displayPolls = [col1, col2, col3].filter(
-    (poll): poll is PollWithOptions => Boolean(poll),
-  );
+    for (const poll of primary) {
+      if (result.length >= count) break;
+      if (used.has(poll.id)) continue;
+      used.add(poll.id);
+      result.push(poll);
+    }
 
-  if (displayPolls.length === 0) return null;
+    for (const poll of filler) {
+      if (result.length >= count) break;
+      if (used.has(poll.id)) continue;
+      used.add(poll.id);
+      result.push(poll);
+    }
+
+    // If we still don't have enough polls (small dataset), repeat from the
+    // available pool so the UI still renders 50 items per column.
+    if (result.length < count) {
+      const pool = [...primary, ...filler].filter((p) => !used.has(p.id));
+      const fallbackPool = pool.length > 0 ? pool : [...primary, ...filler];
+      if (fallbackPool.length > 0) {
+        let i = 0;
+        while (result.length < count) {
+          result.push(fallbackPool[i % fallbackPool.length]);
+          i += 1;
+        }
+      }
+    }
+
+    return result;
+  };
+
+  const usedIds = new Set<string>();
+  const col1 = buildColumn(shuffledContext, shuffledRemainder, 50, usedIds);
+  const col2 = buildColumn([], shuffledRemainder, 50, usedIds);
+  const col3 = buildColumn([], shuffledRemainder, 50, usedIds);
+
+  const columns = [col1, col2, col3].filter((c) => c.length > 0);
+  if (columns.length === 0) return null;
 
   return (
-    <section
-      className="py-20 md:py-24 bg-secondary/10 border-b border-border/40"
-    >
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-10 text-center max-w-2xl mx-auto">
-          <h2
-            className="text-3xl md:text-4xl font-extrabold tracking-tight
-              text-foreground mb-4"
-          >
-            Trending Questions
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            See what other riders are thinking. Cast your vote to reveal the
-            results instantly.
-          </p>
-        </div>
+    <section className="bg-[#0E1F46] px-4 py-10">
+      <div className="container px-4 md:px-6 mx-auto max-w-7xl">
+        <h2 className="text-2xl md:text-3xl font-semibold text-white">
+          Trending Questions
+        </h2>
+        <p className="text-sm text-white/70">
+          See what other riders are thinking. Cast your vote to reveal the
+          results instantly.
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {displayPolls.map((poll) => (
-            <div key={poll.id} className="h-full">
-              <PollCard poll={poll} />
-            </div>
-          ))}
+        <PollsColumnsClient columns={columns} />
+
+        <div className="mt-10 flex justify-center">
+          <Link
+            href="/polls"
+            className="text-sm rounded-xl border border-white/15 bg-white/10
+              px-4 py-2 hover:bg-white/15 text-white"
+          >
+            See all polls
+          </Link>
         </div>
       </div>
     </section>
