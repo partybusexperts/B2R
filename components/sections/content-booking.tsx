@@ -2,13 +2,13 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import {
-  Phone,
-  MessageSquareQuote,
-  CalendarCheck,
-  PartyPopper,
-  ArrowRight,
-} from "lucide-react";
+// import {
+//   Phone,
+//   MessageSquareQuote,
+//   CalendarCheck,
+//   PartyPopper,
+//   ArrowRight,
+// } from "lucide-react";
 
 // Assuming you have a Dialog component, like from Shadcn UI.
 // If you use a different library, adjust these imports.
@@ -35,86 +35,38 @@ const bookingSteps: BookingStep[] = [
   {
     id: "contact",
     title: "1. Contact Us",
-    icon: <Phone className="h-8 w-8" />,
-    shortDescription: "Click to continue",
-    modalContent: (
-      <div className="space-y-4 text-foreground/90">
-        <p>
-          Getting started is easy! Reach out to our team via phone, email, or
-          our online contact form. We are available 24/7 to answer your
-          questions and discuss your event needs.
-        </p>
-        <h4 className="font-semibold">Ways to reach us:</h4>
-        <ul className="list-disc list-inside space-y-2 ml-2">
-          <li>
-            Call us at: <strong>(888) 535-2566</strong>
-          </li>
-          <li>
-            Email: <strong>bookings@bus2ride.com</strong>
-          </li>
-          <li>Fill out our quick quote form on the website.</li>
-        </ul>
-      </div>
-    ),
+    // icon: <Phone className="h-8 w-8" />,
+    icon: "📞",
+    shortDescription: "Click to continue →",
+    modalContent:
+      "Call or email our bookings team — we’re ready to help you plan the perfect trip.",
   },
   {
     id: "quote",
     title: "2. Get a Quote",
-    icon: <MessageSquareQuote className="h-8 w-8" />,
-    shortDescription: "Click to continue",
-    modalContent: (
-      <div className="space-y-4 text-foreground/90">
-        <p>
-          Based on your event details (date, time, group size, and vehicle
-          preference), we will provide you with a transparent, no-obligation
-          price quote.
-        </p>
-        <p>
-          Our quotes include all fees, so there are no surprises later. We can
-          also help you choose the perfect vehicle that fits your group and
-          budget.
-        </p>
-      </div>
-    ),
+    // icon: <MessageSquareQuote className="h-8 w-8" />,
+    icon: "💬",
+    shortDescription: "Click to continue →",
+    modalContent:
+      "Request a written quote — our team reviews your trip details and replies with a confirmed price and available vehicles.",
   },
   {
     id: "reserve",
     title: "3. Reserve Your Ride",
-    icon: <CalendarCheck className="h-8 w-8" />,
-    shortDescription: "Click to continue",
-    modalContent: (
-      <div className="space-y-4 text-foreground/90">
-        <p>
-          Ready to move forward? Secure your vehicle with a small deposit. This
-          secures your reservation for your chosen date and time.
-        </p>
-        <p>
-          We&apos;ll send you a confirmation email with all the booking details
-          and a contract to review and sign electronically. The remaining
-          balance will be due closer to your event date.
-        </p>
-      </div>
-    ),
+    // icon: <CalendarCheck className="h-8 w-8" />,
+    icon: "📝",
+    shortDescription: "Click to continue →",
+    modalContent:
+      "Reserve a vehicle once you’ve chosen a quote — a small deposit secures the booking.",
   },
   {
     id: "finalize",
     title: "4. Finalize & Ride",
-    icon: <PartyPopper className="h-8 w-8" />,
-    shortDescription: "Click to continue",
-    modalContent: (
-      <div className="space-y-4 text-foreground/90">
-        <p>
-          As your event approaches, we&apos;ll touch base to finalize any
-          remaining details, such as specific pick-up/drop-off locations and
-          your itinerary.
-        </p>
-        <p>
-          On the day of your event, your professional chauffeur will arrive on
-          time in a spotless vehicle, ready to provide a safe and fun experience
-          for you and your group!
-        </p>
-      </div>
-    ),
+    // icon: <PartyPopper className="h-8 w-8" />,
+    icon: "🎉",
+    shortDescription: "Click to continue →",
+    modalContent:
+      "Final checks and day-of instructions so your trip goes smoothly.",
   },
 ];
 
@@ -127,19 +79,24 @@ export function BookingProcessSection({ className }: { className?: string }) {
     <section
       className={cn(
         // Match the dark blue, highly rounded container from the image
-        `bg-primary/95 text-primary-foreground py-8 md:py-12 m-16
-        rounded-[3rem]`,
+        "max-w-7xl mx-auto px-4 md:px-6 my-12",
         className,
       )}
     >
-      <div className="container mx-auto px-4 md:px-12 text-center">
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-12">
+      <div
+        className="bg-[#122a56] border border-blue-800/30 rounded-3xl shadow-xl
+          px-5 md:px-8 py-8"
+      >
+        <h2
+          className="text-4xl md:text-5xl font-extrabold text-center text-white
+            font-serif tracking-tight"
+        >
           How the Bus2Ride Booking Process Works
         </h2>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6
-            lg:gap-8"
+          className="mt-8 flex flex-col md:flex-row gap-4 md:gap-6
+            justify-between"
         >
           {bookingSteps.map((step) => (
             <Dialog
@@ -150,29 +107,30 @@ export function BookingProcessSection({ className }: { className?: string }) {
               <DialogTrigger asChild>
                 <BookingStepCard step={step} />
               </DialogTrigger>
+
               {/* Modal Content Structure */}
               <DialogContent
-                className="sm:max-w-[500px] bg-card text-card-foreground
-                  rounded-2xl"
+                className="bg-gradient-to-br from-[#13306a] to-[#0e2250] border
+                  border-blue-800/40 rounded-2xl shadow-2xl"
               >
+                <div
+                  className="mx-auto w-14 h-14 rounded-full bg-blue-900/20
+                    border border-blue-700/40 flex items-center justify-center
+                    text-3xl mb-4"
+                >
+                  {step.icon}
+                </div>
                 <DialogHeader>
                   <DialogTitle
-                    className="flex items-center gap-3 text-2xl text-primary"
+                    className="text-2xl font-extrabold text-white mb-2
+                      font-serif tracking-tight"
                   >
-                    <span
-                      className="p-3 rounded-full bg-primary/10 text-primary"
-                    >
-                      {step.icon}
-                    </span>
-                    {step.title.substring(3)}{" "}
-                    {/* Remove "1. " from title in modal */}
+                    ⭐️{step.title}
                   </DialogTitle>
-                  <DialogDescription>
-                    Details for step {step.title.charAt(0)} of the booking
-                    process.
+                  <DialogDescription className="text-blue-100/90 text-md">
+                    <p className="mb-3">{step.modalContent}</p>
                   </DialogDescription>
                 </DialogHeader>
-                <div className="py-4">{step.modalContent}</div>
               </DialogContent>
             </Dialog>
           ))}
@@ -193,42 +151,31 @@ const BookingStepCard = React.forwardRef<
   BookingStepCardProps
 >(({ step, className, ...props }, ref) => {
   return (
-    <button
-      ref={ref}
-      className={cn(
-        "group flex flex-col items-center justify-center p-8 rounded-3xl",
-        // Lighter, semi-transparent blue background for the cards
-        "bg-primary-foreground/10 border border-white/5",
-        // Hover effects: slightly lighter background, lift up, and shadow
-        `transition-all duration-300 hover:bg-primary-foreground/15
-        hover:-translate-y-1 hover:shadow-xl`,
-        `text-center cursor-pointer outline-none focus-visible:ring-2
-        focus-visible:ring-white/50`,
-        className,
-      )}
-      {...props}
-    >
-      {/* Icon Container */}
-      <div
-        className="mb-6 p-4 rounded-full bg-white/10 text-white
-          group-hover:bg-white/20 group-hover:scale-110 transition-all
-          duration-300"
+    <div className="relative flex-1">
+      <button
+        ref={ref}
+        className={cn(
+          `block cursor-pointer group bg-[#173264] border border-blue-800/40
+          rounded-2xl px-5 py-6 text-center hover:border-blue-400/60
+          hover:shadow-[0_0_0_2px_rgba(96,165,250,.25)] transition w-full
+          items-center`,
+          className,
+        )}
+        {...props}
       >
-        {step.icon}
-      </div>
-      {/* Title */}
-      <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-      {/* "Click to continue" text with arrow */}
-      <p
-        className="text-sm text-primary-foreground/70 flex items-center
-          justify-center gap-1 group-hover:text-white transition-colors"
-      >
-        {step.shortDescription}
-        <ArrowRight
-          className="h-4 w-4 transition-transform group-hover:translate-x-1"
-        />
-      </p>
-    </button>
+        {/* Icon Container */}
+        <div className="text-2xl text-center">{step.icon}</div>
+        {/* Title */}
+        <h3 className="font-extrabold text-white mt-1">★{step.title}</h3>
+        {/* "Click to continue" text with arrow */}
+        <p
+          className="mt-1 text-blue-200 text-sm opacity-90
+            group-hover:opacity-100"
+        >
+          {step.shortDescription}
+        </p>
+      </button>
+    </div>
   );
 });
 BookingStepCard.displayName = "BookingStepCard";
