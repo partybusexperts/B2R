@@ -17,19 +17,20 @@ export async function FaqSection({
   if (!faqs || faqs.length === 0) return null;
 
   return (
-    <section className="py-20 md:py-24 bg-card border-b border-border/40">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="py-20 md:py-24 bg-[#0E1F46]">
+      <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <h2
-            className="text-3xl md:text-4xl font-extrabold tracking-tight
-              text-foreground"
-          >
+        <div className="mb-8 text-center">
+          <p className="text-sm uppercase tracking-[0.2em] text-white/60">
+            Got questions?
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">
             {title}
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Everything you need to know about booking, pricing, and our
-            vehicles.
+          <p className="mt-4 text-base text-white/70">
+            Search across the 50 most common things riders ask before they book.
+            Everything is curated directly from real conversations, so you get
+            honest answers fast.
           </p>
         </div>
 

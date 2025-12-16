@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, Minus, Plus } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import type { FaqData } from "@/lib/data/faqs";
 import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 
 export function FaqClient({
   faqs,
@@ -68,39 +69,33 @@ export function FaqClient({
             key={faq.id}
             value={faq.id}
             // SEPARATED CARD STYLE
-            className="border border-border/50 bg-card rounded-xl px-2 shadow-sm
-              transition-all duration-200 hover:border-primary/30
-              data-[state=open]:border-primary/50 data-[state=open]:bg-primary/5
-              data-[state=open]:shadow-md"
+            className="group rounded-2xl border border-white/10 bg-white/5
+              backdrop-blur-sm transition-shadow hover:shadow-lg"
           >
-            <AccordionTrigger
-              className="px-4 py-5 hover:no-underline
-                [&[data-state=open]>div>svg.plus]:hidden
-                [&[data-state=open]>div>svg.minus]:block"
-            >
+            <AccordionTrigger className="px-4 py-5 hover:no-underline">
               <div
                 className="flex items-center justify-between w-full text-left
                   gap-4"
               >
                 <span
-                  className="text-base md:text-lg font-semibold text-foreground
+                  className="text-base md:text-lg font-semibold text-white
                     leading-tight"
                 >
                   {faq.question}
                 </span>
-                {/* Custom Icon switching for a polished look */}
-                <div className="shrink-0 text-primary/70">
+                {/* Plus rotates when open */}
+                <div className="text-sm text-white/70 shrink-0">
                   <Plus
-                    className="h-5 w-5 plus transition-transform duration-200"
+                    className="h-5 w-5 transition-transform duration-200
+                      group-data-[state=open]:rotate-45"
                   />
-                  <Minus className="h-5 w-5 minus hidden" />
                 </div>
               </div>
             </AccordionTrigger>
 
             <AccordionContent
-              className="px-4 pb-6 pt-0 text-muted-foreground leading-relaxed
-                text-[15px] md:text-base animate-in slide-in-from-top-2"
+              className="px-4 pb-6 pt-0 leading-relaxed md:text-base animate-in
+                slide-in-from-top-2 text-base text-white/80"
             >
               <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
             </AccordionContent>
@@ -108,8 +103,8 @@ export function FaqClient({
         ))}
       </Accordion>
 
-      {hasMore && (
-        <div className="mt-8 flex justify-center">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        {hasMore ? (
           <Button
             variant={loadMoreVariant}
             size={loadMoreSize}
@@ -120,15 +115,35 @@ export function FaqClient({
             }
             className={
               loadMoreClassName ??
-              `flex items-center gap-2 font-bold text-primary
-              hover:bg-primary/10 transition-colors`
+              `rounded-2xl border border-white/15 bg-white/10 px-6 py-3 text-sm
+                font-semibold text-white transition hover:bg-white/15
+                hover:text-white h-auto`
             }
           >
             {loadMoreLabel}
             {showLoadMoreIcon && <ChevronDown className="h-4 w-4" />}
           </Button>
-        </div>
-      )}
+        ) : (
+          <Button
+            variant={loadMoreVariant}
+            size={loadMoreSize}
+            onClick={() =>
+              setVisibleCount((current) =>
+                Math.min(current + batchSize, faqs.length),
+              )
+            }
+            className={
+              loadMoreClassName ??
+              `rounded-2xl border border-white/15 bg-white/10 px-6 py-3 text-sm
+                font-semibold text-white transition hover:bg-white/15
+                hover:text-white h-auto`
+            }
+            asChild
+          >
+            <Link href="/faqs">View all FAQs</Link>
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

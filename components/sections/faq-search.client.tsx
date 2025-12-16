@@ -111,23 +111,22 @@ export function FaqSearchClient({
     : initialCount;
 
   return (
-    <section className="py-20 md:py-24 bg-card border-b border-border/40">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="mx-auto mb-10 max-w-3xl space-y-4 text-center">
-          <h2
-            className="text-3xl md:text-4xl font-extrabold tracking-tight
-              text-foreground"
-          >
+    <section className="py-20 md:py-24 bg-[#0E1F46]">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="mb-8 text-center">
+          <p className="text-sm uppercase tracking-[0.2em] text-white/60">
+            Got questions?
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">
             {title}
           </h2>
-          <p className="text-lg text-muted-foreground">{description}</p>
+          <p className="mt-4 text-base text-white/70">{description}</p>
         </div>
 
-        <div className="mx-auto mb-8 max-w-3xl">
-          <div
-            className="rounded-2xl border border-border bg-background/60 p-4
-              shadow-sm"
-          >
+        <div className="mx-auto max-w-6xl">
+          {/* Search */}
+          <div className="flex flex-col gap-2 text-center mb-8">
+            <label className="text-lg font-medium text-white/80">{`Search any ${category} FAQ`}</label>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="relative w-full">
                 <Search
@@ -137,8 +136,12 @@ export function FaqSearchClient({
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search FAQs (e.g. pricing, deposit, minimum hours)…"
-                  className="pl-9"
+                  placeholder='Try "payment", "booking", "safety"…'
+                  className="w-full rounded-2xl border border-white/15
+                    bg-white/5 px-5 py-3 text-base text-white
+                    placeholder-white/50 shadow focus:outline-none focus:ring-2
+                    focus:ring-white/40 pl-9 h-12 focus-visible:ring-white/40
+                    focus-visible:ring-2"
                 />
               </div>
 
@@ -146,14 +149,15 @@ export function FaqSearchClient({
                 <Button
                   variant="outline"
                   onClick={() => setQuery("")}
-                  className="shrink-0 rounded-xl"
+                  className="shrink-0 rounded-2xl h-12 bg-blue-100
+                    hover:bg-white/70 border-0"
                 >
-                  <X className="h-4 w-4 mr-2" /> Clear
+                  <X className="h-4 w-4" /> Clear
                 </Button>
               )}
             </div>
 
-            <div className="mt-3 text-sm text-muted-foreground">
+            <div className="mt-3 text-sm text-white/60">
               {normalizedQuery ? (
                 <span>
                   Showing{" "}
@@ -171,32 +175,35 @@ export function FaqSearchClient({
               )}
             </div>
           </div>
-        </div>
 
-        <div className="mx-auto max-w-3xl">
-          {visibleFaqs.length > 0 ? (
-            <FaqClient
-              faqs={visibleFaqs}
-              initialCount={effectiveInitialCount}
-            />
-          ) : (
-            <div
-              className="rounded-3xl border border-dashed border-border
-                bg-muted/20 py-16 text-center"
-            >
-              <h3 className="text-lg font-semibold">No FAQs found</h3>
-              <p className="text-muted-foreground">
-                Try a different search (or clear filters).
-              </p>
-              <Button
-                variant="link"
-                onClick={() => setQuery("")}
-                className="mt-2 text-primary"
+          {/* Grid */}
+          <div className="space-y-3">
+            {visibleFaqs.length > 0 ? (
+              <FaqClient
+                faqs={visibleFaqs}
+                initialCount={effectiveInitialCount}
+              />
+            ) : (
+              <div
+                className="rounded-3xl border border-dashed border-border
+                  bg-muted/20 py-16 text-center"
               >
-                Clear search
-              </Button>
-            </div>
-          )}
+                <h3 className="text-lg font-semibold text-white">
+                  No FAQs found
+                </h3>
+                <p className="mt-4 text-blue-100">
+                  Try a different search (or clear filters).
+                </p>
+                <Button
+                  variant="link"
+                  onClick={() => setQuery("")}
+                  className="mt-2 text-white"
+                >
+                  Clear search
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

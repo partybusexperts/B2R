@@ -5,8 +5,9 @@ import { getReviews } from "@/lib/data/reviews";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
-import { FaqSection } from "@/components/sections/faq-section";
+// import { FaqSection } from "@/components/sections/faq-section";
 import FleetSection from "@/components/sections/fleet-section";
+import { FaqSearchSection } from "@/components/sections/faq-search-section";
 // import { BookingProcessSection } from "@/components/sections/content-booking";
 
 export default async function Home() {
@@ -43,7 +44,12 @@ export default async function Home() {
       <ToolsGrid category="home" />
 
       {/* FAQ Section */}
-      <FaqSection category="home" />
+      {/* <FaqSection category="home" title="Homepage FAQ" /> */}
+      <FaqSearchSection
+        category="home"
+        title="Homepage FAQ"
+        description="Search across the 50 most common things riders ask before they book. Everything is curated directly from real conversations, so you get honest answers fast."
+      />
 
       {/* Events Section */}
       <EventsGrid />
