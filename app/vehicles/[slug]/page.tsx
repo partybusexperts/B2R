@@ -58,10 +58,7 @@ export default async function VehiclePage({ params }: PageProps) {
 
       {/* 2. "Why This Category Rocks" */}
       {/* Dynamic slug: why-limo-rocks-v2, why-party-bus-rocks-v2 */}
-      <WhySection
-        slug={categorySlug}
-        className="bg-background border-t border-border/40"
-      />
+      <WhySection slug={categorySlug} />
 
       {/* 3. Related Vehicles (Cross Sell) */}
       {related.length > 0 && (

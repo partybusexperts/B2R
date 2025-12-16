@@ -3,11 +3,10 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
+  // DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -55,84 +54,60 @@ export function WhyFeaturesGridClient({
               setOpen(true);
             }}
             className={cn(
-              `text-left focus-visible:outline-none focus-visible:ring-2
-              focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl`,
+              `group w-full bg-[#12244e] rounded-2xl shadow border
+              border-blue-800/30 px-5 py-4 text-left transition
+              hover:border-blue-500/60 focus-visible:outline-none
+              focus-visible:ring-2 focus-visible:ring-blue-400`,
             )}
             aria-label={`Open details for ${feature.title}`}
           >
-            <Card
-              className={cn(
-                "h-full border-border/50 bg-card/50 transition-all",
-                "hover:-translate-y-1 hover:shadow-lg hover:border-primary/20",
-              )}
-            >
-              <CardHeader className="pb-2">
-                <div
-                  className="mb-4 inline-flex h-12 w-12 items-center
-                    justify-center rounded-lg bg-primary/10 text-primary"
-                >
+            <div className="flex items-start gap-3">
+              <div
+                className="shrink-0 w-9 h-9 rounded-full bg-blue-900/20 border
+                  border-blue-700/40 flex items-center justify-center text-xl"
+              >
+                {feature.icon && feature.icon?.length === 2 ? (
+                  feature.icon
+                ) : (
                   <DynamicIcon
-                    name={(feature.icon ?? "info") as IconName}
+                    name={feature.icon as IconName}
                     className="h-6 w-6"
                   />
-                </div>
-                <CardTitle className="text-xl font-bold text-foreground">
+                )}
+              </div>
+              <div className="">
+                <div className="font-semibold text-white text-lg mb-0.5">
                   {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed">
+                </div>
+                <div className="text-blue-200 text-sm">
                   {feature.description}
-                </p>
-              </CardContent>
-            </Card>
+                </div>
+                <span
+                  className="mt-2 inline-flex items-center gap-1 text-xs
+                    font-semibold uppercase tracking-wide text-blue-300"
+                >
+                  Learn more →
+                </span>
+              </div>
+            </div>
           </button>
         ))}
       </div>
 
       <DialogContent
         className={cn(
-          "p-0 overflow-hidden",
-          "w-[calc(100vw-2rem)] max-w-5xl",
-          "max-h-[85vh]",
+          `w-full max-w-3xl rounded-2xl p-0 shadow-2xl border border-blue-700/60
+          bg-[#050b1f] text-slate-100 overflow-hidden`,
         )}
       >
-        <div
-          className="border-b border-border/60 bg-background/95 backdrop-blur
-            supports-[backdrop-filter]:bg-background/80"
+        <DialogHeader
+          className="flex items-start justify-between gap-4 px-5 py-4 border-b
+            border-blue-900/60 bg-[#050b26]"
         >
-          <div className="p-6 md:p-8">
-            <DialogHeader className="gap-3 sm:text-left">
-              <div className="flex items-start justify-between gap-6">
-                <div className="flex items-start gap-4">
-                  <div
-                    className="mt-0.5 inline-flex h-12 w-12 shrink-0
-                      items-center justify-center rounded-xl bg-primary/10
-                      text-primary"
-                  >
-                    {active?.icon ? (
-                      <DynamicIcon
-                        name={active.icon as IconName}
-                        className="h-6 w-6"
-                      />
-                    ) : null}
-                  </div>
-                  <div className="min-w-0">
-                    <DialogTitle
-                      className="text-2xl md:text-3xl font-extrabold
-                        tracking-tight"
-                    >
-                      {active?.modal_title ?? active?.title ?? ""}
-                    </DialogTitle>
-                    <DialogDescription className="mt-2 text-base">
-                      {active?.modal_description ?? active?.description ?? ""}
-                    </DialogDescription>
-                  </div>
-                </div>
-              </div>
-            </DialogHeader>
-          </div>
-        </div>
+          <DialogTitle className="flex-1 min-w-0">
+            {active?.modal_title ?? active?.title ?? ""}
+          </DialogTitle>
+        </DialogHeader>
 
         <div className="px-6 pb-6 md:px-8 md:pb-8 overflow-y-auto">
           <div
@@ -147,27 +122,29 @@ export function WhyFeaturesGridClient({
               hover:[&_a]:underline`,
             )}
           >
-            {active?.modal_content ? (
-              <div dangerouslySetInnerHTML={{ __html: active.modal_content }} />
-            ) : (
-              <div
-                className="rounded-2xl border border-dashed border-border
-                  bg-muted/20 p-6"
-              >
-                <p className="text-foreground font-semibold mb-1">
-                  More details coming soon
-                </p>
-                <p>
-                  This modal is ready — you just need to add{" "}
-                  <span className="font-semibold">modal_content</span> (and
-                  optional CTA fields) to the content data.
-                </p>
-              </div>
-            )}
+            <div
+              className="rounded-2xl border border-dashed border-border
+                bg-[#1e40afcc] p-6"
+            >
+              <p className="text-white font-semibold mb-1">
+                {active?.modal_title ??
+                  active?.title ??
+                  "More details coming soon"}
+              </p>
+              <p className="text-blue-100">
+                {active?.modal_content || (
+                  <>
+                    This modal is ready — you just need to add{" "}
+                    <span className="font-semibold">modal_content</span> (and
+                    optional CTA fields) to the content data.
+                  </>
+                )}
+              </p>
+            </div>
           </div>
 
           <DialogFooter className="mt-8 sm:justify-between">
-            <Button asChild variant="outline" className="rounded-xl">
+            <Button asChild variant="outline" className="rounded-xl text-black">
               <Link href={learnMoreCtaLink}>Learn more</Link>
             </Button>
             <Button asChild size="lg" className="rounded-xl">

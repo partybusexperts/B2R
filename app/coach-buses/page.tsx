@@ -47,10 +47,7 @@ export default async function CoachBusesPage() {
       <FleetList title="Coach Bus Fleet" vehicles={vehicles} />
 
       {/* 2. "Why Coach Buses Rock" (Legacy V2 Style - Grid) */}
-      <WhySection
-        slug="coach-buses"
-        className="bg-background border-t border-border/40"
-      />
+      <WhySection slug="coach-buses" />
 
       {/* 3. Cross-Sell Text (We also have party buses...) */}
       <OtherFleets currentType="coach" />

@@ -47,10 +47,7 @@ export default async function LimousinesPage() {
       <FleetList title="Limousine Fleet" vehicles={vehicles} />
 
       {/* 2. "Why Limousines Rock" (Legacy V2 Style - Grid) */}
-      <WhySection
-        slug="limousines"
-        className="bg-background border-t border-border/40"
-      />
+      <WhySection slug="limousines" />
 
       {/* 3. Cross-Sell Text (We also have party buses...) */}
       <OtherFleets currentType="limo" />

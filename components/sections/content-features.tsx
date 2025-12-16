@@ -5,37 +5,31 @@ import { WhyFeaturesGridClient } from "@/components/sections/content-features.cl
 interface WhySectionProps {
   slug: string;
   className?: string;
-  cols?: 2 | 3 | 4; // Flexible layout options
 }
 
-export async function WhySection({
-  slug,
-  className,
-  cols = 3,
-}: WhySectionProps) {
+export async function WhySection({ slug, className }: WhySectionProps) {
   const why_section = await getWhySectionsBySlug(slug);
 
   if (!why_section || !why_section.features) return null;
 
   return (
-    <section
-      className={cn(
-        "py-16 md:py-24 bg-card border-b border-border/40",
-        className,
-      )}
-    >
-      <div className="container mx-auto px-4 md:px-6">
+    <section className={cn("py-16 md:py-24 bg-[#0E1F46]", "", className)}>
+      <div
+        className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c]
+          to-[#0f2148] rounded-3xl shadow-xl my-12 py-12 px-6 border
+          border-blue-800/30"
+      >
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <h2
-            className="text-3xl md:text-4xl font-extrabold tracking-tight
-              text-foreground"
+            className="text-4xl md:text-5xl font-extrabold text-center mb-2
+              text-white font-serif tracking-tight"
           >
             {why_section.title}
           </h2>
           {why_section.intro && (
             <div
-              className="text-lg text-muted-foreground leading-relaxed"
+              className="text-blue-100/90 text-center max-w-3xl mx-auto mb-8"
               dangerouslySetInnerHTML={{ __html: why_section.intro }}
             />
           )}
@@ -44,10 +38,7 @@ export async function WhySection({
         {/* The Features Grid */}
         <WhyFeaturesGridClient
           features={why_section.features}
-          className={cn(
-            // Tailwind class logic for dynamic columns
-            cols === 3 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2",
-          )}
+          className={cn("grid sm:grid-cols-2 lg:grid-cols-3 gap-4")}
           defaultCta={{ label: "Get a quote", link: "/contact" }}
         />
       </div>

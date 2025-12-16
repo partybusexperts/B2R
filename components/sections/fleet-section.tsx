@@ -51,10 +51,7 @@ export default async function FleetSection({
           </Suspense>
 
           {/* Why Party Buses Rock */}
-          <WhySection
-            slug="party-buses"
-            className="bg-background/10 dark:bg-background/20"
-          />
+          <WhySection slug="party-buses" />
         </>
       )}
 
@@ -73,10 +70,7 @@ export default async function FleetSection({
           </Suspense>
 
           {/* Why Limousines Rock */}
-          <WhySection
-            slug="limousines"
-            className="bg-background/10 dark:bg-background/20"
-          />
+          <WhySection slug="limousines" />
         </>
       )}
 
@@ -95,10 +89,7 @@ export default async function FleetSection({
           </Suspense>
 
           {/* Why Coach Buses Work Best */}
-          <WhySection
-            slug="coach-buses"
-            className="bg-background/10 dark:bg-background/20"
-          />
+          <WhySection slug="coach-buses" />
         </>
       )}
     </>

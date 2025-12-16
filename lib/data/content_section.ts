@@ -151,7 +151,7 @@ export const getWhySectionsBySlug = cache(async (slug: string) => {
     )
     .eq("vehicle_type", slug)
     // Optional: Only get 3
-    .limit(3, { foreignTable: "why_features" })
+    .limit(6, { foreignTable: "why_features" })
     // Optional: Ensure you get the 'best' 3 (e.g., by some order)
     .order("created_at", { referencedTable: "why_features", ascending: true })
     .single();

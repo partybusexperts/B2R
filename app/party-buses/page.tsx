@@ -47,10 +47,7 @@ export default async function PartyBusPage() {
       <FleetList title="Party Bus Fleet" vehicles={vehicles} />
 
       {/* Why Party Buses Rock */}
-      <WhySection
-        slug="party-buses"
-        className="bg-background border-t border-border/40"
-      />
+      <WhySection slug="party-buses" />
 
       {/* Cross Sell */}
       <OtherFleets currentType="party-bus" />
