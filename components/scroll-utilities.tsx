@@ -200,21 +200,21 @@ function BackToTopButton({
       aria-label="Back to top"
       onClick={onTop}
       className={`fixed z-[140] bottom-6 right-6 h-14 w-14 rounded-full
-        bg-primary text-primary-foreground shadow-lg border-2 border-border flex
+        bg-blue-700 text-white shadow-lg border-2 border-white/30 flex
         items-center justify-center transition-opacity ${
           showTop ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
     >
       <svg viewBox="0 0 36 36" className="h-12 w-12 -rotate-90 absolute">
         <path
-          className="text-primary/20"
+          className="text-blue-300/30"
           stroke="currentColor"
           strokeWidth="4"
           fill="none"
           d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
         />
         <path
-          className="text-success"
+          className="text-emerald-400"
           stroke="currentColor"
           strokeWidth="4"
           strokeLinecap="round"
@@ -251,16 +251,16 @@ function MiniToc({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label="Open page sections"
-        className="rounded-full bg-muted/60 backdrop-blur px-4 py-2
-          text-foreground text-xs font-semibold shadow border border-border
-          hover:bg-muted"
+        className="rounded-full bg-black/40 backdrop-blur px-4 py-2 text-white
+          text-xs font-semibold shadow border border-white/20 hover:bg-black/55"
       >
         {currentLabel} ▾
       </button>
       {open && (
         <div
-          className="w-56 max-h-[60vh] overflow-auto rounded-2xl bg-secondary/90
-            backdrop-blur shadow-2xl border border-border p-2 space-y-1 text-sm"
+          className="w-56 max-h-[60vh] overflow-auto rounded-2xl bg-[#0f2246]/95
+            backdrop-blur shadow-2xl border border-blue-400/30 p-2 space-y-1
+            text-sm"
         >
           {sections.map((s) => (
             <button
@@ -270,10 +270,10 @@ function MiniToc({
                 setOpen(false);
               }}
               className={`block w-full text-left rounded-lg px-3 py-2
-              hover:bg-primary/20 focus:bg-primary/25 outline-none ${
+              hover:bg-blue-600/30 focus:bg-blue-600/40 outline-none ${
                 s.id === activeId
-                  ? "bg-primary/25 text-primary-foreground font-semibold"
-                  : "text-foreground"
+                  ? "bg-blue-500/30 text-white font-semibold"
+                  : "text-blue-100"
               }`}
             >
               {s.label}
@@ -296,29 +296,29 @@ function CtaDock({ visible, onTop }: { visible: boolean; onTop: () => void }) {
     >
       <button
         onClick={onTop}
-        className="rounded-xl bg-primary text-primary-foreground px-4 py-2
-          text-sm font-bold shadow border border-border hover:bg-primary/90"
+        className="rounded-xl bg-blue-700 text-white px-4 py-2 text-sm font-bold
+          shadow border border-blue-300/40 hover:bg-blue-800"
       >
         Top
       </button>
       <a
         href="/quote#instant"
-        className="rounded-xl bg-success text-success-foreground px-4 py-2
-          text-sm font-bold shadow border border-success/40 hover:bg-success/90"
+        className="rounded-xl bg-emerald-500 text-white px-4 py-2 text-sm
+          font-bold shadow border border-emerald-300/40 hover:bg-emerald-600"
       >
         Quote
       </a>
       <a
         href="tel:8885352566"
-        className="rounded-xl bg-card text-foreground px-4 py-2 text-sm
-          font-bold shadow border border-border hover:bg-muted"
+        className="rounded-xl bg-white text-blue-900 px-4 py-2 text-sm font-bold
+          shadow border border-blue-200 hover:bg-blue-50"
       >
         Call
       </a>
       <a
         href="mailto:info@bus2ride.com"
-        className="rounded-xl bg-secondary text-secondary-foreground px-4 py-2
-          text-sm font-bold shadow border border-border hover:bg-secondary/90"
+        className="rounded-xl bg-blue-900 text-white px-4 py-2 text-sm font-bold
+          shadow border border-blue-600 hover:bg-blue-800"
       >
         Email
       </a>
