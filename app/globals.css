@@ -120,6 +120,9 @@
 }
 
 @layer base {
+  body {
+    @apply bg-[#0f1f46];
+  }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
