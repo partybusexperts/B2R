@@ -1,9 +1,7 @@
 import { ToolCard } from "./tool-card";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { shuffle } from "@/lib/utils";
 import { getTools } from "@/lib/data/tools";
-import { ChevronRight } from "lucide-react";
 
 interface ToolsGridProps {
   category?: string; // e.g. "home", "pricing"
@@ -30,50 +28,30 @@ export async function ToolsGrid({ category = "general" }: ToolsGridProps) {
   const displayTools = [...contextTools, ...shuffle(otherTools)].slice(0, 4); // Show 4 tools total
 
   return (
-    <section className="py-16 md:py-24 bg-background border-b border-border/40">
-      <div className="container mx-auto px-4 md:px-6">
+    <section className="py-16 md:py-24 bg-[#0E1F46]">
+      <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
-        <div
-          className="flex flex-col md:flex-row justify-between items-end mb-10
-            gap-4"
-        >
-          <div className="max-w-2xl space-y-2">
-            <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight
-                text-foreground"
-            >
-              Planning Tools & Guides
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Everything you need to plan the perfect trip, from pricing
-              calculators to safety checklists.
-            </p>
-          </div>
-          <Button
-            asChild
-            variant="ghost"
-            className="group hidden gap-2 text-base font-bold text-primary
-              hover:bg-primary/10 md:inline-flex"
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-white">Tools</h2>
+
+          <Link
+            href={"/tools"}
+            className="text-sm rounded-xl border border-white/15 bg-white/10
+              px-3 py-1.5 hover:bg-white/15 text-white"
           >
-            <Link href={"/tools"}>
-              View All Tools{" "}
-              <ChevronRight
-                className="h-4 w-4 transition-transform
-                  group-hover:translate-x-1"
-              />
-            </Link>
-          </Button>
+            View more tools →
+          </Link>
         </div>
 
         {/* Grid: 1 col mobile, 2 col tablet, 4 col desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {displayTools.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />
           ))}
         </div>
 
         {/* Mobile View All */}
-        <div className="mt-8 text-center md:hidden">
+        {/* <div className="mt-8 text-center md:hidden">
           <Button
             variant="outline"
             asChild
@@ -81,6 +59,16 @@ export async function ToolsGrid({ category = "general" }: ToolsGridProps) {
           >
             <Link href="/tools">View All Tools</Link>
           </Button>
+        </div> */}
+
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/tools"
+            className="text-sm rounded-xl border border-white/15 bg-white/10
+              px-4 py-2 hover:bg-white/15 text-white"
+          >
+            View more tools →
+          </Link>
         </div>
       </div>
     </section>

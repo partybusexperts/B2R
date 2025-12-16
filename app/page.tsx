@@ -6,8 +6,8 @@ import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
 import { FaqSection } from "@/components/sections/faq-section";
-import { BookingProcessSection } from "@/components/sections/content-booking";
 import FleetSection from "@/components/sections/fleet-section";
+// import { BookingProcessSection } from "@/components/sections/content-booking";
 
 export default async function Home() {
   // const [partyBus, limo, coach, reviews] = await Promise.all([
@@ -49,7 +49,7 @@ export default async function Home() {
       <EventsGrid />
 
       {/* Booking Process */}
-      <BookingProcessSection />
+      {/* <BookingProcessSection /> */}
     </>
   );
 }
