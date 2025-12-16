@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider as NextThemeProvider } from "next-themes";
-import Navigation from "@/components/layout/navigation";
 import "./globals.css";
 import Footer from "@/components/layout/footer";
 import ScrollUtilities from "@/components/scroll-utilities";
+import { Header } from "@/components/layout/Header";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -12,8 +12,9 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Bus2Ride – Party Bus & Limo Service",
+  description:
+    "Nationwide party bus and limo booking with real humans and smart tools.",
 };
 
 const geistSans = Geist({
@@ -39,9 +40,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navigation />
+          <Header />
 
-          <main>{children}</main>
+          <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
 
           <ScrollUtilities />
           <Footer />

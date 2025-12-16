@@ -24,6 +24,11 @@ npm run start    # serve production build
 npm run lint     # ESLint
 ```
 
+## Environment variables
+
+- Copy `.env.example` to `.env.local` and fill in real values.
+- `.env.local` is gitignored by default (safe for secrets).
+
 ---
 
 ## Global Component Rules
