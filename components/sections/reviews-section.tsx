@@ -1,10 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Search, Check, Filter, Quote } from "lucide-react";
+import { Search, Check, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StarRating } from "@/components/ui/star-rating";
 import { cn } from "@/lib/utils";
@@ -70,31 +69,61 @@ export function ReviewsSection({
 
   return (
     <section
-      className={cn(
-        `py-20 md:py-24 border-b border-border/40 bg-primary/5
-        dark:bg-background`,
-      )}
+      className={cn("relative w-full border-t border-white/5 bg-[#051127]")}
     >
-      <div className="container mx-auto px-4 md:px-6">
+      {/* Background effect */}
+      <div className="absolute inset-0 opacity-40">
+        <div
+          className="mx-auto h-full max-w-5xl
+            bg-[radial-gradient(circle_at_top,_rgba(58,105,255,0.35),_transparent_55%)]"
+        ></div>
+      </div>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14">
         {/* Header */}
-        <div className="mx-auto mb-12 max-w-3xl space-y-4 text-center">
-          <h2
-            className="text-3xl font-extrabold tracking-tight text-foreground
-              md:text-4xl"
+        <div
+          className="flex flex-col gap-6 md:flex-row md:items-center
+            md:justify-between mb-5"
+        >
+          <div>
+            {" "}
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.4em]
+                text-white/50"
+            >
+              Verified riders
+            </p>
+            <h2 className="mt-3 text-3xl font-bold text-white">
+              {title || "People can’t stop talking about us"}
+            </h2>
+            <div className="mt-4 flex items-center gap-3 text-white/80">
+              <div
+                className="inline-flex items-center gap-2 rounded-full border
+                  border-white/15 bg-white/5 px-4 py-1 text-sm font-semibold"
+              >
+                <StarRating rating={5} />
+                <span>5 / 5</span>
+              </div>
+            </div>
+          </div>
+          <Link
+            href={"/reviews"}
+            className="inline-flex items-center justify-center rounded-full
+              border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold
+              text-white/90 shadow-[0_10px_30px_rgba(3,7,18,0.65)] transition
+              hover:border-white/40 hover:bg-white/15"
           >
-            {title || "Trusted by thousands of happy riders"}
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Don{"'"}t just take our word for it. Read verified reviews from real
-            customers.
-          </p>
+            Read all reviews
+          </Link>
         </div>
 
         {/* Search & Filter Toolbar */}
         <div
-          className="mb-10 flex flex-col items-center justify-between gap-4
-            rounded-2xl border border-primary/10 bg-background/60 p-4 shadow-sm
-            md:flex-row"
+          className="mb-10 flex flex-col items-center justify-between gap-4 p-4
+            md:flex-row from-white/12 via-white/6 rounded-3xl border
+            border-white/15 bg-gradient-to-br from-white/12 via-white/6
+            to-transparent text-white shadow-[0_25px_60px_rgba(3,7,18,0.4)]
+            backdrop-blur-sm transition duration-300 hover:-translate-y-1
+            hover:border-white/35"
         >
           <div className="relative w-full md:max-w-sm">
             <Search
@@ -105,7 +134,8 @@ export function ReviewsSection({
               placeholder="Search reviews..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="border-border/60 bg-background/50 pl-9"
+              className="border-white/15 bg-gradient-to-br from-white/12
+                via-white/6 to-transparent pl-9 text-black"
             />
           </div>
 
@@ -115,7 +145,7 @@ export function ReviewsSection({
           >
             <span
               className="mr-2 flex items-center gap-2 text-sm font-semibold
-                text-muted-foreground"
+                text-white/80"
             >
               <Filter className="h-4 w-4" /> Filter:
             </span>
@@ -126,16 +156,14 @@ export function ReviewsSection({
                   key={filter.tag}
                   onClick={() => toggleFilter(filter.tag)}
                   className={cn(
-                    `inline-flex items-center gap-1.5 rounded-full border px-3
-                    py-1.5 text-sm font-medium transition-all duration-200`,
-                    isActive
-                      ? `border-primary bg-primary text-primary-foreground
-                        shadow-md`
-                      : `border-border bg-background text-muted-foreground
-                        hover:border-primary/50 hover:bg-accent`,
+                    `inline-flex items-center justify-center rounded-full border
+                    border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold
+                    text-white/90 shadow-[0_10px_30px_rgba(3,7,18,0.65)]
+                    transition hover:border-white/40 hover:bg-white/15`,
+                    isActive ? "border-white/40 bg-white/15 shadow-md" : "",
                   )}
                 >
-                  {isActive && <Check className="h-3 w-3" />}
+                  {isActive && <Check className="h-3 w-3 pr-1" />}
                   {filter.label}
                 </button>
               );
@@ -145,76 +173,50 @@ export function ReviewsSection({
 
         {/* Grid */}
         {filteredReviews.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredReviews.map((review, idx) => (
               <Card
                 key={`${review.id}-${idx}`}
-                className="flex h-full flex-col gap-2 border-border/60 shadow-sm
-                  transition-shadow hover:shadow-md hover:border-primary/30"
+                className="py-0 gap-0 group relative overflow-hidden rounded-3xl
+                  border border-white/15 bg-gradient-to-br from-white/12
+                  via-white/6 to-transparent p-6 text-white
+                  shadow-[0_25px_60px_rgba(3,7,18,0.4)] backdrop-blur-sm
+                  transition duration-300 hover:-translate-y-1
+                  hover:border-white/35"
               >
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start">
-                    <div className="flex flex-col gap-1">
-                      <div
-                        className="flex items-center gap-2 font-bold
-                          text-foreground"
-                      >
-                        {review.author_display}
-                      </div>
-                      <div
-                        className="flex items-center gap-2 text-xs
-                          text-muted-foreground"
-                      >
-                        {/* TODO: make source an ENUM or delete it */}
-                        {/* {review.source && (
-                          <Badge
-                            variant="outline"
-                            className="h-5 px-1.5 text-[10px] uppercase
-                              font-bold tracking-wider"
-                          >
-                            {review.source}
-                          </Badge>
-                        )} */}
-                        <span>
-                          {review.service_date
-                            ? new Date(review.service_date).toLocaleDateString()
-                            : new Date(review.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                    <StarRating rating={review.rating || 5} />
-                  </div>
-                </CardHeader>
-                <CardContent className="flex flex-1 flex-col gap-4">
-                  <div className="relative">
-                    <Quote
-                      className="absolute -left-1 -top-2 h-6 w-6 rotate-180
-                        text-primary/10"
-                    />
-                    <p
-                      className="relative z-10 leading-relaxed
-                        text-muted-foreground italic"
-                    >
-                      &quot;{review.body}&quot;
-                    </p>
-                  </div>
+                <div
+                  className="absolute inset-0 opacity-0 transition
+                    group-hover:opacity-30"
+                >
+                  <div
+                    className="h-full w-full
+                      bg-[radial-gradient(circle_at_top,_rgba(86,156,255,0.45),_transparent_60%)]"
+                  ></div>
+                </div>
+                <div
+                  className="relative flex items-center justify-between gap-3"
+                >
+                  <StarRating rating={review.rating || 5} />
+                </div>
+                <p
+                  className="relative mt-4 text-[15px] leading-relaxed
+                    text-white/90 line-clamp-4 overflow-hidden"
+                >
+                  &quot;{review.body}&quot;
+                </p>
+                <div
+                  className="relative mt-4 flex items-center gap-2 text-[13px]
+                    text-white/75"
+                >
+                  <span
+                    className="inline-block h-[6px] w-[6px] rounded-full
+                      bg-emerald-400"
+                  ></span>
+                  {"— "}
+                  {review.author_display || "Anonymous"}
+                </div>
 
-                  {/* Tags Display (If exists) */}
-                  {review.tags && review.tags.length > 0 && (
-                    <div className="mt-auto flex flex-wrap gap-2 pt-4">
-                      {review.tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="secondary"
-                          className="bg-muted text-xs font-normal
-                            text-muted-foreground"
-                        >
-                          #{tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
+                {/* Tags Display (If exists) */}
               </Card>
             ))}
           </div>
@@ -241,15 +243,17 @@ export function ReviewsSection({
         )}
 
         {/* Footer */}
-        <div className="mt-12 text-center">
+        <div className="mt-10 text-center">
           <Button
             asChild
             size="lg"
             variant="outline"
-            className="rounded-xl border-primary/20 px-8 font-bold
-              hover:bg-primary/5 hover:text-primary"
+            className="inline-flex items-center justify-center rounded-full
+              bg-white/95 px-7 py-3 text-sm font-semibold text-[#04132d]
+              shadow-[0_15px_40px_rgba(10,27,54,0.35)] transition
+              hover:translate-y-0.5 hover:bg-white"
           >
-            <Link href="/reviews">Read all Reviews</Link>
+            <Link href="/reviews">See more reviews</Link>
           </Button>
         </div>
       </div>

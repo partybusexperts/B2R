@@ -16,7 +16,7 @@ export function StarRating({
           className={cn(
             "h-4 w-4",
             star <= rating
-              ? "fill-warning text-warning"
+              ? "fill-[#FACC14] border-[#FACC14] text-[#FACC14]"
               : "fill-muted text-muted-foreground/30",
           )}
         />
