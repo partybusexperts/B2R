@@ -128,3 +128,14 @@
     cursor: pointer;
   }
 }
+
+/* Poll columns: hide native scrollbars (use custom scrollbar overlay). */
+.polls-column-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge/IE */
+}
+
+.polls-column-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
