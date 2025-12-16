@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"; // ensuring correct alias
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { capitalize, cn } from "@/lib/utils";
 
 // Extracted for cleaner render
@@ -63,36 +62,26 @@ export default function Footer() {
 
   return (
     // Changed bg-background to bg-muted/20 for subtle separation from main content
-    <footer className="border-t border-border bg-muted/10 text-foreground">
+    <footer
+      className="mt-16 border-t border-blue-900/20 bg-gradient-to-b
+        from-[#0f2148] to-[#132c5f] text-blue-50"
+    >
       {/* Top CTA strip */}
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div
-          className="flex flex-col items-center justify-between gap-6 py-8
-            lg:flex-row"
+          className="flex flex-col lg:flex-row items-center justify-between
+            gap-4 py-6"
         >
-          <div className="space-y-1 text-center lg:text-left">
-            <h3 className="text-xl font-extrabold tracking-tight md:text-2xl">
-              Ready to roll? Get a quote in seconds.
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              No hidden fees. Instant pricing.
-            </p>
-          </div>
+          <h3 className="text-xl md:text-2xl font-extrabold tracking-tight">
+            Ready to roll? Get a quote in seconds.
+          </h3>
 
-          <div
-            className="flex flex-col items-center gap-4 sm:flex-row w-full
-              sm:w-auto"
-          >
-            <ThemeSwitcher />
-
-            {/* ARCHITECTURE NOTE: 
-                Use 'variant' props instead of manual class overrides for consistency.
-            */}
-
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <Button
               asChild
-              variant="outline"
-              className="w-full sm:w-auto rounded-xl font-bold"
+              className="inline-flex items-center justify-center rounded-xl px-5
+                py-3 font-bold bg-white text-blue-900 border border-blue-200
+                hover:bg-blue-50 transition h-auto text-md"
             >
               <a
                 href={`tel:${contact.phoneTel}`}
@@ -104,8 +93,10 @@ export default function Footer() {
 
             <Button
               asChild
-              variant="secondary"
-              className="w-full sm:w-auto rounded-xl font-bold"
+              // variant="secondary"
+              className="inline-flex items-center justify-center rounded-xl px-5
+                py-3 font-bold bg-blue-700 text-white border border-blue-800
+                hover:bg-blue-800 transition h-auto text-md"
             >
               <a href={`mailto:${contact.email}`}>✉️ Email Us</a>
             </Button>
@@ -113,35 +104,34 @@ export default function Footer() {
             <Button
               asChild
               size="lg"
-              className="w-full sm:w-auto rounded-xl font-bold shadow-lg
-                shadow-primary/25"
+              className="inline-flex items-center justify-center rounded-xl px-5
+                py-3 font-bold bg-blue-900 text-white border border-blue-900
+                hover:bg-blue-950 transition h-auto text-md"
             >
-              <Link href="/quote#instant">⚡ Instant Quote</Link>
+              <Link href="/quote">⚡ Instant Quote</Link>
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-border/50" />
-
       {/* Main footer content */}
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+        <div
+          className="grid gap-10 md:gap-8 grid-cols-1 sm:grid-cols-2
+            lg:grid-cols-4"
+        >
           {/* Brand & Social */}
-          <div className="space-y-4">
-            <div>
-              <div
-                className="text-2xl font-extrabold tracking-tight text-primary"
-              >
-                Bus2Ride
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Premium party buses, limos, and shuttles. Clean rides, pro
-                drivers, fast quotes.
-              </p>
+          <div>
+            <div className="text-2xl font-extrabold tracking-tight">
+              Bus2Ride
             </div>
+            <p className="text-blue-200/90 mt-2">
+              Premium party buses, limos, and shuttles. Clean rides, pro
+              drivers, fast quotes.
+            </p>
 
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Social Icons */}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
               {Object.entries(SOCIALS)
                 .filter(([, url]) => !!url)
                 .map(([name, url]) => (
@@ -151,25 +141,25 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={name}
-                    // Semantic Token usage: hover:bg-primary/10 instead of specific color
                     className="group inline-flex h-10 w-10 items-center
-                      justify-center rounded-full border border-border
-                      bg-background transition-colors hover:border-primary/50
-                      hover:bg-primary/5"
+                      justify-center rounded-full border border-blue-800/40
+                      bg-blue-900/30 hover:bg-blue-900/60 transition"
                     title={capitalize(name)}
                   >
                     <SocialIcon
                       name={name}
-                      className="text-muted-foreground group-hover:text-primary"
+                      className="h-5 w-5 fill-blue-100/90 group-hover:fill-white
+                        transition"
                     />
                   </a>
                 ))}
             </div>
-            <ul className="mt-4 text-sm text-muted-foreground space-y-1">
+
+            <ul className="mt-4 text-sm text-blue-200/80 space-y-1">
               <li>
                 <a
                   href={`tel:${contact.phoneTel}`}
-                  className="hover:text-foreground"
+                  className="hover:text-blue-100"
                 >
                   {contact.phoneDisplay}
                 </a>
@@ -177,7 +167,7 @@ export default function Footer() {
               <li>
                 <a
                   href={`mailto:${contact.email}`}
-                  className="hover:text-foreground"
+                  className="hover:text-blue-100"
                 >
                   {contact.email}
                 </a>
@@ -188,8 +178,8 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <div className="mb-4 font-bold">Quick Links</div>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="font-bold text-white mb-3">Quick Links</div>
+            <ul className="space-y-2 text-blue-200/90">
               {[
                 { label: "Party Buses", href: "/party-buses" },
                 { label: "Limousines", href: "/limos" },
@@ -202,10 +192,7 @@ export default function Footer() {
                 { label: "Contact", href: "/contact" },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="transition-colors hover:text-primary"
-                  >
+                  <Link href={link.href} className="hover:text-blue-100">
                     {link.label}
                   </Link>
                 </li>
@@ -215,8 +202,8 @@ export default function Footer() {
 
           {/* Popular Services */}
           <div>
-            <div className="mb-4 font-bold">Popular Services</div>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="font-bold text-white mb-3">Popular Services</div>
+            <ul className="space-y-2 text-blue-200/90">
               {[
                 { label: "Weddings", href: "/events/weddings" },
                 { label: "Proms", href: "/events/proms" },
@@ -226,10 +213,7 @@ export default function Footer() {
                 { label: "Night Out", href: "/events/night-out" },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="transition-colors hover:text-primary"
-                  >
+                  <Link href={link.href} className="hover:text-blue-100">
                     {link.label}
                   </Link>
                 </li>
@@ -239,34 +223,28 @@ export default function Footer() {
 
           {/* Hours & Legal */}
           <div>
-            <div className="mb-4 font-bold">Hours</div>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex justify-between">
+            <div className="font-bold text-white mb-3">Hours</div>
+            <ul className="space-y-1 text-blue-200/90">
+              <li>
                 <span>Mon-Thu: 9am - 9pm</span>
               </li>
-              <li className="flex justify-between">
+              <li>
                 <span>Fri-Sat: 9am - 12am</span>
               </li>
-              <li className="flex justify-between">
+              <li>
                 <span>Sun: 10am - 6pm</span>
               </li>
             </ul>
 
-            <div className="mt-6 mb-4 font-bold">Legal</div>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+            <div className="font-bold text-white mt-5 mb-2">Legal</div>
+            <ul className="space-y-2 text-blue-200/90">
               <li>
-                <Link
-                  href="/privacy"
-                  className="transition-colors hover:text-primary"
-                >
+                <Link href="/privacy" className="hover:text-blue-100">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/terms"
-                  className="transition-colors hover:text-primary"
-                >
+                <Link href="/terms" className="hover:text-blue-100">
                   Terms of Service
                 </Link>
               </li>
@@ -276,16 +254,15 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-border">
+      <div className="border-t border-blue-900/30">
         <div
-          className="mx-auto flex max-w-7xl flex-col items-center
-            justify-between gap-4 px-4 py-6 text-xs text-muted-foreground
-            md:flex-row md:px-6"
+          className="max-w-7xl mx-auto px-4 md:px-6 py-5 text-sm
+            text-blue-200/80 flex flex-col md:flex-row items-center
+            justify-between gap-3"
         >
           <span>© {year || "...."} Bus2Ride. All rights reserved.</span>
-          <span className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-success"></span>
-            Licensed & Insured • DOT Compliant
+          <span className="opacity-80">
+            Licensed & insured • Professional drivers
           </span>
         </div>
       </div>
