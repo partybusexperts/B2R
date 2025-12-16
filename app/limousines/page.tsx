@@ -5,10 +5,10 @@ import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
-import { FaqSection } from "@/components/sections/faq-section";
 import { getVehiclesByType } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import { BookingProcessSection } from "@/components/sections/content-booking";
+import { FaqSearchSection } from "@/components/sections/faq-search-section";
 
 // Helper to fetch page-specific data
 async function getPageData() {
@@ -68,7 +68,13 @@ export default async function LimousinesPage() {
       <EventsGrid />
 
       {/* 9. FAQ (Context: Limousines) */}
-      <FaqSection category="limousines" title="Limousines FAQs" />
+      <FaqSearchSection
+        category="limousines"
+        title="Everything about limo timelines & etiquette"
+        aboveTitle="Limousine FAQ"
+        description="Find answers about photo timing, multi-stop routes, gratuity, and formal arrival etiquette before you lock in your limo."
+        inputPlaceholder='Try "prom rules", "wedding photo buffer", "pickup windows"…'
+      />
     </main>
   );
 }

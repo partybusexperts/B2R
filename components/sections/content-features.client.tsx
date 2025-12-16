@@ -44,7 +44,7 @@ export function WhyFeaturesGridClient({
         if (!nextOpen) setActive(null);
       }}
     >
-      <div className={cn("grid gap-6 md:gap-8", className)}>
+      <div className={cn("", className)}>
         {features.map((feature) => (
           <button
             key={`${feature.title}-${feature.id}`}

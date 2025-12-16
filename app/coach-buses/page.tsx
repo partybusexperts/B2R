@@ -5,10 +5,10 @@ import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
-import { FaqSection } from "@/components/sections/faq-section";
 import { getVehiclesByType } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import { BookingProcessSection } from "@/components/sections/content-booking";
+import { FaqSearchSection } from "@/components/sections/faq-search-section";
 
 // Helper to fetch page-specific data
 async function getPageData() {
@@ -68,7 +68,13 @@ export default async function CoachBusesPage() {
       <EventsGrid />
 
       {/* 9. FAQ (Context: Coach Bus) */}
-      <FaqSection category="coach-buses" title="Coach Buses FAQs" />
+      <FaqSearchSection
+        category="coach-buses"
+        title="Coach bus logistics, timing & compliance"
+        aboveTitle="Coach & Charter FAQ"
+        description="Search answers about driver hours, luggage staging, ADA requests, rest stops, and multi-day itineraries before you submit your manifest."
+        inputPlaceholder='Try "driver hours", "rest stops", "luggage"…'
+      />
     </main>
   );
 }

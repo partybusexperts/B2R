@@ -67,7 +67,7 @@ export function FleetList({ vehicles, title }: FleetListProps) {
     <div className="min-h-screen bg-[#0B1938]">
       {/* --- Filter Bar Header (Sticky) --- */}
       <div
-        className="sticky top-16 z-40 w-full border-b border-border/60
+        className="sticky top-16 z-40 w-full border-b border-blue-800/40
           bg-[#060E23]/95 backdrop-blur
           supports-[backdrop-filter]:bg-[#060E23]/60"
       >

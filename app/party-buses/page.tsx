@@ -5,10 +5,11 @@ import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
-import { FaqSection } from "@/components/sections/faq-section";
+// import { FaqSection } from "@/components/sections/faq-section";
 import { getVehiclesByType } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import { BookingProcessSection } from "@/components/sections/content-booking";
+import { FaqSearchSection } from "@/components/sections/faq-search-section";
 
 // Helper to fetch page-specific data
 async function getPageData() {
@@ -68,7 +69,14 @@ export default async function PartyBusPage() {
       <EventsGrid />
 
       {/* FAQ (Context: Party Bus) */}
-      <FaqSection category="party-buses" title="Party Bus FAQs" />
+      {/* <FaqSection category="party-buses" title="Party Bus FAQs" /> */}
+      <FaqSearchSection
+        category="party-buses"
+        title="Everything about party bus bookings"
+        aboveTitle="Party Bus FAQ"
+        description="Search through the most common questions groups ask about BYOB rules, pricing windows, pickup timing, and post-ride cleanup before locking in a bus."
+        inputPlaceholder='Try "BYOB", "pricing", "pickup windows"…'
+      />
     </main>
   );
 }

@@ -23,18 +23,33 @@ function filterFaqsLocally(faqs: FaqData[], query: string) {
   });
 }
 
+const mapCategoryToName = {
+  home: "home",
+  booking: "booking",
+  pricing: "pricing",
+  vehicles: "vehicles",
+  safety: "safety",
+  "party-buses": "party buses",
+  limousines: "limousines",
+  "coach-buses": "coach buses",
+} as { [key: string]: string };
+
 export function FaqSearchClient({
   category,
   faqs,
   title = "Frequently Asked Questions",
+  aboveTitle = "Got questions?",
   description = "Search answers about booking, pricing, and vehicles.",
+  inputPlaceholder = '\'Try "payment", "booking", "safety"…\'',
   initialCount = 8,
   searchMode = "hybrid",
 }: {
   category?: string;
   faqs: FaqData[];
   title?: string;
+  aboveTitle?: string;
   description?: string;
+  inputPlaceholder?: string;
   initialCount?: number;
   searchMode?: "client" | "server" | "hybrid";
 }) {
@@ -115,7 +130,7 @@ export function FaqSearchClient({
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-8 text-center">
           <p className="text-sm uppercase tracking-[0.2em] text-white/60">
-            Got questions?
+            {aboveTitle}
           </p>
           <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">
             {title}
@@ -126,7 +141,7 @@ export function FaqSearchClient({
         <div className="mx-auto max-w-6xl">
           {/* Search */}
           <div className="flex flex-col gap-2 text-center mb-8">
-            <label className="text-lg font-medium text-white/80">{`Search any ${category} FAQ`}</label>
+            <label className="text-lg font-medium text-white/80">{`Search any ${mapCategoryToName[category ?? "general"]} FAQ`}</label>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="relative w-full">
                 <Search
@@ -136,7 +151,7 @@ export function FaqSearchClient({
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder='Try "payment", "booking", "safety"…'
+                  placeholder={inputPlaceholder}
                   className="w-full rounded-2xl border border-white/15
                     bg-white/5 px-5 py-3 text-base text-white
                     placeholder-white/50 shadow focus:outline-none focus:ring-2
