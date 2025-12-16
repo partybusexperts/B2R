@@ -57,62 +57,76 @@ export default async function BlogPostPage({ params }: PageProps) {
     <main>
       {/* Custom Hero for Blog Post */}
       <div
-        className="relative bg-slate-900 text-white py-24 md:py-32
-          overflow-hidden"
+        className="relative overflow-hidden bg-[#0E1F46] py-20 text-white
+          md:py-28"
       >
-        <div className="absolute inset-0 bg-black/60 z-10" />
-        {thumbnailSrc && (
-          <Image
-            src={thumbnailSrc}
-            alt={post.title ?? "Blog post"}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-        )}
-        <div
-          className="container mx-auto px-4 md:px-6 relative z-20 text-center
-            max-w-4xl"
-        >
-          <Badge
-            className="mb-6 bg-primary text-primary-foreground
-              hover:bg-primary/90 px-4 py-1 text-sm"
-          >
-            {tags[0] ?? "Post"}
-          </Badge>
-
-          <h1
-            className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6
-              leading-tight"
-          >
-            {post.title}
-          </h1>
+        <div className="absolute inset-0">
+          {thumbnailSrc && (
+            <Image
+              src={thumbnailSrc}
+              alt={post.title ?? "Blog post"}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover opacity-80"
+            />
+          )}
           <div
-            className="flex items-center justify-center gap-6 text-slate-300
-              text-sm md:text-base"
+            className="absolute inset-0 bg-gradient-to-b from-slate-950/75
+              via-slate-950/55 to-[#0E1F46]"
+          />
+        </div>
+
+        <div
+          className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6
+            lg:px-10"
+        >
+          <div
+            className="mx-auto max-w-4xl rounded-[32px] border border-white/10
+              bg-gradient-to-b from-slate-950/70 to-slate-900/70 p-8 text-center
+              shadow-[0_25px_80px_rgba(2,8,23,0.55)] backdrop-blur-sm md:p-12"
           >
-            <span className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4" />
-              {date}
-            </span>
-            <span className="flex items-center gap-2">
-              <User className="h-4 w-4" />
-              {post.author ?? "Author"}
-            </span>
+            <Badge
+              variant="secondary"
+              className="mb-6 rounded-full border border-white/15 bg-white/5
+                px-4 py-1 text-sm font-semibold tracking-wide text-slate-100"
+            >
+              {tags[0] ?? "Post"}
+            </Badge>
+
+            <h1
+              className="text-4xl font-bold tracking-tight text-white
+                md:text-6xl"
+            >
+              {post.title}
+            </h1>
+
+            <div
+              className="mt-6 flex items-center justify-center gap-6 text-sm
+                text-white/70 md:text-base"
+            >
+              <span className="flex items-center gap-2">
+                <CalendarDays className="h-4 w-4 text-white/60" />
+                {date}
+              </span>
+              <span className="flex items-center gap-2">
+                <User className="h-4 w-4 text-white/60" />
+                {post.author ?? "Author"}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <article className="py-16 md:py-24 bg-background">
+      <article className="py-16 md:py-24 bg-[#0E1F46]">
         <div className="container mx-auto px-4 md:px-6 max-w-4xl">
           {/* Back Link */}
           <div className="mb-8">
             <Button
               variant="ghost"
               asChild
-              className="pl-0 hover:pl-2 transition-all gap-2
-                text-muted-foreground hover:text-primary"
+              className="pl-0 hover:pl-2 transition-all gap-2 text-white/70
+                hover:text-white hover:bg-white/5"
             >
               <Link href="/blog">
                 <ArrowLeft className="h-4 w-4" /> Back to Blog
@@ -122,21 +136,28 @@ export default async function BlogPostPage({ params }: PageProps) {
 
           {/* Content */}
           <div
-            className="prose prose-lg dark:prose-invert max-w-none
+            className="prose prose-lg prose-invert max-w-none text-justify
               prose-headings:font-bold prose-headings:tracking-tight
-              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-              prose-img:rounded-2xl prose-img:shadow-lg text-justify"
+              prose-headings:text-white prose-p:text-slate-200
+              prose-a:text-sky-300 prose-a:no-underline hover:prose-a:underline
+              prose-strong:text-white prose-hr:border-white/10
+              prose-img:rounded-2xl prose-img:shadow-lg space-y-6"
             dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
           />
 
           {/* Tags & Share */}
           <div
-            className="mt-12 pt-8 border-t border-border/40 flex flex-col
+            className="mt-12 pt-8 border-t border-white/10 flex flex-col
               sm:flex-row justify-between items-center gap-6"
           >
             <div className="flex flex-wrap gap-2">
               {post.tags?.map((tag) => (
-                <Badge key={tag} variant="secondary" className="px-3 py-1">
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="rounded-full border border-white/15 bg-white/5 px-3
+                    py-1 text-xs font-semibold tracking-wide text-slate-100"
+                >
                   {tag}
                 </Badge>
               ))}

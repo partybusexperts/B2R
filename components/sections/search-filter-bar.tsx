@@ -64,8 +64,9 @@ export function SearchFilterBar({
   return (
     <div
       className={cn(
-        `w-full bg-card border border-border/50 rounded-2xl shadow-sm p-4
-        md:p-6`,
+        `w-full rounded-[32px] border border-white/10 bg-gradient-to-b
+        from-slate-950/80 to-slate-900/80 shadow-[0_25px_80px_rgba(2,8,23,0.55)]
+        p-4 md:p-6`,
         className,
       )}
     >
@@ -75,18 +76,19 @@ export function SearchFilterBar({
         {/* Title & Search */}
         <div className="w-full md:w-1/3 space-y-3">
           {title && (
-            <h3 className="text-lg font-bold text-foreground">{title}</h3>
+            <h3 className="text-lg font-bold text-white/95">{title}</h3>
           )}
           <div className="relative">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4
-                text-muted-foreground"
+                text-white/50"
             />
             <Input
               value={isControlled ? (controlledQuery ?? "") : query}
               onChange={handleSearch}
               placeholder={placeholder}
-              className="pl-9 bg-background/50"
+              className="h-12 pl-9 rounded-full border border-white/10
+                bg-white/5 text-slate-100 placeholder:text-white/40"
             />
             {(isControlled ? controlledQuery : query) && (
               <button
@@ -95,7 +97,7 @@ export function SearchFilterBar({
                   onSearchChange?.("");
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2
-                  text-muted-foreground hover:text-foreground"
+                  text-white/50 hover:text-white"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -113,11 +115,13 @@ export function SearchFilterBar({
                   key={filter.value}
                   variant={isActive ? "default" : "outline"}
                   className={cn(
-                    `cursor-pointer px-4 py-2 text-sm transition-all
-                    hover:scale-105 select-none`,
+                    `cursor-pointer select-none rounded-full px-4 py-2 text-sm
+                    font-semibold tracking-wide transition-all hover:scale-105`,
                     isActive
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : "bg-background hover:bg-muted hover:border-primary/50",
+                      ? `bg-sky-500/20 text-sky-200 border border-sky-400/40
+                        hover:bg-sky-400/10`
+                      : `border border-white/15 bg-white/5 text-slate-100
+                        hover:bg-white/10`,
                   )}
                   onClick={() => toggleFilter(filter.value)}
                 >
@@ -130,7 +134,7 @@ export function SearchFilterBar({
                 variant="ghost"
                 size="sm"
                 onClick={clearAll}
-                className="text-muted-foreground hover:text-destructive ml-2"
+                className="ml-2 text-white/70 hover:text-white"
               >
                 Clear
               </Button>

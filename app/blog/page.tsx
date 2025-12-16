@@ -8,13 +8,10 @@ import { getReviews } from "@/lib/data/reviews";
 import { getBlogPosts } from "@/lib/data/blog";
 import { BlogGrid } from "@/components/sections/blog-grid";
 import FleetSection from "@/components/sections/fleet-section";
-// import { FleetList } from "@/components/sections/fleet-list";
-// import { getRandomVehicles } from "@/lib/data/vehicles";
 
 export default async function BlogPage() {
   const blogs = (await getBlogPosts()) ?? [];
   const reviews = (await getReviews()) ?? [];
-  // const fleet = (await getRandomVehicles()) ?? [];
 
   return (
     <main>
@@ -22,7 +19,6 @@ export default async function BlogPage() {
 
       <BlogGrid posts={blogs} />
 
-      {/* <FleetList title="Our Fleet" vehicles={fleet} /> */}
       <FleetSection />
       <ReviewsSection reviews={reviews} />
       <PollsGrid />

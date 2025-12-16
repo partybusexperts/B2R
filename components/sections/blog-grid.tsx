@@ -3,13 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, CalendarDays, User } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SearchFilterBar } from "@/components/sections/search-filter-bar";
 import { PostsData } from "@/lib/data/blog";
@@ -77,19 +71,26 @@ export function BlogGrid({ posts }: BlogGridProps) {
   }, [posts, query, activeFilters]);
 
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="max-w-6xl mx-auto px-4 py-16 space-y-12 bg-[#0E1F46]">
       <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <h2
-            className="text-3xl md:text-4xl font-extrabold tracking-tight
-              text-foreground"
+        <div className="space-y-3 text-center md:text-left mb-12">
+          <p
+            className="text-xs md:text-sm uppercase tracking-[0.35em]
+              text-sky-400"
           >
-            Latest News & Guides
+            Bus2Ride Insider
+          </p>
+          <h2
+            className="text-4xl md:text-5xl font-bold leading-tight text-white"
+          >
+            Playbooks for Every Ride
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Expert advice, travel tips, and industry insights from the Bus2Ride
-            team.
+          <p className="text-slate-300 max-w-3xl text-base md:text-lg">
+            Deep dives, checklists, and operations war stories from the crews
+            who keep party buses, limos, and shuttles running. Every article
+            ships with 750+ words of tactics so your next run feels cinematic,
+            not chaotic.
           </p>
         </div>
 
@@ -113,7 +114,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
                 "en-US",
                 {
                   year: "numeric",
-                  month: "long",
+                  month: "numeric",
                   day: "numeric",
                 },
               );
@@ -124,108 +125,114 @@ export function BlogGrid({ posts }: BlogGridProps) {
                   : null;
 
               return (
-                <Card
+                <Link
                   key={post.id}
-                  className="group flex flex-col pt-0 overflow-hidden
-                    border-border/50 hover:shadow-lg transition-all
-                    duration-300"
+                  href={`/blog/${post.slug}`}
+                  className="group block h-full"
                 >
-                  {/* Image Placeholder */}
-                  <div
-                    className="aspect-video bg-muted relative overflow-hidden"
+                  <Card
+                    key={post.id}
+                    className="relative flex h-full flex-col overflow-hidden
+                      rounded-[32px] border border-white/10 bg-gradient-to-b
+                      from-slate-950/80 to-slate-900/80
+                      shadow-[0_25px_80px_rgba(2,8,23,0.55)] transition-all
+                      duration-300 group-hover:-translate-y-1 py-0
+                      group-hover:border-sky-400/60"
                   >
-                    {thumbnailSrc && (
-                      <Image
-                        src={thumbnailSrc}
-                        alt={post.title ?? "Blog post"}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover"
-                      />
-                    )}
+                    {/* Image */}
                     <div
-                      className="absolute inset-0 bg-gradient-to-t from-black/60
-                        to-transparent opacity-60"
-                    />
-                  </div>
+                      className="relative aspect-[4/2.1] w-full overflow-hidden
+                        bg-slate-900"
+                    >
+                      {thumbnailSrc && (
+                        <Image
+                          src={thumbnailSrc}
+                          alt={post.title ?? "Blog post"}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="h-full w-full object-cover transition
+                            duration-500 group-hover:scale-[1.04]"
+                        />
+                      )}
 
-                  <CardHeader className="space-y-2">
-                    <div
-                      className="flex items-center gap-4 text-xs
-                        text-muted-foreground"
-                    >
-                      <span className="flex items-center gap-1">
-                        <CalendarDays className="h-3 w-3" />
-                        {date}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <User className="h-3 w-3" />
-                        {post.author ?? "Author"}
-                      </span>
+                      <div
+                        className="pointer-events-none absolute inset-0
+                          bg-gradient-to-b from-black/10 via-transparent
+                          to-black/60"
+                      />
+
+                      {/* Top overlay */}
+                      <div
+                        className="absolute inset-x-0 bottom-0 flex items-center
+                          justify-between px-5 py-3 text-[0.65rem] font-semibold
+                          uppercase tracking-[0.3em] text-white/80"
+                      >
+                        <span>PLAYBOOK</span>
+                        <span>{date}</span>
+                      </div>
                     </div>
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="group-hover:text-primary transition-colors"
-                    >
-                      <h3
-                        className="text-xl font-bold leading-tight line-clamp-2"
+
+                    <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
+                      <h2
+                        className="text-2xl font-semibold text-white/95
+                          group-hover:text-sky-100"
                       >
                         {post.title}
-                      </h3>
-                    </Link>
-                  </CardHeader>
+                      </h2>
 
-                  <CardContent className="flex-1">
-                    <p
-                      className="text-muted-foreground line-clamp-3 text-sm
-                        leading-relaxed"
-                    >
-                      {post.excerpt}
-                    </p>
-                  </CardContent>
+                      <p
+                        className="mt-3 text-sm md:text-base text-slate-200
+                          leading-relaxed"
+                      >
+                        {post.excerpt}
+                      </p>
 
-                  <CardFooter className="flex flex-col items-start gap-6">
-                    {tags && tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {tags.slice(0, 3).map((tag) => (
-                          <button
-                            key={post.id + tag}
-                            type="button"
-                            onClick={() => setQuery(tag)}
-                            className="focus-visible:outline-none
-                              focus-visible:ring-2 focus-visible:ring-ring
-                              focus-visible:ring-offset-2 rounded-full"
-                            aria-label={`Search posts tagged ${tag}`}
-                          >
-                            <Badge
-                              variant="secondary"
-                              className="rounded-full border border-border/60
-                                bg-muted/30 text-foreground hover:bg-accent"
+                      {tags && tags.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {tags.slice(0, 3).map((tag) => (
+                            <button
+                              key={post.id + tag}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setQuery(tag);
+                              }}
+                              className="rounded-full focus-visible:outline-none
+                                focus-visible:ring-2 focus-visible:ring-white/30
+                                inset-0"
+                              aria-label={`Search posts tagged ${tag}`}
                             >
-                              {tag}
-                            </Badge>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                              <Badge
+                                variant="secondary"
+                                className="rounded-full border border-white/15
+                                  bg-white/5 px-3 py-1 text-xs font-semibold
+                                  tracking-wide text-slate-100"
+                              >
+                                {tag}
+                              </Badge>
+                            </button>
+                          ))}
+                        </div>
+                      )}
 
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="inline-flex items-center gap-2 font-semibold
-                        text-foreground group-hover:text-primary
-                        transition-colors"
-                    >
-                      Read the guide <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </CardFooter>
-                </Card>
+                      <div
+                        className="mt-auto pt-6 flex items-center gap-2 text-sm
+                          font-semibold text-sky-300 group-hover:text-white"
+                      >
+                        <span>Read the guide</span>
+                        <span aria-hidden="true">→</span>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
               );
             })}
         </div>
 
         {(!filteredPosts || filteredPosts.length === 0) && (
           <div className="text-center py-20">
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-blue-100">
               No articles found matching your criteria.
             </p>
           </div>
