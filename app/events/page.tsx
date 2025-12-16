@@ -1,5 +1,4 @@
 import Hero from "@/components/layout/hero";
-import { EventCard } from "@/components/sections/events-card";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
@@ -7,6 +6,7 @@ import { FaqSection } from "@/components/sections/faq-section";
 import { getEvents } from "@/lib/data/events";
 import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
+import { EventSearchClient } from "@/components/sections/events-search.client";
 
 export default async function EventsPage() {
   const events = (await getEvents()) ?? [];
@@ -16,24 +16,29 @@ export default async function EventsPage() {
     <main>
       <Hero slug="events" />
 
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-            <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight
-                text-foreground"
+      <section className="relative isolate py-24 sm:py-28 bg-[#0C163A]">
+        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div className="mb-10 text-center">
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.3em]
+                text-white/70"
             >
-              All Upcoming Events
+              Event playbook
+            </p>
+            <h2
+              className="mt-4 text-4xl font-semibold tracking-tight text-white
+                sm:text-5xl"
+            >
+              Browse every party bus event idea
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Browse our curated list of events and book your ride today.
+            <p className="mt-3 text-base text-white/75 sm:text-lg">
+              Filter popular use cases, search by name, or jump straight into a
+              curated event guide. All the tiles below link to a ready-to-book
+              walkthrough.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
+
+          <EventSearchClient events={events} />
         </div>
       </section>
 
