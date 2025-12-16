@@ -46,16 +46,16 @@ export default async function ToolsPage() {
       />
 
       {/* Tools List */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="py-16 md:py-24 bg-[#0E1F46]">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
           <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
             <h2
               className="text-3xl md:text-4xl font-extrabold tracking-tight
-                text-foreground"
+                text-white"
             >
               All Planning Tools
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-white/70">
               Calculators, checklists, and guides to make your event a success.
             </p>
           </div>
