@@ -127,8 +127,8 @@ export function BookingProcessSection({ className }: { className?: string }) {
                   >
                     ⭐️{step.title}
                   </DialogTitle>
-                  <DialogDescription className="text-blue-100/90 text-md">
-                    <p className="mb-3">{step.modalContent}</p>
+                  <DialogDescription className="text-blue-100/90 text-md mb-3">
+                    {step.modalContent}
                   </DialogDescription>
                 </DialogHeader>
               </DialogContent>

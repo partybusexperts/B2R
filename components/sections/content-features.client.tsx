@@ -44,7 +44,7 @@ export function WhyFeaturesGridClient({
         if (!nextOpen) setActive(null);
       }}
     >
-      <div className={cn("", className)}>
+      <div className={cn(className)}>
         {features.map((feature) => (
           <button
             key={`${feature.title}-${feature.id}`}
