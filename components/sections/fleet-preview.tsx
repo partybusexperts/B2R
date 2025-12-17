@@ -4,12 +4,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { VehicleData } from "@/types/vehicle.types";
 import { FleetCard } from "./fleet-card";
+import { cn } from "@/lib/utils";
 
 interface FleetPreviewProps {
   title?: string;
   viewAllLink?: string;
   vehicles: VehicleData[];
   showNavigation?: boolean;
+  sectionClassName?: string;
 }
 
 export function FleetPreview({
@@ -17,12 +19,13 @@ export function FleetPreview({
   viewAllLink,
   vehicles = [],
   showNavigation = true,
+  sectionClassName,
 }: FleetPreviewProps) {
   if (!vehicles || vehicles.length === 0) return null;
 
   return (
-    <section className="bg-[#0E1F46]">
-      <div className="bg-[#0E1F46] py-16 md:py-24 max-w-7xl mx-auto">
+    <section className={cn("bg-[#0E1F46]", sectionClassName)}>
+      <div className="py-16 md:py-24 max-w-7xl mx-auto">
         {/* Header Section */}
         {title && (
           <div className="flex items-center justify-between mb-10">

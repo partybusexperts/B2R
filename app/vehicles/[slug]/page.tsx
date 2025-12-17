@@ -62,9 +62,12 @@ export default async function VehiclePage({ params }: PageProps) {
 
       {/* 3. Related Vehicles (Cross Sell) */}
       {related.length > 0 && (
-        <section className="bg-slate-50 dark:bg-slate-900/30">
+        <section className="bg-[#0E1F46]">
           <div className="container mx-auto px-4 md:px-6 py-16">
-            <h2 className="text-5xl font-extrabold text-center">
+            <h2
+              className="mt-2 text-3xl font-semibold text-white md:text-4xl
+                text-center"
+            >
               Explore Other {categoryTitle}
             </h2>
             <div className="space-y-4">
@@ -73,6 +76,7 @@ export default async function VehiclePage({ params }: PageProps) {
                 // Reuse the preview card but hide navigation arrows for this context
                 showNavigation={false}
                 viewAllLink={related[0].type as string}
+                // sectionClassName="bg-[#050F25]"
               />
             </div>
           </div>
