@@ -163,56 +163,37 @@ function buildShowcaseVehicles(): ShowcaseVehicle[] {
     });
 }
 
-function RotatingVehicleShowcase() {
-  const vehicles = useMemo(() => buildShowcaseVehicles(), []);
-  const [offset, setOffset] = useState(0);
-
-  useEffect(() => {
-    if (vehicles.length <= VEHICLE_VISIBLE_COUNT) return;
-    const id = window.setInterval(() => {
-      setOffset((prev) => (prev + 1) % vehicles.length);
-    }, VEHICLE_ROTATE_INTERVAL);
-    return () => window.clearInterval(id);
-  }, [vehicles.length]);
-
-  const count = Math.min(VEHICLE_VISIBLE_COUNT, vehicles.length);
-  const visible = useMemo(() => {
-    if (!vehicles.length) return [] as ShowcaseVehicle[];
-    return Array.from({ length: count }, (_, idx) => vehicles[(offset + idx) % vehicles.length]);
-  }, [vehicles, offset, count]);
-
-  if (!vehicles.length) {
-    return <p className="text-blue-100/80 text-center">Vehicles are loading…</p>;
-  }
+function HauntedHeroPhotoStrip() {
+  const photos = [
+    { src: "/images/party-buses/30 Passenger Party Bus Exterior.png", alt: "Party bus outside a haunted attraction" },
+    { src: "/images/party-buses/36 Passenger Party Bus Inside.png", alt: "Party bus interior lighting before the haunt" },
+    { src: "/images/party-buses/18 Passenger White Party Bus Exterior.png", alt: "Sprinter pickup for haunted house night" },
+  ];
 
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {visible.map((vehicle) => (
-          <article
-            key={vehicle.id}
-            className="rounded-3xl border border-blue-800/30 bg-[#173264] p-4 shadow-xl flex flex-col"
-          >
-            <SmartImage
-              src={vehicle.image}
-              alt={vehicle.title}
-              className="w-full h-48 object-cover rounded-2xl border border-blue-800/40 mb-4"
-            />
-            <h3 className="text-xl font-bold text-white">{vehicle.title}</h3>
-            <p className="text-sm text-blue-100/90 mt-1 flex-1">{vehicle.desc}</p>
-            <a
-              href={vehicle.href}
-              className="mt-4 inline-flex items-center justify-center rounded-full bg-blue-600 text-white border border-blue-700 px-4 py-2 font-semibold hover:bg-blue-700"
-            >
-              View fleet option →
-            </a>
-          </article>
-        ))}
+    <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+      <div className="rounded-3xl border border-blue-800/30 bg-[#0b1329] p-5 md:p-7 shadow-xl overflow-hidden">
+        <div className="flex items-end justify-between gap-4 mb-5">
+          <div>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Visual preview</p>
+            <h2 className="mt-2 text-2xl md:text-3xl font-semibold text-white">What "Fright Night" looks like with a private ride</h2>
+            <p className="mt-2 text-sm text-blue-100/80 max-w-2xl">
+              Placeholder images for now. We'll swap these for real seasonal shots once the gallery library is ready.
+            </p>
+          </div>
+          <a href="/fleet" className="text-sm font-semibold text-blue-200 hover:text-white">Browse fleet →</a>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {photos.map((p) => (
+            <figure key={p.alt} className="rounded-2xl border border-blue-800/40 bg-[#050b19] shadow-lg overflow-hidden">
+              <SmartImage src={p.src} alt={p.alt} className="w-full h-56 object-cover" />
+              <figcaption className="p-3 text-xs text-blue-100/80">{p.alt}</figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
-      <div className="text-center text-xs uppercase tracking-[0.4em] text-blue-200/70">
-        Rotating every 3 seconds
-      </div>
-    </div>
+    </section>
   );
 }
 
@@ -497,24 +478,169 @@ function TopHauntsPlaceholder() {
   );
 }
 
-function HauntedGalleryStrip() {
+function HauntedRouteIntelStrip() {
+  const cards = [
+    {
+      title: "Pickup Plan",
+      desc: "We set clean meet-points so your group doesn't scatter in rideshares.",
+      img: "/images/party-buses/18 Passenger White Party Bus Exterior.png",
+    },
+    {
+      title: "Warm + Recover Between Stops",
+      desc: "Lines are brutal. Your ride stays comfy with music + lighting in between.",
+      img: "/images/party-buses/36 Passenger Party Bus Inside.png",
+    },
+    {
+      title: "Drop-Off Advantage",
+      desc: "Most haunts have parking chaos—private drop-offs save time and headaches.",
+      img: "/images/party-buses/30 Passenger Party Bus Exterior.png",
+    },
+  ];
+
   return (
     <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
-      <div className="rounded-3xl border border-blue-800/30 bg-[#0b1329] p-5 md:p-7 shadow-xl overflow-hidden">
-        <div className="flex items-center justify-between mb-4">
+      <div className="rounded-3xl border border-blue-800/30 bg-[#0b1329] p-6 md:p-8 shadow-xl">
+        <div className="flex items-end justify-between gap-4 mb-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Night ops gallery</p>
-            <h2 className="mt-2 text-2xl md:text-3xl font-semibold text-white">Set the mood before you roll</h2>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Route intel</p>
+            <h2 className="mt-2 text-2xl md:text-3xl font-semibold text-white">How we run haunted nights</h2>
+            <p className="mt-2 text-sm text-blue-100/80 max-w-2xl">
+              These are the pieces that make the night smooth: meet-points, timing buffers, and the keep everyone together plan.
+            </p>
           </div>
-          <a href="/gallery" className="text-sm font-semibold text-blue-200 hover:text-white">See more shots →</a>
+          <a href="/quote#instant" className="text-sm font-semibold text-blue-200 hover:text-white">Instant Quote →</a>
         </div>
-        <div className="flex gap-4 overflow-y-hidden overflow-x-auto pb-2">
-          {GALLERY_IMAGES.map((img, idx) => (
-            <figure key={`${img.src}-${idx}`} className="min-w-[220px] sm:min-w-[260px] rounded-2xl border border-blue-800/40 bg-[#050b19] shadow-lg">
-              <SmartImage src={img.src} alt={img.alt} className="w-full h-40 sm:h-48 object-cover rounded-t-2xl" />
-              <figcaption className="p-3 text-xs text-blue-100/80">{img.alt}</figcaption>
-            </figure>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {cards.map((c) => (
+            <article key={c.title} className="rounded-2xl border border-blue-800/40 bg-[#050b19] overflow-hidden shadow-lg">
+              <SmartImage src={c.img} alt={c.title} className="w-full h-44 object-cover" />
+              <div className="p-4">
+                <h3 className="text-lg font-bold text-white">{c.title}</h3>
+                <p className="mt-2 text-sm text-blue-100/85">{c.desc}</p>
+              </div>
+            </article>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function VehicleCategoryRow({
+  title,
+  subtitle,
+  category,
+  limit,
+  href,
+}: {
+  title: string;
+  subtitle: string;
+  category: "party-buses" | "limousines" | "coach-buses";
+  limit: number;
+  href: string;
+}) {
+  const vehicles = useMemo(() => {
+    const resolved = resolveVehicles(findByFileName);
+    return resolved
+      .filter((v) => v.category === category)
+      .slice(0, limit)
+      .map((vehicle) => {
+        const capacity =
+          vehicle.capacityMin === vehicle.capacityMax
+            ? `${vehicle.capacityMax} riders`
+            : `${vehicle.capacityMin}–${vehicle.capacityMax} riders`;
+        const highlight = vehicle.highlights.slice(0, 2).join(" · ");
+        const desc = highlight ? `${capacity}. ${highlight}.` : capacity;
+
+        return {
+          id: vehicle.id,
+          title: vehicle.name,
+          desc,
+          image: vehicle.primary?.entry?.original || VEHICLE_FALLBACK_IMAGE,
+        };
+      });
+  }, [category, limit]);
+
+  if (!vehicles.length) return null;
+
+  return (
+    <div className="rounded-3xl border border-blue-800/30 bg-[#101f3c] p-6 md:p-8 shadow-xl">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
+        <div>
+          <p className="text-xs uppercase tracking-[0.35em] text-white/60">Popular picks</p>
+          <h3 className="mt-2 text-2xl md:text-3xl font-extrabold text-white font-serif tracking-tight">{title}</h3>
+          <p className="mt-2 text-sm text-blue-100/80 max-w-2xl">{subtitle}</p>
+        </div>
+        <a href={href} className="text-sm font-semibold text-blue-200 hover:text-white">See all →</a>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        {vehicles.map((v) => (
+          <article key={v.id} className="rounded-2xl border border-blue-800/30 bg-[#173264] p-4 shadow-xl flex flex-col">
+            <SmartImage src={v.image} alt={v.title} className="w-full h-44 object-cover rounded-2xl border border-blue-800/40 mb-4" />
+            <h4 className="text-lg font-bold text-white">{v.title}</h4>
+            <p className="text-sm text-blue-100/90 mt-1 flex-1">{v.desc}</p>
+            <a
+              href={href}
+              className="mt-4 inline-flex items-center justify-center rounded-full bg-blue-600 text-white border border-blue-700 px-4 py-2 font-semibold hover:bg-blue-700"
+            >
+              View options →
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HauntedLinksSection() {
+  const internal = [
+    { label: "Instant Quote", href: "/quote#instant" },
+    { label: "Browse Fleet", href: "/fleet" },
+    { label: "All Events", href: "/events" },
+    { label: "Planning Tools", href: "/resources" },
+    { label: "Policies & Guidelines", href: "/policies" },
+  ];
+
+  const external = [
+    { label: "HauntWorld (directory)", href: "https://www.hauntworld.com" },
+    { label: "HauntedHouseOnline (directory)", href: "https://www.hauntedhouseonline.com" },
+    { label: "Universal Halloween Horror Nights", href: "https://www.universalstudioshollywood.com/hhn/" },
+    { label: "Six Flags Fright Fest", href: "https://fright-fest.sixflags.com/" },
+    { label: "CDC Halloween Safety Tips", href: "https://www.cdc.gov/family/halloween/index.htm" },
+  ];
+
+  return (
+    <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+      <div className="rounded-3xl border border-blue-800/30 bg-[#101f3c] p-6 md:p-8 shadow-xl">
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p className="text-xs uppercase tracking-[0.35em] text-white/60">Keep planning</p>
+            <h3 className="mt-2 text-xl font-bold text-white">Helpful pages on Bus2Ride</h3>
+            <ul className="mt-4 space-y-2 text-sm text-blue-100/90">
+              {internal.map((l) => (
+                <li key={l.href}>
+                  <a className="underline decoration-blue-300 hover:text-white" href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p className="text-xs uppercase tracking-[0.35em] text-white/60">Do your haunt research</p>
+            <h3 className="mt-2 text-xl font-bold text-white">External resources</h3>
+            <ul className="mt-4 space-y-2 text-sm text-blue-100/90">
+              {external.map((l) => (
+                <li key={l.href}>
+                  <a className="underline decoration-blue-300 hover:text-white" href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-[11px] text-blue-200/75">
+              External links are for convenience. Bus2Ride isn't affiliated with these sites.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -686,23 +812,37 @@ export default function HauntedHouseToursRichPage() {
         </div>
       </section>
 
+      <HauntedHeroPhotoStrip />
+
       <ScareStyleSection />
 
       <SampleItinerariesSection />
 
-      {/* VEHICLE SHOWCASE */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-white font-serif tracking-tight text-center mb-4">Popular Vehicles for Fright Night</h2>
-        <p className="text-center text-blue-100/80 max-w-3xl mx-auto mb-8">
-          Pulled straight from our vehicles1 library. Cards rotate automatically so you can see which party buses,
-          shuttles, and coaches fit spooky season groups.
-        </p>
-        <RotatingVehicleShowcase />
-        <div className="text-center mt-8">
-          <a href="/fleet" className="inline-flex items-center justify-center rounded-full px-8 py-3 font-bold bg-blue-600 text-white border border-blue-700 hover:bg-blue-700">
-            Browse Full Fleet
-          </a>
-        </div>
+      {/* VEHICLE SHOWCASE (three rows by category) */}
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-10 space-y-6">
+        <VehicleCategoryRow
+          title="Party Buses for Fright Night"
+          subtitle="Big energy, big lighting, jackets + costumes stay onboard. Great for groups that want the ride to feel like part of the show."
+          category="party-buses"
+          limit={3}
+          href="/fleet#party-bus"
+        />
+
+        <VehicleCategoryRow
+          title="Limousines for Date Nights + Small Crews"
+          subtitle="Quiet, classy, and fast pickups—perfect for one main haunt + dessert stop without the chaos."
+          category="limousines"
+          limit={3}
+          href="/fleet#limousines"
+        />
+
+        <VehicleCategoryRow
+          title="Coach Buses for Large Groups"
+          subtitle="Corporate teams, big friend groups, and school events—move everyone together with luggage space and a calm ride between stops."
+          category="coach-buses"
+          limit={3}
+          href="/fleet#coach"
+        />
       </section>
 
       <TopHauntsPlaceholder />
@@ -716,7 +856,7 @@ export default function HauntedHouseToursRichPage() {
         </div>
       </section>
 
-      <HauntedGalleryStrip />
+      <HauntedRouteIntelStrip />
 
       {/* POLLS SECTION */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-10">
@@ -762,6 +902,8 @@ export default function HauntedHouseToursRichPage() {
         </div>
       </section>
 
+      <HauntedLinksSection />
+
       {/* FAQ SECTION */}
       <HauntedFaqSection />
 
@@ -777,7 +919,6 @@ export default function HauntedHouseToursRichPage() {
           </div>
         </div>
       </section>
-      <StickyPlanBar quoteHref={quoteHref} />
     </main>
   );
 }
