@@ -437,7 +437,7 @@ export default async function ContactPage() {
       </section>
 
       {/* How to book (below “Why our replies feel instant”) */}
-      <BookingProcessSection className="m-0 my-16 md:my-20 rounded-none" />
+      <BookingProcessSection />
 
       {/* Additional Sections */}
       <FleetSection />
