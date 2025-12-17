@@ -49,59 +49,102 @@ export default async function ContactPage() {
         cards={cardsForHeader}
       />
 
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-16 md:py-24 bg-[#0C163A]">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* Left: Contact Form */}
             <div className="space-y-8">
               <div className="space-y-4">
-                <h2 className="text-3xl font-extrabold tracking-tight">
+                <h2
+                  className="text-3xl font-extrabold tracking-tight text-white"
+                >
                   Get in Touch
                 </h2>
-                <p className="text-lg text-muted-foreground">
+                <p className="text-lg text-white/75">
                   Have a question about a booking or need a custom quote? Fill
                   out the form below and our team will get back to you shortly.
                 </p>
               </div>
 
-              <Card className="border-primary/10 bg-background/60 shadow-sm">
+              <Card
+                className="rounded-3xl shadow-[0_35px_120px_rgba(5,10,35,0.65)]
+                  border border-white/10 bg-gradient-to-r from-slate-900/80
+                  to-slate-950/90 text-white"
+              >
                 <CardHeader>
-                  <CardTitle>Send us a message</CardTitle>
+                  <CardTitle className="text-white">
+                    Send us a message
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <form className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="first-name">First name</Label>
-                        <Input id="first-name" placeholder="John" />
+                        <Label htmlFor="first-name" className="text-white/80">
+                          First name
+                        </Label>
+                        <Input
+                          id="first-name"
+                          placeholder="John"
+                          className="border-white/15 bg-white/5 text-white
+                            placeholder:text-white/60
+                            focus-visible:border-white/40
+                            focus-visible:ring-white/15"
+                        />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="last-name">Last name</Label>
-                        <Input id="last-name" placeholder="Doe" />
+                        <Label htmlFor="last-name" className="text-white/80">
+                          Last name
+                        </Label>
+                        <Input
+                          id="last-name"
+                          placeholder="Doe"
+                          className="border-white/15 bg-white/5 text-white
+                            placeholder:text-white/60
+                            focus-visible:border-white/40
+                            focus-visible:ring-white/15"
+                        />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email" className="text-white/80">
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         placeholder="john@example.com"
                         type="email"
+                        className="border-white/15 bg-white/5 text-white
+                          placeholder:text-white/60
+                          focus-visible:border-white/40
+                          focus-visible:ring-white/15"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
+                      <Label htmlFor="phone" className="text-white/80">
+                        Phone
+                      </Label>
                       <Input
                         id="phone"
                         placeholder="(555) 123-4567"
                         type="tel"
+                        className="border-white/15 bg-white/5 text-white
+                          placeholder:text-white/60
+                          focus-visible:border-white/40
+                          focus-visible:ring-white/15"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="message">Message</Label>
+                      <Label htmlFor="message" className="text-white/80">
+                        Message
+                      </Label>
                       <Textarea
                         id="message"
                         placeholder="Tell us about your event..."
-                        className="min-h-[120px]"
+                        className="min-h-[120px] border-white/15 bg-white/5
+                          text-white placeholder:text-white/60
+                          focus-visible:border-white/40
+                          focus-visible:ring-white/15"
                       />
                     </div>
                     <Button
@@ -119,7 +162,12 @@ export default async function ContactPage() {
             <div className="space-y-8">
               {/* Contact Info Cards */}
               <div className="grid gap-6">
-                <Card className="bg-primary/5 border-primary/20">
+                <Card
+                  className="rounded-3xl
+                    shadow-[0_35px_120px_rgba(5,10,35,0.65)] border
+                    border-white/10 bg-gradient-to-r from-slate-900/80
+                    to-slate-950/90 text-white"
+                >
                   <CardContent className="flex items-center gap-4 p-6">
                     <div
                       className="h-12 w-12 rounded-full bg-primary/10 flex
@@ -129,12 +177,17 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg">Call Us 24/7</h3>
-                      <p className="text-muted-foreground">(888) 535-2566</p>
+                      <p className="text-white/70">(888) 535-2566</p>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-primary/5 border-primary/20">
+                <Card
+                  className="rounded-3xl
+                    shadow-[0_35px_120px_rgba(5,10,35,0.65)] border
+                    border-white/10 bg-gradient-to-r from-slate-900/80
+                    to-slate-950/90 text-white"
+                >
                   <CardContent className="flex items-center gap-4 p-6">
                     <div
                       className="h-12 w-12 rounded-full bg-primary/10 flex
@@ -144,14 +197,17 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg">Email Support</h3>
-                      <p className="text-muted-foreground">
-                        bookings@bus2ride.com
-                      </p>
+                      <p className="text-white/70">bookings@bus2ride.com</p>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-primary/5 border-primary/20">
+                <Card
+                  className="rounded-3xl
+                    shadow-[0_35px_120px_rgba(5,10,35,0.65)] border
+                    border-white/10 bg-gradient-to-r from-slate-900/80
+                    to-slate-950/90 text-white"
+                >
                   <CardContent className="flex items-center gap-4 p-6">
                     <div
                       className="h-12 w-12 rounded-full bg-primary/10 flex
@@ -161,16 +217,23 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg">Office Hours</h3>
-                      <p className="text-muted-foreground">Mon-Sun: 24 Hours</p>
+                      <p className="text-white/70">Mon-Sun: 24 Hours</p>
                     </div>
                   </CardContent>
                 </Card>
               </div>
 
               {/* Ballpark Pricing (Configurable copy later) */}
-              <Card className="border-border/60 shadow-sm">
+              <Card
+                className="rounded-3xl shadow-[0_35px_120px_rgba(5,10,35,0.65)]
+                  border border-white/10 bg-gradient-to-r from-slate-900/80
+                  to-slate-950/90 text-white"
+              >
                 <CardHeader className="pb-3">
-                  <Badge variant="secondary" className="w-fit">
+                  <Badge
+                    variant="outline"
+                    className="w-fit border-white/15 bg-white/5 text-white/70"
+                  >
                     BALLPARK
                   </Badge>
                   <CardTitle className="text-2xl">
@@ -178,32 +241,26 @@ export default async function ContactPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
+                  <p className="text-white/70">
                     Final price depends on date, vehicle class, and drive time.
                     If you tell us your headcount + hours, we can usually narrow
                     it down fast.
                   </p>
                   <div
-                    className="rounded-2xl border border-border bg-muted/20 p-4
+                    className="rounded-2xl border border-white/10 bg-white/5 p-4
                       text-sm"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-semibold">Party bus</span>
-                      <span className="text-muted-foreground">
-                        often $120–$250/hr
-                      </span>
+                      <span className="text-white/65">often $120–$250/hr</span>
                     </div>
                     <div className="mt-2 flex items-center justify-between">
                       <span className="font-semibold">Limo</span>
-                      <span className="text-muted-foreground">
-                        often $90–$200/hr
-                      </span>
+                      <span className="text-white/65">often $90–$200/hr</span>
                     </div>
                     <div className="mt-2 flex items-center justify-between">
                       <span className="font-semibold">Coach</span>
-                      <span className="text-muted-foreground">
-                        often $130–$260/hr
-                      </span>
+                      <span className="text-white/65">often $130–$260/hr</span>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-3">
@@ -214,8 +271,8 @@ export default async function ContactPage() {
                       asChild
                       size="lg"
                       variant="outline"
-                      className="rounded-xl border-primary/20 hover:bg-primary/5
-                        hover:text-primary"
+                      className="rounded-xl border-white/15 bg-white/5
+                        text-white/80 hover:bg-white/10 hover:text-white"
                     >
                       <Link href="/pricing">See pricing guides</Link>
                     </Button>
@@ -225,16 +282,24 @@ export default async function ContactPage() {
 
               {/* Response (replace SLA with facts + trivia) */}
               <div className="grid gap-6">
-                <Card className="border-border/60 shadow-sm">
+                <Card
+                  className="rounded-3xl
+                    shadow-[0_35px_120px_rgba(5,10,35,0.65)] border
+                    border-white/10 bg-gradient-to-r from-slate-900/80
+                    to-slate-950/90 text-white"
+                >
                   <CardHeader className="pb-3">
-                    <Badge variant="secondary" className="w-fit">
+                    <Badge
+                      variant="outline"
+                      className="w-fit border-white/15 bg-white/5 text-white/70"
+                    >
                       FAST REPLY
                     </Badge>
                     <CardTitle className="text-xl">
                       What to send for speed
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-muted-foreground">
+                  <CardContent className="text-white/70">
                     <ul className="list-disc pl-5 space-y-2">
                       <li>Date + start time window</li>
                       <li>Pickup + drop-off areas</li>
@@ -244,16 +309,24 @@ export default async function ContactPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-border/60 shadow-sm">
+                <Card
+                  className="rounded-3xl
+                    shadow-[0_35px_120px_rgba(5,10,35,0.65)] border
+                    border-white/10 bg-gradient-to-r from-slate-900/80
+                    to-slate-950/90 text-white"
+                >
                   <CardHeader className="pb-3">
-                    <Badge variant="secondary" className="w-fit">
+                    <Badge
+                      variant="outline"
+                      className="w-fit border-white/15 bg-white/5 text-white/70"
+                    >
                       TRIVIA
                     </Badge>
                     <CardTitle className="text-xl">
                       Quick facts riders love
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-muted-foreground">
+                  <CardContent className="text-white/70">
                     <ul className="list-disc pl-5 space-y-2">
                       <li>
                         Weekday + daytime bookings often price lower than peak
@@ -267,14 +340,21 @@ export default async function ContactPage() {
               </div>
 
               {/* Coverage locks (make it related) */}
-              <Card className="border-border/60 shadow-sm">
+              <Card
+                className="rounded-3xl shadow-[0_35px_120px_rgba(5,10,35,0.65)]
+                  border border-white/10 bg-gradient-to-r from-slate-900/80
+                  to-slate-950/90 text-white"
+              >
                 <CardHeader className="pb-3">
-                  <Badge variant="secondary" className="w-fit">
+                  <Badge
+                    variant="outline"
+                    className="w-fit border-white/15 bg-white/5 text-white/70"
+                  >
                     COVERAGE
                   </Badge>
                   <CardTitle className="text-xl">Where we can help</CardTitle>
                 </CardHeader>
-                <CardContent className="text-muted-foreground">
+                <CardContent className="text-white/70">
                   <ul className="list-disc pl-5 space-y-2">
                     <li>
                       Party buses, limos, and coaches for events and shuttles
@@ -294,51 +374,60 @@ export default async function ContactPage() {
       </section>
 
       {/* Why our replies feel instant */}
-      <section
-        className="py-16 md:py-24 border-b border-border/40 bg-primary/5
-          dark:bg-background"
-      >
+      <section className="py-16 md:py-24 border-y border-white/5 bg-[#0E1F46]">
         <div className="container mx-auto px-4 md:px-6">
           <div className="mx-auto mb-12 max-w-3xl space-y-4 text-center">
-            <Badge variant="secondary" className="w-fit mx-auto">
+            <Badge
+              variant="outline"
+              className="w-fit mx-auto border-white/15 bg-white/5 text-white/70"
+            >
               WORKFLOW
             </Badge>
             <h2
               className="text-3xl md:text-4xl font-extrabold tracking-tight
-                text-foreground"
+                text-white"
             >
               Why our replies feel instant
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-white/75">
               Dispatch + concierge share the same context, so your quote doesn’t
               bounce between inboxes.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="border-border/60 bg-background/60 p-6 shadow-sm">
-              <div className="text-sm font-bold text-muted-foreground">
+            <Card
+              className="rounded-3xl border border-white/10 bg-white/5 p-6
+                shadow-[0_35px_120px_rgba(5,10,35,0.45)] text-white"
+            >
+              <div className="text-sm font-bold text-white/60">
                 LIVE ROUTE INTELLIGENCE
               </div>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-2 text-white/75">
                 We sanity-check pickup/drop routes for traffic patterns and
                 staging constraints so the itinerary works in real life.
               </p>
             </Card>
-            <Card className="border-border/60 bg-background/60 p-6 shadow-sm">
-              <div className="text-sm font-bold text-muted-foreground">
+            <Card
+              className="rounded-3xl border border-white/10 bg-white/5 p-6
+                shadow-[0_35px_120px_rgba(5,10,35,0.45)] text-white"
+            >
+              <div className="text-sm font-bold text-white/60">
                 VEHICLE READINESS
               </div>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-2 text-white/75">
                 We match the right vehicle class for your headcount and event
                 expectations—then confirm availability before quoting.
               </p>
             </Card>
-            <Card className="border-border/60 bg-background/60 p-6 shadow-sm">
-              <div className="text-sm font-bold text-muted-foreground">
+            <Card
+              className="rounded-3xl border border-white/10 bg-white/5 p-6
+                shadow-[0_35px_120px_rgba(5,10,35,0.45)] text-white"
+            >
+              <div className="text-sm font-bold text-white/60">
                 DOCS + DETAILS
               </div>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-2 text-white/75">
                 Once your plan is set, we keep updates centralized: route
                 changes, venue notes, and timing tweaks stay consistent.
               </p>
