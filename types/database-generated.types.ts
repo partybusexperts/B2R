@@ -549,6 +549,7 @@ export type Database = {
           description: string;
           id: string;
           images: string[] | null;
+          page_content: string | null;
           slug: string;
           title: string;
           updated_at: string;
@@ -560,6 +561,7 @@ export type Database = {
           description: string;
           id?: string;
           images?: string[] | null;
+          page_content?: string | null;
           slug: string;
           title: string;
           updated_at?: string;
@@ -571,6 +573,7 @@ export type Database = {
           description?: string;
           id?: string;
           images?: string[] | null;
+          page_content?: string | null;
           slug?: string;
           title?: string;
           updated_at?: string;

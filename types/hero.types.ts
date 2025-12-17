@@ -1,5 +1,7 @@
 import type { Database } from "./database.types";
 
+// IMPORTANT: these types due to hero.ctas being a JSONB column in supabase and not a relational table
+
 export type HeroCTA = {
   href: string;
   label: string;

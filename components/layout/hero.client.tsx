@@ -12,7 +12,7 @@ type HeroHeasderProps = {
   slideImageUrls: string[];
 };
 
-export function HeroHeader({ hero, slideImageUrls }: HeroHeasderProps) {
+export function HeroClient({ hero, slideImageUrls }: HeroHeasderProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const slideIntervalRef = useRef<number | null>(null);
   const autoplayDurationMs = useMemo(
