@@ -38,7 +38,14 @@ export default async function EventsPage() {
             </p>
           </div>
 
-          <EventSearchClient events={events} />
+          <EventSearchClient
+            events={events}
+            cardCustomStyles={{
+              // text-xs
+              fontSize: ".75rem",
+              lineHeight: "1rem",
+            }}
+          />
         </div>
       </section>
 

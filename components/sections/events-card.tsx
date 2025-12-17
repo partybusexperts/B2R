@@ -11,9 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getRandomImage } from "@/lib/helpers/storage";
 import { EventData } from "@/lib/data/events";
+import { cn } from "@/lib/utils";
 // import { Badge } from "@/components/ui/badge";
 
-export function EventCard({ event }: { event: EventData }) {
+export function EventCard({
+  event,
+  customStyles,
+}: {
+  event: EventData;
+  customStyles?: React.CSSProperties;
+}) {
   // const eventDate = event.date_range
   //   ? new Date(event.date_range).toLocaleDateString()
   //   : "Upcoming";
@@ -52,7 +59,10 @@ export function EventCard({ event }: { event: EventData }) {
         </div>
       </div>
 
-      <CardContent className="flex flex-1 flex-col px-8 pb-8 pt-2 text-center">
+      <CardContent
+        className="flex flex-1 flex-col px-8 pb-8 pt-2 text-center
+          justify-between"
+      >
         {/* Date line (kept, subtle) */}
         {/* <div
           className="mb-3 flex items-center justify-center gap-2 text-xs
@@ -93,8 +103,11 @@ export function EventCard({ event }: { event: EventData }) {
           <Button
             asChild
             variant="outline"
-            className="h-12 w-full rounded-full border-white/30 bg-white/95
-              font-bold text-[#04132d] hover:bg-white"
+            className={cn(
+              `h-12 w-full rounded-full border-white/30 bg-white/95 font-bold
+              text-[#04132d] hover:bg-white`,
+            )}
+            style={customStyles}
           >
             <a href="tel:8885352566">
               <Phone className="mr-2 h-4 w-4" /> (888) 535-2566

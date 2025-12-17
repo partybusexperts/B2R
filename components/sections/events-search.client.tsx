@@ -26,7 +26,13 @@ function filterEventsLocally(events: EventData[], query: string) {
   });
 }
 
-export function EventSearchClient({ events }: { events: EventData[] }) {
+export function EventSearchClient({
+  events,
+  cardCustomStyles,
+}: {
+  events: EventData[];
+  cardCustomStyles?: React.CSSProperties;
+}) {
   const [query, setQuery] = React.useState("");
   const [selectedEventSlug, setSelectedEventSlug] = React.useState<string>("");
 
@@ -108,7 +114,11 @@ export function EventSearchClient({ events }: { events: EventData[] }) {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {localResults.map((event) => (
-          <EventCard key={event.id} event={event} />
+          <EventCard
+            key={event.id}
+            event={event}
+            customStyles={cardCustomStyles}
+          />
         ))}
       </div>
     </div>
