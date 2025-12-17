@@ -5,14 +5,10 @@ import { EventsGrid } from "@/components/sections/events-grid";
 import { FaqSection } from "@/components/sections/faq-section";
 import { getReviews } from "@/lib/data/reviews";
 import { getEventBySlug } from "@/lib/data/events";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowLeft, CalendarDays, MapPin, Ticket } from "lucide-react";
 import { notFound } from "next/navigation";
-import Image from "next/image";
-import { getRandomImage } from "@/lib/helpers/storage";
 import FleetSection from "@/components/sections/fleet-section";
+import Hero from "@/components/layout/hero";
+import EventQuickPlanner from "@/components/sections/event-quick-planner.client";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -26,231 +22,234 @@ export default async function EventDetailPage({ params }: PageProps) {
 
   const reviews = (await getReviews()) ?? [];
 
-  const eventDate = event.date_range
-    ? new Date(event.date_range).toLocaleDateString()
-    : "Upcoming";
-
   return (
     <main>
-      {/* Custom Hero for Event */}
-      <div className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
-        <Image
-          src={getRandomImage(event.images, "Events1")}
-          alt={event.title}
-          fill
-          className="object-cover opacity-95"
-          priority
-        />
-        <div className="absolute inset-0" />
+      <Hero slug={event.slug} />
+
+      <section className="bg-[#122a56] py-10 px-4 md:px-6">
         <div
-          className="absolute inset-0 bg-gradient-to-t from-background
-            via-background/40 to-transparent"
-        />
+          className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8
+            items-start"
+        >
+          {/* Event content */}
+          <article
+            className="lg:col-span-2 rounded-3xl border border-blue-800/30
+              bg-[#173264] p-6 shadow-xl prose prose-lg prose-invert max-w-none
+              text-justify prose-headings:font-bold
+              prose-headings:tracking-tight prose-headings:text-white
+              prose-p:text-slate-200 prose-a:text-sky-300 prose-a:no-underline
+              hover:prose-a:underline prose-strong:text-white
+              prose-hr:border-white/10 prose-img:rounded-2xl prose-img:shadow-lg
+              space-y-6"
+            dangerouslySetInnerHTML={{ __html: event.page_content ?? "" }}
+          ></article>
 
-        <div className="absolute bottom-0 left-0 right-0 pb-16 md:pb-24">
-          <div className="container mx-auto px-4 md:px-6">
-            <Badge
-              className="mb-6 bg-primary text-primary-foreground
-                hover:bg-primary/90 px-4 py-1 text-sm"
-            >
-              {event.category ?? "Event"}
-            </Badge>
-            <h1
-              className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6
-                leading-tight text-foreground max-w-4xl"
-            >
-              {event.title}
-            </h1>
-            <div
-              className="flex flex-wrap items-center gap-6 text-foreground/80
-                text-lg font-medium"
-            >
-              <span className="flex items-center gap-2">
-                <CalendarDays className="h-5 w-5 text-primary" />
-                {eventDate}
-              </span>
-              <span className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-primary" />
-                City Center & Venues
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid lg:grid-cols-12 gap-12">
-            {/* Main Content */}
-            <div className="lg:col-span-8 space-y-8">
-              <Button
-                variant="ghost"
-                asChild
-                className="pl-0 hover:pl-2 transition-all gap-2
-                  text-muted-foreground hover:text-primary mb-4"
-              >
-                <Link href="/events">
-                  <ArrowLeft className="h-4 w-4" /> Back to Events
-                </Link>
-              </Button>
-
-              <div className="prose prose-lg dark:prose-invert max-w-none">
-                <h2 className="text-3xl font-bold mb-4">About This Event</h2>
-                <p
-                  className="text-xl leading-relaxed text-muted-foreground mb-8"
-                >
-                  {event.description}
-                </p>
-                <p>
-                  Make your {event.title} experience unforgettable with luxury
-                  transportation. Avoid parking hassles, designated driver
-                  worries, and traffic stress. Our fleet is perfect for groups
-                  of all sizes heading to this event.
-                </p>
-                <h3>Why Book With Us?</h3>
-                <ul>
-                  <li>Door-to-door service</li>
-                  <li>Professional chauffeurs</li>
-                  <li>Premium sound systems to get the party started</li>
-                  <li>BYOB allowed on board</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* TODO: quick planner */}
-            {/* Sidebar CTA */}
-            <div className="lg:col-span-4 space-y-6">
-              <div
-                className="bg-card border border-border/50 rounded-3xl p-8
-                  shadow-lg sticky top-24"
-              >
-                <h3 className="text-2xl font-bold mb-2">Ride in Style</h3>
-                <p className="text-muted-foreground mb-6">
-                  Don&apos;t wait until the last minute. Vehicles sell out fast
-                  for major events.
-                </p>
-
-                <div className="space-y-4">
-                  <Button
-                    size="lg"
-                    className="w-full font-bold text-lg h-14 rounded-xl"
-                    asChild
-                  >
-                    <Link href="/quote">Get Instant Quote</Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full font-bold h-12 rounded-xl"
-                    asChild
-                  >
-                    <a href="tel:8885352566">Call (888) 535-2566</a>
-                  </Button>
-                </div>
-
-                <div className="mt-8 pt-8 border-t border-border/50">
-                  <div
-                    className="flex items-center gap-3 text-sm
-                      text-muted-foreground"
-                  >
-                    <Ticket className="h-5 w-5 text-primary" />
-                    <span>
-                      Tickets for the event must be purchased separately from
-                      the venue.
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Quick Planner */}
+          <EventQuickPlanner eventSlug={event.slug} />
         </div>
       </section>
+
       {/* TODO: what kind of event are you planning */}
+
       {/* TODO: sample itineraries */}
+
       <EventsGrid />
       <FleetSection />
 
-      <section className="py-20 md:py-24 bg-primary/5 border-b border-border/40">
-        <div className="container mx-auto px-4 md:px-6">
+      {/* Event Intel */}
+      <section className="relative overflow-hidden py-20 md:py-24 bg-[#122a56]">
+        <div className="absolute inset-0">
+          <div
+            className="h-full w-full bg-gradient-to-b from-[#122a56]
+              via-[#0f1f46] to-[#122a56]"
+          />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 md:px-6">
           <div className="mx-auto max-w-3xl space-y-4 text-center mb-12">
-            <p className="text-sm font-semibold tracking-wider text-primary">
+            <p
+              className="text-xs font-semibold uppercase tracking-[0.4em]
+                text-blue-100/60"
+            >
               EVENT INTEL
             </p>
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-tight
-                text-foreground"
+              className="text-4xl md:text-5xl font-extrabold tracking-tight
+                text-white"
             >
-              Make the fun not stressful
+              Make the scares fun not stressful
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base md:text-lg text-blue-100/80">
               Real-world timing, comfort, and safety tips to keep your group
               together—and keep the night moving.
             </p>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
+            {/* BLUE */}
             <div
-              className="rounded-2xl border border-border/60 bg-background p-6"
+              className="rounded-3xl border border-blue-700/60 bg-[#07132b] p-8
+                shadow-[0_20px_60px_rgba(3,7,18,0.45)]"
             >
-              <h3 className="text-lg font-bold mb-3">Quick facts</h3>
-              <ul
-                className="space-y-2 text-sm text-muted-foreground list-disc
-                  pl-5"
+              <p
+                className="text-xs uppercase tracking-[0.25em] text-blue-300/80
+                  mb-2"
               >
-                <li>
-                  Groups run smoother with one pickup spot and one drop-off
-                  plan.
+                QUICK FACTS
+              </p>
+              <h3 className="text-lg font-semibold text-white mb-3">
+                Haunted house by the numbers
+              </h3>
+              <ul className="space-y-3 text-sm text-blue-100/90">
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-full bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Most popular haunted house nights: the last 2 Fridays &amp;
+                    Saturdays before Halloween.
+                  </span>
                 </li>
-                <li>
-                  Build in buffer time for bathrooms, tickets, and regrouping.
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-full bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Average walkthrough time: 20–35 minutes per attraction, not
+                    counting the line.
+                  </span>
                 </li>
-                <li>
-                  If you’re doing multiple stops, plan one “reset” break in the
-                  middle.
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-full bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Top add-ons: photo ops, themed bars, escape rooms, and
+                    “no-scare” zones.
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-full bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Rain usually doesn’t cancel haunts—just expect muddier paths
+                    and longer lines.
+                  </span>
                 </li>
               </ul>
             </div>
+
+            {/* VIOLET */}
             <div
-              className="rounded-2xl border border-border/60 bg-background p-6"
+              className="rounded-3xl border border-violet-700/60 bg-[#0b1030]
+                p-8 shadow-[0_20px_60px_rgba(3,7,18,0.45)]"
             >
-              <h3 className="text-lg font-bold mb-3">Comfort & pacing</h3>
-              <ul
-                className="space-y-2 text-sm text-muted-foreground list-disc
-                  pl-5"
+              <p
+                className="text-xs uppercase tracking-[0.25em]
+                  text-violet-300/80 mb-2"
               >
-                <li>
-                  Keep a jacket/water stash onboard so nobody slows the group
-                  down.
-                </li>
-                <li>
-                  Short hops + more stops usually beats one long cross-town
-                  drive.
-                </li>
-                <li>
-                  Assign a “meet-point captain” so the driver isn’t hunting
-                  people.
-                </li>
-              </ul>
+                TRIVIA CORNER
+              </p>
+              <h3 className="text-lg font-semibold text-white mb-3">
+                Bus-ride conversation starters
+              </h3>
+              <div className="space-y-4 text-sm text-blue-100/90">
+                <div>
+                  <p className="font-semibold text-white/95 mb-1">
+                    What’s the busiest hour of the night for most haunted
+                    houses?
+                  </p>
+                  <p className="text-blue-200/85">
+                    Usually 8:30–10:00 PM—perfect time to already be inside, not
+                    still parking.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-white/95 mb-1">
+                    What’s the #1 thing people say they regret?
+                  </p>
+                  <p className="text-blue-200/85">
+                    Booking too few hours and having to cut the last stop or
+                    rush the food break.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-white/95 mb-1">
+                    Which scares people more: chainsaws or clowns?
+                  </p>
+                  <p className="text-blue-200/85">
+                    In most polls, clowns win by a hair. Chainsaws just make
+                    everybody run.
+                  </p>
+                </div>
+              </div>
             </div>
+
+            {/* GREEN */}
             <div
-              className="rounded-2xl border border-border/60 bg-background p-6"
+              className="rounded-3xl border border-emerald-600/60 bg-[#051a19]
+                p-8 shadow-[0_20px_60px_rgba(3,7,18,0.45)]"
             >
-              <h3 className="text-lg font-bold mb-3">Safety reminders</h3>
-              <ul
-                className="space-y-2 text-sm text-muted-foreground list-disc
-                  pl-5"
+              <p
+                className="text-xs uppercase tracking-[0.25em]
+                  text-emerald-300/80 mb-2"
               >
-                <li>
-                  If anyone has sensory triggers, tell your planner so we can
-                  pace stops.
+                PRO TIPS &amp; SAFETY
+              </p>
+              <h3 className="text-lg font-semibold text-white mb-3">
+                Keep everyone laughing, not panicking
+              </h3>
+              <ul className="space-y-3 text-sm text-emerald-100/90 mb-3">
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-sm bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Pick a “calm buddy” in each friend group to watch for
+                    anxiety or motion sickness.
+                  </span>
                 </li>
-                <li>
-                  Keep phone chargers handy—lost phones are the #1 night-ender.
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-sm bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Take a group photo before the first haunt—faces get
+                    progressively more destroyed.
+                  </span>
                 </li>
-                <li>
-                  Confirm the venue’s pickup zone ahead of time to avoid traffic
-                  loops.
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-sm bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Keep the bus as the “safe zone”: music, snacks, and a place
+                    to breathe between scares.
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span
+                    className="mt-1 h-[7px] w-[7px] rounded-sm bg-emerald-400
+                      flex-shrink-0"
+                  ></span>
+                  <span>
+                    Save the most intense haunt for the middle of the night, not
+                    the very end.
+                  </span>
                 </li>
               </ul>
+              <p className="mt-6 text-sm text-emerald-200/80">
+                If anyone in your group has epilepsy, heart conditions, or
+                strong sensory triggers, let your planner know so we can suggest
+                calmer routes and quiet breaks.
+              </p>
             </div>
           </div>
         </div>
@@ -260,6 +259,52 @@ export default async function EventDetailPage({ params }: PageProps) {
       <ToolsGrid category="events" />
       <ReviewsSection reviews={reviews} />
       <FaqSection category="events" title="Event Transport FAQs" />
+
+      {/* Ready to ride */}
+      <section className="max-w-7xl mx-auto px-4 md:px-6 pb-12">
+        <div
+          className="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-800
+            border border-blue-400/30 shadow-[0_6px_18px_-2px_rgba(0,0,0,.4)]
+            p-6 md:p-7 text-center"
+        >
+          <h3
+            className="text-2xl md:text-3xl font-extrabold text-white font-serif
+              tracking-tight mb-2"
+          >
+            Ready to ride?
+          </h3>
+          <p className="text-blue-100/90 mb-4">
+            Lock in your haunted itinerary before the crowds. Weekends fill up
+            fast.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="/quote#instant?hrs=5&amp;group=22&amp;event=haunted-house-tour"
+              className="rounded-full font-bold px-6 py-3 text-base shadow-lg
+                transition border flex items-center justify-center bg-white
+                text-blue-900 border-blue-200 hover:bg-blue-50"
+            >
+              ⚡ Get Instant Quote
+            </a>
+            <a
+              href="/contact"
+              className="rounded-full font-bold px-6 py-3 text-base shadow-lg
+                transition border flex items-center justify-center bg-blue-600
+                text-white border-blue-700 hover:bg-blue-700"
+            >
+              Talk to a Planner
+            </a>
+            <a
+              href="/fleet"
+              className="rounded-full font-bold px-6 py-3 text-base shadow-lg
+                transition border flex items-center justify-center bg-blue-800
+                text-white border-blue-900 hover:bg-blue-900"
+            >
+              See Vehicles
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
