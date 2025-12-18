@@ -2,7 +2,7 @@ import { Database } from "@/types/database.types";
 import { createClient } from "../supabase/server";
 import { cache } from "react";
 
-export const getAllLocations = cache(async () => {
+export const getLocations = cache(async () => {
   const supabase = await createClient();
   // Fetch minimal data for the big list
   const { data: locations, error } = await supabase
@@ -11,12 +11,12 @@ export const getAllLocations = cache(async () => {
     .order("state_name");
 
   if (error) {
-    console.error("getAllLocations:", error);
+    console.error("getLocations:", error);
     return [];
   }
 
   if (!locations) {
-    console.warn("getAllLocations:", "No data found");
+    console.warn("getLocations:", "No data found");
     return [];
   }
 
@@ -174,9 +174,24 @@ export interface LocationHeader {
 
 export interface LocationWhyBook {
   description: string;
-  box1: { title: string; description: string; modal_content: string };
-  box2: { title: string; description: string; modal_content: string };
-  box3: { title: string; description: string; modal_content: string };
+  box1: {
+    label: string;
+    title: string;
+    description: string;
+    modal_content: string;
+  };
+  box2: {
+    label: string;
+    title: string;
+    description: string;
+    modal_content: string;
+  };
+  box3: {
+    label: string;
+    title: string;
+    description: string;
+    modal_content: string;
+  };
   row1: { title: string; modal_content: string };
   row2: { title: string; modal_content: string };
   row3: { title: string; modal_content: string };
@@ -185,9 +200,24 @@ export interface LocationWhyBook {
 
 export interface LocationHowToBook {
   description: string;
-  step1: { title: string; description: string; modal_content: string };
-  step2: { title: string; description: string; modal_content: string };
-  step3: { title: string; description: string; modal_content: string };
+  step1: {
+    title: string;
+    icon: string;
+    description: string;
+    modal_content: string;
+  };
+  step2: {
+    title: string;
+    icon: string;
+    description: string;
+    modal_content: string;
+  };
+  step3: {
+    title: string;
+    icon: string;
+    description: string;
+    modal_content: string;
+  };
 }
 
 export interface LocationCitiesServed {
@@ -210,8 +240,12 @@ export interface LocationCompleteGuide {
   content: string; // HTML content
 }
 
+export interface LocationPlanningGuide {
+  content: string; // HTML content
+}
+
 export interface LocationTransportationOverview {
-  description: string;
+  column1_description: string;
   column2: { title: string; content: string }; // HTML content
   box1: { title: string; description: string };
   box2: { title: string; description: string };
@@ -228,13 +262,12 @@ export interface LocationExtraPlanningNotes {
 
 export interface LocationTopHotspots {
   routes: { title: string; description: string }[];
-  high_impact_venues: { name: string; description: string }[];
-  neighborhood_coverage: { name: string; description: string }[];
+  high_impact_venues: { title: string }[];
+  neighborhood_coverage: { name: string }[];
   recommendations: string; // HTML content
 }
 
 export interface LocationComfortChecklist {
-  title: string;
   description: string;
   tips: string[];
   fleet_readiness: string; // HTML content
@@ -253,10 +286,10 @@ export interface LocationComfortChecklist {
     box4: { label: string; title: string; description: string };
   };
   hotfix_lane: string;
-  slot_count: { number: number; label: string; description: string };
-  driver_intel: { title: string; description: string };
+  slot_count: { number: number; text: string; label: string };
+  driver_intel: { description: string; label: string };
   live_weather: { description: string };
-  packing_tips: { description: string };
+  packing_tips: string[];
 }
 
 export interface LocationTransportDoneRight {

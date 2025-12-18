@@ -6,12 +6,12 @@ import { ReviewsSection } from "@/components/sections/reviews-section";
 import { FaqSection } from "@/components/sections/faq-section";
 import Hero from "@/components/layout/hero";
 import { getReviews } from "@/lib/data/reviews";
-import { getAllLocations } from "@/lib/data/locations";
+import { getLocations } from "@/lib/data/locations";
 import FleetSection from "@/components/sections/fleet-section";
 
 // Helper to fetch generic fleet data for the bottom section
 async function getData() {
-  const locations = await getAllLocations();
+  const locations = await getLocations();
   const reviews = await getReviews();
 
   return {

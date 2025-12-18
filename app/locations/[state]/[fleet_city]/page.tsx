@@ -104,7 +104,7 @@ export default async function FleetCityPage({
               className="inline-block rounded-full bg-white text-blue-900
                 font-bold px-5 py-3 shadow hover:opacity-95 transition text-sm"
             >
-              📞 Call (888) 535‑2566
+              📞 Call (888) 535-2566
             </Link>
           </div>
         </div>

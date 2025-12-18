@@ -10,9 +10,11 @@ import {
 export async function LiveWeatherConditions({
   location,
   weather,
+  tips,
 }: {
   location: LocationsData;
   weather: Awaited<ReturnType<typeof fetchOpenWeatherData>>;
+  tips: string[];
 }) {
   const sunrise = formatWeatherTime(weather.current.sunrise, weather.timezone);
   const sunset = formatWeatherTime(weather.current.sunset, weather.timezone);
@@ -114,8 +116,9 @@ export async function LiveWeatherConditions({
               Packing &amp; Activity Tips
             </h2>
             <ul className="mt-2 list-disc list-inside text-sm space-y-1">
-              <li>Heavy parka, thermal base layers, insulated boots.</li>
-              <li>Wind-resistant jacket; secure loose items.</li>
+              {tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
             </ul>
           </div>
           <div

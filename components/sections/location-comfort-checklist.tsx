@@ -81,10 +81,7 @@ export default async function LocationComfortChecklist({
         className="text-center text-blue-100/80 max-w-3xl mx-auto mb-8 text-sm
           md:text-base"
       >
-        Live weather + road intel feed our dispatch board so you know exactly
-        how {location.city_name} feels before doors open. Share these conditions
-        with your crew and we&apos;ll preload buffers, blankets, and traction
-        aids.
+        {location.comfort_checklist?.description}
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
@@ -143,38 +140,15 @@ export default async function LocationComfortChecklist({
       <div className="grid md:grid-cols-2 gap-10">
         {/* Col 1 */}
         <div className="space-y-4 flex flex-col">
-          <div
-            className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40
-              text-blue-100/90 text-sm leading-relaxed"
-          >
-            Best viewing is usually 10:30 PM - 1:30 AM away from city glow.
-          </div>
-          <div
-            className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40
-              text-blue-100/90 text-sm leading-relaxed"
-          >
-            Have a flexible driver window; cloud breaks can shift 30-60 miles.
-          </div>
-          <div
-            className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40
-              text-blue-100/90 text-sm leading-relaxed"
-          >
-            Dress in layered synthetics + insulated boots (interior cools fast
-            when doors open).
-          </div>
-          <div
-            className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40
-              text-blue-100/90 text-sm leading-relaxed"
-          >
-            Use red headlamps inside vehicle to preserve night vision.
-          </div>
-          <div
-            className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40
-              text-blue-100/90 text-sm leading-relaxed"
-          >
-            Bring spare battery packs—cold drains phones & DSLR batteries
-            quickly.
-          </div>
+          {location.comfort_checklist?.tips.map((tip) => (
+            <div
+              key={tip.toLowerCase().replace(/\s+/g, "-")}
+              className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40
+                text-blue-100/90 text-sm leading-relaxed"
+            >
+              {tip}
+            </div>
+          ))}
 
           {/* Gallery 1 */}
           <div className="mt-6">
@@ -274,44 +248,28 @@ export default async function LocationComfortChecklist({
             >
               {location.city_name} Fleet Readiness
             </h4>
-            <p className="mb-2">
-              Vehicles allocated for {location.city_name} + Southcentral runs
-              are prepped for rapid weather shifts—heated interiors,
-              winter‑rated tires in season, and space allocation for layered
-              gear &amp; camera packs during aurora charters.
-            </p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Block heater + cold start checklist below 20°F.</li>
-              <li>
-                Extra time baked into Seward / Whittier turns during storm
-                advisories.
-              </li>
-              <li>
-                Night charters carry reflective cones for safe photo stop
-                staging.
-              </li>
-              <li>
-                Sprinter &amp; party bus USB power verified pre‑dispatch for
-                battery‑intensive DSLR sessions.
-              </li>
-              <li>
-                Flexible overage policy on aurora nights—extend in 30 min
-                increments if KP spikes.
-              </li>
-            </ul>
-            <p className="mt-3 text-blue-200/80 italic">
-              Include special cargo (skis, coolers, tripods) in your quote
-              request so we reserve the right interior layout.
-            </p>
+
+            <div
+              className="prose prose-lg prose-invert max-w-none text-justify
+                prose-headings:font-bold prose-headings:tracking-tight
+                prose-headings:text-white prose-p:text-slate-200
+                prose-a:text-sky-300 prose-a:no-underline
+                hover:prose-a:underline prose-strong:text-white
+                prose-hr:border-white/10 prose-img:rounded-2xl
+                prose-img:shadow-lg space-y-6"
+              dangerouslySetInnerHTML={{
+                __html: location.comfort_checklist?.fleet_readiness ?? "",
+              }}
+            />
           </div>
 
           <div className="mt-4">
             <a
-              href="/quote#instant"
+              href="/contact"
               className="inline-block rounded-full bg-red-600 text-white
                 font-bold px-5 py-3 shadow hover:opacity-95 transition"
             >
-              Book an Aurora Flex Window
+              Book an {location.state_name} Flex Window
             </a>
           </div>
 
@@ -326,21 +284,11 @@ export default async function LocationComfortChecklist({
                 {location.city_name} Trivia
               </p>
               <h4 className="text-lg font-semibold text-white mt-2">
-                Why locals love night charters
+                {location.comfort_checklist?.trivia.title}
               </h4>
-              <ul className="mt-3 space-y-2 text-sm text-blue-100/90">
-                <li>
-                  Sky stations like Point Woronzof give near-instant aurora
-                  alerts.
-                </li>
-                <li>
-                  City grid means you can warm up at breweries between sky
-                  checks.
-                </li>
-                <li>
-                  Drivers track KP index + cloud cover via dispatch dashboard.
-                </li>
-              </ul>
+              <p className="mt-3 space-y-2 text-sm text-blue-100/90">
+                {location.comfort_checklist?.trivia.description}
+              </p>
             </div>
             <div
               className="rounded-2xl border border-blue-700/40 bg-[#10234c] p-4
@@ -352,16 +300,11 @@ export default async function LocationComfortChecklist({
                 {location.city_name} Fast Facts
               </p>
               <h4 className="text-lg font-semibold text-white mt-2">
-                Within 90 minutes you can…
+                {location.comfort_checklist?.fast_facts.title}
               </h4>
-              <ul className="mt-3 space-y-2 text-sm text-blue-100/90">
-                <li>Pivot north to Wasilla for clear skies after storms.</li>
-                <li>Stage at Alyeska for ski-to-aurora double headers.</li>
-                <li>
-                  Grab tide-dependent Turnagain photo stops without leaving the
-                  highway.
-                </li>
-              </ul>
+              <p className="mt-3 space-y-2 text-sm text-blue-100/90">
+                {location.comfort_checklist?.fast_facts.description}
+              </p>
             </div>
             <div
               className="rounded-2xl border border-blue-700/40 bg-gradient-to-br
@@ -373,7 +316,7 @@ export default async function LocationComfortChecklist({
                 Aurora Playbook
               </p>
               <h4 className="text-lg font-semibold text-white mt-2">
-                Peak KP game plan
+                {location.comfort_checklist?.playbook.title}
               </h4>
               <div
                 className="mt-3 grid gap-4 md:grid-cols-3 text-sm
@@ -384,13 +327,13 @@ export default async function LocationComfortChecklist({
                     className="text-xs text-blue-200/70 uppercase
                       tracking-[0.2em]"
                   >
-                    KP 3-4
+                    {location.comfort_checklist?.playbook.box1.label}
                   </p>
                   <p className="font-semibold text-white">
-                    Stay within city limits
+                    {location.comfort_checklist?.playbook.box1.title}
                   </p>
                   <p className="mt-1 text-[13px]">
-                    Ship Creek overlook + Woronzof for Skyline glow.
+                    {location.comfort_checklist?.playbook.box1.description}
                   </p>
                 </div>
                 <div>
@@ -398,11 +341,13 @@ export default async function LocationComfortChecklist({
                     className="text-xs text-blue-200/70 uppercase
                       tracking-[0.2em]"
                   >
-                    KP 5-6
+                    {location.comfort_checklist?.playbook.box2.label}
                   </p>
-                  <p className="font-semibold text-white">Go 45-60 min north</p>
+                  <p className="font-semibold text-white">
+                    {location.comfort_checklist?.playbook.box2.title}
+                  </p>
                   <p className="mt-1 text-[13px]">
-                    Hatcher Pass pulloffs give zero light pollution.
+                    {location.comfort_checklist?.playbook.box2.description}
                   </p>
                 </div>
                 <div>
@@ -410,13 +355,13 @@ export default async function LocationComfortChecklist({
                     className="text-xs text-blue-200/70 uppercase
                       tracking-[0.2em]"
                   >
-                    KP 7+
+                    {location.comfort_checklist?.playbook.box3.label}
                   </p>
                   <p className="font-semibold text-white">
-                    Chase horizon edges
+                    {location.comfort_checklist?.playbook.box3.title}
                   </p>
                   <p className="mt-1 text-[13px]">
-                    Dispatch monitors NOAA alerts and loiter time is waived.
+                    {location.comfort_checklist?.playbook.box3.description}
                   </p>
                 </div>
               </div>
@@ -437,69 +382,65 @@ export default async function LocationComfortChecklist({
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-white">
-                    Corporate summit
+                    {location.comfort_checklist?.case_files.box1.title}
                   </span>
                   <span
                     className="text-xs uppercase tracking-[0.25em]
                       text-amber-200"
                   >
-                    +30 min standby
+                    {location.comfort_checklist?.case_files.box1.label}
                   </span>
                 </div>
                 <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  Board stayed at Hotel Captain Cook; we padded the return loop
-                  so execs could hop back out when KP jumped to 5.
+                  {location.comfort_checklist?.case_files.box1.description}
                 </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-white">
-                    Cruise turnover
+                    {location.comfort_checklist?.case_files.box2.title}
                   </span>
                   <span
                     className="text-xs uppercase tracking-[0.25em]
                       text-amber-200"
                   >
-                    Dual-coach convoy
+                    {location.comfort_checklist?.case_files.box2.label}
                   </span>
                 </div>
                 <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  Disembark in Whittier, aurora chase that night—two coaches
-                  staged with separate heaters so luggage never left sight.
+                  {location.comfort_checklist?.case_files.box2.description}
                 </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-white">
-                    Wedding after-party
+                    {location.comfort_checklist?.case_files.box3.title}
                   </span>
                   <span
                     className="text-xs uppercase tracking-[0.25em]
                       text-amber-200"
                   >
-                    3-stop warmups
+                    {location.comfort_checklist?.case_files.box3.label}
                   </span>
                 </div>
                 <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  Shuttled guests between brewery, lookout, and lodge. Added
-                  cocoa + blanket bins to keep gowns photo-ready.
+                  {location.comfort_checklist?.case_files.box3.description}
                 </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold text-white">
-                    Photo crew
+                    {location.comfort_checklist?.case_files.box4.title}
                   </span>
                   <span
                     className="text-xs uppercase tracking-[0.25em]
                       text-amber-200"
                   >
-                    Gear-priority layout
+                    {location.comfort_checklist?.case_files.box4.label}
                   </span>
                 </div>
                 <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  Removed two seats in the sprinter and mounted battery
-                  inverters so the production team could edit between stops.
+                  {location.comfort_checklist?.case_files.box4.description}
                 </p>
               </div>
             </div>
@@ -519,8 +460,7 @@ export default async function LocationComfortChecklist({
                 Dispatch hotfix lane
               </p>
               <p className="text-xs text-blue-100/80">
-                Flag “Aurora Flex” in your quote and our night lead replies on
-                average in under 9 minutes.
+                {location.comfort_checklist?.hotfix_lane}
               </p>
             </div>
           </div>
@@ -532,14 +472,15 @@ export default async function LocationComfortChecklist({
               Live slot count
             </p>
             <div className="mt-2 flex items-end gap-3">
-              <p className="text-3xl font-black text-white">6</p>
+              <p className="text-3xl font-black text-white">
+                {location.comfort_checklist?.slot_count.number}
+              </p>
               <p className="text-xs text-blue-100/80">
-                Aurora-ready sprinter windows left this weekend.
+                {location.comfort_checklist?.slot_count.text}
               </p>
             </div>
             <p className="text-[12px] text-blue-200/70 mt-2">
-              Tap “Hold this slot” in your quote notes to freeze one for 24
-              hours.
+              {location.comfort_checklist?.slot_count.label}
             </p>
           </div>
 
@@ -551,11 +492,10 @@ export default async function LocationComfortChecklist({
               Driver intel
             </p>
             <p className="text-sm text-blue-100/90 mt-2">
-              Night lead Jess reports clearest skies past Wasilla; she’s staging
-              coffee + blanket refills at the first stop.
+              {location.comfort_checklist?.driver_intel.description}
             </p>
             <p className="text-[12px] text-blue-200/60 mt-2">
-              Mention “Jess playbook” if you want the same loop sequencing.
+              {location.comfort_checklist?.driver_intel.label}
             </p>
           </div>
         </div>
@@ -569,19 +509,18 @@ export default async function LocationComfortChecklist({
             Live Weather &amp; Comfort
           </h3>
           <p className="text-blue-100/90 text-sm leading-relaxed">
-            {location.city_name}-focused forecast snapshot to plan layers,
-            hydration &amp; timing.
-          </p>
-          <p className="text-blue-200 text-sm">
-            We combine live forecasts with vehicle readiness checks—ask dispatch
-            for cold-weather add-ons like extra fuel, blankets, or power banks.
+            {location.comfort_checklist?.live_weather.description}
           </p>
           <div
             className="rounded-2xl overflow-hidden border border-blue-600/40
               bg-gradient-to-br from-[#0b2049] via-[#081633] to-[#050b1d] p-2
               md:p-3 text-white text-sm shadow-[0_30px_90px_rgba(4,11,32,0.55)]"
           >
-            <LiveWeatherConditions location={location} weather={weather} />
+            <LiveWeatherConditions
+              location={location}
+              weather={weather}
+              tips={location.comfort_checklist?.packing_tips ?? []}
+            />
           </div>
 
           {/* Old road conditions */}

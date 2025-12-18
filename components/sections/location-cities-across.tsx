@@ -58,9 +58,7 @@ export default async function LocationCitiesAcross({
               Cities We Serve Across {location.state_name}
             </h2>
             <p className="mt-3 text-blue-100/80 max-w-2xl">
-              {location.city_name} dispatch supports every major statewide
-              route—tap a city to open its guide, fleet highlights, and quote
-              links.
+              {location.cities_served?.description}
             </p>
           </div>
 
@@ -77,7 +75,7 @@ export default async function LocationCitiesAcross({
                 border-white/20 px-4 py-2 text-xs uppercase tracking-[0.35em]
                 text-white/80"
             >
-              Snow-ready • Cruise-certified
+              {location.cities_served?.label}
             </span>
           </div>
         </div>

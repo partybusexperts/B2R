@@ -21,10 +21,7 @@ export default async function LocationReadyToPlan({
           Ready for {location.city_name} Transport Done Right?
         </h2>
         <p className="text-blue-100/90 mb-6">
-          Lock preferred vehicles early—peak cruise Saturdays &amp; holiday
-          aurora windows go fast. Book now and enjoy transparent pricing,
-          flexible add-ons, and an operations team that treats your group like
-          VIPs.
+          {location.transport_done_right?.description}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
@@ -58,38 +55,17 @@ export default async function LocationReadyToPlan({
           and we will respond with a tailored plan.
         </p>
         <div className="mt-6 text-blue-200 text-sm max-w-3xl mx-auto">
-          <p className="leading-relaxed">
-            If you want to read more, visit our{" "}
-            <Link className="underline" href="/reviews">
-              customer reviews
-            </Link>{" "}
-            and the{" "}
-            <Link
-              className="underline"
-              href={`/locations/${location.state_slug}/party-buses-${location.city_slug}`}
-            >
-              {location.city_name} hub
-            </Link>{" "}
-            resources. For partner and venue references, see{" "}
-            <Link
-              href={`https://www.${location.city_slug}.net`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              {location.city_slug}.net
-            </Link>{" "}
-            and{" "}
-            <Link
-              href={`https://www.${location.state_slug}railroad.com`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              {location.state_slug}railroad.com
-            </Link>
-            .
-          </p>
+          <div
+            className="prose prose-lg prose-invert max-w-none text-justify
+              prose-headings:font-bold prose-headings:tracking-tight
+              prose-headings:text-white prose-p:text-slate-200
+              prose-a:text-sky-300 prose-a:no-underline hover:prose-a:underline
+              prose-strong:text-white prose-hr:border-white/10
+              prose-img:rounded-2xl prose-img:shadow-lg space-y-6"
+            dangerouslySetInnerHTML={{
+              __html: location.transport_done_right?.bottom_content ?? "",
+            }}
+          />
         </div>
       </div>
     </section>

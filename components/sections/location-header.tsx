@@ -5,6 +5,10 @@ export default function LocationHeader({
 }: {
   location: LocationsData;
 }) {
+  const title = location.header?.title;
+  const description = location.header?.description;
+  const bottom_label = location.header?.bottom_label;
+
   return (
     <section className="relative px-4 pt-4 mb-12">
       <div
@@ -59,18 +63,13 @@ export default function LocationHeader({
               className="text-4xl md:text-5xl font-extrabold leading-tight
                 text-white"
             >
-              {location.city_name && `${location.city_name},`}{" "}
-              {location.state_name} transportation made calm—even when the
-              weather shifts.
+              {title}
             </h1>
             <p
               className="mx-auto max-w-3xl text-base md:text-lg
                 text-blue-100/90"
             >
-              Instant quotes, on-the-ground dispatch, and vehicles winterized
-              for aurora runs, ski charters, cruise transfers, and corporate
-              moves. Tell us your schedule; we handle the buffers, route notes,
-              and gear.
+              {description}
             </p>
           </div>
           <div
@@ -115,9 +114,7 @@ export default function LocationHeader({
             </a>
           </div>
           <p className="mt-6 text-center text-sm text-yellow-200/90">
-            Book smarter: flexible aurora-ready windows, guaranteed on-time
-            pickups, and crew who already factored in{" "}
-            {location.city_name || location.state_name} roads and temps.
+            {bottom_label}
           </p>
         </div>
       </div>

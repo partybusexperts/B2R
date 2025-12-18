@@ -9,6 +9,7 @@ import {
   LocationExtraPlanningNotes,
   LocationHeader,
   LocationHowToBook,
+  LocationPlanningGuide,
   LocationStatePlanningGuide,
   LocationTopHotspots,
   LocationTransportationOverview,
@@ -37,17 +38,18 @@ type DatabaseOverrides = {
           coordinates: LocationCoordinates;
 
           // NEW FIELDS TO OVERRIDE
-          header: LocationHeader;
-          why_book: LocationWhyBook;
-          how_to_book: LocationHowToBook;
-          cities_served: LocationCitiesServed;
-          state_planning_guide: LocationStatePlanningGuide;
-          complete_guide: LocationCompleteGuide;
-          transportation_overview: LocationTransportationOverview;
-          extra_notes: LocationExtraPlanningNotes;
-          top_hotspots: LocationTopHotspots;
-          comfort_checklist: LocationComfortChecklist;
-          transport_done_right: LocationTransportDoneRight;
+          header?: LocationHeader;
+          why_book?: LocationWhyBook;
+          how_to_book?: LocationHowToBook;
+          cities_served?: LocationCitiesServed;
+          state_planning_guide?: LocationStatePlanningGuide;
+          complete_guide?: LocationCompleteGuide;
+          planning_checklist?: LocationPlanningGuide;
+          transportation_overview?: LocationTransportationOverview;
+          extra_notes?: LocationExtraPlanningNotes;
+          top_hotspots?: LocationTopHotspots;
+          comfort_checklist?: LocationComfortChecklist;
+          transport_done_right?: LocationTransportDoneRight;
         };
       };
     };
