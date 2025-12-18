@@ -6,6 +6,8 @@ import {
   formatWeatherTime,
   getWindDirection,
 } from "@/lib/api/weather";
+import { fetchTomTomTraffic } from "@/lib/api/traffic";
+import { TrafficConditions } from "./live-traffic-conditions";
 
 export default async function LocationComfortChecklist({
   location,
@@ -53,6 +55,12 @@ export default async function LocationComfortChecklist({
   const windSpeed = Math.round(weather.current.wind_speed); // e.g., 3
   const windDir = getWindDirection(weather.current.wind_deg); // e.g., "SE"
   const windText = `${windSpeed} mph ${windDir}`; // "3 mph SE"
+
+  // Traffic
+  const traffic = await fetchTomTomTraffic(
+    location.coordinates.lat,
+    location.coordinates.lng,
+  );
 
   return (
     <section
@@ -575,7 +583,9 @@ export default async function LocationComfortChecklist({
           >
             <LiveWeatherConditions location={location} weather={weather} />
           </div>
-          <div
+
+          {/* Old road conditions */}
+          {/* <div
             className="rounded-2xl border border-blue-600/40 bg-gradient-to-br
               from-[#0f274f] to-[#091533] p-5
               shadow-[0_30px_90px_rgba(4,11,32,0.45)]"
@@ -665,11 +675,16 @@ export default async function LocationComfortChecklist({
             >
               Check live AK 511 →
             </a>
-          </div>
+          </div> */}
+
+          {/* Road conditions */}
+          <TrafficConditions data={traffic} />
+
           <div className="mt-6">
             <h4 className="text-sm font-semibold text-blue-200 mb-2">
               View Similar Vehicles
             </h4>
+
             {/* Gallery 2 */}
             <div
               className="relative w-full h-80 md:h-[400px] overflow-hidden
