@@ -1,83 +1,94 @@
-import Link from "next/link";
-import { Button } from "../ui/button";
-
-interface LocationReadyToPlanProps {
-  cityName: string;
-  citySlug: string;
-  stateSlug: string;
-}
+import { LocationsData } from "@/lib/data/locations";
 
 export default async function LocationReadyToPlan({
-  cityName,
-  citySlug,
-  stateSlug,
-}: LocationReadyToPlanProps) {
+  location,
+}: {
+  location: LocationsData;
+}) {
   return (
-    <section className="py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4 md:px-6">
-        <div
-          className="relative overflow-hidden rounded-[2.5rem] border
-            border-primary/20 bg-primary px-6 py-12 md:px-12 md:py-16
-            text-center shadow-2xl"
+    <section
+      className="relative py-16 px-4 bg-gradient-to-br from-blue-800
+        via-blue-900 to-black"
+    >
+      <div className="max-w-5xl mx-auto text-center py-6">
+        <h2
+          className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight
+            font-serif bg-gradient-to-r from-white via-blue-200 to-blue-500
+            bg-clip-text text-transparent"
+          id={`ready-for-${location.city_name}-transport-done-right-12`}
         >
-          {/* Background Ambience - slightly toned down for a cleaner look */}
-          <div
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full
-              bg-primary-foreground/5 blur-3xl -z-10"
-          />
-
-          <div className="mx-auto max-w-3xl space-y-6 relative z-10">
-            <h2
-              className="text-3xl md:text-4xl font-bold tracking-tight
-                text-primary-foreground"
+          Ready for {location.city_name} Transport Done Right?
+        </h2>
+        <p className="text-blue-100/90 mb-6">
+          Lock preferred vehicles early—peak cruise Saturdays &amp; holiday
+          aurora windows go fast. Book now and enjoy transparent pricing,
+          flexible add-ons, and an operations team that treats your group like
+          VIPs.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/contact"
+            className="rounded-full bg-white text-blue-900 font-bold px-8 py-4
+              text-lg shadow-lg hover:bg-blue-50 transition"
+          >
+            Instant Quote
+          </a>
+          <a
+            href="/fleet"
+            className="rounded-full bg-blue-700 text-white font-bold px-8 py-4
+              text-lg shadow-lg hover:bg-blue-800 transition"
+          >
+            View Fleet
+          </a>
+          <a
+            href="tel:8885352566"
+            className="rounded-full bg-blue-900 text-white font-bold px-8 py-4
+              text-lg shadow-lg hover:bg-black transition"
+          >
+            Call (888) 535‑2566
+          </a>
+        </div>
+        <p className="text-[11px] text-blue-300 mt-6">
+          Need multi-day / remote itinerary support? Include all legs + gear
+          notes. Prefer email? Reach our {location.city_name} dispatch at{" "}
+          <a href="mailto:info@bus2ride.com" className="underline">
+            info@bus2ride.com
+          </a>{" "}
+          and we will respond with a tailored plan.
+        </p>
+        <div className="mt-6 text-blue-200 text-sm max-w-3xl mx-auto">
+          <p className="leading-relaxed">
+            If you want to read more, visit our{" "}
+            <a className="underline" href="/reviews">
+              customer reviews
+            </a>{" "}
+            and the{" "}
+            <a
+              className="underline"
+              href={`/locations/state/${location.state_slug}/${location.city_slug}`}
             >
-              Ready to plan your {cityName} party bus?
-            </h2>
-
-            <p
-              className="text-primary-foreground/80 text-base md:text-lg
-                leading-relaxed max-w-2xl mx-auto"
+              {location.city_name} hub
+            </a>{" "}
+            resources. For partner and venue references, see{" "}
+            <a
+              href={`https://www.${location.city_slug}.net`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
             >
-              Tell us your date, headcount, and rough route. We&apos;ll match
-              you with vehicles that can actually handle {cityName} roads and
-              winter, not just look pretty in photos.
-            </p>
-
-            <div
-              className="flex flex-col sm:flex-row items-center justify-center
-                gap-8 pt-4"
+              {location.city_slug}.net
+            </a>{" "}
+            and{" "}
+            <a
+              href={`https://www.${location.state_slug}railroad.com`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
             >
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full bg-secondary text-secondary-foreground
-                  font-bold px-8 h-12 transition-all duration-300
-                  hover:bg-secondary/90 hover:-translate-y-1 shadow-lg
-                  shadow-secondary/40 hover:shadow-secondary/60"
-              >
-                <Link href="/contact" className="text-foreground/80">
-                  Get a fast quote
-                </Link>
-              </Button>
-
-              {/* SECONDARY BUTTON */}
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="rounded-full border-primary-foreground/30
-                  bg-transparent text-primary-foreground
-                  hover:bg-primary-foreground/10 hover:text-primary-foreground
-                  px-8 h-12"
-              >
-                <Link
-                  href={`/locations/state/${stateSlug}/city/${citySlug}/party-buses`}
-                >
-                  See {cityName} vehicles
-                </Link>
-              </Button>
-            </div>
-          </div>
+              {location.state_slug}railroad.com
+            </a>
+            .
+          </p>
         </div>
       </div>
     </section>

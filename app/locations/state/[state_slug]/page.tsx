@@ -1,26 +1,20 @@
-// import { notFound } from "next/navigation";
-import { LiveConditions } from "@/components/sections/live-conditions";
-import { LocationTriviaSection } from "@/components/sections/location-trivia";
-import { LocationInfoGrid } from "@/components/sections/location-info-grid";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
 import { FaqSection } from "@/components/sections/faq-section";
 import { getReviews } from "@/lib/data/reviews";
-import Hero from "@/components/layout/hero";
 import { getLocationsByState } from "@/lib/data/locations";
 import { notFound } from "next/navigation";
-import FleetSection from "@/components/sections/fleet-section";
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { LocationNightOut } from "@/components/sections/location-night-out";
 import LocationReadyToPlan from "@/components/sections/location-ready-to-plan";
-// import { FleetList } from "@/components/sections/fleet-list";
-// import { getRandomVehicles } from "@/lib/data/vehicles";
+import LocationCitiesAcross from "@/components/sections/location-cities-across";
+import LocationHowToBook from "@/components/sections/location-how-to-book";
+import LocationPlanningGuide from "@/components/sections/location-planning-guide";
+import FleetSection from "@/components/sections/fleet-section";
+// import LocationHeader from "@/components/sections/location-header";
+// import LocationWhyBook from "@/components/sections/location-why-book";
 
-export default async function LocationStatePage({
+export default async function StatePage({
   params,
 }: {
   params: Promise<{ state_slug: string }>;
@@ -33,14 +27,40 @@ export default async function LocationStatePage({
   // Fetch standard data for footer stack
   const location = locations[0]; // FIXME: fallback, I should really build a new state page showing many cities
   const reviews = (await getReviews(6)) ?? [];
-  // const fleet = (await getRandomVehicles(3)) ?? [];
 
   return (
-    <main>
-      {/* 1. Dynamic Hero */}
+    <main className="pt-16">
+      {/* Locations custom header */}
+      <LocationCitiesAcross location={location} />
+      {/* <LocationHeader location={location} /> */}
+
+      {/* <LocationWhyBook location={location} /> */}
+
+      <FleetSection />
+
+      <LocationHowToBook location={location} isState />
+
+      <LocationPlanningGuide location={location} />
+
+      <ReviewsSection reviews={reviews} />
+
+      <PollsGrid category={location.state_slug} />
+
+      <ToolsGrid category={location.state_slug} />
+
+      <EventsGrid />
+
+      <FaqSection
+        category={location.state_slug}
+        title={`${location.state_name} FAQs`}
+      />
+
+      <LocationReadyToPlan location={location} />
+
+      {/* 
+
       <Hero slug={state_slug} />
 
-      {/* Cities in this state */}
       <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <div className="mx-auto mb-8 max-w-3xl text-center space-y-3">
@@ -95,14 +115,12 @@ export default async function LocationStatePage({
         </div>
       </section>
 
-      {/* 2. Live Conditions (Weather/Traffic) */}
       <LiveConditions
         city={location.state_name}
         lat={location.coordinates.lat}
         lng={location.coordinates.lng}
       />
 
-      {/* 3. "Events that love party buses" (Modals) */}
       <LocationInfoGrid
         title={`${location.state_name} Events We Love`}
         items={location.local_events}
@@ -110,46 +128,19 @@ export default async function LocationStatePage({
 
       <LocationNightOut city={location.state_name} />
 
-      {/* 5. Vibes & Seasonal (Modals) */}
       <LocationInfoGrid
         title="Neighborhoods & Seasons"
         items={[...location.neighborhood_vibes, location.seasonal_guide]}
       />
 
-      {/* 6. Spicy Trivia */}
       <LocationTriviaSection
         trivia={location.trivia}
         city={location.state_name}
       />
 
-      {/* Local Fleet Section (Filtered) */}
-      {/* <div id="fleet" className="pt-16">
-        <h2 className="text-3xl font-extrabold text-center mb-8">
-            Available in {location.name}
-          </h2>
-          <FleetList title="Anchorage Fleet" vehicles={fleet} />
-        </div> */}
 
-      <ReviewsSection reviews={reviews} />
 
-      <PollsGrid category={location.state_slug} />
-
-      <FleetSection />
-
-      <ToolsGrid category={location.state_slug} />
-
-      <EventsGrid />
-
-      <FaqSection
-        category={location.state_slug}
-        title={`${location.state_name} FAQs`}
-      />
-
-      <LocationReadyToPlan
-        cityName={location.city_name}
-        citySlug={location.city_slug}
-        stateSlug={location.state_slug}
-      />
+      <LocationReadyToPlan location={location} /> */}
     </main>
   );
 }

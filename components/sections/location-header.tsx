@@ -1,0 +1,126 @@
+import { LocationsData } from "@/lib/data/locations";
+
+export default function LocationHeader({
+  location,
+}: {
+  location: LocationsData;
+}) {
+  return (
+    <section className="relative px-4 pt-4 mb-12">
+      <div
+        className="mx-auto max-w-6xl overflow-hidden rounded-[40px] border
+          border-blue-500/30 bg-gradient-to-br from-[#081b3d] via-[#041029]
+          to-black shadow-[0_40px_120px_rgba(3,9,23,0.6)]"
+      >
+        <div
+          className="absolute inset-0 pointer-events-none
+            bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.25),_transparent_55%)]"
+          aria-hidden="true"
+        ></div>
+        <div className="relative z-10 px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
+          <div
+            className="flex flex-wrap items-center justify-between gap-3
+              text-[13px] text-blue-100/80"
+          >
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                className="rounded-full border border-blue-400/50 px-3 py-1
+                  text-xs font-semibold uppercase tracking-[0.35em]
+                  text-blue-200"
+              >
+                {location.city_name && `${location.city_name} • `}
+                {location.state_name}
+              </span>
+              <span className="text-blue-300/80">Bus2Ride Local Dispatch</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-white/80">
+              <a
+                href="tel:8885352566"
+                className="font-semibold underline decoration-dotted
+                  underline-offset-4"
+              >
+                (888) 535-2566
+              </a>
+              <span className="hidden sm:inline">•</span>
+              <a
+                href="mailto:info@bus2ride.com"
+                className="font-semibold underline decoration-dotted
+                  underline-offset-4 hidden sm:inline"
+              >
+                info@bus2ride.com
+              </a>
+            </div>
+          </div>
+          <div className="mt-8 text-center space-y-6">
+            <p className="text-xs uppercase tracking-[0.45em] text-blue-200/80">
+              Party Bus &amp; Charter Service
+            </p>
+            <h1
+              className="text-4xl md:text-5xl font-extrabold leading-tight
+                text-white"
+            >
+              {location.city_name && `${location.city_name},`}{" "}
+              {location.state_name} transportation made calm—even when the
+              weather shifts.
+            </h1>
+            <p
+              className="mx-auto max-w-3xl text-base md:text-lg
+                text-blue-100/90"
+            >
+              Instant quotes, on-the-ground dispatch, and vehicles winterized
+              for aurora runs, ski charters, cruise transfers, and corporate
+              moves. Tell us your schedule; we handle the buffers, route notes,
+              and gear.
+            </p>
+          </div>
+          <div
+            className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap
+              sm:justify-center"
+          >
+            <a
+              href="/pricing"
+              className="inline-flex items-center justify-center rounded-full
+                bg-white px-10 py-5 text-xl font-semibold text-blue-900
+                shadow-[0_20px_40px_rgba(4,7,16,0.45)] hover:-translate-y-0.5
+                hover:bg-slate-50 transition"
+            >
+              ⚡ Instant Quote
+            </a>
+            <a
+              href="/fleet"
+              className="inline-flex items-center justify-center rounded-full
+                bg-blue-600 px-10 py-5 text-xl font-semibold text-white
+                shadow-[0_20px_40px_rgba(5,88,255,0.45)] hover:-translate-y-0.5
+                hover:bg-blue-500 transition"
+            >
+              🚌 View Fleet
+            </a>
+            <a
+              href="tel:8885352566"
+              className="inline-flex items-center justify-center rounded-full
+                bg-slate-900/80 px-10 py-5 text-xl font-semibold text-white
+                shadow-[0_20px_40px_rgba(2,6,23,0.6)] hover:-translate-y-0.5
+                hover:bg-black transition"
+            >
+              📞 Call (888) 535-2566
+            </a>
+            <a
+              href="mailto:info@bus2ride.com"
+              className="inline-flex items-center justify-center rounded-full
+                border border-white/30 px-10 py-5 text-xl font-semibold
+                text-white shadow-[0_20px_40px_rgba(3,9,23,0.5)]
+                hover:-translate-y-0.5 hover:bg-white/5 transition"
+            >
+              ✉️ Email Us
+            </a>
+          </div>
+          <p className="mt-6 text-center text-sm text-yellow-200/90">
+            Book smarter: flexible aurora-ready windows, guaranteed on-time
+            pickups, and crew who already factored in{" "}
+            {location.city_name || location.state_name} roads and temps.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

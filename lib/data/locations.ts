@@ -31,7 +31,8 @@ export const getLocationsByState = cache(async (stateSlug: string) => {
   const { data: locationsByState, error } = await supabase
     .from("locations")
     .select("*")
-    .eq("state_slug", stateSlug);
+    .eq("state_slug", stateSlug)
+    .order("city_name");
 
   if (error) {
     console.error("getLocationsByState:", error);
