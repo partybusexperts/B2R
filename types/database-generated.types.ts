@@ -1833,13 +1833,6 @@ export type Database = {
             referencedRelation: "tools";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "tool_code_tool_id_fkey";
-            columns: ["tool_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tools_status";
-            referencedColumns: ["id"];
-          },
         ];
       };
       tool_placements: {
@@ -1879,13 +1872,6 @@ export type Database = {
             columns: ["tool_id"];
             isOneToOne: false;
             referencedRelation: "tools";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "tool_placements_tool_id_fkey";
-            columns: ["tool_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tools_status";
             referencedColumns: ["id"];
           },
         ];
@@ -1935,66 +1921,50 @@ export type Database = {
             referencedRelation: "tools";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "tool_runs_tool_id_fkey";
-            columns: ["tool_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tools_status";
-            referencedColumns: ["id"];
-          },
         ];
       };
       tools: {
         Row: {
           category: string;
-          Code: string | null;
-          compute_kind: string | null;
           created_at: string;
+          cta_link: string | null;
+          cta_text: string | null;
           description: string;
           href: string;
+          icon_name: string | null;
           id: string;
-          inputs_schema: Json | null;
-          is_active: boolean;
-          is_featured: boolean | null;
+          modal_content: string | null;
           slug: string | null;
-          status: string;
           title: string;
           updated_at: string;
-          version: number;
         };
         Insert: {
           category: string;
-          Code?: string | null;
-          compute_kind?: string | null;
           created_at?: string;
+          cta_link?: string | null;
+          cta_text?: string | null;
           description: string;
           href: string;
+          icon_name?: string | null;
           id: string;
-          inputs_schema?: Json | null;
-          is_active?: boolean;
-          is_featured?: boolean | null;
+          modal_content?: string | null;
           slug?: string | null;
-          status?: string;
           title: string;
           updated_at?: string;
-          version?: number;
         };
         Update: {
           category?: string;
-          Code?: string | null;
-          compute_kind?: string | null;
           created_at?: string;
+          cta_link?: string | null;
+          cta_text?: string | null;
           description?: string;
           href?: string;
+          icon_name?: string | null;
           id?: string;
-          inputs_schema?: Json | null;
-          is_active?: boolean;
-          is_featured?: boolean | null;
+          modal_content?: string | null;
           slug?: string | null;
-          status?: string;
           title?: string;
           updated_at?: string;
-          version?: number;
         };
         Relationships: [];
       };
@@ -3108,13 +3078,6 @@ export type Database = {
             referencedRelation: "tools";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "tool_code_tool_id_fkey";
-            columns: ["tool_id"];
-            isOneToOne: false;
-            referencedRelation: "v_tools_status";
-            referencedColumns: ["id"];
-          },
         ];
       };
       v_tools_home: {
@@ -3130,29 +3093,7 @@ export type Database = {
             referencedRelation: "tools";
             referencedColumns: ["id"];
           },
-          {
-            foreignKeyName: "tool_code_tool_id_fkey";
-            columns: ["slug"];
-            isOneToOne: false;
-            referencedRelation: "v_tools_status";
-            referencedColumns: ["id"];
-          },
         ];
-      };
-      v_tools_status: {
-        Row: {
-          category: string | null;
-          code_handler: string | null;
-          code_runtime: string | null;
-          code_updated_at: string | null;
-          code_version: number | null;
-          has_code: boolean | null;
-          href: string | null;
-          id: string | null;
-          status: string | null;
-          title: string | null;
-        };
-        Relationships: [];
       };
       vehicle_prices_from_legacy: {
         Row: {

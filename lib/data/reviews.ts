@@ -1,8 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
-import { ReviewsData } from "@/types/reviews.types";
 import { cache } from "react";
 
-export const mockReviews: ReviewsData[] = [
+export const mockReviews = [
   {
     id: "id-101",
     author_display: "John Doe", // author
@@ -173,10 +172,14 @@ export const getReviews = cache(async (limit = 9) => {
     return null;
   }
 
-  if (!reviews || reviews.length === 0) {
+  if (!reviews) {
     console.warn("getReviews:", "No data found");
     return null;
   }
 
   return reviews;
 });
+
+export type ReviewsData = NonNullable<
+  Awaited<ReturnType<typeof getReviews>>
+>[number];

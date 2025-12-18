@@ -20,7 +20,7 @@ export default async function StatePage({
   const { state } = await params;
   const locations = await getLocationsByState(state);
 
-  if (!locations || locations.length === 0) return notFound();
+  if (!locations) return notFound();
 
   const location = locations[0]; // FIXME: Fetch state data instead of select the first city in locations
   const reviews = (await getReviews(6)) ?? [];

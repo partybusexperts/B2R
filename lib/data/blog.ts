@@ -55,7 +55,7 @@ export async function getBlogPosts() {
     return null;
   }
 
-  if (!posts || posts.length === 0) {
+  if (!posts) {
     console.warn("getBlogs:", "No data found");
     return null;
   }

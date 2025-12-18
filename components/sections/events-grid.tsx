@@ -13,7 +13,7 @@ export async function EventsGrid({ category }: EventsGridProps) {
   // We fetch a batch (e.g., 20) to ensure we have enough to randomize effectively
   const events = await getEvents();
 
-  if (!events || events.length === 0) return null;
+  if (!events) return null;
 
   // 2. Randomize and Pick 6
   // This runs on the server on every request (if dynamic) or build (if static).

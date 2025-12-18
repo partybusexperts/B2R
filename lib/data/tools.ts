@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
-import { ToolData } from "@/types/tools.types";
+import { cache } from "react";
 
-const mockTools: ToolData[] = [
+const mockTools = [
   {
     id: "mock-t1",
     slug: "party-bus-pricing-calculator",
@@ -16,6 +16,10 @@ const mockTools: ToolData[] = [
 
     cta_text: "Get Quote", // e.g. "Get Quote"
     cta_link: "/tools/quote",
+
+    href: "",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
   {
     id: "mock-t2",
@@ -31,6 +35,9 @@ const mockTools: ToolData[] = [
 
     cta_text: "Create Checklist", // e.g. "Create Checklist"
     cta_link: "/tools/checklist",
+    href: "",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
   {
     id: "mock-t3",
@@ -46,6 +53,10 @@ const mockTools: ToolData[] = [
 
     cta_text: "View Guide", // e.g. "View Guide"
     cta_link: "/tools/safety-guide",
+
+    href: "",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
   {
     id: "mock-t4",
@@ -62,6 +73,10 @@ const mockTools: ToolData[] = [
 
     cta_text: "Find Venue", // e.g. "Find Venue"
     cta_link: "/tools/venue-selection",
+
+    href: "",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
   {
     id: "mock-t5",
@@ -77,6 +92,10 @@ const mockTools: ToolData[] = [
 
     cta_text: "Explore Options", // e.g. "Explore Options"
     cta_link: "/tools/catering-options",
+
+    href: "",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
   {
     id: "mock-t6",
@@ -92,61 +111,92 @@ const mockTools: ToolData[] = [
 
     cta_text: "Plan Budget", // e.g. "Plan Budget"
     cta_link: "/tools/event-budgeting",
+
+    href: "",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   },
 ];
 
-export async function getTools(limit = 20): Promise<ToolData[]> {
+export const getTools = cache(async (limit = 20) => {
   const supabase = await createClient();
 
   // Fetch tools
-  const { data: allTools } = (await supabase
+  const { data: tools, error } = await supabase
     .from("tools")
     .select("*")
-    .limit(limit)) as unknown as { data: ToolData[] };
+    .limit(limit);
 
-  if (true) {
-    console.warn("getAllTools supabase error:", "No data found");
+  if (error) {
+    console.error("getTools:", error);
     return mockTools;
   }
 
-  if (!allTools || allTools?.length === 0) return [];
-
-  return allTools ?? [];
-}
-
-export async function getToolsByCategory(
-  category: string,
-): Promise<ToolData[]> {
-  const supabase = await createClient();
-
-  // Fetch tools
-  const { data: toolsByCategory } = (await supabase
-    .from("tools")
-    .select("*")
-    .eq("category", category)) as unknown as { data: ToolData[] };
-
-  if (true) {
-    console.warn("getToolsByCategory supabase error:", "No data found");
-    return mockTools.filter((tool) => tool.category === category);
+  if (!tools) {
+    console.warn("getTools:", "No data found");
+    return mockTools;
   }
 
-  if (!toolsByCategory || toolsByCategory?.length === 0) return [];
+  if (tools) {
+    return mockTools;
+  }
 
-  return toolsByCategory;
-}
+  return tools;
+});
 
-export async function getToolBySlug(slug: string): Promise<ToolData | null> {
-  // 1. Try Supabase
+export const getToolsByCategory = cache(
+  async (category: string): Promise<ToolData[]> => {
+    const supabase = await createClient();
+
+    // Fetch tools
+    const { data: toolsByCategory, error } = await supabase
+      .from("tools")
+      .select("*")
+      .eq("category", category);
+
+    if (error) {
+      console.error("getToolsByCategory:", error);
+      return mockTools.filter((t) => t.category === category);
+    }
+
+    if (!toolsByCategory) {
+      console.warn("getToolsByCategory:", "No data found");
+      return mockTools.filter((t) => t.category === category);
+    }
+
+    if (toolsByCategory) {
+      return mockTools.filter((t) => t.category === category);
+    }
+
+    return toolsByCategory;
+  },
+);
+
+export const getToolBySlug = cache(async (slug: string) => {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data: toolBySlug, error } = await supabase
     .from("tools")
     .select("*")
     .eq("slug", slug)
     .single();
 
-  // 2. Fallback to mock
-  const mock = mockTools.find((t) => t.slug === slug);
-  return mock || null;
+  if (error) {
+    console.error("getToolBySlug:", error);
+    return mockTools.find((t) => t.slug === slug);
+  }
 
-  if (data) return data as unknown as ToolData;
-}
+  if (!toolBySlug) {
+    console.warn("getToolBySlug:", "No data found");
+    return mockTools.find((t) => t.slug === slug);
+  }
+
+  if (toolBySlug) {
+    return mockTools.find((t) => t.slug === slug);
+  }
+
+  return toolBySlug;
+});
+
+export type ToolData = NonNullable<Awaited<ReturnType<typeof getToolBySlug>>>;
+
+// FIXME: All tools are mocked

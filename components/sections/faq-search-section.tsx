@@ -24,7 +24,7 @@ export async function FaqSearchSection({
 }: FaqSearchSectionProps) {
   const faqs = await getFaqs(category);
 
-  if (!faqs || faqs.length === 0) return null;
+  if (!faqs) return null;
 
   return (
     <FaqSearchClient

@@ -11,7 +11,7 @@ export async function ToolsGrid({ category = "general" }: ToolsGridProps) {
   // 1. Fetch tools (limit to 20 to allow for randomization pool)
   const allTools = await getTools();
 
-  if (!allTools || allTools.length === 0) return null;
+  if (!allTools) return null;
 
   // 2. Logic: "Context First, then Random"
   // Filter for tools that match the current page category

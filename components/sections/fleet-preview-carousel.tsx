@@ -4,9 +4,9 @@ import * as React from "react";
 import Link from "next/link";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { VehicleData } from "@/types/vehicle.types";
 import { cn } from "@/lib/utils";
 import { FleetCard } from "./fleet-card";
+import { VehicleData } from "@/lib/data/vehicles";
 
 interface FleetPreviewCarouselProps {
   title?: string;
@@ -49,7 +49,7 @@ export function FleetPreviewCarousel({
     return () => window.removeEventListener("resize", handleScroll);
   }, [vehicles]);
 
-  if (!vehicles || vehicles.length === 0) return null;
+  if (!vehicles) return null;
 
   // 1. Scroll Handler
   const scroll = (direction: "left" | "right") => {

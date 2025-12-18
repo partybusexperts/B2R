@@ -230,7 +230,7 @@ export function BlogGrid({ posts }: BlogGridProps) {
             })}
         </div>
 
-        {(!filteredPosts || filteredPosts.length === 0) && (
+        {!filteredPosts && (
           <div className="text-center py-20">
             <p className="text-xl text-blue-100">
               No articles found matching your criteria.

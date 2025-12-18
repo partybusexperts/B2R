@@ -1,9 +1,8 @@
-import { VehicleData } from "@/types/vehicle.types";
 import { createClient } from "@/lib/supabase/server";
 import { toPublicStorageUrl } from "../helpers/storage";
 import { cache } from "react";
 
-export const mockVehicles: VehicleData[] = [
+export const mockVehicles = [
   {
     id: "1",
     created_at: "2024-01-01T00:00:00Z",
@@ -70,7 +69,7 @@ export const getVehicles = cache(async (limit = 10) => {
     return null;
   }
 
-  if (!vehicles || vehicles.length === 0) {
+  if (!vehicles) {
     console.warn("getVehicles:", "No data found");
     return null;
   }
@@ -81,7 +80,7 @@ export const getVehicles = cache(async (limit = 10) => {
 export const getRandomVehicles = cache(async (limit = 10) => {
   const vehicles = (await getVehicles(100)) ?? [];
 
-  if (!vehicles || vehicles.length === 0) {
+  if (!vehicles) {
     console.warn("getRandomVehicles:", "No data found");
     return null;
   }
@@ -100,7 +99,7 @@ export const getVehiclebySlug = cache(async (slug: string) => {
     .from("vehicles")
     .select("*")
     .eq("slug", slug)
-    .single<VehicleData>();
+    .single();
 
   if (error) {
     console.error("getVehiclebySlug:", error);
@@ -135,7 +134,7 @@ export const getVehiclesByType = cache(
       return null;
     }
 
-    if (!vehiclesByType || vehiclesByType?.length === 0) {
+    if (!vehiclesByType) {
       console.warn("getVehiclesByType", "No data found");
       return null;
     }
@@ -165,7 +164,7 @@ export const getSimilarVehiclesByType = cache(
       return null;
     }
 
-    if (!similarVehiclesByType || similarVehiclesByType.length === 0) {
+    if (!similarVehiclesByType) {
       console.warn("getSimilarVehiclesByType:", "No data found");
       return null;
     }
@@ -210,7 +209,7 @@ export const getRandomVehiclesImages = cache(async (limit = 10) => {
     return [];
   }
 
-  if (!folders || folders.length === 0) {
+  if (!folders) {
     console.warn("getRandomVehiclesImages:", "No folders found");
     return [];
   }
@@ -233,7 +232,7 @@ export const getRandomVehiclesImages = cache(async (limit = 10) => {
       continue;
     }
 
-    if (!vehiclesImages || vehiclesImages.length === 0) {
+    if (!vehiclesImages) {
       console.warn(
         "getRandomVehiclesImages:",
         "No images found in folder",
@@ -254,3 +253,7 @@ export const getRandomVehiclesImages = cache(async (limit = 10) => {
 
   return randomVehiclesImagesUrls;
 });
+
+export type VehicleData = NonNullable<
+  Awaited<ReturnType<typeof getVehiclebySlug>>
+>;

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { VehicleData } from "@/types/vehicle.types";
 import { FleetCard } from "./fleet-card";
 import { cn } from "@/lib/utils";
+import { VehicleData } from "@/lib/data/vehicles";
 
 interface FleetPreviewProps {
   title?: string;
@@ -21,7 +21,7 @@ export function FleetPreview({
   showNavigation = true,
   sectionClassName,
 }: FleetPreviewProps) {
-  if (!vehicles || vehicles.length === 0) return null;
+  if (!vehicles) return null;
 
   return (
     <section className={cn("bg-[#0E1F46]", sectionClassName)}>

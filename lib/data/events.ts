@@ -68,7 +68,7 @@ export const getEvents = cache(async (limit?: number) => {
     return null;
   }
 
-  if (!events || events?.length === 0) {
+  if (!events) {
     console.warn("getEvents:", "No data found");
     return null;
   }

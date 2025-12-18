@@ -53,6 +53,7 @@ export default async function FleetCityPage({
 
   return (
     <main>
+      {/* Once we have cities images, we need to show them in the hero.  */}
       <Hero slug={location.city_slug} />
 
       <OtherFleets currentType={fleetTypeMap[fleetType]} location={location} />

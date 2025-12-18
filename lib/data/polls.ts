@@ -106,7 +106,7 @@ export const getPolls = cache(async (limit = 20) => {
     return null;
   }
 
-  if (!polls || polls.length === 0) {
+  if (!polls) {
     console.warn("getPolls:", "No data found");
     return null;
   }
@@ -149,7 +149,7 @@ export const getPollsBySearch = cache(async (query: string, limit = 30) => {
     return null;
   }
 
-  if (!polls || polls.length === 0) {
+  if (!polls) {
     return [];
   }
 
@@ -194,7 +194,7 @@ export const getPollsByCategory = cache(
       return null;
     }
 
-    if (!polls || polls.length === 0) {
+    if (!polls) {
       console.warn("getPollsByCategory:", "No data found");
       return null;
     }
@@ -265,7 +265,7 @@ export const getPollResultsByCategory = cache(
     // 1. Fetch data with the Relation
     const polls = await getPollsByCategory(category, limit);
 
-    if (!polls || polls.length === 0) {
+    if (!polls) {
       return [];
     }
 

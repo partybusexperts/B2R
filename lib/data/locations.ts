@@ -16,7 +16,7 @@ export const getAllLocations = cache(async () => {
     return [];
   }
 
-  if (!locations || locations.length === 0) {
+  if (!locations) {
     console.warn("getAllLocations:", "No data found");
     return [];
   }

@@ -7,8 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StarRating } from "@/components/ui/star-rating";
 import { cn } from "@/lib/utils";
-import { ReviewsData } from "@/types/reviews.types";
 import Link from "next/link";
+import { ReviewsData } from "@/lib/data/reviews";
 
 interface ReviewsSectionProps {
   reviews: ReviewsData[];

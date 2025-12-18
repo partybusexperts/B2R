@@ -15,7 +15,7 @@ export async function FaqCategorySection({
 }: FaqCategorySectionProps) {
   const faqs = await getFaqs(category);
 
-  if (!faqs || faqs.length === 0) return null;
+  if (!faqs) return null;
 
   return (
     <section className={cn("py-10 md:py-14", className)}>

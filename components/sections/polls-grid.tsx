@@ -12,7 +12,7 @@ export async function PollsGrid({ category }: PollsGridProps) {
   // Supabase doesn't support random ordering easily without RPC.
   const polls = await getPolls(200);
 
-  if (!polls || polls.length === 0) return null;
+  if (!polls) return null;
 
   const normalizedCategory = (category ?? "").trim().toLowerCase();
 
