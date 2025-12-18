@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "scnmubytflrxvokmrfnc.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "openweathermap.org",
+        pathname: "/img/wn/**",
+      },
     ],
   },
 };

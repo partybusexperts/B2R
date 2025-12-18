@@ -2,7 +2,6 @@ import { Database } from "@/types/database.types";
 import { createClient } from "../supabase/server";
 import { cache } from "react";
 
-// 1. FOR PAGE: /locations (The Directory)
 export const getAllLocations = cache(async () => {
   const supabase = await createClient();
   // Fetch minimal data for the big list
@@ -21,11 +20,9 @@ export const getAllLocations = cache(async () => {
     return [];
   }
 
-  // Use merged types or create relational tables / foreign keys
-  return locations as Database["public"]["Tables"]["locations"]["Row"][];
+  return locations;
 });
 
-// 2. FOR PAGE: /locations/states/[state_slug]
 export const getLocationsByState = cache(async (stateSlug: string) => {
   const supabase = await createClient();
   const { data: locationsByState, error } = await supabase
@@ -90,46 +87,179 @@ export const getLocationsByCitySlug = cache(async (citySlug: string) => {
   return locationsByCity ?? [];
 });
 
-// 4. FOR PAGE: /locations/state/[state_slug]/city/[city_slug]/[fleet_slug]
-export const getLocationFleetPage = cache(
-  async (stateSlug: string, citySlug: string, fleetSlug: string) => {
-    const location = await getLocationBySlugs(stateSlug, citySlug);
+// Using merged types to avoid creating relational tables / foreign keys
+export type LocationsData = Database["public"]["Tables"]["locations"]["Row"];
 
-    if (!location) return null;
-
-    const isFleetType = (
-      value: string,
-    ): value is "party-bus" | "limo" | "coach" =>
-      value === "party-bus" || value === "limo" || value === "coach";
-
-    if (!isFleetType(fleetSlug)) return null;
-
-    // CHECK: Does this city actually have this fleet type?
-    // If Anchorage only has 'party-bus', then /anchorage/coach should 404.
-    const hasFleet = location.available_fleet_types.includes(fleetSlug);
-
-    if (!hasFleet) return null; // This triggers notFound() in Next.js
-
-    return location;
-  },
-);
-
-export type LocationsData = Awaited<ReturnType<typeof getAllLocations>>[number];
-
-export interface LocationTrivia {
-  question: string;
-  answer: string;
-  icon: string;
-}
-
-export interface LocationInfoBlock {
-  title: string;
-  icon: string;
-  short_desc: string;
-  modal_content: string;
-}
+console.log(`
+- [ ]  header: title, description, bottom_label
+- [ ]  why_book:
+    - [ ]  description
+    - [ ]  box1: title, description, modal_content
+    - [ ]  box2: title, description, modal_content
+    - [ ]  box3: title, description, modal_content
+    - [ ]  row1: title, modal_content
+    - [ ]  row2: title, modal_content
+    - [ ]  row3: title, modal_content
+    - [ ]  row4: title, modal_content
+- [ ]  how_to_book: (ASK IF NEEDED, OR THIS CAN BE THE SAME FOR ALL CITIES)
+    - [ ]  description
+    - [ ]  step1: title, description, modal_content
+    - [ ]  step2: title, description, modal_content
+    - [ ]  step3: title, description, modal_content
+- [ ]  cities_served: (MAYBE THIS CAN GO ON STATE TABLE INSTEAD OF CITY)
+    - [ ]  description
+    - [ ]  label
+- [ ]  state_planning_guide: (MAYBE THIS CAN GO ON STATE TABLE INSTEAD OF CITY)
+    - [ ]  box1: title, description
+    - [ ]  box2: title, description
+    - [ ]  box3: title, description
+    - [ ]  box4: title, description
+    - [ ]  box5: title, description
+    - [ ]  box6: title, description
+    - [ ]  box7: title, description
+    - [ ]  box8: title, description
+- [ ]  complete_guide: content (html)
+- [ ]  planning_checklist: content (html) [ASK IF NEEDED]
+- [ ]  transportation_overview:
+    - [ ]  description
+    - [ ]  column2: title, content (html)
+    - [ ]  box1: title, description
+    - [ ]  box2: title, description
+    - [ ]  box3: title, description
+    - [ ]  box4: title, description
+    - [ ]  box5: title, description
+    - [ ]  box6: title, description
+- [ ]  extra_notes:
+    - [ ]  title
+    - [ ]  content (html)
+- [ ]  top_hotspots:
+    - [ ]  routes: {title, description}[]
+    - [ ]  high_impact_venues: venues[]
+    - [ ]  neighborhood_coverage: zones[]
+    - [ ]  recommendations: content (html)
+- [ ]  comfort_checklist:
+    - [ ]  title
+    - [ ]  description
+    - [ ]  tips: text[]
+    - [ ]  fleet_readiness: content (html)
+    - [ ]  trivia: title, description
+    - [ ]  fast_facts: title, description
+    - [ ]  playbook:
+        - [ ]  title
+        - [ ]  box1: label, title, description
+        - [ ]  box2: label, title, description
+        - [ ]  box3: label, title, description
+    - [ ]  case_files:
+        - [ ]  box1: label, title, description
+        - [ ]  box2: label, title, description
+        - [ ]  box3: label, title, description
+        - [ ]  box4: label, title, description
+    - [ ]  hotfix_lane: description
+    - [ ]  slot_count: number, label, description
+    - [ ]  driver_intel: title, description
+    - [ ]  live_weather: description
+    - [ ]  packing_tips: description
+- [ ]  transport_done_right: description, bottom_content (html)
+`);
 
 export interface LocationCoordinates {
   lat: number;
   lng: number;
+}
+export interface LocationHeader {
+  title: string;
+  description: string;
+  bottom_label: string;
+}
+
+export interface LocationWhyBook {
+  description: string;
+  box1: { title: string; description: string; modal_content: string };
+  box2: { title: string; description: string; modal_content: string };
+  box3: { title: string; description: string; modal_content: string };
+  row1: { title: string; modal_content: string };
+  row2: { title: string; modal_content: string };
+  row3: { title: string; modal_content: string };
+  row4: { title: string; modal_content: string };
+}
+
+export interface LocationHowToBook {
+  description: string;
+  step1: { title: string; description: string; modal_content: string };
+  step2: { title: string; description: string; modal_content: string };
+  step3: { title: string; description: string; modal_content: string };
+}
+
+export interface LocationCitiesServed {
+  description: string;
+  label: string;
+}
+
+export interface LocationStatePlanningGuide {
+  box1: { title: string; description: string };
+  box2: { title: string; description: string };
+  box3: { title: string; description: string };
+  box4: { title: string; description: string };
+  box5: { title: string; description: string };
+  box6: { title: string; description: string };
+  box7: { title: string; description: string };
+  box8: { title: string; description: string };
+}
+
+export interface LocationCompleteGuide {
+  content: string; // HTML content
+}
+
+export interface LocationTransportationOverview {
+  description: string;
+  column2: { title: string; content: string }; // HTML content
+  box1: { title: string; description: string };
+  box2: { title: string; description: string };
+  box3: { title: string; description: string };
+  box4: { title: string; description: string };
+  box5: { title: string; description: string };
+  box6: { title: string; description: string };
+}
+
+export interface LocationExtraPlanningNotes {
+  title: string;
+  content: string; // HTML content
+}
+
+export interface LocationTopHotspots {
+  routes: { title: string; description: string }[];
+  high_impact_venues: { name: string; description: string }[];
+  neighborhood_coverage: { name: string; description: string }[];
+  recommendations: string; // HTML content
+}
+
+export interface LocationComfortChecklist {
+  title: string;
+  description: string;
+  tips: string[];
+  fleet_readiness: string; // HTML content
+  trivia: { title: string; description: string };
+  fast_facts: { title: string; description: string };
+  playbook: {
+    title: string;
+    box1: { label: string; title: string; description: string };
+    box2: { label: string; title: string; description: string };
+    box3: { label: string; title: string; description: string };
+  };
+  case_files: {
+    box1: { label: string; title: string; description: string };
+    box2: { label: string; title: string; description: string };
+    box3: { label: string; title: string; description: string };
+    box4: { label: string; title: string; description: string };
+  };
+  hotfix_lane: string;
+  slot_count: { number: number; label: string; description: string };
+  driver_intel: { title: string; description: string };
+  live_weather: { description: string };
+  packing_tips: { description: string };
+}
+
+export interface LocationTransportDoneRight {
+  description: string;
+  bottom_content: string; // HTML content
 }

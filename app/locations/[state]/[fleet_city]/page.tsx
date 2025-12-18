@@ -18,7 +18,7 @@ import LocationPlanningChecklist from "@/components/sections/location-planning-c
 import LocationTransportationOverview from "@/components/sections/location-transportation-overview";
 import LocationExtraPlanningNotes from "@/components/sections/location-extra-planning-notes";
 import LocationTopHotspots from "@/components/sections/location-top-hotspots";
-import LocationLiveWeather from "@/components/sections/location-live-weather";
+import LocationComfortChecklist from "@/components/sections/location-comfort-checklist";
 import Hero from "@/components/layout/hero";
 import Link from "next/link";
 import { OtherFleets } from "@/components/sections/content-with-images";
@@ -50,6 +50,8 @@ export default async function FleetCityPage({
     limousines: "limo",
     "coach-buses": "coach",
   } as const;
+
+  const vehicles_images = ["asd"];
 
   return (
     <main>
@@ -118,7 +120,10 @@ export default async function FleetCityPage({
 
       <LocationTopHotspots location={location} />
 
-      <LocationLiveWeather location={location} />
+      <LocationComfortChecklist
+        location={location}
+        vehicles_images={vehicles_images}
+      />
 
       <PollsGrid category={location.city_slug} />
 

@@ -842,49 +842,34 @@ export type Database = {
       };
       locations: {
         Row: {
-          available_fleet_types: string[] | null;
           city_name: string;
           city_slug: string;
           coordinates: Json;
           created_at: string | null;
           id: string;
-          local_events: Json | null;
           name: string;
-          neighborhood_vibes: Json | null;
-          seasonal_guide: Json | null;
           state_name: string;
           state_slug: string;
-          trivia: Json | null;
         };
         Insert: {
-          available_fleet_types?: string[] | null;
           city_name: string;
           city_slug: string;
           coordinates: Json;
           created_at?: string | null;
           id?: string;
-          local_events?: Json | null;
           name: string;
-          neighborhood_vibes?: Json | null;
-          seasonal_guide?: Json | null;
           state_name: string;
           state_slug: string;
-          trivia?: Json | null;
         };
         Update: {
-          available_fleet_types?: string[] | null;
           city_name?: string;
           city_slug?: string;
           coordinates?: Json;
           created_at?: string | null;
           id?: string;
-          local_events?: Json | null;
           name?: string;
-          neighborhood_vibes?: Json | null;
-          seasonal_guide?: Json | null;
           state_name?: string;
           state_slug?: string;
-          trivia?: Json | null;
         };
         Relationships: [];
       };

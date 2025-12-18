@@ -2,9 +2,18 @@ import { MergeDeep } from "type-fest";
 import { Database as DatabaseGenerated } from "./database-generated.types"; // Your auto-gen file
 import { HeroCTA } from "./hero.types";
 import {
+  LocationCitiesServed,
+  LocationComfortChecklist,
+  LocationCompleteGuide,
   LocationCoordinates,
-  LocationInfoBlock,
-  LocationTrivia,
+  LocationExtraPlanningNotes,
+  LocationHeader,
+  LocationHowToBook,
+  LocationStatePlanningGuide,
+  LocationTopHotspots,
+  LocationTransportationOverview,
+  LocationTransportDoneRight,
+  LocationWhyBook,
 } from "@/lib/data/locations";
 
 // Define the exact override structure
@@ -25,15 +34,20 @@ type DatabaseOverrides = {
       };
       locations: {
         Row: {
-          // 1. Override the JSONB columns
           coordinates: LocationCoordinates;
-          trivia: LocationTrivia[]; // It's an array in the DB
-          local_events: LocationInfoBlock[];
-          neighborhood_vibes: LocationInfoBlock[];
-          seasonal_guide: LocationInfoBlock; // It's a single object
 
-          // 2. Override the Enums/Arrays
-          available_fleet_types: ("party-bus" | "limo" | "coach")[];
+          // NEW FIELDS TO OVERRIDE
+          header: LocationHeader;
+          why_book: LocationWhyBook;
+          how_to_book: LocationHowToBook;
+          cities_served: LocationCitiesServed;
+          state_planning_guide: LocationStatePlanningGuide;
+          complete_guide: LocationCompleteGuide;
+          transportation_overview: LocationTransportationOverview;
+          extra_notes: LocationExtraPlanningNotes;
+          top_hotspots: LocationTopHotspots;
+          comfort_checklist: LocationComfortChecklist;
+          transport_done_right: LocationTransportDoneRight;
         };
       };
     };
