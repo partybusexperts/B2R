@@ -3,9 +3,8 @@ import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
-import { FaqSection } from "@/components/sections/faq-section";
 import { getReviews } from "@/lib/data/reviews";
-import { getLocationBySlugs } from "@/lib/data/locations";
+import { getLocationWithContent } from "@/lib/data/locations";
 import FleetSection from "@/components/sections/fleet-section";
 import LocationReadyToPlan from "@/components/sections/location-ready-to-plan";
 import LocationHeader from "@/components/sections/location-header";
@@ -22,6 +21,7 @@ import LocationComfortChecklist from "@/components/sections/location-comfort-che
 import Hero from "@/components/layout/hero";
 import Link from "next/link";
 import { OtherFleets } from "@/components/sections/content-with-images";
+import { FaqSearchSection } from "@/components/sections/faq-search-section";
 
 type FleetType = "party-buses" | "limousines" | "coach-buses";
 
@@ -39,7 +39,10 @@ export default async function FleetCityPage({
 
   const city = fleet_city.replace(`${fleetType}-`, "");
 
-  const location = await getLocationBySlugs(state, city);
+  const location = await getLocationWithContent({
+    slug: `${city}-${state}`,
+    fleetType: fleetType,
+  });
 
   if (!location) return notFound();
 
@@ -131,8 +134,8 @@ export default async function FleetCityPage({
 
       <EventsGrid />
 
-      <FaqSection
-        category={location.city_slug}
+      <FaqSearchSection
+        category={location.slug ?? "home"}
         title={`${location.city_name} FAQs`}
       />
 

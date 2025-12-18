@@ -1,5 +1,4 @@
-import { VehicleData } from "@/types/vehicle.types";
-import { getVehiclesByType } from "@/lib/data/vehicles";
+import { getVehiclesByType, VehicleData } from "@/lib/data/vehicles";
 import { FleetPreview } from "./fleet-preview";
 
 export async function FleetPreviewServer({

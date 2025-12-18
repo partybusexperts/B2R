@@ -1,9 +1,9 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 
 export default function LocationCompleteGuide({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   return (
     <section
@@ -29,7 +29,7 @@ export default function LocationCompleteGuide({
           prose-hr:border-white/10 prose-img:rounded-2xl prose-img:shadow-lg
           space-y-6"
         dangerouslySetInnerHTML={{
-          __html: location.complete_guide?.content ?? "",
+          __html: location.complete_guide ?? "",
         }}
       />
     </section>

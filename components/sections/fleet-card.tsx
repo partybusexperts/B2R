@@ -2,13 +2,13 @@
 
 import { toPublicStorageUrl } from "@/lib/helpers/storage";
 import { cn } from "@/lib/utils";
-import { VehicleData } from "@/types/vehicle.types";
 import React from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
 import { Phone } from "lucide-react";
+import { VehicleData } from "@/lib/data/vehicles";
 
 function hashStringToSeed(input: string): number {
   // Deterministic 32-bit hash (FNV-1a)

@@ -1,10 +1,10 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 import Link from "next/link";
 
 export default function LocationPlanningChecklist({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   return (
     <section
@@ -28,7 +28,7 @@ export default function LocationPlanningChecklist({
           prose-hr:border-white/10 prose-img:rounded-2xl prose-img:shadow-lg
           space-y-6"
         dangerouslySetInnerHTML={{
-          __html: location.planning_checklist?.content ?? "",
+          __html: location.planning_checklist ?? "",
         }}
       />
 

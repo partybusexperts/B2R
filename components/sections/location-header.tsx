@@ -1,9 +1,9 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 
 export default function LocationHeader({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   const title = location.header?.title;
   const description = location.header?.description;

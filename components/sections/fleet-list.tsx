@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { FleetPreview } from "@/components/sections/fleet-preview";
-import { VehicleData } from "@/types/vehicle.types";
+import { VehicleData } from "@/lib/data/vehicles";
 
 // Common amenities found in your data
 const AMENITY_FILTERS = [

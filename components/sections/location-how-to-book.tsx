@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 import {
   Dialog,
   DialogClose,
@@ -13,13 +13,14 @@ export default function LocationHowToBook({
   location,
   isState = false,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
   isState?: boolean;
 }) {
   const steps = [
     location.how_to_book?.step1,
     location.how_to_book?.step2,
     location.how_to_book?.step3,
+    location.how_to_book?.step4,
   ];
 
   return (

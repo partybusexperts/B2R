@@ -1,10 +1,14 @@
 import Link from "next/link";
-import { getLocationsByState, type LocationsData } from "@/lib/data/locations";
+import {
+  getLocationsByState,
+  LocationsData,
+  type LocationsWithContentData,
+} from "@/lib/data/locations";
 
 export default async function LocationCitiesAcross({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   const cities = (await getLocationsByState(location.state_slug)) ?? [];
 

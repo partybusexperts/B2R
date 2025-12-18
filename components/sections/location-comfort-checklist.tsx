@@ -1,4 +1,4 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 import { VehicleData } from "@/lib/data/vehicles";
 import { LiveWeatherConditions } from "./live-weather-conditions";
 import {
@@ -13,7 +13,7 @@ export default async function LocationComfortChecklist({
   location,
   // vehicles_images,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
   vehicles_images: VehicleData["images"];
 }) {
   const weather = await fetchOpenWeatherData(

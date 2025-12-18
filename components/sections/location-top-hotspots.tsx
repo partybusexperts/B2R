@@ -1,9 +1,9 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 
 export default function LocationTopHotspots({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   const routes = location.top_hotspots?.routes;
   const venues = location.top_hotspots?.high_impact_venues;
@@ -46,11 +46,11 @@ export default function LocationTopHotspots({
             <ul className="grid grid-cols-2 gap-3 text-sm text-blue-100/90">
               {venues?.map((venue) => (
                 <li
-                  key={venue.title}
+                  key={venue}
                   className="bg-[#122a4c] rounded-lg px-3 py-2 border
                     border-blue-700/40"
                 >
-                  {venue.title}
+                  {venue}
                 </li>
               ))}
             </ul>
@@ -62,12 +62,12 @@ export default function LocationTopHotspots({
             <div className="flex flex-wrap gap-2">
               {coverage?.map((zone) => (
                 <span
-                  key={zone.name}
+                  key={zone}
                   className="rounded-full bg-blue-50/10 border
                     border-blue-500/40 text-blue-100 text-xs font-semibold px-3
                     py-1"
                 >
-                  {zone.name}
+                  {zone}
                 </span>
               ))}
             </div>

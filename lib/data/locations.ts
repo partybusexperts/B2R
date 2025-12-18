@@ -69,6 +69,48 @@ export const getLocationBySlugs = cache(
   },
 );
 
+export async function getLocationWithContent({
+  slug,
+  fleetType,
+}: {
+  slug: string;
+  fleetType: "party-buses" | "limousines" | "coach-buses";
+}) {
+  console.log("Fetching fleet city location with content:", {
+    slug,
+    fleetType,
+  });
+  const supabase = await createClient();
+
+  const { data: location, error } = await supabase
+    .from("locations")
+    .select(
+      `
+      *,
+      content:locations_content!inner(*) 
+    `,
+    )
+    .eq("slug", slug) // 1. Match the Location Slug
+    .eq("content.fleet_type", fleetType) // 2. Match the Content Fleet Type
+    .single();
+
+  if (error || !location) {
+    console.error("Error fetching fleet location content:", error);
+    return null;
+  }
+
+  // The 'content' field will be an array (usually of 1 item).
+  // You might want to flatten it for easier use in your component:
+  const contentItem = Array.isArray(location.content)
+    ? location.content[0]
+    : location.content;
+
+  return {
+    ...location,
+    ...contentItem, // Now is an object, not an array
+  };
+}
+
 // Legacy helper: used to safely redirect old routes like `/locations/city/[city_slug]`.
 // Returns potentially multiple rows because `city_slug` is not globally unique.
 export const getLocationsByCitySlug = cache(async (citySlug: string) => {
@@ -89,78 +131,8 @@ export const getLocationsByCitySlug = cache(async (citySlug: string) => {
 
 // Using merged types to avoid creating relational tables / foreign keys
 export type LocationsData = Database["public"]["Tables"]["locations"]["Row"];
-
-console.log(`
-- [ ]  header: title, description, bottom_label
-- [ ]  why_book:
-    - [ ]  description
-    - [ ]  box1: title, description, modal_content
-    - [ ]  box2: title, description, modal_content
-    - [ ]  box3: title, description, modal_content
-    - [ ]  row1: title, modal_content
-    - [ ]  row2: title, modal_content
-    - [ ]  row3: title, modal_content
-    - [ ]  row4: title, modal_content
-- [ ]  how_to_book: (ASK IF NEEDED, OR THIS CAN BE THE SAME FOR ALL CITIES)
-    - [ ]  description
-    - [ ]  step1: title, description, modal_content
-    - [ ]  step2: title, description, modal_content
-    - [ ]  step3: title, description, modal_content
-- [ ]  cities_served: (MAYBE THIS CAN GO ON STATE TABLE INSTEAD OF CITY)
-    - [ ]  description
-    - [ ]  label
-- [ ]  state_planning_guide: (MAYBE THIS CAN GO ON STATE TABLE INSTEAD OF CITY)
-    - [ ]  box1: title, description
-    - [ ]  box2: title, description
-    - [ ]  box3: title, description
-    - [ ]  box4: title, description
-    - [ ]  box5: title, description
-    - [ ]  box6: title, description
-    - [ ]  box7: title, description
-    - [ ]  box8: title, description
-- [ ]  complete_guide: content (html)
-- [ ]  planning_checklist: content (html) [ASK IF NEEDED]
-- [ ]  transportation_overview:
-    - [ ]  description
-    - [ ]  column2: title, content (html)
-    - [ ]  box1: title, description
-    - [ ]  box2: title, description
-    - [ ]  box3: title, description
-    - [ ]  box4: title, description
-    - [ ]  box5: title, description
-    - [ ]  box6: title, description
-- [ ]  extra_notes:
-    - [ ]  title
-    - [ ]  content (html)
-- [ ]  top_hotspots:
-    - [ ]  routes: {title, description}[]
-    - [ ]  high_impact_venues: venues[]
-    - [ ]  neighborhood_coverage: zones[]
-    - [ ]  recommendations: content (html)
-- [ ]  comfort_checklist:
-    - [ ]  title
-    - [ ]  description
-    - [ ]  tips: text[]
-    - [ ]  fleet_readiness: content (html)
-    - [ ]  trivia: title, description
-    - [ ]  fast_facts: title, description
-    - [ ]  playbook:
-        - [ ]  title
-        - [ ]  box1: label, title, description
-        - [ ]  box2: label, title, description
-        - [ ]  box3: label, title, description
-    - [ ]  case_files:
-        - [ ]  box1: label, title, description
-        - [ ]  box2: label, title, description
-        - [ ]  box3: label, title, description
-        - [ ]  box4: label, title, description
-    - [ ]  hotfix_lane: description
-    - [ ]  slot_count: number, label, description
-    - [ ]  driver_intel: title, description
-    - [ ]  live_weather: description
-    - [ ]  packing_tips: description
-- [ ]  transport_done_right: description, bottom_content (html)
-`);
+export type LocationsWithContentData = LocationsData &
+  Database["public"]["Tables"]["locations_content"]["Row"];
 
 export interface LocationCoordinates {
   lat: number;
@@ -218,6 +190,12 @@ export interface LocationHowToBook {
     description: string;
     modal_content: string;
   };
+  step4: {
+    title: string;
+    icon: string;
+    description: string;
+    modal_content: string;
+  };
 }
 
 export interface LocationCitiesServed {
@@ -236,13 +214,9 @@ export interface LocationStatePlanningGuide {
   box8: { title: string; description: string };
 }
 
-export interface LocationCompleteGuide {
-  content: string; // HTML content
-}
+export type LocationCompleteGuide = string; // HTML content
 
-export interface LocationPlanningGuide {
-  content: string; // HTML content
-}
+export type LocationPlanningGuide = string; // HTML content
 
 export interface LocationTransportationOverview {
   column1_description: string;
@@ -262,8 +236,8 @@ export interface LocationExtraPlanningNotes {
 
 export interface LocationTopHotspots {
   routes: { title: string; description: string }[];
-  high_impact_venues: { title: string }[];
-  neighborhood_coverage: { name: string }[];
+  high_impact_venues: string[];
+  neighborhood_coverage: string[];
   recommendations: string; // HTML content
 }
 

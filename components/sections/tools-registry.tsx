@@ -1,7 +1,7 @@
-import { ToolData } from "@/types/tools.types";
 import { PricingCalculator } from "../tools/pricing-calculator";
 import { PlanningChecklist } from "../tools/planning-checklist";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import { ToolData } from "@/lib/data/tools";
 
 // A fallback component for tools that don't have a custom implementation yet
 function DefaultToolView({ tool }: { tool: ToolData }) {

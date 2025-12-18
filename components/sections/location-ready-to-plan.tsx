@@ -1,10 +1,10 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 import Link from "next/link";
 
 export default async function LocationReadyToPlan({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   return (
     <section

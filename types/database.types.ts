@@ -36,8 +36,12 @@ type DatabaseOverrides = {
       locations: {
         Row: {
           coordinates: LocationCoordinates;
+        };
+      };
+      locations_content: {
+        Row: {
+          fleet_type: "party-buses" | "limousines" | "coach-buses";
 
-          // NEW FIELDS TO OVERRIDE
           header?: LocationHeader;
           why_book?: LocationWhyBook;
           how_to_book?: LocationHowToBook;

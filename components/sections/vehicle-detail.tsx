@@ -7,7 +7,6 @@ import * as React from "react";
 // import { Badge } from "@/components/ui/badge";
 // import { Card } from "@/components/ui/card";
 // import { cn } from "@/lib/utils";
-import { VehicleData } from "@/types/vehicle.types";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -19,6 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { VehicleData } from "@/lib/data/vehicles";
 
 export function VehicleDetail({ vehicle }: { vehicle: VehicleData }) {
   // const [activeImage, setActiveImage] = React.useState(0);

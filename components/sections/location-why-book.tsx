@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 import {
   Dialog,
   DialogClose,
@@ -13,7 +13,7 @@ import {
 export default function LocationWhyBook({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   const infoTiles = [
     location.why_book?.box1,

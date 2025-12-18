@@ -13,8 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
-import { ToolData } from "@/types/tools.types";
 import { cn } from "@/lib/utils";
+import { ToolData } from "@/lib/data/tools";
 
 export function ToolCard({ tool }: { tool: ToolData }) {
   const pricingCtaLabel = "Get a quote";

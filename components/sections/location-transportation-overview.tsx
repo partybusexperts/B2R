@@ -1,9 +1,9 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 
 export default function LocationTransportationOverview({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   return (
     <section

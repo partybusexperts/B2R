@@ -1,9 +1,9 @@
-import { LocationsData } from "@/lib/data/locations";
+import { LocationsWithContentData } from "@/lib/data/locations";
 
 export default function LocationPlanningGuide({
   location,
 }: {
-  location: LocationsData;
+  location: LocationsWithContentData;
 }) {
   const guides = [
     location.state_planning_guide?.box1,
