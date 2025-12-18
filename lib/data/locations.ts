@@ -76,10 +76,6 @@ export async function getLocationWithContent({
   slug: string;
   fleetType: "party-buses" | "limousines" | "coach-buses";
 }) {
-  console.log("Fetching fleet city location with content:", {
-    slug,
-    fleetType,
-  });
   const supabase = await createClient();
 
   const { data: location, error } = await supabase
