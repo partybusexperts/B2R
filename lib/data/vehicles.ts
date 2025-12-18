@@ -196,63 +196,78 @@ export const getRandomVehicleByType = cache(
 
 // STORAGE FUNCTION
 
-export const getRandomVehiclesImages = cache(async (limit = 10) => {
-  const supabase = await createClient();
-  const bucket = "vehicles1";
+export const getRandomVehiclesImages = cache(
+  async (limit = 10, type?: "party-buses" | "limousines" | "coach-buses") => {
+    const supabase = await createClient();
+    const bucket = "vehicles1";
 
-  const { data: folders, error: foldersError } = await supabase.storage
-    .from(bucket)
-    .list("", { limit: 100 });
-
-  if (foldersError) {
-    console.error("getRandomVehiclesImages (folders):", foldersError);
-    return [];
-  }
-
-  if (!folders) {
-    console.warn("getRandomVehiclesImages:", "No folders found");
-    return [];
-  }
-
-  const shuffledFolders = [...folders]
-    .filter((item) => item.name && !item.name.endsWith("/"))
-    .sort(() => Math.random() - 0.5)
-    .slice(0, limit);
-
-  // Final images array
-  const randomVehiclesImagesUrls: string[] = [];
-
-  for (const folder of shuffledFolders) {
-    const { data: vehiclesImages, error: imagesError } = await supabase.storage
+    const { data: folders, error: foldersError } = await supabase.storage
       .from(bucket)
-      .list(folder.name, { limit: limit });
+      .list("", { limit: 100 });
 
-    if (imagesError) {
-      console.error("getRandomVehiclesImages (images):", imagesError);
-      continue;
+    if (foldersError) {
+      console.error("getRandomVehiclesImages (folders):", foldersError);
+      return [];
     }
 
-    if (!vehiclesImages) {
-      console.warn(
-        "getRandomVehiclesImages:",
-        "No images found in folder",
-        folder.name,
+    if (!folders) {
+      console.warn("getRandomVehiclesImages:", "No folders found");
+      return [];
+    }
+
+    let filteredFolders = folders;
+
+    if (type) {
+      const mapTypeToKeyWord = {
+        "party-buses": "Party",
+        limousines: "Limo",
+        "coach-buses": "Coach",
+      };
+
+      filteredFolders = folders.filter((folder) =>
+        folder.name.includes(mapTypeToKeyWord[type]),
       );
-      continue;
     }
 
-    const randomIndex = Math.floor(Math.random() * vehiclesImages.length);
+    const shuffledFolders = [...filteredFolders]
+      .filter((item) => item.name && !item.name.endsWith("/"))
+      .sort(() => Math.random() - 0.5)
+      .slice(0, limit);
 
-    randomVehiclesImagesUrls.push(
-      toPublicStorageUrl(
-        bucket,
-        `${folder.name}/${vehiclesImages[randomIndex].name}`,
-      ),
-    );
-  }
+    // Final images array
+    const randomVehiclesImagesUrls: string[] = [];
 
-  return randomVehiclesImagesUrls;
-});
+    for (const folder of shuffledFolders) {
+      const { data: vehiclesImages, error: imagesError } =
+        await supabase.storage.from(bucket).list(folder.name, { limit: limit });
+
+      if (imagesError) {
+        console.error("getRandomVehiclesImages (images):", imagesError);
+        continue;
+      }
+
+      if (!vehiclesImages) {
+        console.warn(
+          "getRandomVehiclesImages:",
+          "No images found in folder",
+          folder.name,
+        );
+        continue;
+      }
+
+      const randomIndex = Math.floor(Math.random() * vehiclesImages.length);
+
+      randomVehiclesImagesUrls.push(
+        toPublicStorageUrl(
+          bucket,
+          `${folder.name}/${vehiclesImages[randomIndex].name}`,
+        ),
+      );
+    }
+
+    return randomVehiclesImagesUrls;
+  },
+);
 
 export type VehicleData = NonNullable<
   Awaited<ReturnType<typeof getVehiclebySlug>>

@@ -19,14 +19,14 @@ export default function LocationWhyBook({
     location.why_book?.box1,
     location.why_book?.box2,
     location.why_book?.box3,
-  ] as const;
+  ].filter((tile): tile is NonNullable<typeof tile> => Boolean(tile));
 
   const benefitTiles = [
     location.why_book?.row1,
     location.why_book?.row2,
     location.why_book?.row3,
     location.why_book?.row4,
-  ] as const;
+  ].filter((tile): tile is NonNullable<typeof tile> => Boolean(tile));
 
   return (
     <section
@@ -37,7 +37,7 @@ export default function LocationWhyBook({
     >
       <div className="grid gap-6 md:grid-cols-3">
         {infoTiles.map((tile) => (
-          <Dialog key={tile?.title}>
+          <Dialog key={tile.title}>
             <DialogTrigger asChild>
               <button
                 type="button"
@@ -133,10 +133,10 @@ export default function LocationWhyBook({
       </div>
       <div className="mt-10">
         <ul className="space-y-4 text-blue-900 text-lg">
-          {benefitTiles.map((item) => (
-            <Dialog key={item?.title}>
+          {benefitTiles.map((item, idx) => (
+            <Dialog key={`${item.title}-${idx}`}>
               <li
-                className="flex item?s-center bg-white rounded-lg shadow px-4
+                className="flex items-center bg-white rounded-lg shadow px-4
                   py-3 hover:bg-blue-50 transition border border-blue-200
                   cursor-pointer"
               >
@@ -151,7 +151,7 @@ export default function LocationWhyBook({
                       cursor-pointer"
                     aria-label={item?.title}
                   >
-                    {item?.title}
+                    {item.title}
                   </button>
                 </DialogTrigger>
               </li>

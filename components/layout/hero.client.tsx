@@ -102,7 +102,7 @@ export function HeroClient({ hero, slideImageUrls }: HeroHeasderProps) {
       ) : (
         <div
           className="absolute inset-0 z-0 bg-gradient-to-b from-primary/90
-            via-primary/70 to-background"
+            to-black via-primary/70"
         />
       )}
 

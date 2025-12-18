@@ -8,14 +8,22 @@ import {
 } from "@/lib/api/weather";
 import { fetchTomTomTraffic } from "@/lib/api/traffic";
 import { TrafficConditions } from "./live-traffic-conditions";
+import VehicleImageGallery from "./vehicle-image-gallery.client";
 
 export default async function LocationComfortChecklist({
   location,
-  // vehicles_images,
+  vehicles_images,
 }: {
   location: LocationsWithContentData;
   vehicles_images: VehicleData["images"];
 }) {
+  const imageUrls = (vehicles_images ?? []).filter(
+    (u): u is string => typeof u === "string" && u.length > 0,
+  );
+
+  const gallery1 = imageUrls.slice(0, 6);
+  const gallery2 = imageUrls.slice(6, 12);
+
   const weather = await fetchOpenWeatherData(
     location.coordinates.lat,
     location.coordinates.lng,
@@ -152,90 +160,7 @@ export default async function LocationComfortChecklist({
 
           {/* Gallery 1 */}
           <div className="mt-6">
-            <div
-              className="relative w-full h-80 md:h-[400px] overflow-hidden
-                rounded-2xl group border border-blue-700/40 shadow-lg
-                bg-[#0f1f3a]"
-            >
-              {/* They change from opacity 0 to 100 every x seconds, so it only shows 1 image */}
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <button
-                aria-label="Previous"
-                className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40
-                  hover:bg-black/60 text-white w-10 h-10 rounded-full flex
-                  items-center justify-center opacity-0 group-hover:opacity-100
-                  transition"
-              >
-                ‹
-              </button>
-              <button
-                aria-label="Next"
-                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40
-                  hover:bg-black/60 text-white w-10 h-10 rounded-full flex
-                  items-center justify-center opacity-0 group-hover:opacity-100
-                  transition"
-              >
-                ›
-              </button>
-              <div
-                className="absolute bottom-2 left-1/2 -translate-x-1/2 flex
-                  gap-1"
-              >
-                <button
-                  aria-label="Go to slide 1"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 2"
-                  className="h-2.5 w-2.5 rounded-full bg-white border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 3"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 4"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 5"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 6"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-              </div>
-            </div>
+            <VehicleImageGallery imageUrls={gallery1} />
           </div>
 
           <div
@@ -625,90 +550,9 @@ export default async function LocationComfortChecklist({
             </h4>
 
             {/* Gallery 2 */}
-            <div
-              className="relative w-full h-80 md:h-[400px] overflow-hidden
-                rounded-2xl group border border-blue-700/40 shadow-lg
-                bg-[#0f1f3a]"
-            >
-              {/* They change from opacity 0 to 100 every x seconds, so it only shows 1 image */}
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <div
-                className="absolute inset-0 transition-opacity duration-700
-                  ease-in-out opacity-0"
-              ></div>
-              <button
-                aria-label="Previous"
-                className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40
-                  hover:bg-black/60 text-white w-10 h-10 rounded-full flex
-                  items-center justify-center opacity-0 group-hover:opacity-100
-                  transition"
-              >
-                ‹
-              </button>
-              <button
-                aria-label="Next"
-                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40
-                  hover:bg-black/60 text-white w-10 h-10 rounded-full flex
-                  items-center justify-center opacity-0 group-hover:opacity-100
-                  transition"
-              >
-                ›
-              </button>
-              <div
-                className="absolute bottom-2 left-1/2 -translate-x-1/2 flex
-                  gap-1"
-              >
-                <button
-                  aria-label="Go to slide 1"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 2"
-                  className="h-2.5 w-2.5 rounded-full bg-white border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 3"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 4"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 5"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-                <button
-                  aria-label="Go to slide 6"
-                  className="h-2.5 w-2.5 rounded-full bg-white/40 border
-                    border-white/50"
-                ></button>
-              </div>
-            </div>
+            <VehicleImageGallery
+              imageUrls={gallery2.length ? gallery2 : gallery1}
+            />
           </div>
         </div>
       </div>

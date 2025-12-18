@@ -22,6 +22,7 @@ import Hero from "@/components/layout/hero";
 import Link from "next/link";
 import { OtherFleets } from "@/components/sections/content-with-images";
 import { FaqSearchSection } from "@/components/sections/faq-search-section";
+import { getRandomVehiclesImages } from "@/lib/data/vehicles";
 
 type FleetType = "party-buses" | "limousines" | "coach-buses";
 
@@ -54,7 +55,7 @@ export default async function FleetCityPage({
     "coach-buses": "coach",
   } as const;
 
-  const vehicles_images = ["asd"];
+  const vehicles_images = await getRandomVehiclesImages(12, fleetType);
 
   return (
     <main>
