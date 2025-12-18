@@ -643,7 +643,7 @@ export default function LocationLiveWeather({
                           <polyline
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="2"
+                            strokeWidth="2"
                             points="6,23.600000000000023 34,23.600000000000023 62,23.600000000000023 90,23.600000000000023 118,32.399999999999984 146,41.20000000000003 174,50 202,67.59999999999994 230,67.59999999999994 258,76.40000000000006 286,76.40000000000006 314,94"
                             className="text-sky-700"
                           ></polyline>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 import { toPublicStorageUrl } from "@/lib/helpers/storage"; // Assuming you have this helper
+import { LocationsData } from "@/lib/data/locations";
 
 // Define the 3 main categories
 const CATEGORIES = [
@@ -11,21 +12,21 @@ const CATEGORIES = [
     title: "Party Buses",
     description:
       "Turn the journey into the destination with premium sound and lights.",
-    link: "/fleet/party-bus",
+    link: "party-buses",
   },
   {
     id: "limo",
     title: "Limousines",
     description:
       "Classic stretch limos for elegant arrivals and smaller groups.",
-    link: "/fleet/limo",
+    link: "limousines",
   },
   {
     id: "coach",
     title: "Coach Buses",
     description:
       "Comfortable, reliable seating for large group transportation.",
-    link: "/fleet/coach",
+    link: "coach-buses",
   },
 ] as const;
 
@@ -33,11 +34,13 @@ type FleetType = (typeof CATEGORIES)[number]["id"];
 
 interface OtherFleetsProps {
   currentType: FleetType; // The type of the page we are currently on
+  location?: LocationsData; // Optional location to customize links
   className?: string;
 }
 
 export async function OtherFleets({
   currentType,
+  location,
   className,
 }: OtherFleetsProps) {
   const supabase = await createClient();
@@ -100,7 +103,11 @@ export async function OtherFleets({
         {/* 2-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cardsWithImages.map((card) => (
-            <Link key={card.id} href={card.link} className="group">
+            <Link
+              key={card.id}
+              href={`${location ? `/locations/${location.state_slug}/${card.link}-${location.city_slug}` : `/${card.link}`}`}
+              className="group"
+            >
               <div
                 className="rounded-2xl border border-blue-800/30 bg-[#12244e]
                   overflow-hidden shadow-xl"

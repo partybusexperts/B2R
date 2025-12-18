@@ -21,6 +21,7 @@ import LocationTopHotspots from "@/components/sections/location-top-hotspots";
 import LocationLiveWeather from "@/components/sections/location-live-weather";
 import Hero from "@/components/layout/hero";
 import Link from "next/link";
+import { OtherFleets } from "@/components/sections/content-with-images";
 
 type FleetType = "party-buses" | "limousines" | "coach-buses";
 
@@ -36,7 +37,7 @@ export default async function FleetCityPage({
       /(party-buses)|(limousines)|(coach-buses)/g,
     )?.[0] as FleetType) ?? "party-buses";
 
-  const city = fleet_city.replace(`${fleetType}-`, "").replace(/-/g, " ");
+  const city = fleet_city.replace(`${fleetType}-`, "");
 
   const location = await getLocationBySlugs(state, city);
 
@@ -44,15 +45,28 @@ export default async function FleetCityPage({
 
   const reviews = (await getReviews(6)) ?? [];
 
+  const fleetTypeMap = {
+    "party-buses": "party-bus",
+    limousines: "limo",
+    "coach-buses": "coach",
+  } as const;
+
   return (
     <main>
       <Hero slug={location.city_slug} />
+
+      <OtherFleets currentType={fleetTypeMap[fleetType]} location={location} />
 
       <LocationHeader location={location} />
 
       <LocationWhyBook location={location} />
 
-      <FleetSection location={{ stateSlug: state, citySlug: city }} />
+      <FleetSection
+        showPartyBuses={fleetType === "party-buses"}
+        showLimousines={fleetType === "limousines"}
+        showCoachBuses={fleetType === "coach-buses"}
+        location={{ stateSlug: state, citySlug: city }}
+      />
 
       <LocationHowToBook location={location} />
 
