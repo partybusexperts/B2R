@@ -172,26 +172,28 @@ export default function Navigation() {
     children: React.ReactNode;
   }) => (
     <li className="relative">
-      <div
-        className={cn(
-          `flex cursor-pointer items-center gap-1 px-3 py-2 text-md font-medium
-          transition-colors`,
-          open === k ? "text-blue-200" : "text-white hover:text-blue-200",
-        )}
-        role="button"
-        tabIndex={0}
-        aria-haspopup="menu"
-        aria-expanded={open === k}
-        onMouseEnter={() => {
-          clearTimer(k);
-          setOpen(k);
-        }}
-        onMouseLeave={() => closeWithDelay(k)}
-        onFocus={() => setOpen(k)}
-      >
-        {label}
-        <Caret className={open === k ? "rotate-180" : ""} />
-      </div>
+      <Link href={label === "Fleet" ? "/fleet" : "#"}>
+        <div
+          className={cn(
+            `flex cursor-pointer items-center gap-1 px-3 py-2 text-md
+            font-medium transition-colors`,
+            open === k ? "text-blue-200" : "text-white hover:text-blue-200",
+          )}
+          role="button"
+          tabIndex={0}
+          aria-haspopup="menu"
+          aria-expanded={open === k}
+          onMouseEnter={() => {
+            clearTimer(k);
+            setOpen(k);
+          }}
+          onMouseLeave={() => closeWithDelay(k)}
+          onFocus={() => setOpen(k)}
+        >
+          {label}
+          <Caret className={open === k ? "rotate-180" : ""} />
+        </div>
+      </Link>
 
       <ul
         role="menu"
