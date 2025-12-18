@@ -97,7 +97,7 @@ export default function LocationTransportationOverview({
           </div>
           <div className="mt-6">
             <a
-              href="/quote#instant"
+              href="/contact"
               className="rounded-full bg-yellow-500 text-black font-bold px-5
                 py-3 shadow hover:brightness-95 transition"
             >

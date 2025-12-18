@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -137,9 +138,9 @@ export default function LocationWhyBook({
                   {tile.label}
                 </div>
 
-                <h3 className="mt-3 text-3xl font-extrabold text-white">
+                <DialogTitle className="mt-3 text-3xl font-extrabold text-white">
                   {tile.modalTitle}
-                </h3>
+                </DialogTitle>
 
                 <p className="mt-4 text-blue-100/90 leading-relaxed">
                   {tile.modalBody}
@@ -226,9 +227,11 @@ export default function LocationWhyBook({
                     WHY BOOK WITH US
                   </div>
 
-                  <h3 className="mt-3 text-3xl font-extrabold text-white">
+                  <DialogTitle
+                    className="mt-3 text-3xl font-extrabold text-white"
+                  >
                     {item.title}
-                  </h3>
+                  </DialogTitle>
 
                   <p className="mt-4 text-blue-100/90 leading-relaxed">
                     {item.modalBody}
