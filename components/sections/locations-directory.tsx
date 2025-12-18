@@ -157,7 +157,7 @@ export function LocationsDirectory({ locations }: LocationsDirectoryProps) {
                   >
                     <MapPin className="h-5 w-5 text-sky-300" />
                     <Link
-                      href={`/locations/state/${loc.state_slug}`}
+                      href={`/locations/${loc.state_slug}`}
                       className="hover:underline underline-offset-4"
                     >
                       {loc.state}
@@ -178,7 +178,7 @@ export function LocationsDirectory({ locations }: LocationsDirectoryProps) {
                   {loc.cities.slice(0, 8).map((city) => (
                     <Link
                       key={city.slug}
-                      href={`/locations/state/${loc.state_slug}/city/${city.slug}`}
+                      href={`/locations/${loc.state_slug}/party-buses-${city.slug}`}
                       className="text-sm text-white/75 hover:text-white
                         hover:underline underline-offset-4"
                     >
@@ -195,7 +195,7 @@ export function LocationsDirectory({ locations }: LocationsDirectoryProps) {
               {/* View State Button */}
               <CardFooter className="relative mt-auto">
                 <Link
-                  href={`/locations/state/${loc.state_slug}`}
+                  href={`/locations/${loc.state_slug}`}
                   className="inline-flex w-full items-center justify-between
                     rounded-full border border-white/20 px-4 py-2 text-xs
                     font-semibold uppercase tracking-[0.25em] text-white/85

@@ -1,4 +1,5 @@
 import { LocationsData } from "@/lib/data/locations";
+import Link from "next/link";
 
 export default async function LocationReadyToPlan({
   location,
@@ -26,67 +27,67 @@ export default async function LocationReadyToPlan({
           VIPs.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
+          <Link
             href="/contact"
             className="rounded-full bg-white text-blue-900 font-bold px-8 py-4
               text-lg shadow-lg hover:bg-blue-50 transition"
           >
             Instant Quote
-          </a>
-          <a
+          </Link>
+          <Link
             href="/fleet"
             className="rounded-full bg-blue-700 text-white font-bold px-8 py-4
               text-lg shadow-lg hover:bg-blue-800 transition"
           >
             View Fleet
-          </a>
-          <a
+          </Link>
+          <Link
             href="tel:8885352566"
             className="rounded-full bg-blue-900 text-white font-bold px-8 py-4
               text-lg shadow-lg hover:bg-black transition"
           >
-            Call (888) 535‑2566
-          </a>
+            Call (888) 535-2566
+          </Link>
         </div>
         <p className="text-[11px] text-blue-300 mt-6">
           Need multi-day / remote itinerary support? Include all legs + gear
           notes. Prefer email? Reach our {location.city_name} dispatch at{" "}
-          <a href="mailto:info@bus2ride.com" className="underline">
+          <Link href="mailto:info@bus2ride.com" className="underline">
             info@bus2ride.com
-          </a>{" "}
+          </Link>{" "}
           and we will respond with a tailored plan.
         </p>
         <div className="mt-6 text-blue-200 text-sm max-w-3xl mx-auto">
           <p className="leading-relaxed">
             If you want to read more, visit our{" "}
-            <a className="underline" href="/reviews">
+            <Link className="underline" href="/reviews">
               customer reviews
-            </a>{" "}
+            </Link>{" "}
             and the{" "}
-            <a
+            <Link
               className="underline"
-              href={`/locations/state/${location.state_slug}/${location.city_slug}`}
+              href={`/locations/${location.state_slug}/party-buses-${location.city_slug}`}
             >
               {location.city_name} hub
-            </a>{" "}
+            </Link>{" "}
             resources. For partner and venue references, see{" "}
-            <a
+            <Link
               href={`https://www.${location.city_slug}.net`}
               target="_blank"
               rel="noopener noreferrer"
               className="underline"
             >
               {location.city_slug}.net
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a
+            <Link
               href={`https://www.${location.state_slug}railroad.com`}
               target="_blank"
               rel="noopener noreferrer"
               className="underline"
             >
               {location.state_slug}railroad.com
-            </a>
+            </Link>
             .
           </p>
         </div>

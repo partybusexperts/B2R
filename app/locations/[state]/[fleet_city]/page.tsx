@@ -22,13 +22,23 @@ import LocationLiveWeather from "@/components/sections/location-live-weather";
 import Hero from "@/components/layout/hero";
 import Link from "next/link";
 
-export default async function StateCityPage({
+type FleetType = "party-buses" | "limousines" | "coach-buses";
+
+export default async function FleetCityPage({
   params,
 }: {
-  params: Promise<{ state_slug: string; city_slug: string }>;
+  params: Promise<{ state: string; fleet_city: string }>;
 }) {
-  const { state_slug, city_slug } = await params;
-  const location = await getLocationBySlugs(state_slug, city_slug);
+  const { state, fleet_city } = await params;
+
+  const fleetType =
+    (fleet_city.match(
+      /(party-buses)|(limousines)|(coach-buses)/g,
+    )?.[0] as FleetType) ?? "party-buses";
+
+  const city = fleet_city.replace(`${fleetType}-`, "").replace(/-/g, " ");
+
+  const location = await getLocationBySlugs(state, city);
 
   if (!location) return notFound();
 
@@ -42,7 +52,7 @@ export default async function StateCityPage({
 
       <LocationWhyBook location={location} />
 
-      <FleetSection location={{ stateSlug: state_slug, citySlug: city_slug }} />
+      <FleetSection location={{ stateSlug: state, citySlug: city }} />
 
       <LocationHowToBook location={location} />
 

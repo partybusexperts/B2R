@@ -31,7 +31,7 @@ export default async function FleetSection({
         : fleet === "limo"
           ? "limousines"
           : "coach-buses";
-    return `/locations/state/${location.stateSlug}/city/${location.citySlug}/${fleetSlug}`;
+    return `/locations/${location.stateSlug}/$${fleetSlug}-${location.citySlug}`;
   };
 
   return (

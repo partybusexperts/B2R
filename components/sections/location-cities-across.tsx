@@ -140,7 +140,7 @@ function CitiesGrid({
         gap-5"
     >
       {cities.map((city) => {
-        const cityHref = `/locations/state/${stateSlug}/city/${city.city_slug}`;
+        const cityHref = `/locations/${stateSlug}/party-buses-${city.city_slug}`;
 
         return (
           <div
@@ -183,7 +183,7 @@ function CitiesGrid({
               </div>
 
               <Link
-                href={`/locations/state/${stateSlug}`}
+                href={`/locations/${stateSlug}`}
                 className="text-sm font-semibold text-white/70"
               >
                 {stateName}
