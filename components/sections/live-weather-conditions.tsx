@@ -135,15 +135,16 @@ export async function LiveWeatherConditions({
               <span className="inline-block align-[-2px]">⚠️</span> Weather
               Alerts
             </h2>
-            <p className="mt-2 text-sm text-gray-700">
+            <div className="mt-2 text-sm text-gray-700">
               {weather.alerts
                 ? weather.alerts.map((alert) => (
                     <div key={alert.event}>
-                      <strong>{alert.event}</strong>: {alert.description}
+                      <strong>{alert.event}:</strong>
+                      <p>{alert.description}</p>
                     </div>
                   ))
                 : "No active alerts for this area."}
-            </p>
+            </div>
           </div>
           <HourlyForecastCard data={next12Hours} />
           <FiveDaysForecastCard data={next5Days} />
