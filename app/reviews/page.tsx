@@ -8,6 +8,14 @@ import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
 // import { getVehiclesByType } from "@/lib/data/vehicles";
 // import { FleetList } from "@/components/sections/fleet-list";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Reviews",
+  description:
+    "Read verified rider reviews and see why groups trust Bus2Ride for party buses, limos, and coach buses.",
+  path: "/reviews",
+});
 
 export default async function ReviewsPage() {
   const reviews = (await getReviews(50)) ?? []; // Fetch more reviews for the main page

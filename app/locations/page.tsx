@@ -8,6 +8,14 @@ import Hero from "@/components/layout/hero";
 import { getReviews } from "@/lib/data/reviews";
 import { getLocations } from "@/lib/data/locations";
 import FleetSection from "@/components/sections/fleet-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Locations",
+  description:
+    "Find party bus, limo, and coach bus service by city and state. Browse coverage and get a fast quote for your route.",
+  path: "/locations",
+});
 
 // Helper to fetch generic fleet data for the bottom section
 async function getData() {

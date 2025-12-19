@@ -7,6 +7,14 @@ import { getEvents } from "@/lib/data/events";
 import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
 import { EventSearchClient } from "@/components/sections/events-search.client";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Events",
+  description:
+    "Browse event guides for weddings, bachelor(ette) parties, proms, nights out, and more — with route tips and booking playbooks.",
+  path: "/events",
+});
 
 export default async function EventsPage() {
   const events = (await getEvents()) ?? [];

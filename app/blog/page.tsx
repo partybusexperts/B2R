@@ -8,6 +8,14 @@ import { getReviews } from "@/lib/data/reviews";
 import { getBlogPosts } from "@/lib/data/blog";
 import { BlogGrid } from "@/components/sections/blog-grid";
 import FleetSection from "@/components/sections/fleet-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Blog",
+  description:
+    "Planning tips, pricing breakdowns, and booking advice for party buses, limos, and coach buses — written for real group trips.",
+  path: "/blog",
+});
 
 export default async function BlogPage() {
   const blogs = (await getBlogPosts()) ?? [];

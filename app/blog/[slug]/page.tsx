@@ -14,9 +14,41 @@ import { getBlogPostBySlug } from "@/lib/data/blog";
 import FleetSection from "@/components/sections/fleet-section";
 import Image from "next/image";
 import { toPublicStorageUrl } from "@/lib/helpers/storage";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
+
+  if (!post) {
+    return pageMetadata({
+      title: "Blog Post Not Found",
+      description: "This article doesn’t exist or may have moved.",
+      noIndex: true,
+    });
+  }
+
+  const description = (post.excerpt ?? "").trim() || undefined;
+  const thumbnailSrc =
+    post.thumbnail_url && post.thumbnail_url.trim().length > 0
+      ? toPublicStorageUrl("Blog", post.thumbnail_url)
+      : null;
+
+  return pageMetadata({
+    title: post.title ?? "Blog",
+    description,
+    path: `/blog/${post.slug}`,
+    openGraphImages: thumbnailSrc ? [thumbnailSrc] : undefined,
+  });
 }
 
 const buildTopicTags = (slug: string) => {

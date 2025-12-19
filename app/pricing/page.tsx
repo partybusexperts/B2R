@@ -7,6 +7,14 @@ import { EventsGrid } from "@/components/sections/events-grid";
 import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
 import { FaqSearchSection } from "@/components/sections/faq-search-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Pricing",
+  description:
+    "Get clear pricing guidance for party buses, limos, and coach buses — plus instant answers to common cost questions before you book.",
+  path: "/pricing",
+});
 
 export default async function PricingPage() {
   const reviews = (await getReviews()) ?? [];

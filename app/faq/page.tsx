@@ -11,6 +11,14 @@ import Hero from "@/components/layout/hero";
 import { FaqMostClickedWeek } from "@/components/sections/faq-most-clicked-week";
 import { FaqCategorySection } from "@/components/sections/faq-category-section";
 import { HeaderSection } from "@/components/sections/header-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "FAQ",
+  description:
+    "Search answers about booking, pricing, timing, vehicle rules, and event logistics — curated from real rider questions.",
+  path: "/faq",
+});
 
 function getCountsByCategory(faqs: FaqData[]) {
   const counts = new Map<string, number>();

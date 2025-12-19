@@ -9,9 +9,40 @@ import { notFound } from "next/navigation";
 import FleetSection from "@/components/sections/fleet-section";
 import Hero from "@/components/layout/hero";
 import EventQuickPlanner from "@/components/sections/event-quick-planner.client";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { toPublicStorageUrl } from "@/lib/helpers/storage";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await getEventBySlug(slug);
+
+  if (!event) {
+    return pageMetadata({
+      title: "Event Not Found",
+      description: "This event page doesn’t exist or may have moved.",
+      noIndex: true,
+    });
+  }
+
+  const ogImage = event.images?.[0]
+    ? toPublicStorageUrl("Events1", event.images[0])
+    : undefined;
+
+  return pageMetadata({
+    title: event.title ?? "Event",
+    description: (event.description ?? "").trim() || undefined,
+    path: `/events/${event.slug}`,
+    openGraphImages: ogImage ? [ogImage] : undefined,
+  });
 }
 
 export default async function EventDetailPage({ params }: PageProps) {

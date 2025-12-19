@@ -15,6 +15,14 @@ import { BookingProcessSection } from "@/components/sections/content-booking";
 import FleetSection from "@/components/sections/fleet-section";
 import Link from "next/link";
 import { HeaderSection } from "@/components/sections/header-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Contact",
+  description:
+    "Get an instant quote or ask a booking question. Tell us your date, pickup area, group size, and itinerary — we’ll help you lock in the right vehicle.",
+  path: "/contact",
+});
 
 export default async function ContactPage() {
   const reviews = (await getReviews()) ?? [];

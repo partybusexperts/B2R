@@ -8,6 +8,7 @@ import { EventsGrid } from "@/components/sections/events-grid";
 // import { FaqSection } from "@/components/sections/faq-section";
 import FleetSection from "@/components/sections/fleet-section";
 import { FaqSearchSection } from "@/components/sections/faq-search-section";
+import { pageMetadata } from "@/lib/seo/metadata";
 // import { BookingProcessSection } from "@/components/sections/content-booking";
 
 export default async function Home() {
@@ -59,3 +60,10 @@ export default async function Home() {
     </>
   );
 }
+
+export const metadata = pageMetadata({
+  title: "Party Bus, Limo & Coach Bus Rentals",
+  description:
+    "Browse premium party buses, limousines, and coach buses. Get a fast quote, confirm capacity, and book with a professional driver.",
+  path: "/",
+});

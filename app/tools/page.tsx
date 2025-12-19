@@ -9,6 +9,14 @@ import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { HeaderSection } from "@/components/sections/header-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Planning Tools",
+  description:
+    "Use calculators, checklists, and guides to plan routes, set budgets, and book the right vehicle with confidence.",
+  path: "/tools",
+});
 
 export default async function ToolsPage() {
   const tools = await getTools(100);

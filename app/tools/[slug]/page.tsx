@@ -5,9 +5,34 @@ import Hero from "@/components/layout/hero";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const tool = await getToolBySlug(slug);
+
+  if (!tool) {
+    return pageMetadata({
+      title: "Tool Not Found",
+      description: "This tool doesn’t exist or may have moved.",
+      noIndex: true,
+    });
+  }
+
+  return pageMetadata({
+    title: tool.title ?? "Tool",
+    description: (tool.description ?? "").trim() || undefined,
+    path: `/tools/${tool.slug}`,
+  });
 }
 
 export default async function ToolPage({ params }: PageProps) {

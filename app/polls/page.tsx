@@ -13,6 +13,14 @@ import FleetSection from "@/components/sections/fleet-section";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PollsSearchForm } from "@/components/sections/polls-search-form.client";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Community Polls",
+  description:
+    "Vote on real booking questions and see what riders prioritize — pricing, safety, accessibility, and party bus rules.",
+  path: "/polls",
+});
 
 export default async function PollsPage({
   searchParams,

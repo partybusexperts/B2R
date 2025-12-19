@@ -22,6 +22,36 @@ import LocationTopHotspots from "@/components/sections/location-top-hotspots";
 import LocationTransportationOverview from "@/components/sections/location-transportation-overview";
 import { Link } from "lucide-react";
 import { getRandomVehiclesImages } from "@/lib/data/vehicles";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ state: string }>;
+}): Promise<Metadata> {
+  const { state } = await params;
+  const stateData = await getState(state);
+
+  if (!stateData) {
+    return pageMetadata({
+      title: "Location Not Found",
+      description: "This location page doesn’t exist or may have moved.",
+      noIndex: true,
+    });
+  }
+
+  const title = `${stateData.name} Group Transportation`;
+  const description =
+    stateData.header?.description ??
+    `Browse cities across ${stateData.name} and compare party buses, limos, and coach buses for your group.`;
+
+  return pageMetadata({
+    title,
+    description,
+    path: `/locations/${stateData.slug}`,
+  });
+}
 
 export default async function StatePage({
   params,

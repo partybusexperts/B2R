@@ -13,6 +13,14 @@ import {
   getPollResultsHeaderData,
 } from "@/lib/data/polls";
 import FleetSection from "@/components/sections/fleet-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Poll Results",
+  description:
+    "Live results from community polls — see trends and vote totals across the most-discussed booking topics.",
+  path: "/polls/results",
+});
 
 export default async function PollResultsPage() {
   const pollResultsHeaderData = await getPollResultsHeaderData();

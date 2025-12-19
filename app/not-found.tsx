@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { ArrowLeft, Home, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Page Not Found",
+  description: "This page doesn’t exist or may have moved.",
+  noIndex: true,
+});
 
 export default function NotFound() {
   return (

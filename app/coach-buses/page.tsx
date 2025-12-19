@@ -9,6 +9,14 @@ import { getVehiclesByType } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import { BookingProcessSection } from "@/components/sections/content-booking";
 import { FaqSearchSection } from "@/components/sections/faq-search-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Coach Buses",
+  description:
+    "Find coach buses for comfortable group transportation. Compare capacity and amenities for longer routes, tours, and event shuttles.",
+  path: "/coach-buses",
+});
 
 // Helper to fetch page-specific data
 async function getPageData() {

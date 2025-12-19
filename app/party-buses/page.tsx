@@ -10,6 +10,14 @@ import { getVehiclesByType } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import { BookingProcessSection } from "@/components/sections/content-booking";
 import { FaqSearchSection } from "@/components/sections/faq-search-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Party Buses",
+  description:
+    "Browse party buses by size and amenities. Search capacity, compare layouts, and book a chauffeur-driven ride for your event.",
+  path: "/party-buses",
+});
 
 // Helper to fetch page-specific data
 async function getPageData() {

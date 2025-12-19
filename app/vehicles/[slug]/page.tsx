@@ -13,9 +13,49 @@ import {
 } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { toPublicStorageUrl } from "@/lib/helpers/storage";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const vehicle = await getVehiclebySlug(slug);
+
+  if (!vehicle) {
+    return pageMetadata({
+      title: "Vehicle Not Found",
+      description: "This vehicle doesn’t exist or may have moved.",
+      noIndex: true,
+    });
+  }
+
+  const primaryImage = vehicle.images?.[0]
+    ? toPublicStorageUrl("vehicles1", vehicle.images[0])
+    : undefined;
+
+  const typeLabel =
+    vehicle.type === "party-bus"
+      ? "Party Bus"
+      : vehicle.type === "limo"
+        ? "Limo"
+        : "Coach Bus";
+
+  return pageMetadata({
+    title: `${vehicle.name ?? typeLabel} Rental`,
+    description:
+      (vehicle.description ?? "").trim() ||
+      `Browse details, photos, and amenities for this ${typeLabel.toLowerCase()}.`,
+    path: `/vehicles/${vehicle.slug}`,
+    openGraphImages: primaryImage ? [primaryImage] : undefined,
+  });
 }
 
 async function getVehicleData(slug: string) {

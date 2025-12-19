@@ -9,6 +9,14 @@ import { getVehiclesByType } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import { BookingProcessSection } from "@/components/sections/content-booking";
 import { FaqSearchSection } from "@/components/sections/faq-search-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Limousines",
+  description:
+    "Explore sleek limousines for weddings, proms, corporate transfers, and VIP nights. Compare options and get a fast quote.",
+  path: "/limousines",
+});
 
 // Helper to fetch page-specific data
 async function getPageData() {

@@ -8,6 +8,14 @@ import FleetSection from "@/components/sections/fleet-section";
 import { IndustrySecretsSection } from "@/components/sections/industry-secrets-section";
 import { FaqSection } from "@/components/sections/faq-section";
 import { HeaderSection } from "@/components/sections/header-section";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Industry Secrets",
+  description:
+    "Contract gotchas, billing norms, and pricing quirks — distilled so you can book and negotiate like an insider.",
+  path: "/industry-secrets",
+});
 
 export default async function IndustrySecretsPage() {
   const reviews = (await getReviews()) ?? [];

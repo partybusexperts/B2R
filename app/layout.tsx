@@ -5,15 +5,14 @@ import Navigation from "@/components/layout/navigation";
 import "./globals.css";
 import Footer from "@/components/layout/footer";
 import ScrollUtilities from "@/components/scroll-utilities";
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+import { rootMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  ...rootMetadata({
+    defaultTitle: "Bus2Ride",
+    description:
+      "Premium party buses, limos, and coach buses — clean rides, pro drivers, and fast quotes.",
+  }),
 };
 
 const geistSans = Geist({

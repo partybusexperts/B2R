@@ -23,8 +23,54 @@ import Link from "next/link";
 import { OtherFleets } from "@/components/sections/content-with-images";
 import { FaqSearchSection } from "@/components/sections/faq-search-section";
 import { getRandomVehiclesImages } from "@/lib/data/vehicles";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo/metadata";
 
 type FleetType = "party-buses" | "limousines" | "coach-buses";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ state: string; fleet_city: string }>;
+}): Promise<Metadata> {
+  const { state, fleet_city } = await params;
+  const fleetType =
+    (fleet_city.match(
+      /(party-buses)|(limousines)|(coach-buses)/g,
+    )?.[0] as FleetType) ?? "party-buses";
+
+  const city = fleet_city.replace(`${fleetType}-`, "");
+  const location = await getLocationWithContent({
+    slug: `${city}-${state}`,
+    fleetType,
+  });
+
+  if (!location) {
+    return pageMetadata({
+      title: "Location Not Found",
+      description: "This location page doesn’t exist or may have moved.",
+      noIndex: true,
+    });
+  }
+
+  const fleetLabel =
+    fleetType === "party-buses"
+      ? "Party Bus"
+      : fleetType === "limousines"
+        ? "Limo"
+        : "Coach Bus";
+
+  const title = `${fleetLabel} Rentals in ${location.city_name}, ${location.state_name}`;
+  const description =
+    location.header?.description ??
+    `Compare ${fleetLabel.toLowerCase()} options in ${location.city_name}, ${location.state_name}. Browse amenities, group sizes, and booking tips.`;
+
+  return pageMetadata({
+    title,
+    description,
+    path: `/locations/${location.state_slug}/${fleetType}-${location.city_slug}`,
+  });
+}
 
 export default async function FleetCityPage({
   params,

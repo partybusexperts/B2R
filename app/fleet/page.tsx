@@ -2,6 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { getRandomVehicleByType } from "@/lib/data/vehicles";
 import { getRandomImage } from "@/lib/helpers/storage";
+import { pageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = pageMetadata({
+  title: "Fleet",
+  description:
+    "Explore party buses, limousines, and coach buses. Compare styles, capacity, and amenities to find the right ride for your group.",
+  path: "/fleet",
+});
 
 type FleetCardConfig = {
   title: string;
