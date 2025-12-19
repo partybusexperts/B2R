@@ -314,7 +314,7 @@ export default async function EventDetailPage({ params }: PageProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="/quote#instant?hrs=5&amp;group=22&amp;event=haunted-house-tour"
+              href="/pricing"
               className="rounded-full font-bold px-6 py-3 text-base shadow-lg
                 transition border flex items-center justify-center bg-white
                 text-blue-900 border-blue-200 hover:bg-blue-50"

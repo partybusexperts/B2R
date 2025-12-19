@@ -419,15 +419,9 @@ export default async function LocationComfortChecklist({
             className="mt-4 rounded-2xl border border-blue-700/40 bg-[#0d1f42]
               p-4 flex items-center gap-4 shadow"
           >
-            <div
-              className="rounded-full bg-blue-500/20 text-blue-100 px-3 py-2
-                text-xs font-semibold tracking-[0.3em] uppercase"
-            >
-              Ping
-            </div>
             <div>
               <p className="text-sm font-semibold text-white">
-                Dispatch hotfix lane
+                Flexible Scheduling & Last-Minute Changes
               </p>
               <p className="text-xs text-blue-100/80">
                 {comfortChecklist?.hotfix_lane}
@@ -439,12 +433,12 @@ export default async function LocationComfortChecklist({
               p-4 shadow"
           >
             <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">
-              Live slot count
+              Limited Weekend Availability
             </p>
             <div className="mt-2 flex items-end gap-3">
-              <p className="text-3xl font-black text-white">
+              {/* <p className="text-3xl font-black text-white">
                 {comfortChecklist?.slot_count?.number}
-              </p>
+              </p> */}
               <p className="text-xs text-blue-100/80">
                 {comfortChecklist?.slot_count?.text}
               </p>
@@ -459,7 +453,7 @@ export default async function LocationComfortChecklist({
               p-4 shadow"
           >
             <p className="text-xs uppercase tracking-[0.35em] text-blue-200/70">
-              Driver intel
+              Experienced, Event-Ready Drivers
             </p>
             <p className="text-sm text-blue-100/90 mt-2">
               {comfortChecklist?.driver_intel?.description}

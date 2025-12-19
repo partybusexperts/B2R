@@ -15,7 +15,7 @@ const mockTools = [
       "Use our Party Bus Pricing Calculator to estimate the cost of renting a party bus for your event. Enter the number of guests and the duration of your event to get an instant quote.", // The text/html to show inside the popup
 
     cta_text: "Get Quote", // e.g. "Get Quote"
-    cta_link: "/tools/quote",
+    cta_link: "/tools/pricing",
 
     href: "",
     created_at: new Date().toISOString(),

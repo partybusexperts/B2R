@@ -108,7 +108,7 @@ export default function Footer() {
                 py-3 font-bold bg-blue-900 text-white border border-blue-900
                 hover:bg-blue-950 transition h-auto text-md"
             >
-              <Link href="/quote">⚡ Instant Quote</Link>
+              <Link href="/pricing">⚡ Instant Quote</Link>
             </Button>
           </div>
         </div>
