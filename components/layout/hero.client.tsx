@@ -88,7 +88,7 @@ export function HeroClient({ hero, slideImageUrls }: HeroHeasderProps) {
                   alt=""
                   fill
                   sizes="100vw"
-                  quality={70}
+                  quality={75}
                   priority={slideIndex < 3}
                   loading={slideIndex < 3 ? "eager" : "lazy"}
                   className="object-cover object-center"

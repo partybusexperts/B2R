@@ -125,7 +125,7 @@ export async function LiveWeatherConditions({
           </div>
           <div
             className="bg-white text-gray-900 rounded-2xl shadow p-4 border
-              border-gray-200"
+              border-gray-200 col-span-2"
           >
             <h2
               className="text-lg font-semibold text-sky-900 flex items-center
@@ -135,12 +135,14 @@ export async function LiveWeatherConditions({
               <span className="inline-block align-[-2px]">⚠️</span> Weather
               Alerts
             </h2>
-            <div className="mt-2 text-sm text-gray-700">
+            <div className="mt-2 text-sm text-gray-700 text-clip">
               {weather.alerts
                 ? weather.alerts.map((alert) => (
                     <div key={alert.event}>
                       <strong>{alert.event}:</strong>
-                      <p>{alert.description}</p>
+                      <p className="whitespace-pre-wrap break-words">
+                        {alert.description}
+                      </p>
                     </div>
                   ))
                 : "No active alerts for this area."}
