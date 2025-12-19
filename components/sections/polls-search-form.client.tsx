@@ -121,7 +121,10 @@ export function PollsSearchForm({
       {isPending ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {Array.from({ length: 9 }).map((_, idx) => (
-            <Skeleton key={idx} className="h-[340px] w-full rounded-xl" />
+            <Skeleton
+              key={idx}
+              className="h-[340px] w-full rounded-xl bg-slate-800/70"
+            />
           ))}
         </div>
       ) : (

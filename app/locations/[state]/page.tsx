@@ -133,7 +133,10 @@ export default async function StatePage({
         vehicles_images={vehicles_images}
       />
 
-      <PollsGrid category={stateData.slug} />
+      <PollsGrid
+        columnCategories={[stateData.slug ?? "", "events", "pricing"]}
+        hideCities
+      />
 
       <ToolsGrid category={stateData.slug} />
 

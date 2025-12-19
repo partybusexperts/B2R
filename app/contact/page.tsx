@@ -450,7 +450,10 @@ export default async function ContactPage() {
       {/* Additional Sections */}
       <FleetSection />
       <ReviewsSection reviews={reviews} />
-      <PollsGrid category="contact" />
+      <PollsGrid
+        columnCategories={["booking-experience", "pricing", "events"]}
+        hideCities
+      />
       <EventsGrid />
       <FaqSection category="contact" title="Booking FAQs" />
     </main>

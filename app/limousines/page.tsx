@@ -67,7 +67,10 @@ export default async function LimousinesPage() {
       <ReviewsSection reviews={reviews} />
 
       {/* 6. Polls */}
-      <PollsGrid category="limo" />
+      <PollsGrid
+        columnCategories={["stretch-limo", "suv-limo", "weddings"]}
+        hideCities
+      />
 
       {/* 7. Tools (Context: Limo) */}
       <ToolsGrid category="limo" />

@@ -76,7 +76,7 @@ import { cache } from "react";
 //   },
 // ];
 
-export const getPolls = cache(async (limit = 20) => {
+export const getPolls = cache(async (limit = 20, category = "") => {
   const supabase = await createClient();
 
   const { data: polls, error } = await supabase
@@ -98,7 +98,8 @@ export const getPolls = cache(async (limit = 20) => {
       `,
     )
     .filter("question", "not.ilike", "Your opinion on%") // Ask to remove these later
-    .order("ord", { referencedTable: "poll_options1", ascending: false })
+    .filter("category_slug", "ilike", `%${category}%`)
+    .order("ord", { referencedTable: "poll_options1", ascending: true })
     .limit(limit);
 
   if (error) {

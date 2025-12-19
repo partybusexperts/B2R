@@ -14,6 +14,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PollsSearchForm } from "@/components/sections/polls-search-form.client";
 import { pageMetadata } from "@/lib/seo/metadata";
+import { PollCategorySection } from "@/components/sections/poll-category-section";
+import Locations from "@/lib/data/local/locations.json";
+
+const cities = Locations.flatMap((loc) =>
+  loc.cities.map((city) => city.toLowerCase()),
+);
 
 export const metadata = pageMetadata({
   title: "Community Polls",
@@ -38,11 +44,31 @@ export default async function PollsPage({
   const category = typeof categoryRaw === "string" ? categoryRaw : "";
   const normalizedCategory = category.trim();
 
+  // const hasSearch = q.trim().length > 0 || normalizedCategory.length > 0;
+
+  const pollSections = [
+    { category: "party-bus", title: "Party Buses" },
+    { category: "limo", title: "Limousines" },
+    { category: "coach-bus", title: "Coach Buses" },
+    { category: "pricing", title: "Pricing" },
+    { category: "booking-experience", title: "Booking Experience" },
+    { category: "booking-lead-times", title: "Booking Lead Times" },
+    { category: "events", title: "Events" },
+  ] as const;
+
   let polls = q.trim()
     ? ((await getPollsBySearch(q, 90)) ?? [])
     : normalizedCategory
       ? ((await getPollsByCategory(normalizedCategory, 150)) ?? [])
-      : ((await getPolls(30)) ?? []);
+      : ((await getPolls(81)) ?? []);
+
+  // Default view: hide city-specific polls (users can still search for them)
+  if (!q.trim() && !normalizedCategory) {
+    polls = polls.filter((poll) => {
+      const question = poll.question?.toLowerCase() ?? "";
+      return !cities.some((city) => question.includes(city));
+    });
+  }
 
   if (q.trim() && normalizedCategory) {
     const needle = normalizedCategory.toLowerCase();
@@ -133,6 +159,28 @@ export default async function PollsPage({
           </div>
         </div>
       </section>
+
+      {
+        <section className="bg-[#0E1F46]">
+          <div className="container mx-auto px-4 md:px-6 pt-10">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white">
+              Browse by category
+            </h2>
+            <p className="mt-2 text-sm text-white/70">
+              Jump into a topic and vote on the most popular questions.
+            </p>
+          </div>
+
+          {pollSections.map((section) => (
+            <div key={section.category} id={`polls-${section.category}`}>
+              <PollCategorySection
+                category={section.category}
+                title={section.title}
+              />
+            </div>
+          ))}
+        </section>
+      }
 
       <ReviewsSection reviews={reviews} />
       <FleetSection />

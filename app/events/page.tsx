@@ -58,7 +58,10 @@ export default async function EventsPage() {
       </section>
 
       <ReviewsSection reviews={reviews} />
-      <PollsGrid category="events" />
+      <PollsGrid
+        columnCategories={["events", "weddings", "concerts"]}
+        hideCities
+      />
 
       <FleetSection />
       {/* <FleetList title="Our Fleet" vehicles={fleet} /> */}

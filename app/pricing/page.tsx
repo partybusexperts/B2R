@@ -43,7 +43,14 @@ export default async function PricingPage() {
       </section>
 
       <ReviewsSection reviews={reviews} />
-      <PollsGrid category="pricing" />
+      <PollsGrid
+        columnCategories={[
+          "pricing",
+          "booking-experience",
+          "booking-lead-times",
+        ]}
+        hideCities
+      />
       <FleetSection />
       <ToolsGrid category="pricing" />
       <FaqSection category="pricing" title="Pricing FAQs" />

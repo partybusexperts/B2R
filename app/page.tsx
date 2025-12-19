@@ -39,7 +39,11 @@ export default async function Home() {
       />
 
       {/* Polls Section */}
-      <PollsGrid category="home" />
+      <PollsGrid
+        category="home"
+        columnCategories={["party-bus", "stretch-limo", "coach-bus"]}
+        hideCities
+      />
 
       {/* Tools Section */}
       <ToolsGrid category="home" />

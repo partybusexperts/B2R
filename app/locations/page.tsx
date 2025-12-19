@@ -40,7 +40,10 @@ export default async function LocationsIndexPage() {
       <LocationsDirectory locations={locations} />
 
       {/* 3. Polls (Requested Order: Polls -> Fleet -> Tools -> Reviews -> FAQ) */}
-      <PollsGrid category="locations" />
+      <PollsGrid
+        columnCategories={["events", "pricing", "booking-experience"]}
+        hideCities
+      />
 
       {/* 4. Fleet Section option A with filters */}
       {/* <div className="py-12 pb-6 bg-slate-50 dark:bg-slate-900/20">

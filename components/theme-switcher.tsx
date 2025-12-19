@@ -19,7 +19,8 @@ const ThemeSwitcher = () => {
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true);
-  }, []);
+    setTheme("light");
+  }, [setTheme]);
 
   if (!mounted) {
     return null;

@@ -84,7 +84,14 @@ export default async function IndustrySecretsPage() {
       <IndustrySecretsSection secrets={secrets} />
 
       <FleetSection />
-      <PollsGrid category="secrets" />
+      <PollsGrid
+        columnCategories={[
+          "pricing",
+          "booking-experience",
+          "best-driver-moments",
+        ]}
+        hideCities
+      />
       <ReviewsSection reviews={reviews} />
       <EventsGrid />
       <ToolsGrid category="secrets" />

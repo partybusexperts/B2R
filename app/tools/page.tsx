@@ -81,7 +81,14 @@ export default async function ToolsPage() {
 
       <FleetSection />
       <ReviewsSection reviews={reviews} />
-      <PollsGrid category="tools" />
+      <PollsGrid
+        columnCategories={[
+          "booking-experience",
+          "booking-lead-times",
+          "airport-procedures",
+        ]}
+        hideCities
+      />
       <ToolsGrid category="tools" />
       <FaqSection category="tools" title="Tools FAQs" />
       <EventsGrid />

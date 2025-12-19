@@ -68,7 +68,10 @@ export default async function PartyBusPage() {
       <ReviewsSection reviews={reviews} />
 
       {/* Polls */}
-      <PollsGrid category="party-bus" />
+      <PollsGrid
+        columnCategories={["party-bus", "pricing", "events"]}
+        hideCities
+      />
 
       {/* Tools (Context: Party Bus) */}
       <ToolsGrid category="party-bus" />
