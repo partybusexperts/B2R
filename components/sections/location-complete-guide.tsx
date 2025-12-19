@@ -13,6 +13,14 @@ export default function LocationCompleteGuide({
     ? state.complete_guide
     : location?.complete_guide;
 
+  const fleetType = state
+    ? "Party Bus"
+    : location?.fleet_type === "party-buses"
+      ? "Party Bus"
+      : location?.fleet_type === "limousines"
+        ? "Limousine"
+        : "Coach Bus";
+
   if (!completeGuideContent) return null;
   return (
     <section
@@ -24,9 +32,9 @@ export default function LocationCompleteGuide({
         className="text-3xl md:text-4xl font-extrabold text-center mb-6
           font-serif tracking-tight bg-gradient-to-r from-white via-blue-200
           to-blue-500 bg-clip-text text-transparent"
-        id={`complete-guide-to-party-bus-service-in-${slug}-4`}
+        id={`complete-guide-to-${fleetType.toLowerCase().trim()}-service-in-${slug}-4`}
       >
-        Complete Guide to Party Bus Service in {name}
+        Complete Guide to {fleetType} Service in {name}
       </h2>
 
       {/* content */}
