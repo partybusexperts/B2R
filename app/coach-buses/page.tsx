@@ -67,7 +67,14 @@ export default async function CoachBusesPage() {
       <ReviewsSection reviews={reviews} />
 
       {/* 6. Polls */}
-      <PollsGrid category="coach" />
+      <PollsGrid
+        columnCategories={[
+          "coach-bus",
+          "airport-procedures",
+          "sporting-events",
+        ]}
+        hideCities
+      />
 
       {/* 7. Tools (Context: Coach buses) */}
       <ToolsGrid category="coach" />

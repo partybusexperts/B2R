@@ -175,7 +175,10 @@ export default async function FleetCityPage({
         vehicles_images={vehicles_images}
       />
 
-      <PollsGrid category={location.city_slug} />
+      <PollsGrid
+        columnCategories={[location.state_slug ?? "", "events", "pricing"]}
+        hideCities
+      />
 
       <ToolsGrid category={location.city_slug} />
 

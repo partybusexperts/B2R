@@ -29,7 +29,14 @@ export default async function ReviewsPage() {
 
       {/* <FleetList title="Our Fleet" vehicles={fleet} /> */}
       <FleetSection />
-      <PollsGrid category="reviews" />
+      <PollsGrid
+        columnCategories={[
+          "best-driver-moments",
+          "booking-experience",
+          "pricing",
+        ]}
+        hideCities
+      />
       <EventsGrid />
       <ToolsGrid category="reviews" />
       <FaqSection category="reviews" title="Reviews FAQs" />

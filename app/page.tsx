@@ -41,7 +41,7 @@ export default async function Home() {
       {/* Polls Section */}
       <PollsGrid
         category="home"
-        columnCategories={["party-bus", "limo", "coach-bus"]}
+        columnCategories={["party-bus", "stretch-limo", "coach-bus"]}
         hideCities
       />
 

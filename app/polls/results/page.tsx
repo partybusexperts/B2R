@@ -165,7 +165,10 @@ export default async function PollResultsPage() {
       {/* TODO: Do a poll results section by category */}
 
       <FleetSection />
-      <PollsGrid category="results" />
+      <PollsGrid
+        columnCategories={["pricing", "events", "booking-experience"]}
+        hideCities
+      />
       <ReviewsSection reviews={reviews} />
       <ToolsGrid category="results" />
       <EventsGrid />

@@ -91,6 +91,13 @@ export default async function VehiclePage({ params }: PageProps) {
 
   const categorySlug = categoryTitle.toLowerCase().replace(" ", "-");
 
+  const pollCategories =
+    vehicle.type === "party-bus"
+      ? (["party-bus", "pricing", "events"] as const)
+      : vehicle.type === "coach"
+        ? (["coach-bus", "airport-procedures", "sporting-events"] as const)
+        : (["stretch-limo", "suv-limo", "weddings"] as const);
+
   return (
     <main>
       {/* 1. Main Vehicle Details */}
@@ -131,7 +138,7 @@ export default async function VehiclePage({ params }: PageProps) {
       />
 
       <ReviewsSection reviews={reviews} />
-      <PollsGrid category={vehicle.type as string} />
+      <PollsGrid columnCategories={[...pollCategories]} hideCities />
       <ToolsGrid category="pricing" />
       <EventsGrid />
       <FaqSection

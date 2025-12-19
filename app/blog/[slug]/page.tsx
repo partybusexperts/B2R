@@ -203,7 +203,10 @@ export default async function BlogPostPage({ params }: PageProps) {
       {/* <FleetList title="Related Vehicles" vehicles={fleet} /> */}
 
       <ReviewsSection reviews={reviews} />
-      <PollsGrid category="blog" />
+      <PollsGrid
+        columnCategories={["events", "weddings", "party-bus"]}
+        hideCities
+      />
       <ToolsGrid category="blog" />
       <FaqSection category="blog" title="Related FAQs" />
       <EventsGrid />

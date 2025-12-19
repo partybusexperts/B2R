@@ -286,7 +286,10 @@ export default async function EventDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      <PollsGrid category="events" />
+      <PollsGrid
+        columnCategories={["events", "weddings", "concerts"]}
+        hideCities
+      />
       <ToolsGrid category="events" />
       <ReviewsSection reviews={reviews} />
       <FaqSection category="events" title="Event Transport FAQs" />
