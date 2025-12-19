@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -33,13 +34,6 @@ export function HeroClient({ hero, slideImageUrls }: HeroHeasderProps) {
         window.clearInterval(slideIntervalRef.current);
     };
   }, [slideImageUrls.length, autoplayDurationMs]);
-
-  useEffect(() => {
-    slideImageUrls.forEach((imageUrl) => {
-      const img = new Image();
-      img.src = imageUrl;
-    });
-  }, [slideImageUrls]);
 
   const darkenIntensity = clampDarkenIntensity(hero?.darken);
   const hasSlideImages = slideImageUrls.length > 0;
@@ -84,12 +78,21 @@ export function HeroClient({ hero, slideImageUrls }: HeroHeasderProps) {
                       "z-0 opacity-0 transition-all",
                 )}
                 style={{
-                  backgroundImage: `url("${imageUrl}")`,
                   // Force exact 900ms duration for the transitions (opacity & reset)
                   // This overrides any Tailwind utility conflicts.
                   transitionDuration: "900ms",
                 }}
               >
+                <Image
+                  src={imageUrl}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  quality={70}
+                  priority={slideIndex < 3}
+                  loading={slideIndex < 3 ? "eager" : "lazy"}
+                  className="object-cover object-center"
+                />
                 <div className="absolute inset-0" style={overlayGradient} />
               </div>
             );
