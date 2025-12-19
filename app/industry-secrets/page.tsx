@@ -85,11 +85,7 @@ export default async function IndustrySecretsPage() {
 
       <FleetSection />
       <PollsGrid
-        columnCategories={[
-          "pricing",
-          "booking-experience",
-          "best-driver-moments",
-        ]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <ReviewsSection reviews={reviews} />

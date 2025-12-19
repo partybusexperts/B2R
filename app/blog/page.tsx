@@ -30,7 +30,7 @@ export default async function BlogPage() {
       <FleetSection />
       <ReviewsSection reviews={reviews} />
       <PollsGrid
-        columnCategories={["events", "weddings", "party-bus"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <ToolsGrid category="blog" />

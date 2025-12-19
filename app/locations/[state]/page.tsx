@@ -134,7 +134,8 @@ export default async function StatePage({
       />
 
       <PollsGrid
-        columnCategories={[stateData.slug ?? "", "events", "pricing"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
+        // columnCategories={[stateData.slug ?? "", "events", "pricing"]}
         hideCities
       />
 

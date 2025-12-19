@@ -10,8 +10,7 @@ const cities = Locations.flatMap((loc) =>
 const CATEGORY_TITLES: Record<string, string> = {
   "party-bus": "Party Buses",
   "coach-bus": "Coach Buses",
-  "stretch-limo": "Limousines",
-  "suv-limo": "Limousines",
+  limo: "Limousines",
   "party-van": "Party Vans",
   events: "Events",
   pricing: "Pricing",

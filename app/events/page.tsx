@@ -59,7 +59,7 @@ export default async function EventsPage() {
 
       <ReviewsSection reviews={reviews} />
       <PollsGrid
-        columnCategories={["events", "weddings", "concerts"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
 

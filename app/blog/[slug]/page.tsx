@@ -204,7 +204,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       <ReviewsSection reviews={reviews} />
       <PollsGrid
-        columnCategories={["events", "weddings", "party-bus"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <ToolsGrid category="blog" />

@@ -287,7 +287,8 @@ export default async function EventDetailPage({ params }: PageProps) {
       </section>
 
       <PollsGrid
-        columnCategories={["events", "weddings", "concerts"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
+        // columnCategories={[slug, "events", "concerts"]}
         hideCities
       />
       <ToolsGrid category="events" />

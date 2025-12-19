@@ -41,7 +41,7 @@ export default async function LocationsIndexPage() {
 
       {/* 3. Polls (Requested Order: Polls -> Fleet -> Tools -> Reviews -> FAQ) */}
       <PollsGrid
-        columnCategories={["events", "pricing", "booking-experience"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
 

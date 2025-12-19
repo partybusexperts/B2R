@@ -153,7 +153,7 @@ export default async function FaqPage() {
       <ReviewsSection reviews={reviews} />
       <FleetSection />
       <PollsGrid
-        columnCategories={["booking-experience", "pricing", "alcohol-policy"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <EventsGrid />

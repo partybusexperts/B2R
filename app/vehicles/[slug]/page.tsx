@@ -93,10 +93,10 @@ export default async function VehiclePage({ params }: PageProps) {
 
   const pollCategories =
     vehicle.type === "party-bus"
-      ? (["party-bus", "pricing", "events"] as const)
+      ? (["party-bus", "limo", "coach-bus"] as const)
       : vehicle.type === "coach"
-        ? (["coach-bus", "airport-procedures", "sporting-events"] as const)
-        : (["stretch-limo", "suv-limo", "weddings"] as const);
+        ? (["coach-bus", "party-bus", "limo"] as const)
+        : (["limo", "party-bus", "coach-bus"] as const);
 
   return (
     <main>
