@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 import {
   Dialog,
   DialogClose,
@@ -12,21 +12,44 @@ import {
 
 export default function LocationWhyBook({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
-  const infoTiles = [
-    location.why_book?.box1,
-    location.why_book?.box2,
-    location.why_book?.box3,
-  ].filter((tile): tile is NonNullable<typeof tile> => Boolean(tile));
+  const infoTiles = state
+    ? [state.why_book?.box1, state.why_book?.box2, state.why_book?.box3].filter(
+        (tile): tile is NonNullable<typeof tile> => Boolean(tile),
+      )
+    : [
+        location?.why_book?.box1,
+        location?.why_book?.box2,
+        location?.why_book?.box3,
+      ].filter((tile): tile is NonNullable<typeof tile> => Boolean(tile));
 
-  const benefitTiles = [
-    location.why_book?.row1,
-    location.why_book?.row2,
-    location.why_book?.row3,
-    location.why_book?.row4,
-  ].filter((tile): tile is NonNullable<typeof tile> => Boolean(tile));
+  const benefitTiles = state
+    ? [
+        state.why_book?.row1,
+        state.why_book?.row2,
+        state.why_book?.row3,
+        state.why_book?.row4,
+      ].filter((tile): tile is NonNullable<typeof tile> => Boolean(tile))
+    : [
+        location?.why_book?.row1,
+        location?.why_book?.row2,
+        location?.why_book?.row3,
+        location?.why_book?.row4,
+      ].filter((tile): tile is NonNullable<typeof tile> => Boolean(tile));
+
+  if (infoTiles.length === 0 && benefitTiles.length === 0) {
+    return null;
+  }
+
+  const slug = state ? state.slug : location?.state_slug;
+  const name = state ? state.name : location?.city_name;
+  const description = state
+    ? state.why_book?.description
+    : location?.why_book?.description;
 
   return (
     <section
@@ -123,13 +146,11 @@ export default function LocationWhyBook({
           className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r
             from-white via-blue-200 to-blue-500 bg-clip-text text-transparent
             drop-shadow font-serif tracking-tight"
-          id={`why-book-in-${location.city_slug}-with-bus2ride-0`}
+          id={`why-book-in-${slug}-with-bus2ride-0`}
         >
-          Why Book in {location.city_name} with Bus2Ride?
+          Why Book in {name} with Bus2Ride?
         </h2>
-        <p className="mx-auto max-w-3xl text-blue-100/90">
-          {location.why_book?.description}
-        </p>
+        <p className="mx-auto max-w-3xl text-blue-100/90">{description}</p>
       </div>
       <div className="mt-10">
         <ul className="space-y-4 text-blue-900 text-lg">

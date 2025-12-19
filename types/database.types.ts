@@ -56,6 +56,22 @@ type DatabaseOverrides = {
           transport_done_right?: LocationTransportDoneRight;
         };
       };
+      states: {
+        Row: {
+          header?: LocationHeader;
+          why_book?: LocationWhyBook;
+          how_to_book?: LocationHowToBook;
+          cities_served?: LocationCitiesServed;
+          state_planning_guide?: LocationStatePlanningGuide;
+          complete_guide?: LocationCompleteGuide;
+          planning_checklist?: LocationPlanningGuide;
+          transportation_overview?: LocationTransportationOverview;
+          extra_notes?: LocationExtraPlanningNotes;
+          top_hotspots?: LocationTopHotspots;
+          comfort_checklist?: LocationComfortChecklist;
+          transport_done_right?: LocationTransportDoneRight;
+        };
+      };
     };
   };
 };

@@ -1,4 +1,3 @@
-import { LocationsData } from "@/lib/data/locations";
 import Image from "next/image";
 import {
   Daily,
@@ -8,11 +7,13 @@ import {
 } from "@/lib/api/weather";
 
 export async function LiveWeatherConditions({
-  location,
+  cityName,
+  stateName,
   weather,
   tips,
 }: {
-  location: LocationsData;
+  cityName?: string;
+  stateName?: string;
   weather: Awaited<ReturnType<typeof fetchOpenWeatherData>>;
   tips: string[];
 }) {
@@ -41,7 +42,8 @@ export async function LiveWeatherConditions({
         >
           <div>
             <h1 className="text-xl font-bold text-sky-950">
-              Live Weather — {location.city_name}, {location.state_name}
+              Live Weather — {cityName && `${cityName}, `}{" "}
+              {stateName ?? "Unknown State"}
             </h1>
             <p className="text-sky-900 mt-0.5 text-xs">
               <span className="inline-flex items-center gap-1 mr-3">

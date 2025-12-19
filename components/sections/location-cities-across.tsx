@@ -2,17 +2,25 @@ import Link from "next/link";
 import {
   getLocationsByState,
   LocationsData,
+  StateData,
   type LocationsWithContentData,
 } from "@/lib/data/locations";
 
 export default async function LocationCitiesAcross({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
-  const cities = (await getLocationsByState(location.state_slug)) ?? [];
+  const cities =
+    (await getLocationsByState(state?.slug || location?.state_slug || "")) ??
+    [];
+  if (!cities) return null;
 
-  if (cities.length === 0) return null;
+  const stateName = state ? state.name : location?.state_name;
+  const stateSlug = state ? state.slug : location?.state_slug;
+  const citiesServed = state ? state?.cities_served : location?.cities_served;
 
   return (
     <section
@@ -42,7 +50,7 @@ export default async function LocationCitiesAcross({
               »
             </li>
             <li className="text-blue-100 font-semibold">
-              {location.state_name} Overview
+              {stateName} Overview
             </li>
           </ol>
         </nav>
@@ -57,12 +65,12 @@ export default async function LocationCitiesAcross({
               className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r
                 from-white via-blue-200 to-blue-500 bg-clip-text
                 text-transparent drop-shadow-lg font-serif tracking-tight"
-              id={`cities-we-serve-across-${location.state_slug}-2`}
+              id={`cities-we-serve-across-${stateSlug}-2`}
             >
-              Cities We Serve Across {location.state_name}
+              Cities We Serve Across {stateName}
             </h2>
             <p className="mt-3 text-blue-100/80 max-w-2xl">
-              {location.cities_served?.description}
+              {citiesServed?.description}
             </p>
           </div>
 
@@ -79,17 +87,19 @@ export default async function LocationCitiesAcross({
                 border-white/20 px-4 py-2 text-xs uppercase tracking-[0.35em]
                 text-white/80"
             >
-              {location.cities_served?.label}
+              {citiesServed?.label}
             </span>
           </div>
         </div>
 
         {/* Cities Grid */}
-        <CitiesGrid
-          cities={cities}
-          stateName={location.state_name}
-          stateSlug={location.state_slug}
-        />
+        {stateName && stateSlug && (
+          <CitiesGrid
+            cities={cities}
+            stateName={stateName}
+            stateSlug={stateSlug}
+          />
+        )}
 
         {/* Not seeing your city? */}
         <div className="mt-12 flex justify-center">

@@ -14,6 +14,9 @@ export async function fetchOpenWeatherData(lat: number, lng: number) {
   });
 
   if (!res.ok) {
+    console.error(`OpenWeatherAPI failed: ${res.status}`);
+
+    // return mocked data
     return {
       lat: 33.44,
       lon: -94.04,
@@ -130,8 +133,6 @@ export async function fetchOpenWeatherData(lat: number, lng: number) {
         },
       ],
     };
-
-    throw new Error(`OpenWeatherAPI failed: ${res.status}`);
   }
 
   const json = (await res.json()) as OneCallResponse;

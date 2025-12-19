@@ -1,20 +1,38 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 
 export default function LocationPlanningGuide({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
-  const guides = [
-    location.state_planning_guide?.box1,
-    location.state_planning_guide?.box2,
-    location.state_planning_guide?.box3,
-    location.state_planning_guide?.box4,
-    location.state_planning_guide?.box5,
-    location.state_planning_guide?.box6,
-    location.state_planning_guide?.box7,
-    location.state_planning_guide?.box8,
-  ];
+  const guides = state
+    ? [
+        state.state_planning_guide?.box1,
+        state.state_planning_guide?.box2,
+        state.state_planning_guide?.box3,
+        state.state_planning_guide?.box4,
+        state.state_planning_guide?.box5,
+        state.state_planning_guide?.box6,
+        state.state_planning_guide?.box7,
+        state.state_planning_guide?.box8,
+      ]
+    : [
+        location?.state_planning_guide?.box1,
+        location?.state_planning_guide?.box2,
+        location?.state_planning_guide?.box3,
+        location?.state_planning_guide?.box4,
+        location?.state_planning_guide?.box5,
+        location?.state_planning_guide?.box6,
+        location?.state_planning_guide?.box7,
+        location?.state_planning_guide?.box8,
+      ];
+
+  if (!guides) return null;
+
+  const slug = state ? state?.slug : location?.state_slug;
+  const name = state ? state?.name : location?.city_name;
 
   return (
     <section
@@ -26,9 +44,9 @@ export default function LocationPlanningGuide({
         className="text-4xl md:text-5xl font-extrabold text-center mb-12
           bg-gradient-to-r from-white via-blue-200 to-blue-500 bg-clip-text
           text-transparent drop-shadow-lg font-serif tracking-tight"
-        id={`${location.state_slug}-planning-guide-3`}
+        id={`${slug}-planning-guide-3`}
       >
-        {location.state_name} Planning Guide
+        {name} Planning Guide
       </h2>
       <div className="grid md:grid-cols-2 gap-8">
         {/* Col 1 */}

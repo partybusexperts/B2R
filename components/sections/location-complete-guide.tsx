@@ -1,10 +1,19 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 
 export default function LocationCompleteGuide({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
+  const slug = state ? state?.slug : location?.state_slug;
+  const name = state ? state?.name : location?.city_name;
+  const completeGuideContent = state
+    ? state.complete_guide
+    : location?.complete_guide;
+
+  if (!completeGuideContent) return null;
   return (
     <section
       className="relative py-16 max-w-7xl mx-auto bg-gradient-to-br to-black
@@ -15,9 +24,9 @@ export default function LocationCompleteGuide({
         className="text-3xl md:text-4xl font-extrabold text-center mb-6
           font-serif tracking-tight bg-gradient-to-r from-white via-blue-200
           to-blue-500 bg-clip-text text-transparent"
-        id={`complete-guide-to-party-bus-service-in-${location.city_slug}-4`}
+        id={`complete-guide-to-party-bus-service-in-${slug}-4`}
       >
-        Complete Guide to Party Bus Service in {location.city_name}
+        Complete Guide to Party Bus Service in {name}
       </h2>
 
       {/* content */}
@@ -29,7 +38,7 @@ export default function LocationCompleteGuide({
           prose-hr:border-white/10 prose-img:rounded-2xl prose-img:shadow-lg
           space-y-6"
         dangerouslySetInnerHTML={{
-          __html: location.complete_guide ?? "",
+          __html: completeGuideContent ?? "",
         }}
       />
     </section>

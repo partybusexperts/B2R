@@ -1,4 +1,4 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 import { VehicleData } from "@/lib/data/vehicles";
 import { LiveWeatherConditions } from "./live-weather-conditions";
 import {
@@ -9,24 +9,38 @@ import {
 import { fetchTomTomTraffic } from "@/lib/api/traffic";
 import { TrafficConditions } from "./live-traffic-conditions";
 import VehicleImageGallery from "./vehicle-image-gallery.client";
+import { fetchStateGeocodeData } from "@/lib/api/geocode";
 
 export default async function LocationComfortChecklist({
   location,
+  state,
   vehicles_images,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
   vehicles_images: VehicleData["images"];
 }) {
-  const imageUrls = (vehicles_images ?? []).filter(
-    (u): u is string => typeof u === "string" && u.length > 0,
-  );
+  const imageUrls = vehicles_images ?? [];
 
   const gallery1 = imageUrls.slice(0, 6);
   const gallery2 = imageUrls.slice(6, 12);
 
+  const stateGeoData = {
+    coordinates: {
+      lat: 0,
+      lng: 0,
+    },
+  };
+
+  if (state) {
+    const geoData = await fetchStateGeocodeData(state.name);
+    stateGeoData.coordinates.lat = geoData ? geoData[0]?.lat : 0;
+    stateGeoData.coordinates.lng = geoData ? geoData[0]?.lon : 0;
+  }
+
   const weather = await fetchOpenWeatherData(
-    location.coordinates.lat,
-    location.coordinates.lng,
+    state ? stateGeoData.coordinates.lat : location?.coordinates.lat || 0,
+    state ? stateGeoData.coordinates.lng : location?.coordinates.lng || 0,
   );
 
   const sunrise = formatWeatherTime(weather.current.sunrise, weather.timezone);
@@ -66,9 +80,21 @@ export default async function LocationComfortChecklist({
 
   // Traffic
   const traffic = await fetchTomTomTraffic(
-    location.coordinates.lat,
-    location.coordinates.lng,
+    state ? stateGeoData.coordinates.lat : location?.coordinates.lat || 0,
+    state ? stateGeoData.coordinates.lng : location?.coordinates.lng || 0,
   );
+
+  // Final variables
+
+  const name = state ? state.name : location?.city_name;
+  const stateName = state ? state.name : location?.state_name;
+  const comfortChecklist = state
+    ? state.comfort_checklist
+    : location?.comfort_checklist;
+
+  if (!comfortChecklist) {
+    return null;
+  }
 
   return (
     <section
@@ -82,14 +108,14 @@ export default async function LocationComfortChecklist({
           to-blue-500 bg-clip-text text-transparent"
         id="aurora-winter-comfort-checklist-7"
       >
-        {location.city_name} Comfort Checklist
+        {name} Comfort Checklist
       </h2>
 
       <p
         className="text-center text-blue-100/80 max-w-3xl mx-auto mb-8 text-sm
           md:text-base"
       >
-        {location.comfort_checklist?.description}
+        {comfortChecklist?.description}
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
@@ -148,7 +174,7 @@ export default async function LocationComfortChecklist({
       <div className="grid md:grid-cols-2 gap-10">
         {/* Col 1 */}
         <div className="space-y-4 flex flex-col">
-          {location.comfort_checklist?.tips.map((tip) => (
+          {comfortChecklist?.tips.map((tip) => (
             <div
               key={tip.toLowerCase().replace(/\s+/g, "-")}
               className="bg-[#132a55] p-4 rounded-xl border border-blue-700/40
@@ -171,7 +197,7 @@ export default async function LocationComfortChecklist({
             <h4
               className="font-semibold text-blue-50 mb-2 text-sm tracking-wide"
             >
-              {location.city_name} Fleet Readiness
+              {name} Fleet Readiness
             </h4>
 
             <div
@@ -183,7 +209,7 @@ export default async function LocationComfortChecklist({
                 prose-hr:border-white/10 prose-img:rounded-2xl
                 prose-img:shadow-lg space-y-6"
               dangerouslySetInnerHTML={{
-                __html: location.comfort_checklist?.fleet_readiness ?? "",
+                __html: comfortChecklist?.fleet_readiness ?? "",
               }}
             />
           </div>
@@ -194,7 +220,7 @@ export default async function LocationComfortChecklist({
               className="inline-block rounded-full bg-red-600 text-white
                 font-bold px-5 py-3 shadow hover:opacity-95 transition"
             >
-              Book an {location.state_name} Flex Window
+              Book an {stateName} Flex Window
             </a>
           </div>
 
@@ -206,13 +232,13 @@ export default async function LocationComfortChecklist({
               <p
                 className="text-xs uppercase tracking-[0.35em] text-blue-200/70"
               >
-                {location.city_name} Trivia
+                {name} Trivia
               </p>
               <h4 className="text-lg font-semibold text-white mt-2">
-                {location.comfort_checklist?.trivia.title}
+                {comfortChecklist?.trivia?.title}
               </h4>
               <p className="mt-3 space-y-2 text-sm text-blue-100/90">
-                {location.comfort_checklist?.trivia.description}
+                {comfortChecklist?.trivia?.description}
               </p>
             </div>
             <div
@@ -222,13 +248,13 @@ export default async function LocationComfortChecklist({
               <p
                 className="text-xs uppercase tracking-[0.35em] text-blue-200/70"
               >
-                {location.city_name} Fast Facts
+                {name} Fast Facts
               </p>
               <h4 className="text-lg font-semibold text-white mt-2">
-                {location.comfort_checklist?.fast_facts.title}
+                {comfortChecklist?.fast_facts?.title}
               </h4>
               <p className="mt-3 space-y-2 text-sm text-blue-100/90">
-                {location.comfort_checklist?.fast_facts.description}
+                {comfortChecklist?.fast_facts?.description}
               </p>
             </div>
             <div
@@ -241,7 +267,7 @@ export default async function LocationComfortChecklist({
                 Aurora Playbook
               </p>
               <h4 className="text-lg font-semibold text-white mt-2">
-                {location.comfort_checklist?.playbook.title}
+                {comfortChecklist?.playbook?.title}
               </h4>
               <div
                 className="mt-3 grid gap-4 md:grid-cols-3 text-sm
@@ -252,13 +278,13 @@ export default async function LocationComfortChecklist({
                     className="text-xs text-blue-200/70 uppercase
                       tracking-[0.2em]"
                   >
-                    {location.comfort_checklist?.playbook.box1.label}
+                    {comfortChecklist?.playbook?.box1?.label}
                   </p>
                   <p className="font-semibold text-white">
-                    {location.comfort_checklist?.playbook.box1.title}
+                    {comfortChecklist?.playbook?.box1?.title}
                   </p>
                   <p className="mt-1 text-[13px]">
-                    {location.comfort_checklist?.playbook.box1.description}
+                    {comfortChecklist?.playbook?.box1?.description}
                   </p>
                 </div>
                 <div>
@@ -266,13 +292,13 @@ export default async function LocationComfortChecklist({
                     className="text-xs text-blue-200/70 uppercase
                       tracking-[0.2em]"
                   >
-                    {location.comfort_checklist?.playbook.box2.label}
+                    {comfortChecklist?.playbook?.box2?.label}
                   </p>
                   <p className="font-semibold text-white">
-                    {location.comfort_checklist?.playbook.box2.title}
+                    {comfortChecklist?.playbook?.box2?.title}
                   </p>
                   <p className="mt-1 text-[13px]">
-                    {location.comfort_checklist?.playbook.box2.description}
+                    {comfortChecklist?.playbook?.box2?.description}
                   </p>
                 </div>
                 <div>
@@ -280,13 +306,13 @@ export default async function LocationComfortChecklist({
                     className="text-xs text-blue-200/70 uppercase
                       tracking-[0.2em]"
                   >
-                    {location.comfort_checklist?.playbook.box3.label}
+                    {comfortChecklist?.playbook?.box3?.label}
                   </p>
                   <p className="font-semibold text-white">
-                    {location.comfort_checklist?.playbook.box3.title}
+                    {comfortChecklist?.playbook?.box3?.title}
                   </p>
                   <p className="mt-1 text-[13px]">
-                    {location.comfort_checklist?.playbook.box3.description}
+                    {comfortChecklist?.playbook?.box3?.description}
                   </p>
                 </div>
               </div>
@@ -301,73 +327,92 @@ export default async function LocationComfortChecklist({
               Dispatch case files
             </p>
             <h4 className="text-lg font-semibold text-white mt-2">
-              Real {location.city_name} requests we staged this season
+              Real {name} requests we staged this season
             </h4>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-white">
-                    {location.comfort_checklist?.case_files.box1.title}
-                  </span>
-                  <span
-                    className="text-xs uppercase tracking-[0.25em]
-                      text-amber-200"
-                  >
-                    {location.comfort_checklist?.case_files.box1.label}
-                  </span>
+              {comfortChecklist?.case_files?.box1 && (
+                <div
+                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-white">
+                      {comfortChecklist?.case_files.box1.title}
+                    </span>
+                    <span
+                      className="text-xs uppercase tracking-[0.25em]
+                        text-amber-200"
+                    >
+                      {comfortChecklist?.case_files.box1.label}
+                    </span>
+                  </div>
+                  <p className="text-[13px] leading-relaxed text-blue-100/90">
+                    {comfortChecklist?.case_files.box1.description}
+                  </p>
                 </div>
-                <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  {location.comfort_checklist?.case_files.box1.description}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-white">
-                    {location.comfort_checklist?.case_files.box2.title}
-                  </span>
-                  <span
-                    className="text-xs uppercase tracking-[0.25em]
-                      text-amber-200"
-                  >
-                    {location.comfort_checklist?.case_files.box2.label}
-                  </span>
+              )}
+
+              {comfortChecklist?.case_files?.box2 && (
+                <div
+                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-white">
+                      {comfortChecklist?.case_files.box2.title}
+                    </span>
+                    <span
+                      className="text-xs uppercase tracking-[0.25em]
+                        text-amber-200"
+                    >
+                      {comfortChecklist?.case_files.box2.label}
+                    </span>
+                  </div>
+                  <p className="text-[13px] leading-relaxed text-blue-100/90">
+                    {comfortChecklist?.case_files.box2.description}
+                  </p>
                 </div>
-                <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  {location.comfort_checklist?.case_files.box2.description}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-white">
-                    {location.comfort_checklist?.case_files.box3.title}
-                  </span>
-                  <span
-                    className="text-xs uppercase tracking-[0.25em]
-                      text-amber-200"
-                  >
-                    {location.comfort_checklist?.case_files.box3.label}
-                  </span>
+              )}
+
+              {comfortChecklist?.case_files?.box3 && (
+                <div
+                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-white">
+                      {comfortChecklist?.case_files.box3.title}
+                    </span>
+                    <span
+                      className="text-xs uppercase tracking-[0.25em]
+                        text-amber-200"
+                    >
+                      {comfortChecklist?.case_files.box3.label}
+                    </span>
+                  </div>
+                  <p className="text-[13px] leading-relaxed text-blue-100/90">
+                    {comfortChecklist?.case_files.box3.description}
+                  </p>
                 </div>
-                <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  {location.comfort_checklist?.case_files.box3.description}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-white">
-                    {location.comfort_checklist?.case_files.box4.title}
-                  </span>
-                  <span
-                    className="text-xs uppercase tracking-[0.25em]
-                      text-amber-200"
-                  >
-                    {location.comfort_checklist?.case_files.box4.label}
-                  </span>
+              )}
+
+              {comfortChecklist?.case_files?.box4 && (
+                <div
+                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-white">
+                      {comfortChecklist?.case_files.box4.title}
+                    </span>
+                    <span
+                      className="text-xs uppercase tracking-[0.25em]
+                        text-amber-200"
+                    >
+                      {comfortChecklist?.case_files.box4.label}
+                    </span>
+                  </div>
+                  <p className="text-[13px] leading-relaxed text-blue-100/90">
+                    {comfortChecklist?.case_files.box4.description}
+                  </p>
                 </div>
-                <p className="text-[13px] leading-relaxed text-blue-100/90">
-                  {location.comfort_checklist?.case_files.box4.description}
-                </p>
-              </div>
+              )}
             </div>
           </div>
           <div
@@ -385,7 +430,7 @@ export default async function LocationComfortChecklist({
                 Dispatch hotfix lane
               </p>
               <p className="text-xs text-blue-100/80">
-                {location.comfort_checklist?.hotfix_lane}
+                {comfortChecklist?.hotfix_lane}
               </p>
             </div>
           </div>
@@ -398,14 +443,14 @@ export default async function LocationComfortChecklist({
             </p>
             <div className="mt-2 flex items-end gap-3">
               <p className="text-3xl font-black text-white">
-                {location.comfort_checklist?.slot_count.number}
+                {comfortChecklist?.slot_count?.number}
               </p>
               <p className="text-xs text-blue-100/80">
-                {location.comfort_checklist?.slot_count.text}
+                {comfortChecklist?.slot_count?.text}
               </p>
             </div>
             <p className="text-[12px] text-blue-200/70 mt-2">
-              {location.comfort_checklist?.slot_count.label}
+              {comfortChecklist?.slot_count?.label}
             </p>
           </div>
 
@@ -417,10 +462,10 @@ export default async function LocationComfortChecklist({
               Driver intel
             </p>
             <p className="text-sm text-blue-100/90 mt-2">
-              {location.comfort_checklist?.driver_intel.description}
+              {comfortChecklist?.driver_intel?.description}
             </p>
             <p className="text-[12px] text-blue-200/60 mt-2">
-              {location.comfort_checklist?.driver_intel.label}
+              {comfortChecklist?.driver_intel?.label}
             </p>
           </div>
         </div>
@@ -434,7 +479,7 @@ export default async function LocationComfortChecklist({
             Live Weather &amp; Comfort
           </h3>
           <p className="text-blue-100/90 text-sm leading-relaxed">
-            {location.comfort_checklist?.live_weather.description}
+            {comfortChecklist?.live_weather?.description}
           </p>
           <div
             className="rounded-2xl overflow-hidden border border-blue-600/40
@@ -442,9 +487,10 @@ export default async function LocationComfortChecklist({
               md:p-3 text-white text-sm shadow-[0_30px_90px_rgba(4,11,32,0.55)]"
           >
             <LiveWeatherConditions
-              location={location}
+              cityName={location ? location.city_name : undefined}
+              stateName={stateName}
               weather={weather}
-              tips={location.comfort_checklist?.packing_tips ?? []}
+              tips={comfortChecklist?.packing_tips ?? []}
             />
           </div>
 

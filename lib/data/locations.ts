@@ -69,43 +69,45 @@ export const getLocationBySlugs = cache(
   },
 );
 
-export async function getLocationWithContent({
-  slug,
-  fleetType,
-}: {
-  slug: string;
-  fleetType: "party-buses" | "limousines" | "coach-buses";
-}) {
-  const supabase = await createClient();
+export const getLocationWithContent = cache(
+  async ({
+    slug,
+    fleetType,
+  }: {
+    slug: string;
+    fleetType: "party-buses" | "limousines" | "coach-buses";
+  }) => {
+    const supabase = await createClient();
 
-  const { data: location, error } = await supabase
-    .from("locations")
-    .select(
-      `
+    const { data: location, error } = await supabase
+      .from("locations")
+      .select(
+        `
       *,
       content:locations_content!inner(*) 
     `,
-    )
-    .eq("slug", slug) // 1. Match the Location Slug
-    .eq("content.fleet_type", fleetType) // 2. Match the Content Fleet Type
-    .single();
+      )
+      .eq("slug", slug) // 1. Match the Location Slug
+      .eq("content.fleet_type", fleetType) // 2. Match the Content Fleet Type
+      .single();
 
-  if (error || !location) {
-    console.error("Error fetching fleet location content:", error);
-    return null;
-  }
+    if (error || !location) {
+      console.error("Error fetching fleet location content:", error);
+      return null;
+    }
 
-  // The 'content' field will be an array (usually of 1 item).
-  // You might want to flatten it for easier use in your component:
-  const contentItem = Array.isArray(location.content)
-    ? location.content[0]
-    : location.content;
+    // The 'content' field will be an array (usually of 1 item).
+    // You might want to flatten it for easier use in your component:
+    const contentItem = Array.isArray(location.content)
+      ? location.content[0]
+      : location.content;
 
-  return {
-    ...location,
-    ...contentItem, // Now is an object, not an array
-  };
-}
+    return {
+      ...location,
+      ...contentItem, // Now is an object, not an array
+    };
+  },
+);
 
 // Legacy helper: used to safely redirect old routes like `/locations/city/[city_slug]`.
 // Returns potentially multiple rows because `city_slug` is not globally unique.
@@ -266,3 +268,26 @@ export interface LocationTransportDoneRight {
   description: string;
   bottom_content: string; // HTML content
 }
+
+export const getState = cache(async (stateSlug: string) => {
+  const supabase = await createClient();
+  const { data: stateData, error } = await supabase
+    .from("states")
+    .select("*")
+    .eq("slug", stateSlug)
+    .single();
+
+  if (error) {
+    console.error("getState:", error);
+    return null;
+  }
+
+  if (!stateData) {
+    console.warn("getState:", "No data found");
+    return null;
+  }
+
+  return stateData;
+});
+
+export type StateData = Database["public"]["Tables"]["states"]["Row"];

@@ -1,13 +1,20 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 
 export default function LocationHeader({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
-  const title = location.header?.title;
-  const description = location.header?.description;
-  const bottom_label = location.header?.bottom_label;
+  const header = state ? state.header : location?.header;
+
+  if (!header) {
+    return null;
+  }
+
+  const cityName = location?.city_name;
+  const stateName = state ? state.name : location?.state_name;
 
   return (
     <section className="relative px-4 pt-4 mb-12">
@@ -32,8 +39,8 @@ export default function LocationHeader({
                   text-xs font-semibold uppercase tracking-[0.35em]
                   text-blue-200"
               >
-                {location.city_name && `${location.city_name} • `}
-                {location.state_name}
+                {cityName && `${cityName} • `}
+                {stateName}
               </span>
               <span className="text-blue-300/80">Bus2Ride Local Dispatch</span>
             </div>
@@ -63,13 +70,13 @@ export default function LocationHeader({
               className="text-4xl md:text-5xl font-extrabold leading-tight
                 text-white"
             >
-              {title}
+              {header?.title}
             </h1>
             <p
               className="mx-auto max-w-3xl text-base md:text-lg
                 text-blue-100/90"
             >
-              {description}
+              {header?.description}
             </p>
           </div>
           <div
@@ -114,7 +121,7 @@ export default function LocationHeader({
             </a>
           </div>
           <p className="mt-6 text-center text-sm text-yellow-200/90">
-            {bottom_label}
+            {header?.bottom_label}
           </p>
         </div>
       </div>

@@ -1,13 +1,31 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 
 export default function LocationTopHotspots({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
-  const routes = location.top_hotspots?.routes;
-  const venues = location.top_hotspots?.high_impact_venues;
-  const coverage = location.top_hotspots?.neighborhood_coverage;
+  const routes = state
+    ? state.top_hotspots?.routes
+    : location?.top_hotspots?.routes;
+  const venues = state
+    ? state.top_hotspots?.high_impact_venues
+    : location?.top_hotspots?.high_impact_venues;
+  const coverage = state
+    ? state.top_hotspots?.neighborhood_coverage
+    : location?.top_hotspots?.neighborhood_coverage;
+  const recommendations = state
+    ? state.top_hotspots?.recommendations
+    : location?.top_hotspots?.recommendations;
+
+  if (!routes && !venues && !coverage && !recommendations) {
+    return null;
+  }
+
+  const slug = state ? state.slug : location?.city_slug;
+  const name = state ? state.name : location?.city_name;
 
   return (
     <section
@@ -19,9 +37,9 @@ export default function LocationTopHotspots({
         className="text-4xl md:text-5xl font-extrabold text-center mb-12
           font-serif tracking-tight bg-gradient-to-r from-white via-blue-200
           to-blue-500 bg-clip-text text-transparent"
-        id={`top-${location.city_slug}-routes-logistics-hotspots-6`}
+        id={`top-${slug}-routes-logistics-hotspots-6`}
       >
-        Top {location.city_name} Routes &amp; Logistics Hotspots
+        Top {name} Routes &amp; Logistics Hotspots
       </h2>
       <div className="grid md:grid-cols-2 gap-10">
         <div className="space-y-6">
@@ -85,7 +103,7 @@ export default function LocationTopHotspots({
                 prose-hr:border-white/10 prose-img:rounded-2xl
                 prose-img:shadow-lg space-y-6"
               dangerouslySetInnerHTML={{
-                __html: location.top_hotspots?.recommendations ?? "",
+                __html: recommendations ?? "",
               }}
             />
           </div>

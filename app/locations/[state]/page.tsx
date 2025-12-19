@@ -3,10 +3,7 @@ import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
 import { getReviews } from "@/lib/data/reviews";
-import {
-  getLocationsByState,
-  getLocationWithContent,
-} from "@/lib/data/locations";
+import { getState } from "@/lib/data/locations";
 import { notFound } from "next/navigation";
 import LocationReadyToPlan from "@/components/sections/location-ready-to-plan";
 import LocationCitiesAcross from "@/components/sections/location-cities-across";
@@ -24,6 +21,7 @@ import LocationPlanningChecklist from "@/components/sections/location-planning-c
 import LocationTopHotspots from "@/components/sections/location-top-hotspots";
 import LocationTransportationOverview from "@/components/sections/location-transportation-overview";
 import { Link } from "lucide-react";
+import { getRandomVehiclesImages } from "@/lib/data/vehicles";
 
 export default async function StatePage({
   params,
@@ -31,63 +29,33 @@ export default async function StatePage({
   params: Promise<{ state: string }>;
 }) {
   const { state } = await params;
-  const locations = await getLocationsByState(state);
 
-  if (!locations) return notFound();
+  const stateData = await getState(state);
 
-  const location = await getLocationWithContent({
-    slug: `${locations?.[0].city_slug}-${state}`,
-    fleetType: "party-buses",
-  });
-
-  if (!location) return notFound();
+  if (!stateData) return notFound();
 
   const reviews = (await getReviews(6)) ?? [];
 
+  const vehicles_images = await getRandomVehiclesImages(12);
+
   return (
-    // <main className="pt-16">
-    //   <LocationCitiesAcross location={location} />
-
-    //   <FleetSection />
-
-    //   <LocationHowToBook location={location} isState />
-
-    //   <LocationPlanningGuide location={location} />
-
-    //   <ReviewsSection reviews={reviews} />
-
-    //   <PollsGrid category={location.state_slug} />
-
-    //   <ToolsGrid category={location.state_slug} />
-
-    //   <EventsGrid />
-
-    //   <FaqSection
-    //     category={location.state_slug}
-    //     title={`${location.state_name} FAQs`}
-    //   />
-
-    //   <LocationReadyToPlan location={location} />
-    // </main>
-
     <main>
       {/* Once we have cities images, we need to show them in the hero.  */}
-      <Hero slug={location.state_slug} />
+      <Hero slug={stateData.slug} />
 
-      <LocationCitiesAcross location={location} />
-      <LocationHeader location={location} />
+      <LocationCitiesAcross state={stateData} />
 
-      <LocationWhyBook location={location} />
+      <LocationHeader state={stateData} />
 
-      <FleetSection
-        location={{ stateSlug: state, citySlug: locations?.[0].city_slug }}
-      />
+      <LocationWhyBook state={stateData} />
 
-      <LocationHowToBook location={location} />
+      <FleetSection />
 
-      <LocationPlanningGuide location={location} />
+      <LocationHowToBook state={stateData} />
 
-      <LocationCompleteGuide location={location} />
+      <LocationPlanningGuide state={stateData} />
+
+      <LocationCompleteGuide state={stateData} />
 
       <section className="max-w-7xl mx-auto my-8 px-6 space-y-8">
         <div
@@ -96,8 +64,8 @@ export default async function StatePage({
             justify-between gap-4"
         >
           <div className="text-sm sm:text-base font-semibold">
-            Ready to lock a vehicle for {location.city_name}? Get an instant
-            quote with driver notes and aurora-flex options.
+            Ready to lock a vehicle for {stateData.name}? Get an instant quote
+            with driver notes and aurora-flex options.
           </div>
           <div className="flex gap-3">
             <Link
@@ -122,28 +90,31 @@ export default async function StatePage({
 
       <ReviewsSection reviews={reviews} />
 
-      <LocationPlanningChecklist location={location} />
+      <LocationPlanningChecklist state={stateData} />
 
-      <LocationTransportationOverview location={location} />
+      <LocationTransportationOverview state={stateData} />
 
-      <LocationExtraPlanningNotes location={location} />
+      <LocationExtraPlanningNotes state={stateData} />
 
-      <LocationTopHotspots location={location} />
+      <LocationTopHotspots state={stateData} />
 
-      <LocationComfortChecklist location={location} vehicles_images={[]} />
+      <LocationComfortChecklist
+        state={stateData}
+        vehicles_images={vehicles_images}
+      />
 
-      <PollsGrid category={location.city_slug} />
+      <PollsGrid category={stateData.slug} />
 
-      <ToolsGrid category={location.city_slug} />
+      <ToolsGrid category={stateData.slug} />
 
       <EventsGrid />
 
       <FaqSearchSection
-        category={location.slug ?? "home"}
-        title={`${location.city_name} FAQs`}
+        category={stateData.slug ?? "home"}
+        title={`${stateData.name} FAQs`}
       />
 
-      <LocationReadyToPlan location={location} />
+      <LocationReadyToPlan state={stateData} />
     </main>
   );
 }

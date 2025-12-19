@@ -1,11 +1,21 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 import Link from "next/link";
 
 export default function LocationPlanningChecklist({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
+  const planningChecklistContent = state
+    ? state.planning_checklist
+    : location?.planning_checklist;
+
+  const name = state ? state?.name : location?.city_name;
+
+  if (!planningChecklistContent) return null;
+
   return (
     <section
       className="relative py-16 max-w-7xl mx-auto bg-gradient-to-br to-black
@@ -28,7 +38,7 @@ export default function LocationPlanningChecklist({
           prose-hr:border-white/10 prose-img:rounded-2xl prose-img:shadow-lg
           space-y-6"
         dangerouslySetInnerHTML={{
-          __html: location.planning_checklist ?? "",
+          __html: planningChecklistContent ?? "",
         }}
       />
 
@@ -56,7 +66,7 @@ export default function LocationPlanningChecklist({
           className="rounded-full bg-white text-blue-900 font-bold px-5 py-3
             shadow hover:opacity-95 transition"
         >
-          Call {location.city_name} Dispatch
+          Call {name} Dispatch
         </Link>
       </div>
     </section>

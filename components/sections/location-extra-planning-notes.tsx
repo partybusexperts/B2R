@@ -1,10 +1,18 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 
 export default function LocationExtraPlanningNotes({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
+  const extraNotes = state ? state.extra_notes : location?.extra_notes;
+
+  if (!extraNotes) {
+    return null;
+  }
+
   return (
     <section
       className="relative py-16 max-w-7xl mx-auto bg-gradient-to-br rounded-3xl
@@ -15,7 +23,7 @@ export default function LocationExtraPlanningNotes({
         className="text-3xl font-extrabold mb-4 font-serif bg-gradient-to-r
           from-white via-blue-200 to-blue-500 bg-clip-text text-transparent"
       >
-        {location.extra_notes?.title}
+        {extraNotes?.title}
       </h3>
       <div
         className="prose prose-lg prose-invert max-w-none text-justify
@@ -25,7 +33,7 @@ export default function LocationExtraPlanningNotes({
           prose-hr:border-white/10 prose-img:rounded-2xl prose-img:shadow-lg
           space-y-6"
         dangerouslySetInnerHTML={{
-          __html: location.extra_notes?.content ?? "",
+          __html: extraNotes?.content ?? "",
         }}
       />
     </section>

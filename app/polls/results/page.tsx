@@ -131,7 +131,8 @@ export default async function PollResultsPage() {
                   </CardTitle>
                   <Badge
                     variant="outline"
-                    className="w-fit mt-2 border-white/15 bg-white/5 text-white/75"
+                    className="w-fit mt-2 border-white/15 bg-white/5
+                      text-white/75"
                   >
                     {poll.total_votes} votes
                   </Badge>

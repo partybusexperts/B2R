@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 import {
   Dialog,
   DialogClose,
@@ -11,17 +11,35 @@ import {
 
 export default function LocationHowToBook({
   location,
-  isState = false,
+  state,
 }: {
-  location: LocationsWithContentData;
-  isState?: boolean;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
-  const steps = [
-    location.how_to_book?.step1,
-    location.how_to_book?.step2,
-    location.how_to_book?.step3,
-    location.how_to_book?.step4,
-  ];
+  const steps = state
+    ? [
+        state.how_to_book?.step1,
+        state.how_to_book?.step2,
+        state.how_to_book?.step3,
+        state.how_to_book?.step4,
+      ]
+    : [
+        location?.how_to_book?.step1,
+        location?.how_to_book?.step2,
+        location?.how_to_book?.step3,
+        location?.how_to_book?.step4,
+      ];
+
+  if (!steps) {
+    return null;
+  }
+
+  const slug = state ? state?.slug : location?.state_slug;
+  const name = state ? state?.name : location?.city_name;
+
+  const description = state
+    ? state.how_to_book?.description
+    : location?.how_to_book?.description;
 
   return (
     <section
@@ -34,12 +52,12 @@ export default function LocationHowToBook({
         className="text-4xl md:text-5xl font-extrabold text-center mb-4
           font-serif tracking-tight bg-gradient-to-r from-white via-blue-200
           to-blue-500 bg-clip-text text-transparent"
-        id={`how-to-book-in-${isState ? location.state_slug : location.city_slug}-1`}
+        id={`how-to-book-in-${slug}-1`}
       >
-        How to Book in {isState ? location.state_name : location.city_name}
+        How to Book in {name}
       </h2>
       <p className="text-blue-100/85 text-center max-w-3xl mx-auto mb-10">
-        {location.how_to_book?.description}
+        {description}
       </p>
       <div className="grid gap-4 md:grid-cols-4">
         {steps.map((step, index) => (
@@ -88,7 +106,7 @@ export default function LocationHowToBook({
                   className="text-xs font-semibold uppercase tracking-[0.4em]
                     text-blue-200/80"
                 >
-                  {isState ? location.state_name : location.city_name} BOOKING
+                  {name} BOOKING
                 </div>
 
                 <h3 className="mt-3 text-3xl font-extrabold text-white">
@@ -138,7 +156,7 @@ export default function LocationHowToBook({
             border-white/30 px-8 py-3 text-sm font-bold text-white
             hover:bg-white/10"
         >
-          Talk to {isState ? location.state_name : location.city_name} Dispatch
+          Talk to {name} Dispatch
         </a>
       </div>
     </section>

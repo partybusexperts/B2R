@@ -1,11 +1,21 @@
-import { LocationsWithContentData } from "@/lib/data/locations";
+import { LocationsWithContentData, StateData } from "@/lib/data/locations";
 import Link from "next/link";
 
 export default async function LocationReadyToPlan({
   location,
+  state,
 }: {
-  location: LocationsWithContentData;
+  location?: LocationsWithContentData;
+  state?: StateData;
 }) {
+  const name = state ? state.name : location?.city_name;
+  const transportDoneRight = state
+    ? state.transport_done_right
+    : location?.transport_done_right;
+
+  if (!transportDoneRight) {
+    return null;
+  }
   return (
     <section
       className="relative py-16 px-4 bg-gradient-to-br from-blue-800
@@ -16,12 +26,12 @@ export default async function LocationReadyToPlan({
           className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight
             font-serif bg-gradient-to-r from-white via-blue-200 to-blue-500
             bg-clip-text text-transparent"
-          id={`ready-for-${location.city_name}-transport-done-right-12`}
+          id={`ready-for-${name}-transport-done-right-12`}
         >
-          Ready for {location.city_name} Transport Done Right?
+          Ready for {name} Transport Done Right?
         </h2>
         <p className="text-blue-100/90 mb-6">
-          {location.transport_done_right?.description}
+          {transportDoneRight?.description}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
@@ -48,7 +58,7 @@ export default async function LocationReadyToPlan({
         </div>
         <p className="text-[11px] text-blue-300 mt-6">
           Need multi-day / remote itinerary support? Include all legs + gear
-          notes. Prefer email? Reach our {location.city_name} dispatch at{" "}
+          notes. Prefer email? Reach our {name} dispatch at{" "}
           <Link href="mailto:info@bus2ride.com" className="underline">
             info@bus2ride.com
           </Link>{" "}
@@ -63,7 +73,7 @@ export default async function LocationReadyToPlan({
               prose-strong:text-white prose-hr:border-white/10
               prose-img:rounded-2xl prose-img:shadow-lg space-y-6"
             dangerouslySetInnerHTML={{
-              __html: location.transport_done_right?.bottom_content ?? "",
+              __html: transportDoneRight?.bottom_content ?? "",
             }}
           />
         </div>
