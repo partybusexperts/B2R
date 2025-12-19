@@ -396,7 +396,7 @@ export default function Navigation() {
               size="lg"
               asChild
             >
-              <Link href="/quote" onClick={closeNow}>
+              <Link href="/pricing" onClick={closeNow}>
                 Get a Quote
               </Link>
             </Button>

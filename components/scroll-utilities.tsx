@@ -302,7 +302,7 @@ function CtaDock({ visible, onTop }: { visible: boolean; onTop: () => void }) {
         Top
       </button>
       <a
-        href="/quote#instant"
+        href="/pricing"
         className="rounded-xl bg-emerald-500 text-white px-4 py-2 text-sm
           font-bold shadow border border-emerald-300/40 hover:bg-emerald-600"
       >

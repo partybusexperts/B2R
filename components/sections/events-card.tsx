@@ -97,7 +97,7 @@ export function EventCard({
             className="h-12 w-full rounded-full bg-primary font-bold
               text-primary-foreground hover:bg-primary/90"
           >
-            <Link href="/quote">Quote</Link>
+            <Link href="/pricing">Quote</Link>
           </Button>
 
           <Button
