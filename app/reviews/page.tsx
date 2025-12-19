@@ -30,11 +30,7 @@ export default async function ReviewsPage() {
       {/* <FleetList title="Our Fleet" vehicles={fleet} /> */}
       <FleetSection />
       <PollsGrid
-        columnCategories={[
-          "best-driver-moments",
-          "booking-experience",
-          "pricing",
-        ]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <EventsGrid />

@@ -451,7 +451,7 @@ export default async function ContactPage() {
       <FleetSection />
       <ReviewsSection reviews={reviews} />
       <PollsGrid
-        columnCategories={["booking-experience", "pricing", "events"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <EventsGrid />

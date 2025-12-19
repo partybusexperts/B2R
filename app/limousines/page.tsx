@@ -68,7 +68,7 @@ export default async function LimousinesPage() {
 
       {/* 6. Polls */}
       <PollsGrid
-        columnCategories={["stretch-limo", "suv-limo", "weddings"]}
+        columnCategories={["limo", "party-bus", "coach-bus"]}
         hideCities
       />
 

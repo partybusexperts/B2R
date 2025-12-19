@@ -79,8 +79,14 @@ import { cache } from "react";
 export const getPolls = cache(async (limit = 20, category = "") => {
   const supabase = await createClient();
 
+  // We format the pattern here so it works with ILIKE in the SQL function
+  const categoryPattern = `%${category}%`;
+
   const { data: polls, error } = await supabase
-    .from("polls1")
+    .rpc("get_random_polls", {
+      category_pattern: categoryPattern,
+      limit_count: limit,
+    })
     .select(
       `
         id,
@@ -97,8 +103,6 @@ export const getPolls = cache(async (limit = 20, category = "") => {
         )
       `,
     )
-    .filter("question", "not.ilike", "Your opinion on%") // Ask to remove these later
-    .filter("category_slug", "ilike", `%${category}%`)
     .order("ord", { referencedTable: "poll_options1", ascending: true })
     .limit(limit);
 

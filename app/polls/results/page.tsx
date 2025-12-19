@@ -166,7 +166,7 @@ export default async function PollResultsPage() {
 
       <FleetSection />
       <PollsGrid
-        columnCategories={["pricing", "events", "booking-experience"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <ReviewsSection reviews={reviews} />

@@ -44,11 +44,7 @@ export default async function PricingPage() {
 
       <ReviewsSection reviews={reviews} />
       <PollsGrid
-        columnCategories={[
-          "pricing",
-          "booking-experience",
-          "booking-lead-times",
-        ]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
         hideCities
       />
       <FleetSection />

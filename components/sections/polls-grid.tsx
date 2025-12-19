@@ -7,6 +7,48 @@ const cities = Locations.flatMap((loc) =>
   loc.cities.map((city) => city.toLowerCase()),
 );
 
+const CATEGORY_TITLES: Record<string, string> = {
+  "party-bus": "Party Buses",
+  "coach-bus": "Coach Buses",
+  limo: "Limousines",
+  "party-van": "Party Vans",
+  events: "Events",
+  pricing: "Pricing",
+  "booking-experience": "Booking Experience",
+  "booking-lead-times": "Booking Lead Times",
+  "alcohol-policy": "Alcohol Policy",
+  "airport-procedures": "Airport Procedures",
+  weddings: "Weddings",
+  concerts: "Concerts",
+  prom: "Prom",
+  "sporting-events": "Sporting Events",
+  "bachelor-parties": "Bachelor Parties",
+  "bachelorette-parties": "Bachelorette Parties",
+  "birthday-parties": "Birthday Parties",
+  "accessibility-experience": "Accessibility",
+  audio: "Audio",
+  "bar-area": "Bar Area",
+  "wrap-around-seating": "Wrap-Around Seating",
+};
+
+const humanizeCategorySlug = (slug: string) => {
+  const raw = (slug ?? "").trim();
+  if (!raw) return "";
+  if (CATEGORY_TITLES[raw]) return CATEGORY_TITLES[raw];
+
+  return raw
+    .split("-")
+    .filter(Boolean)
+    .map((part) => {
+      const lower = part.toLowerCase();
+      if (lower === "suv") return "SUV";
+      if (lower === "ada") return "ADA";
+      if (lower === "byob") return "BYOB";
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join(" ");
+};
+
 interface PollsGridProps {
   category?: string; // e.g. "home", "pricing", "party-bus"
   columnCategories?: string[]; // up to 3 category slugs, one per column
@@ -72,6 +114,7 @@ export async function PollsGrid({
     : [];
 
   const columns: PollWithOptions[][] = [col1, col2, col3];
+  const columnTitles = categories.map(humanizeCategorySlug);
 
   return (
     <section className="bg-[#0E1F46] px-4 py-10">
@@ -84,7 +127,7 @@ export async function PollsGrid({
           results instantly.
         </p>
 
-        <PollsColumnsClient columns={columns} />
+        <PollsColumnsClient columns={columns} columnTitles={columnTitles} />
 
         <div className="mt-10 flex justify-center">
           <Link

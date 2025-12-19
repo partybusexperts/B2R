@@ -3383,6 +3383,31 @@ export type Database = {
           weight: number;
         }[];
       };
+      get_random_polls: {
+        Args: { category_pattern: string; limit_count: number };
+        Returns: {
+          category_slug: string | null;
+          created_at: string | null;
+          id: string;
+          is_active: boolean | null;
+          main_category: string | null;
+          meta: Json | null;
+          meta_json: Json;
+          multi_select: boolean | null;
+          question: string;
+          show_on_city_page: boolean | null;
+          show_on_home: boolean | null;
+          show_on_polls: boolean | null;
+          show_on_vehicle_page: boolean | null;
+          slug: string;
+        }[];
+        SetofOptions: {
+          from: "*";
+          to: "polls1";
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
       get_style: { Args: { page: string; site: string }; Returns: Json };
       import_faqs: { Args: { items: Json }; Returns: number };
       import_reviews: {

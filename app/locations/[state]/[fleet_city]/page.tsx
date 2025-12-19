@@ -176,7 +176,8 @@ export default async function FleetCityPage({
       />
 
       <PollsGrid
-        columnCategories={[location.state_slug ?? "", "events", "pricing"]}
+        columnCategories={["party-bus", "limo", "coach-bus"]}
+        // columnCategories={[location.state_slug ?? "", "events", "pricing"]}
         hideCities
       />
 

@@ -68,11 +68,7 @@ export default async function CoachBusesPage() {
 
       {/* 6. Polls */}
       <PollsGrid
-        columnCategories={[
-          "coach-bus",
-          "airport-procedures",
-          "sporting-events",
-        ]}
+        columnCategories={["coach-bus", "party-bus", "limo"]}
         hideCities
       />
 
