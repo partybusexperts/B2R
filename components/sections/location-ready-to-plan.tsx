@@ -13,6 +13,17 @@ export default async function LocationReadyToPlan({
     ? state.transport_done_right
     : location?.transport_done_right;
 
+  const fleetType = state ? undefined : location?.fleet_type;
+
+  const transport =
+    fleetType === "party-buses"
+      ? "Party Bus"
+      : fleetType === "limousines"
+        ? "Limousine"
+        : fleetType === "coach-buses"
+          ? "Coach Bus"
+          : "Transportation";
+
   if (!transportDoneRight) {
     return null;
   }
@@ -28,7 +39,7 @@ export default async function LocationReadyToPlan({
             bg-clip-text text-transparent"
           id={`ready-for-${name}-transport-done-right-12`}
         >
-          Ready for {name} Transport Done Right?
+          Ready for {name} {transport} Done Right?
         </h2>
         <p className="text-blue-100/90 mb-6">
           {transportDoneRight?.description}
@@ -66,7 +77,7 @@ export default async function LocationReadyToPlan({
         </p>
         <div className="mt-6 text-blue-200 text-sm max-w-3xl mx-auto">
           <div
-            className="prose prose-lg prose-invert max-w-none text-justify
+            className="prose prose-md prose-invert max-w-none text-justify
               prose-headings:font-bold prose-headings:tracking-tight
               prose-headings:text-white prose-p:text-slate-200
               prose-a:text-sky-300 prose-a:no-underline hover:prose-a:underline

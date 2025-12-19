@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FaqClient } from "@/components/sections/faq-client";
 import type { FaqData } from "@/lib/data/faqs";
-import { cn } from "@/lib/utils";
+import { capitalize, cn } from "@/lib/utils";
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, " ");
@@ -144,7 +144,7 @@ export function FaqSearchClient({
         <div className="mx-auto max-w-6xl">
           {/* Search */}
           <div className="flex flex-col gap-2 text-center mb-8">
-            <label className="text-lg font-medium text-white/80">{`Search any ${mapCategoryToName[category ?? "general"]} FAQ`}</label>
+            <label className="text-lg font-medium text-white/80">{`Search any ${mapCategoryToName[category ?? "general"] || capitalize(category ?? "general")} FAQ`}</label>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="relative w-full">
                 <Search

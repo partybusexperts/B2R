@@ -187,7 +187,7 @@ export default async function FleetCityPage({
       <EventsGrid />
 
       <FaqSearchSection
-        category={location.slug ?? "home"}
+        category={location.city_slug ?? "home"}
         title={`${location.city_name} FAQs`}
       />
 
