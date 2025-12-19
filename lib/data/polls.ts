@@ -98,7 +98,7 @@ export const getPolls = cache(async (limit = 20) => {
       `,
     )
     .filter("question", "not.ilike", "Your opinion on%") // Ask to remove these later
-    .order("ord", { referencedTable: "poll_options1", ascending: true })
+    .order("ord", { referencedTable: "poll_options1", ascending: false })
     .limit(limit);
 
   if (error) {
@@ -231,7 +231,7 @@ export const getPollResults = cache(async (limit = 90) => {
   }
 
   // 2. Map and Calculate Totals/Percentages
-  return polls.map((poll) => {
+  const results = polls.map((poll) => {
     // A. Handle potential missing array
     // (TypeScript might warn if you don't cast, but Supabase returns an array here)
     const options = poll.options || [];
@@ -258,6 +258,11 @@ export const getPollResults = cache(async (limit = 90) => {
       options: optionsWithPercent,
     } satisfies PollResultsData;
   });
+
+  return results.sort(
+    (a, b) =>
+      b.total_votes - a.total_votes || a.question.localeCompare(b.question),
+  );
 });
 
 export const getPollResultsByCategory = cache(
@@ -270,7 +275,7 @@ export const getPollResultsByCategory = cache(
     }
 
     // 2. Map and Calculate Totals/Percentages
-    return polls.map((poll) => {
+    const results = polls.map((poll) => {
       // A. Handle potential missing array
       // (TypeScript might warn if you don't cast, but Supabase returns an array here)
       const options = poll.options || [];
@@ -297,6 +302,11 @@ export const getPollResultsByCategory = cache(
         options: optionsWithPercent,
       } satisfies PollResultsData;
     });
+
+    return results.sort(
+      (a, b) =>
+        b.total_votes - a.total_votes || a.question.localeCompare(b.question),
+    );
   },
 );
 
