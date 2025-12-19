@@ -1,80 +1,77 @@
 import { getPolls, PollWithOptions } from "@/lib/data/polls";
-import { shuffle } from "@/lib/utils";
 import { PollsColumnsClient } from "./polls-columns.client";
 import Link from "next/link";
+import Locations from "../../lib/data/local/locations.json";
+
+const cities = Locations.flatMap((loc) =>
+  loc.cities.map((city) => city.toLowerCase()),
+);
 
 interface PollsGridProps {
   category?: string; // e.g. "home", "pricing", "party-bus"
+  columnCategories?: string[]; // up to 3 category slugs, one per column
+  hideCities?: boolean; // whether to show city polls
 }
 
-export async function PollsGrid({ category }: PollsGridProps) {
-  // Fetch enough to build 3 columns of 50.
-  // Supabase doesn't support random ordering easily without RPC.
-  const polls = await getPolls(200);
+export async function PollsGrid({
+  category,
+  columnCategories,
+  hideCities = true,
+}: PollsGridProps) {
+  const COLUMN_COUNT = 3;
+  const PER_COLUMN = 50;
+  const FETCH_LIMIT = 250;
 
-  if (!polls) return null;
+  const categories = (
+    columnCategories && columnCategories.length > 0
+      ? columnCategories
+      : category
+        ? [category, "", ""]
+        : ["", "", ""]
+  )
+    .slice(0, COLUMN_COUNT)
+    .map((c) => (c ?? "").trim());
 
-  const normalizedCategory = (category ?? "").trim().toLowerCase();
+  const totalVotesForPoll = (poll: PollWithOptions) =>
+    (poll.options ?? []).reduce(
+      (sum, opt) => sum + Number(opt.vote_count ?? 0),
+      0,
+    );
 
-  const contextCandidates = normalizedCategory
-    ? polls.filter((poll) =>
-        (poll.category_slug ?? "").toLowerCase().includes(normalizedCategory),
-      )
-    : [];
+  const sortByMostVotes = (polls: PollWithOptions[]) =>
+    [...polls].sort(
+      (a, b) =>
+        totalVotesForPoll(b) - totalVotesForPoll(a) ||
+        (a.question ?? "").localeCompare(b.question ?? ""),
+    );
 
-  const shuffledContext = shuffle([...contextCandidates]);
-  const contextIds = new Set(shuffledContext.map((p) => p.id));
+  const [raw1, raw2, raw3] = await Promise.all([
+    getPolls(FETCH_LIMIT, categories[0] ?? ""),
+    getPolls(FETCH_LIMIT, categories[1] ?? ""),
+    getPolls(FETCH_LIMIT, categories[2] ?? ""),
+  ]);
 
-  const shuffledRemainder = shuffle(
-    polls.filter((poll) => !contextIds.has(poll.id)),
-  );
+  // Filter out city-specific polls if needed
+  const filterCityPolls = (polls: PollWithOptions[] | null) => {
+    if (!hideCities || !polls) return polls;
 
-  const buildColumn = (
-    primary: PollWithOptions[],
-    filler: PollWithOptions[],
-    count: number,
-    used: Set<string>,
-  ) => {
-    const result: PollWithOptions[] = [];
-
-    for (const poll of primary) {
-      if (result.length >= count) break;
-      if (used.has(poll.id)) continue;
-      used.add(poll.id);
-      result.push(poll);
-    }
-
-    for (const poll of filler) {
-      if (result.length >= count) break;
-      if (used.has(poll.id)) continue;
-      used.add(poll.id);
-      result.push(poll);
-    }
-
-    // If we still don't have enough polls (small dataset), repeat from the
-    // available pool so the UI still renders 50 items per column.
-    if (result.length < count) {
-      const pool = [...primary, ...filler].filter((p) => !used.has(p.id));
-      const fallbackPool = pool.length > 0 ? pool : [...primary, ...filler];
-      if (fallbackPool.length > 0) {
-        let i = 0;
-        while (result.length < count) {
-          result.push(fallbackPool[i % fallbackPool.length]);
-          i += 1;
-        }
-      }
-    }
-
-    return result;
+    return polls.filter((poll) => {
+      const question = poll.question?.toLowerCase() ?? "";
+      return !cities.some((city) => question.includes(city));
+    });
   };
 
-  const usedIds = new Set<string>();
-  const col1 = buildColumn(shuffledContext, shuffledRemainder, 50, usedIds);
-  const col2 = buildColumn([], shuffledRemainder, 50, usedIds);
-  const col3 = buildColumn([], shuffledRemainder, 50, usedIds);
+  const col1 = filterCityPolls(raw1)
+    ? sortByMostVotes(filterCityPolls(raw1)!).slice(0, PER_COLUMN)
+    : [];
+  const col2 = filterCityPolls(raw2)
+    ? sortByMostVotes(filterCityPolls(raw2)!).slice(0, PER_COLUMN)
+    : [];
+  const col3 = filterCityPolls(raw3)
+    ? sortByMostVotes(filterCityPolls(raw3)!).slice(0, PER_COLUMN)
+    : [];
 
-  const columns = [col1, col2, col3].filter((c) => c.length > 0);
-  if (columns.length === 0) return null;
+  const columns: PollWithOptions[][] = [col1, col2, col3];
 
   return (
     <section className="bg-[#0E1F46] px-4 py-10">
