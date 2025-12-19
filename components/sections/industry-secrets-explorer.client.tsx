@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { SecretsData } from "@/lib/data/secrets";
 
 export type IndustrySecretCategory =
   | "pricing"
@@ -37,14 +38,6 @@ export type IndustrySecretCategory =
   | "policy"
   | "quality"
   | "safety";
-
-export type IndustrySecret = {
-  id: string;
-  category: IndustrySecretCategory;
-  title: string;
-  summary: string;
-  bodyHtml: string;
-};
 
 const CATEGORY_LABELS: Record<IndustrySecretCategory, string> = {
   pricing: "Pricing",
@@ -73,8 +66,19 @@ const CATEGORY_ICONS: Record<
   safety: ShieldCheck,
 };
 
-function SecretCard({ secret }: { secret: IndustrySecret }) {
-  const Icon = CATEGORY_ICONS[secret.category];
+function isIndustrySecretCategory(
+  value: unknown,
+): value is IndustrySecretCategory {
+  return typeof value === "string" && value in CATEGORY_LABELS;
+}
+
+function SecretCard({ secret }: { secret: SecretsData }) {
+  const category: IndustrySecretCategory = isIndustrySecretCategory(
+    secret.category,
+  )
+    ? secret.category
+    : "pricing";
+  const Icon = CATEGORY_ICONS[category];
 
   return (
     <Dialog>
@@ -92,7 +96,7 @@ function SecretCard({ secret }: { secret: IndustrySecret }) {
                 className="w-fit text-xs font-bold border-white/15 bg-white/5
                   text-white/70"
               >
-                {CATEGORY_LABELS[secret.category].toUpperCase()}
+                {CATEGORY_LABELS[category].toUpperCase()}
               </Badge>
               <div
                 className="flex h-10 w-10 items-center justify-center
@@ -136,7 +140,7 @@ function SecretCard({ secret }: { secret: IndustrySecret }) {
             {secret.title}
           </DialogTitle>
           <DialogDescription className="text-base text-white/60">
-            {CATEGORY_LABELS[secret.category]}
+            {CATEGORY_LABELS[category]}
           </DialogDescription>
         </DialogHeader>
 
@@ -144,7 +148,7 @@ function SecretCard({ secret }: { secret: IndustrySecret }) {
           className="my-2 max-h-[60vh] overflow-y-auto rounded-xl bg-white/5 p-5
             text-sm leading-relaxed text-white/80"
         >
-          <div dangerouslySetInnerHTML={{ __html: secret.bodyHtml }} />
+          <div dangerouslySetInnerHTML={{ __html: secret.body_html }} />
         </div>
 
         <div className="flex justify-end gap-3 pt-2">
@@ -190,7 +194,7 @@ export function IndustrySecretsExplorer({
   secrets,
   defaultSelected,
 }: {
-  secrets: IndustrySecret[];
+  secrets: SecretsData[];
   defaultSelected?: IndustrySecretCategory[];
 }) {
   const [query, setQuery] = React.useState("");
@@ -200,7 +204,9 @@ export function IndustrySecretsExplorer({
 
   const categories = React.useMemo(() => {
     const set = new Set<IndustrySecretCategory>();
-    secrets.forEach((s) => set.add(s.category));
+    secrets.forEach((s) => {
+      if (isIndustrySecretCategory(s.category)) set.add(s.category);
+    });
     return Array.from(set);
   }, [secrets]);
 
@@ -214,8 +220,10 @@ export function IndustrySecretsExplorer({
 
   const filtered = React.useMemo(() => {
     return secrets.filter((s) => {
+      const category = isIndustrySecretCategory(s.category) ? s.category : null;
       const matchesCategory =
-        selected.length === 0 || selected.includes(s.category);
+        selected.length === 0 ||
+        (category ? selected.includes(category) : false);
 
       const hay = `${s.title} ${s.summary}`.toLowerCase();
       const matchesQuery = !normalizedQuery || hay.includes(normalizedQuery);
@@ -226,7 +234,7 @@ export function IndustrySecretsExplorer({
 
   const withBreaks = React.useMemo(() => {
     const out: Array<
-      { kind: "secret"; secret: IndustrySecret } | { kind: "cta"; id: string }
+      { kind: "secret"; secret: SecretsData } | { kind: "cta"; id: string }
     > = [];
     filtered.forEach((s, idx) => {
       out.push({ kind: "secret", secret: s });

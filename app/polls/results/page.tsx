@@ -8,10 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, TrendingUp, Users } from "lucide-react";
-import {
-  getPollResultsByCategory,
-  getPollResultsHeaderData,
-} from "@/lib/data/polls";
+import { getPollResults, getPollResultsHeaderData } from "@/lib/data/polls";
 import FleetSection from "@/components/sections/fleet-section";
 import { pageMetadata } from "@/lib/seo/metadata";
 
@@ -25,9 +22,7 @@ export const metadata = pageMetadata({
 export default async function PollResultsPage() {
   const pollResultsHeaderData = await getPollResultsHeaderData();
 
-  const pollResults = await getPollResultsByCategory(
-    pollResultsHeaderData?.category_slug || "",
-  );
+  const pollResults = await getPollResults(1000);
 
   const reviews = (await getReviews()) ?? [];
 

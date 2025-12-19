@@ -9,6 +9,8 @@ import { IndustrySecretsSection } from "@/components/sections/industry-secrets-s
 import { FaqSection } from "@/components/sections/faq-section";
 import { HeaderSection } from "@/components/sections/header-section";
 import { pageMetadata } from "@/lib/seo/metadata";
+import { getSecrets } from "@/lib/data/secrets";
+import { getLocationsCount } from "@/lib/data/locations";
 
 export const metadata = pageMetadata({
   title: "Industry Secrets",
@@ -19,23 +21,51 @@ export const metadata = pageMetadata({
 
 export default async function IndustrySecretsPage() {
   const reviews = (await getReviews()) ?? [];
-  // TODO: Industry secrets are all mocked and static. The connection/seeding to supabase is not done yey
+
+  const secrets = (await getSecrets()) ?? [];
+
+  const cityCount = await getLocationsCount();
+
+  const extractPercents = (input: string) => {
+    const matches = input.match(/\b(\d{1,3})\s*%/g) ?? [];
+    return matches
+      .map((m) => Number.parseInt(m.replace(/[^0-9]/g, ""), 10))
+      .filter((n) => Number.isFinite(n));
+  };
+
+  const percentMentions = secrets.flatMap((s) =>
+    extractPercents(`${s.summary ?? ""} ${s.body_html ?? ""}`),
+  );
+
+  const avgSavingsPercent =
+    percentMentions.length > 0
+      ? Math.round(
+          percentMentions.reduce((sum, n) => sum + n, 0) /
+            percentMentions.length,
+        )
+      : null;
+
+  const dispatchMentionsCount = secrets.filter((s) =>
+    /(dispatch|dispatcher|driver|operator)/i.test(
+      `${s.title ?? ""} ${s.summary ?? ""} ${s.body_html ?? ""}`,
+    ),
+  ).length;
 
   const cardsForHeader = [
     {
-      info: "32",
+      info: String(secrets.length),
       label: "PLAYBOOK SECRETS",
     },
     {
-      info: "18%",
+      info: avgSavingsPercent === null ? "—" : `${avgSavingsPercent}%`,
       label: "AVERAGE SAVINGS",
     },
     {
-      info: "38",
+      info: String(cityCount),
       label: "Cities Validated",
     },
     {
-      info: "220",
+      info: String(dispatchMentionsCount),
       label: "DISPATCH INTERVIEWS",
     },
   ] as const;
@@ -51,7 +81,7 @@ export default async function IndustrySecretsPage() {
         cards={cardsForHeader}
       />
 
-      <IndustrySecretsSection />
+      <IndustrySecretsSection secrets={secrets} />
 
       <FleetSection />
       <PollsGrid category="secrets" />
