@@ -199,7 +199,8 @@ export default function Navigation() {
         role="menu"
         className={cn(
           `absolute left-0 top-full z-50 mt-1 min-w-[14rem] rounded-md border
-          border-blue-200 bg-popover p-2 shadow-lg transition-all duration-200`,
+          border-blue-200 bg-[#fffafc] p-2 shadow-lg transition-all
+          duration-200`,
           open === k
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-2 opacity-0",
