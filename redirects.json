@@ -1,0 +1,30 @@
+[
+  {
+    "source": "/locations/louisiana/lafayette-charter-buses",
+    "destination": "/locations/louisiana/charter-buses-lafayette"
+  },
+  {
+    "source": "/locations/louisiana/lafayette-limousines",
+    "destination": "/locations/louisiana/limousines-lafayette"
+  },
+  {
+    "source": "/locations/louisiana/lafayette-party-buses",
+    "destination": "/locations/louisiana/party-buses-lafayette"
+  },
+  {
+    "source": "/locations/virginia/richmond-charter-buses",
+    "destination": "/locations/virginia/charter-buses-richmond"
+  },
+  {
+    "source": "/locations/virginia/richmond-limousines",
+    "destination": "/locations/virginia/limousines-richmond"
+  },
+  {
+    "source": "/locations/virginia/richmond-party-buses",
+    "destination": "/locations/virginia/party-buses-richmond"
+  },
+  {
+    "source": "/locations/alabama/auburn-charter-buses",
+    "destination": "/locations/alabama/charter-buses-auburn"
+  }
+]

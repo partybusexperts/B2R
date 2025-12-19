@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Base */
+  --radius: 0.65rem;
+  --background: 0.99 0.005 280; /* Light gray/white surface */
+  --foreground: 0.15 0.005 285; /* Dark text on light bg */
+
+  /* Cards / Popovers */
+  --card: 0.99 0.005 280;
+  --card-foreground: 0.15 0.005 285;
+  --popover: 0.99 0.005 280;
+  --popover-foreground: 0.15 0.005 285;
+
+  /* Primary & Secondary */
+  --primary: 0.55 0.24 265; /* main brand purple */
+  --primary-foreground: 0.95 0.02 255; /* text on primary */
+  --secondary: 0.85 0.02 285; /* secondary, soft accent */
+  --secondary-foreground: 0.22 0.005 285;
+
+  /* Muted / Accents */
+  --muted: 0.9 0.01 280; /* subtle background / borders */
+  --muted-foreground: 0.55 0.01 285;
+  --accent: 0.85 0.01 285;
+  --accent-foreground: 0.22 0.006 285;
+
+  /* Destructive */
+  --destructive: 0.58 0.25 28; /* red for delete/errors */
+  --destructive-foreground: 0.98 0 5;
+
+  /* Inputs / Borders / Rings */
+  --border: 0.92 0.004 285;
+  --input: 0.92 0.004 285;
+  --ring: 0.71 0 0;
+
+  /* Sidebar */
+  --sidebar: 0.985 0 0;
+  --sidebar-foreground: 0.15 0.005 285;
+  --sidebar-primary: 0.55 0.24 265;
+  --sidebar-primary-foreground: 0.95 0.02 255;
+  --sidebar-accent: 0.85 0.01 285;
+  --sidebar-accent-foreground: 0.22 0.006 285;
+  --sidebar-border: 0.92 0.004 285;
+  --sidebar-ring: 0.71 0 0;
+
+  /* Charts */
+  --chart-1: 0.81 0.11 252;
+  --chart-2: 0.62 0.21 260;
+  --chart-3: 0.55 0.25 263;
+  --chart-4: 0.49 0.24 265;
+  --chart-5: 0.42 0.2 266;
+
+  /* New semantic colors */
+  --success: 0.43 0.42 120; /* green for success */
+  --success-foreground: 0.98 0 5;
+  --warning: 0.58 0.38 85; /* yellow/orange for warning */
+  --warning-foreground: 0.15 0 0;
+  --info: 0.48 0.28 200; /* blue for info messages */
+  --info-foreground: 0.98 0 5;
+}
+
+.dark {
+  /* Base */
+  --background: 0.15 0.005 285; /* dark surface */
+  --foreground: 0.98 0 0; /* light text */
+
+  /* Cards / Popovers */
+  --card: 0.21 0.006 285;
+  --card-foreground: 0.98 0 0;
+  --popover: 0.21 0.006 285;
+  --popover-foreground: 0.98 0 0;
+
+  /* Primary & Secondary */
+  --primary: 0.55 0.24 265;
+  --primary-foreground: 0.95 0.02 255;
+  --secondary: 0.28 0.006 286;
+  --secondary-foreground: 0.98 0 0;
+
+  /* Muted / Accents */
+  --muted: 0.28 0.006 286;
+  --muted-foreground: 0.7 0.015 286;
+  --accent: 0.28 0.006 286;
+  --accent-foreground: 0.98 0 0;
+
+  /* Destructive */
+  --destructive: 0.7 0.19 22;
+  --destructive-foreground: 0.98 0 5;
+
+  /* Inputs / Borders / Rings */
+  --border: 1 0 0 / 10%;
+  --input: 1 0 0 / 15%;
+  --ring: 0.556 0 0;
+
+  /* Sidebar */
+  --sidebar: 0.21 0.006 285;
+  --sidebar-foreground: 0.98 0 0;
+  --sidebar-primary: 0.62 0.21 260;
+  --sidebar-primary-foreground: 0.95 0.02 255;
+  --sidebar-accent: 0.28 0.006 286;
+  --sidebar-accent-foreground: 0.98 0 0;
+  --sidebar-border: 1 0 0 / 10%;
+  --sidebar-ring: 0.439 0 0;
+
+  /* Charts */
+  --chart-1: 0.81 0.105 252;
+  --chart-2: 0.623 0.214 259;
+  --chart-3: 0.546 0.245 262;
+  --chart-4: 0.488 0.243 264;
+  --chart-5: 0.424 0.199 265;
+
+  /* New semantic colors */
+  --success: 0.43 0.42 120;
+  --success-foreground: 0.98 0 5;
+  --warning: 0.58 0.38 85;
+  --warning-foreground: 0.15 0 0;
+  --info: 0.48 0.28 200;
+  --info-foreground: 0.98 0 5;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0f1f46];
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* Poll columns: hide native scrollbars (use custom scrollbar overlay). */
+.polls-column-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge/IE */
+}
+
+.polls-column-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

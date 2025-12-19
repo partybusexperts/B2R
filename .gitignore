@@ -1,5 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# supabase custom migrations
+/lib/supabase/migrations/*
+/.cache/
+
+# mcp file
+.vscode/mcp.json
+
 # dependencies
 /node_modules
 /.pnp
@@ -31,10 +38,8 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
-# keep local env out of the repo explicitly
-.env.local
-!.env.local.example
+.env*.local
+.env
 
 # vercel
 .vercel
@@ -42,18 +47,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# local env/build outputs & editor cruft
-.history
-venv/
-__pycache__/
-*.pyc
-.vscode/
-
-# Local scripts (FAQ generator, etc.)
-scripts/.env
-scripts/node_modules/
-scripts/package-lock.json
-
-supabase/.temp/
-supabasesupabase
