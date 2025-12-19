@@ -840,6 +840,33 @@ export type Database = {
           },
         ];
       };
+      industry_secrets: {
+        Row: {
+          body_html: string;
+          category: string;
+          created_at: string | null;
+          id: string;
+          summary: string;
+          title: string;
+        };
+        Insert: {
+          body_html: string;
+          category: string;
+          created_at?: string | null;
+          id: string;
+          summary: string;
+          title: string;
+        };
+        Update: {
+          body_html?: string;
+          category?: string;
+          created_at?: string | null;
+          id?: string;
+          summary?: string;
+          title?: string;
+        };
+        Relationships: [];
+      };
       locations: {
         Row: {
           city_name: string;

@@ -23,6 +23,21 @@ export const getLocations = cache(async () => {
   return locations;
 });
 
+export const getLocationsCount = cache(async () => {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("locations")
+    .select("id", { count: "exact", head: true });
+
+  if (error) {
+    console.error("getLocationsCount:", error);
+    return 0;
+  }
+
+  return count ?? 0;
+});
+
 export const getLocationsByState = cache(async (stateSlug: string) => {
   const supabase = await createClient();
   const { data: locationsByState, error } = await supabase
