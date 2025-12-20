@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FleetCard } from "./fleet-card";
 import { cn } from "@/lib/utils";
 import { VehicleData } from "@/lib/data/vehicles";
@@ -43,14 +44,35 @@ export function FleetPreview({
         )}
 
         {/* Grid Layout (3 Columns) */}
-        <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {vehicles.map((vehicle) => (
-            <FleetCard
-              key={vehicle.id}
-              vehicle={vehicle}
-              cardLink={viewAllLink}
-            />
-          ))}
+        <div className="relative">
+          <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {vehicles.map((vehicle) => (
+              <FleetCard
+                key={vehicle.id}
+                vehicle={vehicle}
+                cardLink={viewAllLink}
+              />
+            ))}
+          </div>
+
+          {viewAllLink && (
+            <>
+              <Link
+                href={viewAllLink}
+                aria-label={`View all ${title ?? "fleet"} vehicles`}
+                className="hidden md:flex absolute left-[-3rem] top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white/70 bg-white/20 p-3 text-white shadow-2xl transition hover:border-white hover:bg-white/30 focus-visible:outline-none focus-visible:ring focus-visible:ring-white/80 h-16 w-16 text-2xl"
+              >
+                <ArrowLeft className="h-6 w-6" />
+              </Link>
+              <Link
+                href={viewAllLink}
+                aria-label={`View all ${title ?? "fleet"} vehicles`}
+                className="hidden md:flex absolute right-[-3rem] top-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white/70 bg-white/20 p-3 text-white shadow-2xl transition hover:border-white hover:bg-white/30 focus-visible:outline-none focus-visible:ring focus-visible:ring-white/80 h-16 w-16 text-2xl"
+              >
+                <ArrowRight className="h-6 w-6" />
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile "View All" Button (Only shows on small screens) */}

@@ -77,6 +77,11 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
     return stableShuffle(amenities, `${vehicle.id}-amenities`);
   }, [vehicle.amenities, vehicle.id]);
 
+  const fleetPageLink = cardLink || `/vehicles/${vehicle.slug}`;
+  const fleetLabel = vehicle.type
+    ? `${vehicleNameMap[vehicle.type]} Fleet`
+    : "Fleet";
+
   return (
     <div
       className="group relative flex flex-col overflow-hidden rounded-3xl border
@@ -206,23 +211,30 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
       {/* Bottom Section: Details */}
       <div className="flex flex-1 flex-col p-5 justify-between">
         {/* Feature Tags Grid */}
-        <div
-          className="rounded-2xl border border-blue-800/40 bg-[#0d1e40]/80 p-3
-            mb-6 text-sm text-blue-100/90 shadow-inner"
+        <Link
+          href={fleetPageLink}
+          aria-label={`Browse the ${fleetLabel}`}
+          className="group focus-visible:outline-none focus-visible:ring-2
+            focus-visible:ring-blue-400 focus-visible:ring-offset-2"
         >
-          <div className="mt-auto grid grid-cols-2 gap-2 text-center">
-            {features.map((tag, i) => (
-              <div
-                key={i}
-                className="truncate rounded-full border border-blue-700/50
-                  bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase
-                  tracking-wide text-blue-100"
-              >
-                {tag}
-              </div>
-            ))}
+          <div
+            className="rounded-2xl border border-blue-800/40 bg-[#0d1e40]/80 p-3
+              mb-6 text-sm text-blue-100/90 shadow-inner"
+          >
+            <div className="mt-auto grid grid-cols-2 gap-2 text-center">
+              {features.map((tag, i) => (
+                <div
+                  key={`${tag}-${i}`}
+                  className="truncate rounded-full border border-blue-700/50
+                    bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase
+                    tracking-wide text-blue-100"
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </Link>
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3">
