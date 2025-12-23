@@ -98,7 +98,7 @@ export default async function LocationComfortChecklist({
 
   return (
     <section
-      className="relative py-16 px-6 max-w-7xl mx-auto bg-gradient-to-br
+      className="relative py-16 px-2 md:px-6 max-w-7xl mx-auto bg-gradient-to-br
         rounded-3xl shadow-xl my-12 border border-blue-800/40 from-blue-900/90
         to-black"
     >
@@ -173,7 +173,7 @@ export default async function LocationComfortChecklist({
 
       <div className="grid md:grid-cols-2 gap-10">
         {/* Col 1 */}
-        <div className="space-y-4 flex flex-col">
+        <div className="space-y-4 flex flex-col w-auto">
           {comfortChecklist?.tips.map((tip) => (
             <div
               key={tip.toLowerCase().replace(/\s+/g, "-")}
@@ -201,7 +201,7 @@ export default async function LocationComfortChecklist({
             </h4>
 
             <div
-              className="prose prose-lg prose-invert max-w-none text-justify
+              className="prose lg:prose-lg prose-invert max-w-none text-justify
                 prose-headings:font-bold prose-headings:tracking-tight
                 prose-headings:text-white prose-p:text-slate-200
                 prose-a:text-sky-300 prose-a:no-underline

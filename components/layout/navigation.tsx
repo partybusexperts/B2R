@@ -172,7 +172,7 @@ export default function Navigation() {
     children: React.ReactNode;
   }) => (
     <li className="relative">
-      <Link href={label === "Fleet" ? "/fleet" : "#"}>
+      <Link href={label === "Fleet" ? "/fleet" : ""}>
         <div
           className={cn(
             `flex cursor-pointer items-center gap-1 px-3 py-2 text-md
@@ -234,13 +234,20 @@ export default function Navigation() {
         }
         aria-expanded={mobileExpanded === entry.key}
       >
-        <span
-          className={
-            mobileExpanded === entry.key ? "text-primary" : "text-foreground"
-          }
+        <Link
+          href={entry.label === "Fleet" ? "/fleet" : ""}
+          onClick={(e) => {
+            e.stopPropagation(); // avoid opening the accordion if going to the fleet page
+          }}
         >
-          {entry.label}
-        </span>
+          <span
+            className={
+              mobileExpanded === entry.key ? "text-primary" : "text-foreground"
+            }
+          >
+            {entry.label}
+          </span>
+        </Link>
         <Caret className={mobileExpanded === entry.key ? "rotate-180" : ""} />
       </button>
 
@@ -272,11 +279,8 @@ export default function Navigation() {
   );
 
   return (
-    <header
-      className="sticky top-0 z-50 bg-[#1E4ED8]
-        supports-[backdrop-filter]:bg-[#1E4ED8]"
-    >
-      <div className="mx-auto flex h-16 items-center justify-between px-60">
+    <header className="sticky top-0 z-50 bg-[#1E4ED8] px-4">
+      <div className="flex h-16 items-center justify-between max-w-4xl mx-auto">
         {/* Logo */}
         <Link
           href="/"
@@ -345,7 +349,8 @@ export default function Navigation() {
             onClick={() => setMobileMenuOpen((cur) => !cur)}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav"
-            className="text-muted-foreground"
+            className="text-white hover:bg-[#e0e7ff]/50 focus:ring-2
+              focus:ring-blue-300"
           >
             <span className="sr-only">Toggle menu</span>
             <MenuIcon isOpen={isMobileMenuOpen} />
@@ -357,16 +362,14 @@ export default function Navigation() {
       <div
         id="mobile-nav"
         className={cn(
-          `fixed inset-x-0 top-16 z-40 overflow-hidden border-b border-border/40
+          `fixed inset-x-0 top-16 bottom-0 z-40 border-b border-border/40
           bg-background transition-all duration-300 md:hidden`,
           isMobileMenuOpen
-            ? "max-h-[85vh] opacity-100 shadow-xl"
-            : "max-h-0 opacity-0",
+            ? "max-h-[calc(100vh-4rem)] overflow-y-auto opacity-100 shadow-xl"
+            : "max-h-0 overflow-hidden opacity-0",
         )}
       >
-        <div
-          className="flex flex-col space-y-3 p-4 overflow-y-auto max-h-[80vh]"
-        >
+        <div className="flex flex-col space-y-3 p-4 overflow-y-auto">
           {NAV_ENTRIES.map((entry) => {
             if (entry.type === "link") {
               return (

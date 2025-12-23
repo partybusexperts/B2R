@@ -80,7 +80,7 @@ export async function OtherFleets({
     <section
       className={cn(
         // Matching the dark blue background from the image
-        `max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148]
+        `max-w-6xl mx-4 md:mx-auto bg-gradient-to-br from-[#122a5c] to-[#0f2148]
         rounded-3xl shadow-xl my-12 py-12 px-6 border border-blue-800/30`,
         className,
       )}
@@ -113,7 +113,7 @@ export async function OtherFleets({
                   overflow-hidden shadow-xl"
               >
                 {/* Image Area */}
-                <div className="relative h-96 w-full bg-[#173264]">
+                <div className="relative h-48 md:h-96 w-full bg-[#173264]">
                   <Image
                     src={card.imageUrl}
                     alt={card.title}

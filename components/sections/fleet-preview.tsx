@@ -24,12 +24,14 @@ export function FleetPreview({
   if (!vehicles) return null;
 
   return (
-    <section className={cn("bg-[#0E1F46]", sectionClassName)}>
+    <section className={cn("bg-[#0E1F46] px-4", sectionClassName)}>
       <div className="py-16 md:py-24 max-w-7xl mx-auto">
         {/* Header Section */}
         {title && (
           <div className="flex items-center justify-between mb-10">
-            <h2 className="text-3xl font-bold text-white">{title}</h2>
+            <h2 className="text-xl md:text-3xl font-bold text-white">
+              {title}
+            </h2>
 
             {showNavigation && viewAllLink && (
               <Link

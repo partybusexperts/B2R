@@ -59,57 +59,67 @@ export function EventSearchClient({
         >
           Jump to an event:
         </label>
-        <div className="relative w-auto flex">
-          <Search
-            className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2
-              text-muted-foreground"
-          />
-          <Input
-            id="event-search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search events..."
-            className="h-10 w-full rounded-full bg-[#0f1f46] text-blue-50 border
-              border-blue-800/40 pl-11 pr-4"
-          />
-          <Select
-            value={selectedEventSlug}
-            onValueChange={(value) => {
-              setSelectedEventSlug(value);
-            }}
+        <div className="relative w-auto flex md:flex-row flex-col items-center">
+          <div className="flex w-full">
+            <Search
+              className="absolute left-4 top-5 md:top-1/2 h-4 w-4
+                -translate-y-1/2 text-muted-foreground"
+            />
+
+            <Input
+              id="event-search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search events..."
+              className="h-10 w-full rounded-full bg-[#0f1f46] text-blue-50
+                border border-blue-800/40 pl-11 pr-4"
+            />
+          </div>
+
+          <div
+            className="flex items-center mt-3 justify-between md:justify-start
+              md:mt-0 w-full"
           >
-            <SelectTrigger
-              className="h-10 md:w-96 rounded-full bg-[#0f1f46] text-blue-50
-                border border-blue-800/40 px-5 py-5"
+            <Select
+              value={selectedEventSlug}
+              onValueChange={(value) => {
+                setSelectedEventSlug(value);
+              }}
             >
-              <SelectValue placeholder="Select an event" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#0E1F46] border border-blue-800/40">
-              <SelectGroup>
-                {events.map((event) => (
-                  <SelectItem
-                    key={event.id}
-                    value={event.slug || ""}
-                    disabled={!event.slug}
-                    className="text-blue-100 hover:bg-blue-800/40 focus:ring-0
-                      border-0"
-                  >
-                    {event.title}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Button
-            disabled={!query && !selectedEventSlug}
-            onClick={() => {
-              setQuery("");
-              setSelectedEventSlug("");
-            }}
-            className="h-10 ml-3"
-          >
-            Clear
-          </Button>
+              <SelectTrigger
+                className="h-10 md:w-96 rounded-full bg-[#0f1f46] text-blue-50
+                  border border-blue-800/40 px-5 py-5 ml-0 md:ml-3 truncate"
+              >
+                <SelectValue placeholder="Select an event" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#0E1F46] border border-blue-800/40">
+                <SelectGroup>
+                  {events.map((event) => (
+                    <SelectItem
+                      key={event.id}
+                      value={event.slug || ""}
+                      disabled={!event.slug}
+                      className="text-blue-100 hover:bg-blue-800/40 focus:ring-0
+                        border-0"
+                    >
+                      {event.title}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
+            <Button
+              disabled={!query && !selectedEventSlug}
+              onClick={() => {
+                setQuery("");
+                setSelectedEventSlug("");
+              }}
+              className="h-10 ml-3"
+            >
+              Clear
+            </Button>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
