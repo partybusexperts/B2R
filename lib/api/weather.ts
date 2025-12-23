@@ -1,143 +1,113 @@
 export async function fetchOpenWeatherData(lat: number, lng: number) {
-  const key = process.env.OPENWEATHER_API_KEY!;
+  const key = process.env.OPENWEATHER_API_KEY;
+
+  // 1. Return mock data immediately if no key (prevents 401 errors)
+  if (!key) {
+    console.warn("⚠️ No OpenWeather API Key found. Using '0/N/A' mock data.");
+    return getMockWeatherData();
+  }
 
   const url = new URL("https://api.openweathermap.org/data/3.0/onecall");
-
   url.searchParams.set("lat", String(lat));
   url.searchParams.set("lon", String(lng));
   url.searchParams.set("exclude", "minutely");
   url.searchParams.set("units", "imperial");
   url.searchParams.set("appid", key);
 
-  const res = await fetch(url.toString(), {
-    next: { revalidate: 900 }, // Cache for 15 minutes (900s) to save API calls
-  });
+  try {
+    const res = await fetch(url.toString(), {
+      next: { revalidate: 900 }, // Cache for 15 minutes
+    });
 
-  if (!res.ok) {
-    console.error(`OpenWeatherAPI failed: ${res.status}`);
+    if (!res.ok) {
+      // 2. Use console.warn instead of error to avoid breaking the build
+      console.warn(
+        `⚠️ OpenWeatherAPI failed: ${res.status} (${res.statusText}). Using mock data.`,
+      );
+      return getMockWeatherData();
+    }
 
-    // return mocked data
-    return {
-      lat: 33.44,
-      lon: -94.04,
-      timezone: "America/Chicago",
-      timezone_offset: -18000,
-      current: {
-        dt: 1684929490,
-        sunrise: 1684926645,
-        sunset: 1684977332,
-        temp: 292.55,
-        feels_like: 292.87,
-        pressure: 1014,
-        humidity: 89,
-        dew_point: 290.69,
-        uvi: 0.16,
-        clouds: 53,
-        visibility: 10000,
-        wind_speed: 3.13,
-        wind_deg: 93,
-        wind_gust: 6.71,
-        weather: [
-          {
-            id: 803,
-            main: "Clouds",
-            description: "broken clouds",
-            icon: "04d",
-          },
-        ],
-      },
-      minutely: [
-        {
-          dt: 1684929540,
-          precipitation: 0,
-        },
-      ],
-      hourly: [
-        {
-          dt: 1684926000,
-          temp: 292.01,
-          feels_like: 292.33,
-          pressure: 1014,
-          humidity: 91,
-          dew_point: 290.51,
-          uvi: 0,
-          clouds: 54,
-          visibility: 10000,
-          wind_speed: 2.58,
-          wind_deg: 86,
-          wind_gust: 5.88,
-          weather: [
-            {
-              id: 803,
-              main: "Clouds",
-              description: "broken clouds",
-              icon: "04n",
-            },
-          ],
-          pop: 0.15,
-        },
-      ],
-      daily: [
-        {
-          dt: 1684951200,
-          sunrise: 1684926645,
-          sunset: 1684977332,
-          moonrise: 1684941060,
-          moonset: 1684905480,
-          moon_phase: 0.16,
-          summary: "Expect a day of partly cloudy with rain",
-          temp: {
-            day: 299.03,
-            min: 290.69,
-            max: 300.35,
-            night: 291.45,
-            eve: 297.51,
-            morn: 292.55,
-          },
-          feels_like: {
-            day: 299.21,
-            night: 291.37,
-            eve: 297.86,
-            morn: 292.87,
-          },
-          pressure: 1016,
-          humidity: 59,
-          dew_point: 290.48,
-          wind_speed: 3.98,
-          wind_deg: 76,
-          wind_gust: 8.92,
-          weather: [
-            {
-              id: 500,
-              main: "Rain",
-              description: "light rain",
-              icon: "10d",
-            },
-          ],
-          clouds: 92,
-          pop: 0.47,
-          rain: 0.15,
-          uvi: 9.23,
-        },
-      ],
-      alerts: [
-        {
-          sender_name:
-            "NWS Philadelphia - Mount Holly (New Jersey, Delaware, Southeastern Pennsylvania)",
-          event: "Small Craft Advisory",
-          start: 1684952747,
-          end: 1684988747,
-          description:
-            "...SMALL CRAFT ADVISORY REMAINS IN EFFECT FROM 5 PM THIS\nAFTERNOON TO 3 AM EST FRIDAY...\n* WHAT...North winds 15 to 20 kt with gusts up to 25 kt and seas\n3 to 5 ft expected.\n* WHERE...Coastal waters from Little Egg Inlet to Great Egg\nInlet NJ out 20 nm, Coastal waters from Great Egg Inlet to\nCape May NJ out 20 nm and Coastal waters from Manasquan Inlet\nto Little Egg Inlet NJ out 20 nm.\n* WHEN...From 5 PM this afternoon to 3 AM EST Friday.\n* IMPACTS...Conditions will be hazardous to small craft.",
-          tags: [],
-        },
-      ],
-    };
+    const json = (await res.json()) as OneCallResponse;
+    return json;
+  } catch (error) {
+    console.warn("⚠️ OpenWeatherAPI Fetch Error:", error);
+    return getMockWeatherData();
   }
+}
 
-  const json = (await res.json()) as OneCallResponse;
-
-  return json;
+// 3. Helper to generate the "Obvious" Mock Data (0 and N/A)
+function getMockWeatherData(): OneCallResponse {
+  return {
+    lat: 0,
+    lon: 0,
+    timezone: "UTC", // Safe fallback
+    timezone_offset: 0,
+    current: {
+      dt: 0,
+      sunrise: 0,
+      sunset: 0,
+      temp: 0,
+      feels_like: 0,
+      pressure: 0,
+      humidity: 0,
+      dew_point: 0,
+      uvi: 0,
+      clouds: 0,
+      visibility: 0,
+      wind_speed: 0,
+      wind_deg: 0,
+      wind_gust: 0,
+      weather: [
+        {
+          id: 0,
+          main: "N/A",
+          description: "Data Unavailable",
+          icon: "01d",
+        },
+      ],
+    },
+    minutely: [],
+    // Fill with 0s so the UI renders "0°F" instead of disappearing
+    hourly: Array(12).fill({
+      dt: 0,
+      temp: 0,
+      feels_like: 0,
+      pressure: 0,
+      humidity: 0,
+      dew_point: 0,
+      uvi: 0,
+      clouds: 0,
+      visibility: 0,
+      wind_speed: 0,
+      wind_deg: 0,
+      wind_gust: 0,
+      weather: [{ id: 0, main: "N/A", description: "N/A", icon: "01d" }],
+      pop: 0,
+    }),
+    daily: Array(5).fill({
+      dt: 0,
+      sunrise: 0,
+      sunset: 0,
+      moonrise: 0,
+      moonset: 0,
+      moon_phase: 0,
+      summary: "Data Unavailable",
+      temp: { day: 0, min: 0, max: 0, night: 0, eve: 0, morn: 0 },
+      feels_like: { day: 0, night: 0, eve: 0, morn: 0 },
+      pressure: 0,
+      humidity: 0,
+      dew_point: 0,
+      wind_speed: 0,
+      wind_deg: 0,
+      wind_gust: 0,
+      weather: [{ id: 0, main: "N/A", description: "N/A", icon: "01d" }],
+      clouds: 0,
+      pop: 0,
+      rain: 0,
+      uvi: 0,
+    }),
+    alerts: [],
+  };
 }
 
 export function getWeatherIcon(iconCode: string) {
@@ -165,12 +135,23 @@ export function getWindDirection(degrees: number): string {
 }
 
 export function formatWeatherTime(timestamp: number, timezone: string) {
-  return new Date(timestamp * 1000).toLocaleTimeString("en-US", {
-    timeZone: timezone, // Uses the API's "America/Chicago"
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true, // Ensures AM/PM format
-  });
+  try {
+    return new Date(timestamp * 1000).toLocaleTimeString("en-US", {
+      timeZone: timezone, // Uses the API's "America/Chicago"
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true, // Ensures AM/PM format
+    });
+  } catch (error) {
+    console.error("Error formatting weather time:", error);
+    // 4. Fallback to UTC if timezone is invalid (like "N/A")
+    return new Date(timestamp * 1000).toLocaleTimeString("en-US", {
+      timeZone: "UTC",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
 }
 
 // Types from https://gist.github.com/TheJoeFin/5d9be4cb2d5ca0136021cb9ce2a9c9e5
@@ -219,6 +200,7 @@ export type Weather = {
   main: string;
   description: string;
   icon: string;
+  // added to avoid type errors if api returns something unexpected
 };
 
 export type Minutely = {
@@ -293,129 +275,3 @@ export type Alert = {
   description: string;
   tags: string[];
 };
-
-/*
-
-Example response from OpenWeather API one call 3.0:
-https://openweathermap.org/api/one-call-3
-
-{
-   "lat":33.44,
-   "lon":-94.04,
-   "timezone":"America/Chicago",
-   "timezone_offset":-18000,
-   "current":{
-      "dt":1684929490,
-      "sunrise":1684926645,
-      "sunset":1684977332,
-      "temp":292.55,
-      "feels_like":292.87,
-      "pressure":1014,
-      "humidity":89,
-      "dew_point":290.69,
-      "uvi":0.16,
-      "clouds":53,
-      "visibility":10000,
-      "wind_speed":3.13,
-      "wind_deg":93,
-      "wind_gust":6.71,
-      "weather":[
-         {
-            "id":803,
-            "main":"Clouds",
-            "description":"broken clouds",
-            "icon":"04d"
-         }
-      ]
-   },
-   "minutely":[
-      {
-         "dt":1684929540,
-         "precipitation":0
-      },
-      ...
-   ],
-   "hourly":[
-      {
-         "dt":1684926000,
-         "temp":292.01,
-         "feels_like":292.33,
-         "pressure":1014,
-         "humidity":91,
-         "dew_point":290.51,
-         "uvi":0,
-         "clouds":54,
-         "visibility":10000,
-         "wind_speed":2.58,
-         "wind_deg":86,
-         "wind_gust":5.88,
-         "weather":[
-            {
-               "id":803,
-               "main":"Clouds",
-               "description":"broken clouds",
-               "icon":"04n"
-            }
-         ],
-         "pop":0.15
-      },
-      ...
-   ],
-   "daily":[
-      {
-         "dt":1684951200,
-         "sunrise":1684926645,
-         "sunset":1684977332,
-         "moonrise":1684941060,
-         "moonset":1684905480,
-         "moon_phase":0.16,
-         "summary":"Expect a day of partly cloudy with rain",
-         "temp":{
-            "day":299.03,
-            "min":290.69,
-            "max":300.35,
-            "night":291.45,
-            "eve":297.51,
-            "morn":292.55
-         },
-         "feels_like":{
-            "day":299.21,
-            "night":291.37,
-            "eve":297.86,
-            "morn":292.87
-         },
-         "pressure":1016,
-         "humidity":59,
-         "dew_point":290.48,
-         "wind_speed":3.98,
-         "wind_deg":76,
-         "wind_gust":8.92,
-         "weather":[
-            {
-               "id":500,
-               "main":"Rain",
-               "description":"light rain",
-               "icon":"10d"
-            }
-         ],
-         "clouds":92,
-         "pop":0.47,
-         "rain":0.15,
-         "uvi":9.23
-      },
-      ...
-   ],
-    "alerts": [
-    {
-      "sender_name": "NWS Philadelphia - Mount Holly (New Jersey, Delaware, Southeastern Pennsylvania)",
-      "event": "Small Craft Advisory",
-      "start": 1684952747,
-      "end": 1684988747,
-      "description": "...SMALL CRAFT ADVISORY REMAINS IN EFFECT FROM 5 PM THIS\nAFTERNOON TO 3 AM EST FRIDAY...\n* WHAT...North winds 15 to 20 kt with gusts up to 25 kt and seas\n3 to 5 ft expected.\n* WHERE...Coastal waters from Little Egg Inlet to Great Egg\nInlet NJ out 20 nm, Coastal waters from Great Egg Inlet to\nCape May NJ out 20 nm and Coastal waters from Manasquan Inlet\nto Little Egg Inlet NJ out 20 nm.\n* WHEN...From 5 PM this afternoon to 3 AM EST Friday.\n* IMPACTS...Conditions will be hazardous to small craft.",
-      "tags": [
-
-      ]
-    },
-    ...
-  ]
-*/

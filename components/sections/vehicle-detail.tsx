@@ -359,6 +359,7 @@ export function VehicleDetail({ vehicle }: { vehicle: VehicleData }) {
                       alt={imagesInfo.images?.exterior_img.alt}
                       src={imagesInfo.images?.exterior_img.url}
                       fill
+                      sizes="(min-width: 1024px) 672px, 100vw"
                       priority
                       className="object-cover transition duration-500
                         group-hover:scale-[1.02]"
@@ -402,6 +403,7 @@ export function VehicleDetail({ vehicle }: { vehicle: VehicleData }) {
                         alt={imagesInfo.images?.exterior_img.alt}
                         src={imagesInfo.images?.exterior_img.url}
                         fill
+                        sizes="(min-width: 1024px) 336px, 50vw"
                         priority
                         className="object-cover transition duration-500
                           group-hover:scale-[1.02]"
@@ -437,6 +439,7 @@ export function VehicleDetail({ vehicle }: { vehicle: VehicleData }) {
                         alt={imagesInfo.images?.interior_img.alt}
                         src={imagesInfo.images?.interior_img.url}
                         fill
+                        sizes="(min-width: 1024px) 336px, 50vw"
                         priority
                         className="object-cover transition duration-500
                           group-hover:scale-[1.02]"
@@ -477,6 +480,7 @@ export function VehicleDetail({ vehicle }: { vehicle: VehicleData }) {
                         src={galleryImages[galleryIndex].url}
                         alt={`${vehicle.name} photo ${galleryIndex + 1}`}
                         fill
+                        sizes="(min-width: 1024px) 1024px, (min-width: 768px) 672px, 100vw"
                         priority
                         className="object-cover"
                       />

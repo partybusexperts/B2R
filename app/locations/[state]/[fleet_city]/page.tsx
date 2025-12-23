@@ -27,8 +27,6 @@ import { getLocationWithContent } from "@/lib/data/locations";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo/metadata";
 
-type FleetType = "party-buses" | "limousines" | "coach-buses";
-
 export async function generateMetadata({
   params,
 }: {
@@ -71,6 +69,39 @@ export async function generateMetadata({
     description,
     path: `/locations/${location.state_slug}/${fleetType}-${location.city_slug}`,
   });
+}
+
+type FleetType = "party-buses" | "limousines" | "coach-buses";
+
+// 1. Keep this line to enable caching for pages generated on-demand
+export const revalidate = 3600; // Cache for 1 hour (or 86400 for 1 day)
+
+// 2. Allow pages not returned by generateStaticParams to be generated on demand
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  // RETURNING EMPTY ARRAY PREVENTS BUILD TIMEOUTS.
+  // Next.js will generate these pages when the first user visits them.
+  return [];
+
+  // const locations = await getLocations();
+  // const fleetTypes = ["party-buses", "limousines", "coach-buses"];
+
+  // const params = [];
+
+  // // Create a path for every City + Fleet combo
+  // for (const loc of locations ?? []) {
+  //   if (loc.state_slug && loc.city_slug) {
+  //     for (const fleet of fleetTypes) {
+  //       params.push({
+  //         state: loc.state_slug,
+  //         fleet_city: `${fleet}-${loc.city_slug}`,
+  //       });
+  //     }
+  //   }
+  // }
+
+  // return params;
 }
 
 export default async function FleetCityPage({

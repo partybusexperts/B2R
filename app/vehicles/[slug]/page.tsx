@@ -10,16 +10,13 @@ import { FaqSection } from "@/components/sections/faq-section";
 import {
   getSimilarVehiclesByType,
   getVehiclebySlug,
+  getVehicles,
 } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { toPublicStorageUrl } from "@/lib/helpers/storage";
-
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
 
 export async function generateMetadata({
   params,
@@ -56,6 +53,18 @@ export async function generateMetadata({
     path: `/vehicles/${vehicle.slug}`,
     openGraphImages: primaryImage ? [primaryImage] : undefined,
   });
+}
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  // Fetch a large number to ensure we get them all, or paginate if you have thousands
+  const vehicles = await getVehicles();
+  return (vehicles ?? []).map((vehicle) => ({
+    slug: vehicle.slug,
+  }));
 }
 
 async function getVehicleData(slug: string) {

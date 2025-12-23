@@ -2,6 +2,7 @@
 
 # supabase custom migrations
 /lib/supabase/migrations/*
+/lib/supabase/scripts/*
 /.cache/
 
 # mcp file

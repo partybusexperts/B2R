@@ -13,7 +13,7 @@ export async function WhySection({ slug, className }: WhySectionProps) {
   if (!why_section || !why_section.features) return null;
 
   return (
-    <section className={cn("bg-[#0E1F46]", className)}>
+    <section className={cn("bg-[#0E1F46] px-4", className)}>
       <div
         className="max-w-6xl mx-auto bg-gradient-to-br from-[#122a5c]
           to-[#0f2148] rounded-3xl shadow-xl my-6 py-12 px-6 border

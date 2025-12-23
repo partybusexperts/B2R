@@ -1,4 +1,5 @@
 import { LocationsWithContentData, StateData } from "@/lib/data/locations";
+import Link from "next/link";
 
 export default function LocationHeader({
   location,
@@ -45,21 +46,21 @@ export default function LocationHeader({
               <span className="text-blue-300/80">Bus2Ride Local Dispatch</span>
             </div>
             <div className="flex flex-wrap items-center gap-3 text-white/80">
-              <a
+              <Link
                 href="tel:8885352566"
                 className="font-semibold underline decoration-dotted
                   underline-offset-4"
               >
                 (888) 535-2566
-              </a>
+              </Link>
               <span className="hidden sm:inline">•</span>
-              <a
+              <Link
                 href="mailto:info@bus2ride.com"
                 className="font-semibold underline decoration-dotted
                   underline-offset-4 hidden sm:inline"
               >
                 info@bus2ride.com
-              </a>
+              </Link>
             </div>
           </div>
           <div className="mt-8 text-center space-y-6">
@@ -83,42 +84,42 @@ export default function LocationHeader({
             className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap
               sm:justify-center"
           >
-            <a
+            <Link
               href="/pricing"
               className="inline-flex items-center justify-center rounded-full
-                bg-white px-10 py-5 text-xl font-semibold text-blue-900
+                bg-white px-2 md:px-10 py-5 text-xl font-semibold text-blue-900
                 shadow-[0_20px_40px_rgba(4,7,16,0.45)] hover:-translate-y-0.5
                 hover:bg-slate-50 transition"
             >
               ⚡ Instant Quote
-            </a>
-            <a
+            </Link>
+            <Link
               href="/fleet"
               className="inline-flex items-center justify-center rounded-full
-                bg-blue-600 px-10 py-5 text-xl font-semibold text-white
+                bg-blue-600 px-2 md:px-10 py-5 text-xl font-semibold text-white
                 shadow-[0_20px_40px_rgba(5,88,255,0.45)] hover:-translate-y-0.5
                 hover:bg-blue-500 transition"
             >
               🚌 View Fleet
-            </a>
-            <a
+            </Link>
+            <Link
               href="tel:8885352566"
               className="inline-flex items-center justify-center rounded-full
-                bg-slate-900/80 px-10 py-5 text-xl font-semibold text-white
-                shadow-[0_20px_40px_rgba(2,6,23,0.6)] hover:-translate-y-0.5
-                hover:bg-black transition"
+                bg-slate-900/80 px-2 md:px-10 py-5 text-xl font-semibold
+                text-white shadow-[0_20px_40px_rgba(2,6,23,0.6)]
+                hover:-translate-y-0.5 hover:bg-black transition"
             >
               📞 Call (888) 535-2566
-            </a>
-            <a
+            </Link>
+            <Link
               href="mailto:info@bus2ride.com"
               className="inline-flex items-center justify-center rounded-full
-                border border-white/30 px-10 py-5 text-xl font-semibold
+                border border-white/30 px-2 md:px-10 py-5 text-xl font-semibold
                 text-white shadow-[0_20px_40px_rgba(3,9,23,0.5)]
                 hover:-translate-y-0.5 hover:bg-white/5 transition"
             >
               ✉️ Email Us
-            </a>
+            </Link>
           </div>
           <p className="mt-6 text-center text-sm text-yellow-200/90">
             {header?.bottom_label}

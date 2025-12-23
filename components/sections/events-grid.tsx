@@ -22,7 +22,7 @@ export async function EventsGrid({ category }: EventsGridProps) {
   const displayEvents = shuffle(events).slice(0, 6);
 
   return (
-    <section className="py-20 md:py-24 w-full bg-[#122a56]">
+    <section className="py-20 md:py-24 w-full bg-[#122a56] px-4">
       <div className="w-full max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto">
@@ -33,11 +33,12 @@ export async function EventsGrid({ category }: EventsGridProps) {
             className="mt-2 text-4xl font-extrabold text-white font-serif
               tracking-tight"
           >
-            6 rotating nights we book every week
+            Featured events & inspiration
           </h2>
           <p className="mt-3 text-blue-100/90">
-            These cards rotate on every refresh so you always see fresh
-            inspiration from the party bus calendar.
+            Handpicked local events, tips, and venue ideas to spark your group’s
+            next night out — refreshed regularly so you&apos;ll always find new
+            inspiration.
           </p>
         </div>
 

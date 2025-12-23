@@ -4,7 +4,7 @@ import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
 import { FaqSection } from "@/components/sections/faq-section";
 import { getReviews } from "@/lib/data/reviews";
-import { getEventBySlug } from "@/lib/data/events";
+import { getEventBySlug, getEvents } from "@/lib/data/events";
 import { notFound } from "next/navigation";
 import FleetSection from "@/components/sections/fleet-section";
 import Hero from "@/components/layout/hero";
@@ -12,10 +12,6 @@ import EventQuickPlanner from "@/components/sections/event-quick-planner.client"
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { toPublicStorageUrl } from "@/lib/helpers/storage";
-
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
 
 export async function generateMetadata({
   params,
@@ -43,6 +39,17 @@ export async function generateMetadata({
     path: `/events/${event.slug}`,
     openGraphImages: ogImage ? [ogImage] : undefined,
   });
+}
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const events = await getEvents();
+  return (events ?? []).map((event) => ({
+    slug: event.slug,
+  }));
 }
 
 export default async function EventDetailPage({ params }: PageProps) {

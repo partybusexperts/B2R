@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getToolBySlug } from "@/lib/data/tools";
+import { getToolBySlug, getTools } from "@/lib/data/tools";
 import { renderToolComponent } from "@/components/sections/tools-registry";
 import Hero from "@/components/layout/hero";
 import { Button } from "@/components/ui/button";
@@ -7,10 +7,6 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo/metadata";
-
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
 
 export async function generateMetadata({
   params,
@@ -33,6 +29,17 @@ export async function generateMetadata({
     description: (tool.description ?? "").trim() || undefined,
     path: `/tools/${tool.slug}`,
   });
+}
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const tools = await getTools();
+  return (tools ?? []).map((tool) => ({
+    slug: tool.slug,
+  }));
 }
 
 export default async function ToolPage({ params }: PageProps) {

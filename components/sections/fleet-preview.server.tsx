@@ -17,15 +17,6 @@ export async function FleetPreviewServer({
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
 
-  // return (
-  //   <FleetPreviewCarousel
-  //     title={title}
-  //     description={description}
-  //     viewAllLink={viewAllLink}
-  //     vehicles={randomDisplayVehicles}
-  //   />
-  // );
-
   return (
     <FleetPreview
       title={title}

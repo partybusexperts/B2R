@@ -93,6 +93,7 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
           src={activeImage}
           alt={vehicle.name}
           fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           className="object-cover transition-transform duration-700
             group-hover:scale-105"
         />
@@ -188,6 +189,7 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
                   src={img}
                   alt={`View ${idx}`}
                   fill
+                  sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 50vw"
                   className="object-cover"
                 />
                 <div
@@ -212,14 +214,15 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
         >
           <div className="mt-auto grid grid-cols-2 gap-2 text-center">
             {features.map((tag, i) => (
-              <div
-                key={i}
-                className="truncate rounded-full border border-blue-700/50
-                  bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase
-                  tracking-wide text-blue-100"
-              >
-                {tag}
-              </div>
+              <Link key={i} href={cardLink || `/vehicles/${vehicle.slug}`}>
+                <div
+                  className="truncate rounded-full border border-blue-700/50
+                    bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase
+                    tracking-wide text-blue-100"
+                >
+                  {tag}
+                </div>
+              </Link>
             ))}
           </div>
         </div>
