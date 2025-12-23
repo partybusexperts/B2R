@@ -7,8 +7,7 @@ import { getLocations } from "@/lib/data/locations";
 import { getTools } from "@/lib/data/tools";
 import { getVehicles } from "@/lib/data/vehicles";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 60 * 60; // 1 hour
+export const revalidate = 3600; // 1 hour
 
 type BlogPost = NonNullable<Awaited<ReturnType<typeof getBlogPosts>>>[number];
 type VehicleRow = NonNullable<Awaited<ReturnType<typeof getVehicles>>>[number];
