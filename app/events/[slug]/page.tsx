@@ -46,9 +46,9 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const posts = await getEvents();
-  return (posts ?? []).map((post) => ({
-    slug: post.slug,
+  const events = await getEvents();
+  return (events ?? []).map((event) => ({
+    slug: event.slug,
   }));
 }
 
