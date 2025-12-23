@@ -212,14 +212,15 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
         >
           <div className="mt-auto grid grid-cols-2 gap-2 text-center">
             {features.map((tag, i) => (
-              <div
-                key={i}
-                className="truncate rounded-full border border-blue-700/50
-                  bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase
-                  tracking-wide text-blue-100"
-              >
-                {tag}
-              </div>
+              <Link key={i} href={cardLink || `/vehicles/${vehicle.slug}`}>
+                <div
+                  className="truncate rounded-full border border-blue-700/50
+                    bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase
+                    tracking-wide text-blue-100"
+                >
+                  {tag}
+                </div>
+              </Link>
             ))}
           </div>
         </div>
