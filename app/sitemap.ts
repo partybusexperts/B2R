@@ -135,9 +135,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const [posts, vehicles, events, tools, locations] = await Promise.all([
     safe(async () => (await getBlogPosts()) ?? [], [] as BlogPost[]),
-    safe(async () => (await getVehicles(1000)) ?? [], [] as VehicleRow[]),
-    safe(async () => (await getEvents(1000)) ?? [], [] as EventRow[]),
-    safe(async () => (await getTools(1000)) ?? [], [] as ToolRow[]),
+    safe(async () => (await getVehicles()) ?? [], [] as VehicleRow[]),
+    safe(async () => (await getEvents()) ?? [], [] as EventRow[]),
+    safe(async () => (await getTools()) ?? [], [] as ToolRow[]),
     safe(async () => (await getLocations()) ?? [], [] as LocationRow[]),
   ]);
 

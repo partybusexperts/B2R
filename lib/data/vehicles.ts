@@ -56,13 +56,16 @@ export const mockVehicles = [
   },
 ];
 
-export const getVehicles = cache(async (limit = 10) => {
+export const getVehicles = cache(async (limit?: number) => {
   const supabase = await createClient();
 
-  const { data: vehicles, error } = await supabase
-    .from("vehicles")
-    .select("*")
-    .limit(limit);
+  let request = supabase.from("vehicles").select("*");
+
+  if (limit) {
+    request = request.limit(limit);
+  }
+
+  const { data: vehicles, error } = await request;
 
   if (error) {
     console.error("getVehicles:", error);

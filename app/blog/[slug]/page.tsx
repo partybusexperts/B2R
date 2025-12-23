@@ -10,16 +10,25 @@ import { ShareArticleButton } from "@/components/ui/share-article-button";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, User } from "lucide-react";
 import { notFound } from "next/navigation";
-import { getBlogPostBySlug } from "@/lib/data/blog";
+import { getBlogPostBySlug, getBlogPosts } from "@/lib/data/blog";
 import FleetSection from "@/components/sections/fleet-section";
 import Image from "next/image";
 import { toPublicStorageUrl } from "@/lib/helpers/storage";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo/metadata";
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
+const buildTopicTags = (slug: string) => {
+  return slug
+    .split("-")
+    .filter(
+      (segment) =>
+        segment.length > 2 &&
+        !["the", "and", "for", "with", "your", "you", "how"].includes(segment),
+    )
+    .slice(0, 3)
+    .map((segment) => segment.replace(/[^a-z0-9]/gi, ""))
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1));
+};
 
 export async function generateMetadata({
   params,
@@ -51,18 +60,16 @@ export async function generateMetadata({
   });
 }
 
-const buildTopicTags = (slug: string) => {
-  return slug
-    .split("-")
-    .filter(
-      (segment) =>
-        segment.length > 2 &&
-        !["the", "and", "for", "with", "your", "you", "how"].includes(segment),
-    )
-    .slice(0, 3)
-    .map((segment) => segment.replace(/[^a-z0-9]/gi, ""))
-    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1));
-};
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  return (posts ?? []).map((post) => ({
+    slug: post.slug,
+  }));
+}
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;

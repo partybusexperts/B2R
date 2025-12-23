@@ -3,7 +3,7 @@ import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
 import { getReviews } from "@/lib/data/reviews";
-import { getState } from "@/lib/data/locations";
+import { getLocations, getState } from "@/lib/data/locations";
 import { notFound } from "next/navigation";
 import LocationReadyToPlan from "@/components/sections/location-ready-to-plan";
 import LocationCitiesAcross from "@/components/sections/location-cities-across";
@@ -51,6 +51,20 @@ export async function generateMetadata({
     description,
     path: `/locations/${stateData.slug}`,
   });
+}
+
+export async function generateStaticParams() {
+  const locations = await getLocations();
+
+  // Get unique state slugs
+  const stateSlugs = new Set<string>();
+  locations?.forEach((loc) => {
+    if (loc.state_slug) stateSlugs.add(loc.state_slug);
+  });
+
+  return Array.from(stateSlugs).map((slug) => ({
+    state: slug,
+  }));
 }
 
 export default async function StatePage({

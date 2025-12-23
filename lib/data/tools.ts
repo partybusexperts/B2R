@@ -118,14 +118,17 @@ const mockTools = [
   },
 ];
 
-export const getTools = cache(async (limit = 20) => {
+export const getTools = cache(async (limit?: number) => {
   const supabase = await createClient();
 
   // Fetch tools
-  const { data: tools, error } = await supabase
-    .from("tools")
-    .select("*")
-    .limit(limit);
+  let request = supabase.from("tools").select("*");
+
+  if (limit) {
+    request = request.limit(limit);
+  }
+
+  const { data: tools, error } = await request;
 
   if (error) {
     console.error("getTools:", error);
