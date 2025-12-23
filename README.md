@@ -30,7 +30,7 @@ npm run lint     # ESLint
 
 ### Hero Section
 
-- **Used on:** All pages **except** Fleet pages, Polls page, Poll Results page.
+- **Used on:** All pages **except** Fleet pages, Polls page, Poll Results page (`/polls/results`).
 - Fetch hero by slug from Supabase.
 - Rotating carousel of 3 vehicle images from `vehicles1` storage.
 
@@ -52,9 +52,9 @@ npm run lint     # ESLint
 
 ### Reviews Section
 
-- Add **search bar** + **checkbox filters** (filter by vehicle type, "on time", etc.).
-- AI-assisted tagging for filter categories.
-- Consistent across all pages.
+- Includes **search bar** + **filters** (tags / contextual filters).
+- AI-assisted tagging for filter categories (optional enhancement).
+- Keep consistent across all pages.
 
 ### Polls Section
 
@@ -135,7 +135,13 @@ npm run lint     # ESLint
 - Current layout is fine
 - **Stack:** Polls → Fleet sections → Tools → Reviews → FAQ
 
-### City Location Page (`/locations/state/[state_slug]/city/[city_slug]`)
+### City + Fleet Location Page (`/locations/[state]/[fleet_city]`)
+
+- `fleet_city` is `${fleetType}-${citySlug}` where `fleetType` is one of:
+  - `party-buses`
+  - `limousines`
+  - `coach-buses`
+- Example: `/locations/florida/party-buses-miami`
 
 - Standard Hero at top
 - **Larger fonts** (match rest of site)
@@ -147,14 +153,9 @@ npm run lint     # ESLint
 - Remove "Supabase powered social proof" section
 - **Stack:** Reviews → Polls → Fleet sections → Tools → Events → FAQ → "Ready to Plan" CTA
 
-### State Location Page (`/locations/state/[state_slug]`)
+### State Location Page (`/locations/[state]`)
 
-- Use **same template as city pages** (apply all city page changes first)
-
-### City Vehicle Pages (`/locations/state/[state_slug]/city/[city_slug]/[fleet_slug]`)
-
-- Create 3 pages per city: party-buses, limousines, coach-buses
-- Follow city location template pattern
+- Uses the state template and includes a Hero (`slug={stateData.slug}`)
 
 ### Polls Page (`/polls`)
 
@@ -162,7 +163,7 @@ npm run lint     # ESLint
 - Improve UX for faster voting (reduce clicks needed)
 - **Stack:** Reviews → Fleet sections → Tools → Events → FAQ
 
-### Poll Results Page (`/poll-results`)
+### Poll Results Page (`/polls/results`)
 
 - **No Hero**
 - Top section: "Cool Stats" (most popular poll, interesting facts)
@@ -241,15 +242,16 @@ npm run lint     # ESLint
 
 ## Key Files Reference
 
-| Purpose                 | Path                      |
-| ----------------------- | ------------------------- |
-| Supabase server client  | `lib/supabase/server.ts`  |
-| Supabase browser client | `lib/supabase/client.ts`  |
-| Cookie/session proxy    | `lib/supabase/proxy.ts`   |
-| DB types                | `types/database.types.ts` |
-| Vehicle data helpers    | `lib/data/vehicles.ts`    |
-| UI primitives           | `components/ui/`          |
-| Page sections           | `components/sections/`    |
+| Purpose                 | Path                              |
+| ----------------------- | --------------------------------- |
+| Supabase server client  | `lib/supabase/server.ts`          |
+| Supabase browser client | `lib/supabase/client.ts`          |
+| Cookie/session proxy    | `lib/supabase/proxy.ts`           |
+| DB types                | `types/database.types.ts`         |
+| Vehicle data helpers    | `lib/data/vehicles.ts`            |
+| UI primitives           | `components/ui/`                  |
+| Page sections           | `components/sections/`            |
+| SEO metadata routes     | `app/robots.ts`, `app/sitemap.ts` |
 
 ---
 
