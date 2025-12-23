@@ -33,11 +33,12 @@ export async function EventsGrid({ category }: EventsGridProps) {
             className="mt-2 text-4xl font-extrabold text-white font-serif
               tracking-tight"
           >
-            6 rotating nights we book every week
+            Featured events & inspiration
           </h2>
           <p className="mt-3 text-blue-100/90">
-            These cards rotate on every refresh so you always see fresh
-            inspiration from the party bus calendar.
+            Handpicked local events, tips, and venue ideas to spark your group’s
+            next night out — refreshed regularly so you&apos;ll always find new
+            inspiration.
           </p>
         </div>
 
