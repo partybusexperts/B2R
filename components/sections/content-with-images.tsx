@@ -169,6 +169,7 @@ export function BackupOld2ColumnGrid(cardsWithImages: CardsWithImages) {
               src={card.imageUrl}
               alt={card.title}
               fill
+              sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover transition-transform duration-700
                 group-hover:scale-105"
             />

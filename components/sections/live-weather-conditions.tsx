@@ -73,6 +73,7 @@ export async function LiveWeatherConditions({
                   alt={weather.current.weather[0].description}
                   width={40}
                   height={40}
+                  sizes="40px"
                 />
               </div>
             </div>
@@ -245,6 +246,7 @@ function HourlyForecastCard({ data }: { data: Hourly[] }) {
                     alt={hour.weather[0]?.description || "Weather icon"}
                     width={16}
                     height={16}
+                    sizes="16px"
                   />
                   {popPercent}%
                 </div>
@@ -289,6 +291,7 @@ function FiveDaysForecastCard({ data }: { data: Daily[] }) {
                   alt={description}
                   width={24}
                   height={24}
+                  sizes="24px"
                 />
               </div>
               <div className="w-40 text-right">
