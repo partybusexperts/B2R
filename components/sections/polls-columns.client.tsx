@@ -129,15 +129,14 @@ export function PollsColumnsClient({
                 columnRefs.current[colIdx] = el;
               }}
               onScroll={() => updateScrollMeta(colIdx)}
-              className="h-[675px] overflow-y-scroll snap-y snap-mandatory
-                rounded-3xl border border-white/10 bg-white/5
-                polls-column-scroll"
+              className="h-[675px] overflow-y-scroll rounded-3xl border
+                border-white/10 bg-white/5 polls-column-scroll"
             >
               {col.map((poll, idx) => (
                 <div
                   key={`${poll.id}-${idx}`}
                   data-poll-index={idx}
-                  className="h-[450px] snap-start snap-always p-4"
+                  className="h-[450px] p-4"
                 >
                   <PollCard
                     poll={poll}
