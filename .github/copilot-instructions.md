@@ -22,7 +22,7 @@ const reviews = await getReviews(6);
 const { data } = await supabase.from("vehicles").select("*");
 ```
 
-Key fetchers: `getVehicles`, `getRandomVehicles`, `getVehiclesByType`, `getVehiclebySlug`, `getReviews`, `getHeroBySlug`, `getTools`, `getToolBySlug`, `getEvents`, `getEventBySlug`, `getBlogPosts`, `getBlogPostBySlug`, `getLocations`, `getLocationsByState`, `getState`, `getLocationBySlugs`, `getLocationWithContent`
+Key fetchers: `getVehicles`, `getRandomVehicles`, `getReviews`, `getLocationBySlug`, `getHeroBySlug`, `getTools`, `getContentBySlug`
 
 ### Supabase Client
 
@@ -53,7 +53,7 @@ See [app/party-buses/page.tsx](../app/party-buses/page.tsx) for canonical exampl
 ### Hero Rules
 
 - **Include:** Homepage, vehicle pages, location pages, events, blog
-- **Exclude:** Fleet listings (`/party-buses`, `/limousines`, `/coach-buses`), `/polls`, `/polls/results`
+- **Exclude:** Fleet listings (`/party-buses`, `/limousines`), `/polls`, `/poll-results`
 
 ```tsx
 import Hero from "@/components/layout/hero";
@@ -76,27 +76,17 @@ Three types throughout codebase: `"party-bus" | "limo" | "coach"` (defined in [t
 
 ## Location Pages Pattern
 
-Location routes:
-
-- State pages: `app/locations/[state]/page.tsx` → `/locations/[state]`
-- City + fleet pages: `app/locations/[state]/[fleet_city]/page.tsx` → `/locations/[state]/[fleet_city]`
-  - `fleet_city` format: `${fleetType}-${citySlug}` where `fleetType` is one of `party-buses | limousines | coach-buses`
-
-City + fleet pages typically:
+City pages (`app/locations/state/[state_slug]/city/[city_slug]/page.tsx`) require:
 
 ```tsx
-<Hero slug={location.city_slug} />
-<LocationHeader location={location} />
-<LocationWhyBook location={location} />
-<FleetSection location={{ stateSlug, citySlug }} />
-<LocationHowToBook location={location} />
-{/* …location content sections… */}
+<Hero slug={city_slug} />
+<LiveConditions city={location.name} lat={...} lng={...} />
+<LocationInfoGrid items={location.local_events} />
+<ContentFeatures slug={`sample-night-${city_slug}`} />
+<LocationTrivia trivia={location.trivia} />
+<FleetList vehicles={fleet} />
 {/* Standard Footer Stack */}
 ```
-
-## SEO
-
-- Robots + sitemap are implemented using Next.js Metadata Routes in `app/robots.ts` and `app/sitemap.ts`.
 
 ## Styling
 

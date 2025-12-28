@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 import { ReviewsSection } from "@/components/sections/reviews-section";
-import { PollsGrid } from "@/components/sections/polls-grid";
+import { LocationPollsGrid } from "@/components/sections/location-polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
 import { getReviews } from "@/lib/data/reviews";
 
 import FleetSection from "@/components/sections/fleet-section";
 import LocationReadyToPlan from "@/components/sections/location-ready-to-plan";
-import LocationHeader from "@/components/sections/location-header";
 import LocationWhyBook from "@/components/sections/location-why-book";
 import LocationHowToBook from "@/components/sections/location-how-to-book";
 import LocationCitiesAcross from "@/components/sections/location-cities-across";
@@ -26,6 +25,8 @@ import { getRandomVehiclesImages } from "@/lib/data/vehicles";
 import { getLocationWithContent } from "@/lib/data/locations";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo/metadata";
+
+type FleetType = "party-buses" | "limousines" | "coach-buses";
 
 export async function generateMetadata({
   params,
@@ -71,39 +72,6 @@ export async function generateMetadata({
   });
 }
 
-type FleetType = "party-buses" | "limousines" | "coach-buses";
-
-// 1. Keep this line to enable caching for pages generated on-demand
-export const revalidate = 3600; // Cache for 1 hour (or 86400 for 1 day)
-
-// 2. Allow pages not returned by generateStaticParams to be generated on demand
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  // RETURNING EMPTY ARRAY PREVENTS BUILD TIMEOUTS.
-  // Next.js will generate these pages when the first user visits them.
-  return [];
-
-  // const locations = await getLocations();
-  // const fleetTypes = ["party-buses", "limousines", "coach-buses"];
-
-  // const params = [];
-
-  // // Create a path for every City + Fleet combo
-  // for (const loc of locations ?? []) {
-  //   if (loc.state_slug && loc.city_slug) {
-  //     for (const fleet of fleetTypes) {
-  //       params.push({
-  //         state: loc.state_slug,
-  //         fleet_city: `${fleet}-${loc.city_slug}`,
-  //       });
-  //     }
-  //   }
-  // }
-
-  // return params;
-}
-
 export default async function FleetCityPage({
   params,
 }: {
@@ -137,12 +105,8 @@ export default async function FleetCityPage({
 
   return (
     <main>
-      {/* Once we have cities images, we need to show them in the hero.  */}
+      {/* Hero Section */}
       <Hero slug={location.city_slug} />
-
-      <OtherFleets currentType={fleetTypeMap[fleetType]} location={location} />
-
-      <LocationHeader location={location} />
 
       <LocationWhyBook location={location} />
 
@@ -207,10 +171,13 @@ export default async function FleetCityPage({
         vehicles_images={vehicles_images}
       />
 
-      <PollsGrid
-        columnCategories={["party-bus", "limo", "coach-bus"]}
-        // columnCategories={[location.state_slug ?? "", "events", "pricing"]}
-        hideCities
+      {/* Other fleet types - moved below main content */}
+      <OtherFleets currentType={fleetTypeMap[fleetType]} location={location} />
+
+      <LocationPollsGrid
+        cityName={location.city_name}
+        stateName={location.state_name}
+        title={`${location.city_name} Transportation Polls`}
       />
 
       <ToolsGrid category={location.city_slug} />

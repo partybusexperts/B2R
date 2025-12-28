@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 // export const mockPolls: PollData[] = [
 //   {
@@ -161,52 +162,61 @@ export const getPollsBySearch = cache(async (query: string, limit = 30) => {
   return polls;
 });
 
-export const getPollsByCategory = cache(
-  async (category: string = "", limit = 20) => {
-    if (!category || category.trim() === "") {
-      console.warn(
-        "getPollsByCategory: No category provided, returning all polls",
-      );
-    }
+const fetchPollsByCategory = async (category: string, limit: number) => {
+  const supabase = await createClient();
 
-    const supabase = await createClient();
-
-    const { data: polls, error } = await supabase
-      .from("polls1")
-      .select(
-        `
+  const { data: polls, error } = await supabase
+    .from("polls1")
+    .select(
+      `
+      id,
+      question,
+      category_slug,
+      category_data:poll_categories1 (
+        name
+      ),
+      options:poll_options1 (
         id,
-        question,
-        category_slug,
-        category_data:poll_categories1 (
-          name
-        ),
-        options:poll_options1 (
-          id,
-          label,
-          vote_count,
-          ord
-        )
-      `,
+        label,
+        vote_count,
+        ord
       )
-      .filter("question", "not.ilike", "Your opinion on%") // Ask to remove these later
-      .ilike("category_slug", `%${category}%`)
-      .order("ord", { referencedTable: "poll_options1", ascending: true })
-      .limit(limit);
+    `,
+    )
+    .filter("question", "not.ilike", "Your opinion on%")
+    .ilike("category_slug", `%${category}%`)
+    .order("ord", { referencedTable: "poll_options1", ascending: true })
+    .limit(limit);
 
-    if (error) {
-      console.error("getPollsByCategory:", error);
-      return null;
-    }
+  if (error) {
+    console.error("getPollsByCategory:", error);
+    return null;
+  }
 
-    if (!polls) {
-      console.warn("getPollsByCategory:", "No data found");
-      return null;
-    }
+  if (!polls) {
+    console.warn("getPollsByCategory:", "No data found");
+    return null;
+  }
 
-    return polls;
-  },
-);
+  return polls;
+};
+
+export const getPollsByCategory = async (category: string = "", limit = 20) => {
+  if (!category || category.trim() === "") {
+    console.warn(
+      "getPollsByCategory: No category provided, returning all polls",
+    );
+    return fetchPollsByCategory("", limit);
+  }
+
+  const getCachedPolls = unstable_cache(
+    async () => fetchPollsByCategory(category, limit),
+    [`polls-category-${category}-${limit}`],
+    { revalidate: 60, tags: ["polls"] }
+  );
+
+  return getCachedPolls();
+};
 // POLLS RESULTS
 
 // TODO: make both function take random polls
@@ -325,6 +335,47 @@ export const getPollResultsHeaderData = cache(async () => {
 
   return pollHeaderStats;
 });
+
+export const getPollsByLocation = cache(
+  async (cityName: string, limit = 30) => {
+    if (!cityName || cityName.trim() === "") {
+      return null;
+    }
+
+    const supabase = await createClient();
+    const escaped = cityName.trim().replace(/%/g, "\\%").replace(/_/g, "\\_");
+
+    const { data: polls, error } = await supabase
+      .from("polls1")
+      .select(
+        `
+        id,
+        question,
+        category_slug,
+        category_data:poll_categories1 (
+          name
+        ),
+        options:poll_options1 (
+          id,
+          label,
+          vote_count,
+          ord
+        )
+      `,
+      )
+      .filter("question", "not.ilike", "Your opinion on%")
+      .ilike("question", `%${escaped}%`)
+      .order("ord", { referencedTable: "poll_options1", ascending: true })
+      .limit(limit);
+
+    if (error) {
+      console.error("getPollsByLocation:", error);
+      return null;
+    }
+
+    return polls ?? [];
+  },
+);
 
 export type PollWithOptions = NonNullable<
   Awaited<ReturnType<typeof getPolls>>

@@ -1,17 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Code, Check, Copy } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { createClient } from "@/lib/supabase/client";
 import type { PollWithOptions } from "@/lib/data/polls";
-// import { Badge } from "@/components/ui/badge";
-import {
-  //  capitalize,
-  cn,
-} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface PollCardProps {
   poll: PollWithOptions;
@@ -19,6 +15,8 @@ interface PollCardProps {
   advanceDelayMs?: number;
   backgroundClassName?: string;
   noLoadSpinner?: boolean;
+  showEmbed?: boolean;
+  compact?: boolean;
 }
 
 export function PollCard({
@@ -27,11 +25,25 @@ export function PollCard({
   advanceDelayMs = 5000,
   backgroundClassName,
   noLoadSpinner = false,
+  showEmbed = true,
+  compact = false,
 }: PollCardProps) {
   const [hasVoted, setHasVoted] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isAdvancing, setIsAdvancing] = React.useState(false);
+  const [embedCopied, setEmbedCopied] = React.useState(false);
   const options = poll.options ?? [];
+
+  const handleCopyEmbed = async () => {
+    const embedCode = `<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}/polls/embed/${poll.id}" width="100%" height="400" frameborder="0" style="border-radius: 16px; max-width: 400px;"></iframe>`;
+    try {
+      await navigator.clipboard.writeText(embedCode);
+      setEmbedCopied(true);
+      setTimeout(() => setEmbedCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy embed code:", err);
+    }
+  };
 
   const advanceTimeoutRef = React.useRef<number | null>(null);
 
@@ -100,22 +112,16 @@ export function PollCard({
       className={cn(
         `h-full rounded-2xl border border-white/10 bg-white/5 gap-2shadow-sm
         flex flex-col bg-[#273659]`,
+        compact && "rounded-xl",
         backgroundClassName,
       )}
     >
-      <CardHeader className="pb-3">
-        {/* <Badge
-          variant="outline"
-          className="w-fit mb-2 text-xs font-bold text-primary border-primary/20
-            bg-primary/5"
-        >
-          {categoryLabel}
-        </Badge> */}
-        <CardTitle className="text-lg leading-tight text-white">
+      <CardHeader className={cn("pb-3", compact && "pb-2 px-3 pt-3")}>
+        <CardTitle className={cn("text-lg leading-tight text-white", compact && "text-sm")}>
           {poll.question}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-between">
+      <CardContent className={cn("flex-1 flex flex-col justify-between", compact && "px-3 pb-3")}>
         <div className="flex flex-col gap-3 h-auto">
           {options.map((option) => {
             const count = votes[option.id] ?? Number(option.vote_count ?? 0);
@@ -172,6 +178,30 @@ export function PollCard({
         {hasVoted && isAdvancing && !noLoadSpinner && (
           <div className="mt-3 flex items-center justify-center">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
+          </div>
+        )}
+
+        {showEmbed && !compact && (
+          <div className="mt-4 pt-3 border-t border-white/10">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopyEmbed}
+              className="w-full text-xs text-white/50 hover:text-white hover:bg-white/10 gap-2"
+            >
+              {embedCopied ? (
+                <>
+                  <Check className="h-3 w-3 text-green-400" />
+                  <span className="text-green-400">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Code className="h-3 w-3" />
+                  <span>Embed this poll</span>
+                  <Copy className="h-3 w-3 ml-auto" />
+                </>
+              )}
+            </Button>
           </div>
         )}
       </CardContent>

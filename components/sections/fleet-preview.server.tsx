@@ -1,27 +1,31 @@
 import { getVehiclesByType, VehicleData } from "@/lib/data/vehicles";
-import { FleetPreview } from "./fleet-preview";
+import { FleetPreviewRotating } from "./fleet-preview-rotating.client";
 
 export async function FleetPreviewServer({
   title,
   viewAllLink,
   type,
+  amenityMode = "link",
+  compact = false,
+  hideButtons = false,
 }: {
   title: string;
   viewAllLink: string;
   type: VehicleData["type"];
+  amenityMode?: "link" | "badge";
+  compact?: boolean;
+  hideButtons?: boolean;
 }) {
   const vehicles = (await getVehiclesByType(type)) ?? [];
 
-  // Optional: Slice to 3 if you only want a single row
-  const randomDisplayVehicles = [...vehicles]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 3);
-
   return (
-    <FleetPreview
+    <FleetPreviewRotating
       title={title}
       viewAllLink={viewAllLink}
-      vehicles={randomDisplayVehicles}
+      vehicles={vehicles}
+      amenityMode={amenityMode}
+      compact={compact}
+      hideButtons={hideButtons}
     />
   );
 }

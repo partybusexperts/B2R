@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { openLiveChat } from "@/lib/livechat";
 
 // --- Types ---
-type OpenKey = "fleet" | "resources" | null;
+type OpenKey = "fleet" | "resources" | "polls" | null;
 type DropdownKey = Exclude<OpenKey, null>;
 type DropdownItem = { label: string; href: string };
 type NavEntry =
@@ -20,14 +21,18 @@ const DROPDOWN_ITEMS: Record<DropdownKey, DropdownItem[]> = {
     { label: "Party Buses", href: "/party-buses" },
     { label: "Limousines", href: "/limousines" },
     { label: "Coach Buses", href: "/coach-buses" },
+    { label: "View All Fleet", href: "/fleet" },
+  ],
+  polls: [
+    { label: "Browse Polls", href: "/polls" },
+    { label: "Hot Results", href: "/polls/results" },
   ],
   resources: [
     { label: "Blog", href: "/blog" },
-    { label: "Tools", href: "/tools" },
+    { label: "Planning Tools", href: "/tools" },
     { label: "FAQ", href: "/faq" },
     { label: "Industry Secrets", href: "/industry-secrets" },
-    { label: "Poll Results", href: "/polls/results" },
-    { label: "Reviews", href: "/reviews" },
+    { label: "Customer Reviews", href: "/reviews" },
   ],
 };
 
@@ -37,7 +42,7 @@ const NAV_ENTRIES: NavEntry[] = [
   { type: "link", label: "Events", href: "/events" },
   { type: "link", label: "Pricing", href: "/pricing" },
   { type: "link", label: "Locations", href: "/locations" },
-  { type: "link", label: "Polls", href: "/polls" },
+  { type: "dropdown", key: "polls", label: "Polls" },
   { type: "dropdown", key: "resources", label: "Resources" },
   { type: "link", label: "Contact", href: "/contact" },
 ];
@@ -89,6 +94,7 @@ export default function Navigation() {
   // Timer refs for hover intent
   const timers = useRef<Record<DropdownKey, number | null>>({
     fleet: null,
+    polls: null,
     resources: null,
   });
 
@@ -172,7 +178,7 @@ export default function Navigation() {
     children: React.ReactNode;
   }) => (
     <li className="relative">
-      <Link href={label === "Fleet" ? "/fleet" : ""}>
+      <Link href={label === "Fleet" ? "/fleet" : label === "Polls" ? "/polls" : "#"}>
         <div
           className={cn(
             `flex cursor-pointer items-center gap-1 px-3 py-2 text-md
@@ -220,67 +226,90 @@ export default function Navigation() {
     entry,
   }: {
     entry: Extract<NavEntry, { type: "dropdown" }>;
-  }) => (
-    <div
-      className="overflow-hidden rounded-xl border border-border/50
-        bg-background/50"
-    >
-      <button
-        type="button"
-        className="flex w-full items-center justify-between px-4 py-3 text-base
-          font-medium"
-        onClick={() =>
-          setMobileExpanded((cur) => (cur === entry.key ? null : entry.key))
-        }
-        aria-expanded={mobileExpanded === entry.key}
+  }) => {
+    const gradients: Record<DropdownKey, string> = {
+      fleet: "from-pink-500/20 to-purple-500/20",
+      polls: "from-indigo-500/20 to-blue-500/20", 
+      resources: "from-emerald-500/20 to-teal-500/20",
+    };
+    const borderColors: Record<DropdownKey, string> = {
+      fleet: "border-pink-500/30",
+      polls: "border-indigo-500/30",
+      resources: "border-emerald-500/30",
+    };
+    const activeColors: Record<DropdownKey, string> = {
+      fleet: "text-pink-400",
+      polls: "text-indigo-400",
+      resources: "text-emerald-400",
+    };
+
+    return (
+      <div
+        className={cn(
+          "overflow-hidden rounded-xl border transition-all",
+          mobileExpanded === entry.key
+            ? cn("bg-gradient-to-r", gradients[entry.key], borderColors[entry.key])
+            : "border-white/10 bg-white/5"
+        )}
       >
-        <Link
-          href={entry.label === "Fleet" ? "/fleet" : ""}
-          onClick={(e) => {
-            e.stopPropagation(); // avoid opening the accordion if going to the fleet page
-          }}
+        <button
+          type="button"
+          className="flex w-full items-center justify-between px-4 py-3.5 text-base font-semibold"
+          onClick={() =>
+            setMobileExpanded((cur) => (cur === entry.key ? null : entry.key))
+          }
+          aria-expanded={mobileExpanded === entry.key}
         >
           <span
             className={
-              mobileExpanded === entry.key ? "text-primary" : "text-foreground"
+              mobileExpanded === entry.key ? activeColors[entry.key] : "text-white"
             }
           >
             {entry.label}
           </span>
-        </Link>
-        <Caret className={mobileExpanded === entry.key ? "rotate-180" : ""} />
-      </button>
+          <Caret className={cn(
+            "transition-transform duration-200",
+            mobileExpanded === entry.key ? "rotate-180" : "",
+            mobileExpanded === entry.key ? activeColors[entry.key] : "text-white/60"
+          )} />
+        </button>
 
-      <div
-        className={cn(
-          "overflow-hidden transition-all duration-300 ease-in-out",
-          mobileExpanded === entry.key
-            ? "max-h-96 opacity-100"
-            : "max-h-0 opacity-0",
-        )}
-      >
-        <ul className="flex flex-col bg-muted/30 pb-2">
-          {DROPDOWN_ITEMS[entry.key].map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className="block border-l-2 border-transparent px-6 py-2.5
-                  text-sm text-muted-foreground transition-colors
-                  hover:border-primary hover:text-primary"
-                onClick={closeNow}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div
+          className={cn(
+            "overflow-hidden transition-all duration-300 ease-in-out",
+            mobileExpanded === entry.key
+              ? "max-h-96 opacity-100"
+              : "max-h-0 opacity-0",
+          )}
+        >
+          <ul className="flex flex-col gap-1 px-2 pb-3">
+            {DROPDOWN_ITEMS[entry.key].map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "block rounded-lg px-4 py-2.5 text-sm font-medium",
+                    "text-white/80 bg-black/20 transition-all",
+                    "hover:bg-white/10 hover:text-white"
+                  )}
+                  onClick={closeNow}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#1E4ED8] px-4">
-      <div className="flex h-16 items-center justify-between max-w-4xl mx-auto">
+    <header
+      className="sticky top-0 z-50 bg-[#1E4ED8]
+        supports-[backdrop-filter]:bg-[#1E4ED8]"
+    >
+      <div className="mx-auto flex h-16 items-center justify-between px-4 md:px-8 lg:px-16 xl:px-24">
         {/* Logo */}
         <Link
           href="/"
@@ -349,8 +378,7 @@ export default function Navigation() {
             onClick={() => setMobileMenuOpen((cur) => !cur)}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav"
-            className="text-white hover:bg-[#e0e7ff]/50 focus:ring-2
-              focus:ring-blue-300"
+            className="text-white hover:text-blue-200 hover:bg-white/10"
           >
             <span className="sr-only">Toggle menu</span>
             <MenuIcon isOpen={isMobileMenuOpen} />
@@ -362,14 +390,14 @@ export default function Navigation() {
       <div
         id="mobile-nav"
         className={cn(
-          `fixed inset-x-0 top-16 bottom-0 z-40 border-b border-border/40
-          bg-background transition-all duration-300 md:hidden`,
+          "fixed inset-x-0 top-16 z-40 overflow-hidden transition-all duration-300 md:hidden",
+          "bg-gradient-to-b from-[#0a1628] to-[#0d1d3a] border-b border-white/10",
           isMobileMenuOpen
-            ? "max-h-[calc(100vh-4rem)] overflow-y-auto opacity-100 shadow-xl"
-            : "max-h-0 overflow-hidden opacity-0",
+            ? "max-h-[85vh] opacity-100 shadow-2xl"
+            : "max-h-0 opacity-0",
         )}
       >
-        <div className="flex flex-col space-y-3 p-4 overflow-y-auto">
+        <div className="flex flex-col gap-2 p-4 overflow-y-auto max-h-[80vh]">
           {NAV_ENTRIES.map((entry) => {
             if (entry.type === "link") {
               return (
@@ -377,12 +405,10 @@ export default function Navigation() {
                   key={entry.href}
                   href={entry.href}
                   className={cn(
-                    `block rounded-xl border border-transparent bg-muted/40 px-4
-                    py-3 text-base font-medium transition-colors
-                    hover:bg-muted/60`,
+                    "block rounded-xl px-4 py-3.5 text-base font-semibold transition-all",
                     pathname === entry.href
-                      ? "text-primary border-primary/20 bg-primary/5"
-                      : "text-foreground",
+                      ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
+                      : "text-white border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20",
                   )}
                   onClick={closeNow}
                 >
@@ -393,16 +419,26 @@ export default function Navigation() {
             return <MobileAccordion key={entry.key} entry={entry} />;
           })}
 
-          <div className="pt-4 mt-2 border-t border-border/40">
+          <div className="pt-4 mt-2 border-t border-white/10">
             <Button
-              className="w-full font-bold shadow-lg shadow-primary/20"
+              className="w-full font-bold text-base py-6 bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 
+                hover:brightness-110 shadow-lg shadow-pink-500/25 border-0"
               size="lg"
-              asChild
+              onClick={() => { closeNow(); openLiveChat("Mobile Nav", window.location.pathname); }}
             >
-              <Link href="/pricing" onClick={closeNow}>
-                Get a Quote
-              </Link>
+              Get Instant Quote
             </Button>
+            <a
+              href="tel:8885352566"
+              className="flex items-center justify-center gap-2 mt-3 w-full py-3 rounded-xl 
+                border border-white/20 text-white font-medium hover:bg-white/10 transition-all"
+              onClick={closeNow}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              Call (888) 535-2566
+            </a>
           </div>
         </div>
       </div>

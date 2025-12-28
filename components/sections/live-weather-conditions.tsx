@@ -55,7 +55,7 @@ export async function LiveWeatherConditions({
             </p>
           </div>
         </div>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div
             className="bg-white text-gray-900 rounded-2xl shadow p-4
               md:col-span-1 border border-gray-200"
@@ -73,7 +73,6 @@ export async function LiveWeatherConditions({
                   alt={weather.current.weather[0].description}
                   width={40}
                   height={40}
-                  sizes="40px"
                 />
               </div>
             </div>
@@ -108,7 +107,6 @@ export async function LiveWeatherConditions({
               </div>
             </div>
           </div>
-
           <div
             className="bg-white text-gray-900 rounded-2xl shadow p-4 border
               border-gray-200"
@@ -125,10 +123,9 @@ export async function LiveWeatherConditions({
               ))}
             </ul>
           </div>
-
           <div
             className="bg-white text-gray-900 rounded-2xl shadow p-4 border
-              border-gray-200 md:col-span-2"
+              border-gray-200 col-span-2"
           >
             <h2
               className="text-lg font-semibold text-sky-900 flex items-center
@@ -151,7 +148,6 @@ export async function LiveWeatherConditions({
                 : "No active alerts for this area."}
             </div>
           </div>
-
           <HourlyForecastCard data={next12Hours} />
           <FiveDaysForecastCard data={next5Days} />
         </div>
@@ -196,13 +192,13 @@ function HourlyForecastCard({ data }: { data: Hourly[] }) {
 
   return (
     <div
-      className="bg-white text-gray-900 rounded-2xl shadow p-3 md:col-span-2
+      className="bg-white text-gray-900 rounded-2xl shadow p-3 sm:col-span-2
         border border-gray-200"
     >
       <h2 className="text-lg font-semibold text-sky-900" id="next-12-hours-11">
         Next 12 Hours
       </h2>
-      <div className="mt-3 grid grid-cols-1 lg:grid-cols-5 gap-4">
+      <div className="mt-3 grid md:grid-cols-5 gap-4">
         {/* Graph */}
         <div className="md:col-span-2">
           <svg viewBox="0 0 320 100" className="w-full h-24">
@@ -218,8 +214,8 @@ function HourlyForecastCard({ data }: { data: Hourly[] }) {
 
         {/* Grid */}
         <div
-          className="md:col-span-3 grid grid-cols-2 md:grid-cols-3
-            lg:grid-cols-4 gap-2 text-sm"
+          className="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-2
+            text-sm"
         >
           {data.map((hour, index) => {
             const hourLabel = formatWeatherTime(hour.dt, "UTC").replace(
@@ -246,7 +242,6 @@ function HourlyForecastCard({ data }: { data: Hourly[] }) {
                     alt={hour.weather[0]?.description || "Weather icon"}
                     width={16}
                     height={16}
-                    sizes="16px"
                   />
                   {popPercent}%
                 </div>
@@ -291,7 +286,6 @@ function FiveDaysForecastCard({ data }: { data: Daily[] }) {
                   alt={description}
                   width={24}
                   height={24}
-                  sizes="24px"
                 />
               </div>
               <div className="w-40 text-right">

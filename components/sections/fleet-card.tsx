@@ -6,12 +6,11 @@ import React from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "../ui/badge";
-import { Phone } from "lucide-react";
+import { Phone, Sparkles, Users, ChevronRight } from "lucide-react";
 import { VehicleData } from "@/lib/data/vehicles";
+import { openLiveChat } from "@/lib/livechat";
 
 function hashStringToSeed(input: string): number {
-  // Deterministic 32-bit hash (FNV-1a)
   let hash = 2166136261;
   for (let i = 0; i < input.length; i++) {
     hash ^= input.charCodeAt(i);
@@ -39,11 +38,44 @@ function stableShuffle<T>(items: T[], seedKey: string): T[] {
   return out;
 }
 
-const vehicleNameMap = {
+const vehicleNameMap: Record<string, string> = {
   limo: "Limousine",
+  "stretch-limo": "Stretch Limo",
   "party-bus": "Party Bus",
+  "party-bus-lux": "Luxury Party Bus",
   coach: "Coach Bus",
-} as const;
+  "coach-bus": "Coach Bus",
+  sprinter: "Sprinter Van",
+  "sprinter-van": "Sprinter Van",
+  sedan: "Luxury Sedan",
+  suv: "SUV",
+};
+
+const typeGradients: Record<string, string> = {
+  limo: "from-amber-500 via-yellow-400 to-amber-500",
+  "stretch-limo": "from-amber-500 via-yellow-400 to-amber-500",
+  "party-bus": "from-pink-500 via-purple-500 to-blue-500",
+  "party-bus-lux": "from-pink-500 via-fuchsia-500 to-purple-500",
+  coach: "from-emerald-500 via-teal-400 to-emerald-500",
+  "coach-bus": "from-emerald-500 via-teal-400 to-emerald-500",
+  sprinter: "from-sky-500 via-cyan-400 to-sky-500",
+  "sprinter-van": "from-sky-500 via-cyan-400 to-sky-500",
+  sedan: "from-slate-500 via-gray-400 to-slate-500",
+  suv: "from-indigo-500 via-violet-400 to-indigo-500",
+};
+
+function getVehicleLabel(type: string): string {
+  return vehicleNameMap[type] || type.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+function getVehicleGradient(type: string): string {
+  if (typeGradients[type]) return typeGradients[type];
+  if (type.includes("limo")) return typeGradients["limo"];
+  if (type.includes("party") || type.includes("bus")) return typeGradients["party-bus"];
+  if (type.includes("coach")) return typeGradients["coach"];
+  if (type.includes("sprinter") || type.includes("van")) return typeGradients["sprinter"];
+  return typeGradients["party-bus"];
+}
 
 interface FleetCardProps {
   vehicle: VehicleData;
@@ -51,10 +83,9 @@ interface FleetCardProps {
 }
 
 export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
-  // Local state to toggle between main view and alt view (if available)
   const [activeImageIndex, setActiveImageIndex] = React.useState(0);
+  const [isHovered, setIsHovered] = React.useState(false);
 
-  // Memoize images to ensure valid URLs
   const images = React.useMemo(() => {
     if (!vehicle?.images || vehicle.images.length === 0)
       return ["/placeholder-vehicle.jpg"];
@@ -63,7 +94,6 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
 
   const activeImage = images[activeImageIndex] ?? images[0];
 
-  // Show 4 shuffled features
   const features = React.useMemo(() => {
     const fallbackAmenities = [
       "Pro Driver",
@@ -72,188 +102,135 @@ export function FleetCard({ vehicle, cardLink }: FleetCardProps) {
       "BYOB Friendly",
     ];
     const amenities = vehicle.amenities?.slice(0, 4) || fallbackAmenities;
-    // NOTE: This component is SSR-ed then hydrated. Any non-determinism
-    // (like Math.random) will cause hydration mismatches.
     return stableShuffle(amenities, `${vehicle.id}-amenities`);
   }, [vehicle.amenities, vehicle.id]);
 
+  const vehicleType = vehicle.type || "party-bus";
+  const typeGradient = getVehicleGradient(vehicleType);
+  const vehicleLabel = getVehicleLabel(vehicleType);
+
   return (
     <div
-      className="group relative flex flex-col overflow-hidden rounded-3xl border
-        border-blue-800/40 bg-gradient-to-b from-[#132a5d] to-[#0a1734]
-        shadow-xl transition-transform duration-300 hover:-translate-y-1
-        hover:border-blue-500/60"
+      className="group relative flex flex-col overflow-hidden rounded-2xl
+        bg-gradient-to-b from-slate-900/95 to-slate-950
+        border border-white/10 shadow-2xl
+        transition-all duration-500 
+        hover:border-white/20 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Top Section: Main Image */}
-      <div
-        className="relative aspect-[4/3] w-full overflow-hidden bg-muted
-          rounded-t-3xl"
-      >
+      <div className="relative aspect-[16/10] w-full overflow-hidden">
         <Image
           src={activeImage}
           alt={vehicle.name}
           fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-transform duration-700
-            group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          quality={90}
+          priority={false}
+          className={cn(
+            "object-cover transition-all duration-700",
+            isHovered && "scale-110"
+          )}
         />
 
-        {/* Overlay Badges */}
-        <div className="absolute left-3 top-3 z-10">
-          <Badge
-            className="rounded-full border border-white/40 bg-white/10 px-3 py-1
-              text-xs font-semibold uppercase tracking-wide text-white
-              backdrop-blur hover:bg-white/10"
-          >
-            CHAUFFEUR INCLUDED
-          </Badge>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+
+        <div className="absolute top-3 left-3 z-10">
+          <div className={cn(
+            "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
+            "bg-gradient-to-r", typeGradient, "text-white shadow-lg"
+          )}>
+            {vehicleLabel}
+          </div>
         </div>
 
         {vehicle.capacity && (
-          <Badge
-            className="absolute right-4 top-4 rounded-full bg-blue-600/90 px-3
-              py-1 text-xs font-bold uppercase text-white shadow-lg"
-          >
-            {vehicle.capacity.toUpperCase()}
-          </Badge>
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm border border-white/20">
+            <Users className="w-3 h-3 text-white/80" />
+            <span className="text-xs font-semibold text-white">
+              {vehicle.capacity.replace(" pax", "")}
+            </span>
+          </div>
         )}
 
-        <div className="absolute right-3 bottom-3 z-10">
-          <Button asChild className="text-sm font-bold text-white h-8">
-            <Link
-              href={cardLink || `/vehicles/${vehicle.slug}`}
-              className="pointer-events-auto inline-flex items-center gap-2
-                rounded-full border border-emerald-300/80 bg-emerald-400/90 px-4
-                py-1.5 text-[0.7rem] font-bold uppercase tracking-wide
-                text-slate-900 shadow-lg transition hover:bg-white
-                animate-pulse"
-            >
-              Learn more!
-            </Link>
-          </Button>
+        <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+          <h3 className="text-xl font-bold text-white mb-1 drop-shadow-lg">
+            {vehicle.name}
+          </h3>
+          <div className="flex flex-wrap gap-1.5">
+            {features.slice(0, 3).map((tag, i) => (
+              <span
+                key={i}
+                className="px-2 py-0.5 rounded-full text-[10px] font-medium
+                  bg-white/10 backdrop-blur-sm text-white/90 border border-white/10"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Link overlay for entire image area */}
         <Link
           href={cardLink || `/vehicles/${vehicle.slug}`}
           className="absolute inset-0 z-0"
           aria-label={`View ${vehicle.name}`}
         />
-
-        {/* Overlay for Title and Capacity */}
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0
-            bg-gradient-to-t from-black/80 via-black/30 to-transparent p-4"
-        >
-          {vehicle.type && (
-            <div
-              className="text-xs font-semibold uppercase tracking-[0.2em]
-                text-blue-200"
-            >
-              {vehicleNameMap[vehicle.type]}
-            </div>
-          )}
-          <h3 className="mt-1 text-xl font-extrabold text-white">
-            {vehicle.name}
-          </h3>
-          <p className="text-sm text-blue-200/90">
-            Seats up to {vehicle.capacity?.replace(" pax", "") || "?"}{" "}
-            passengers
-          </p>
-        </div>
       </div>
 
-      {/* Middle Section: Thumbnails Row (Mini Gallery) */}
-      <div
-        className="border-t border-blue-900/60 bg-[#050d22]/95 px-4 pb-4 pt-3"
-      >
-        {images.length > 1 && (
-          <div className="grid grid-cols-2 gap-3">
-            {images.slice(0, 2).map((img, idx) => (
+      {images.length > 1 && (
+        <div className="px-3 py-2 bg-slate-950/80 border-t border-white/5">
+          <div className="flex gap-2">
+            {images.slice(0, 4).map((img, idx) => (
               <button
                 key={idx}
                 onClick={() => setActiveImageIndex(idx)}
                 className={cn(
-                  `relative aspect-square w-full overflow-hidden rounded-lg
-                  border-2 transition-all`,
+                  "relative flex-1 aspect-[4/3] rounded-lg overflow-hidden transition-all duration-300",
                   activeImageIndex === idx
-                    ? `relative overflow-hidden rounded-2xl border
-                      border-blue-400 text-left shadow-sm transition ring-2
-                      ring-blue-400/70`
-                    : `relative overflow-hidden rounded-2xl border
-                      border-blue-800/60 text-left shadow-sm transition
-                      hover:border-blue-500/70 hover:opacity-100`,
+                    ? "ring-2 ring-white/60 scale-[1.02]"
+                    : "opacity-60 hover:opacity-100"
                 )}
               >
                 <Image
                   src={img}
-                  alt={`View ${idx}`}
+                  alt={`View ${idx + 1}`}
                   fill
-                  sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 50vw"
+                  sizes="80px"
+                  quality={75}
                   className="object-cover"
                 />
-                <div
-                  className="pointer-events-none absolute left-2 bottom-2
-                    rounded-full bg-black/70 px-2 py-0.5 text-[10px]
-                    font-semibold uppercase tracking-wide text-white"
-                >
-                  {idx === 0 ? "Current View" : "Alt View"}
-                </div>
               </button>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* Bottom Section: Details */}
-      <div className="flex flex-1 flex-col p-5 justify-between">
-        {/* Feature Tags Grid */}
-        <div
-          className="rounded-2xl border border-blue-800/40 bg-[#0d1e40]/80 p-3
-            mb-6 text-sm text-blue-100/90 shadow-inner"
+      <div className="p-4 pt-3 flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex-1 rounded-lg border-white/20 bg-white/5 text-white text-xs font-semibold
+            hover:bg-white hover:text-slate-900 transition-all"
+          asChild
         >
-          <div className="mt-auto grid grid-cols-2 gap-2 text-center">
-            {features.map((tag, i) => (
-              <Link key={i} href={cardLink || `/vehicles/${vehicle.slug}`}>
-                <div
-                  className="truncate rounded-full border border-blue-700/50
-                    bg-blue-900/40 px-3 py-1 text-xs font-semibold uppercase
-                    tracking-wide text-blue-100"
-                >
-                  {tag}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-3">
-          <Button
-            variant="outline"
-            className="inline-flex flex-1 items-center justify-center rounded-xl
-              border border-blue-300/60 bg-white/95 px-3 py-2 text-xs
-              font-extrabold uppercase tracking-wide text-blue-900 shadow-md
-              transition hover:shadow-lg"
-            asChild
-          >
-            <a href="tel:8885352566">
-              <Phone className="mr-2 h-3 w-3" /> Call
-            </a>
-          </Button>
-          <Button
-            className="inline-flex flex-1 items-center justify-center rounded-xl
-              border border-blue-700 bg-gradient-to-r from-blue-600
-              to-indigo-600 px-3 py-2 text-xs font-extrabold uppercase
-              tracking-wide text-white shadow-md transition
-              hover:brightness-110"
-            asChild
-          >
-            <Link href={cardLink || `/vehicles/${vehicle.slug}`}>
-              Live Quote
-            </Link>
-          </Button>
-        </div>
+          <a href="tel:8885352566">
+            <Phone className="w-3 h-3 mr-1.5" />
+            Call Now
+          </a>
+        </Button>
+        <Button
+          size="sm"
+          className={cn(
+            "flex-1 rounded-lg text-xs font-bold bg-gradient-to-r cursor-pointer",
+            typeGradient,
+            "text-white border-0 hover:brightness-110 transition-all"
+          )}
+          onClick={() => openLiveChat(`Fleet Card - ${vehicle.name}`, `/vehicles/${vehicle.slug}`)}
+        >
+          <Sparkles className="w-3 h-3 mr-1.5" />
+          Get Quote
+          <ChevronRight className="w-3 h-3 ml-0.5" />
+        </Button>
       </div>
     </div>
   );

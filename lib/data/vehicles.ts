@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { toPublicStorageUrl } from "../helpers/storage";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 export const mockVehicles = [
   {
@@ -56,16 +57,13 @@ export const mockVehicles = [
   },
 ];
 
-export const getVehicles = cache(async (limit?: number) => {
+const fetchVehicles = async (limit: number) => {
   const supabase = await createClient();
 
-  let request = supabase.from("vehicles").select("*");
-
-  if (limit) {
-    request = request.limit(limit);
-  }
-
-  const { data: vehicles, error } = await request;
+  const { data: vehicles, error } = await supabase
+    .from("vehicles")
+    .select("*")
+    .limit(limit);
 
   if (error) {
     console.error("getVehicles:", error);
@@ -78,7 +76,16 @@ export const getVehicles = cache(async (limit?: number) => {
   }
 
   return vehicles;
-});
+};
+
+export const getVehicles = async (limit = 10) => {
+  const getCachedVehicles = unstable_cache(
+    async () => fetchVehicles(limit),
+    [`vehicles-${limit}`],
+    { revalidate: 300, tags: ["vehicles"] }
+  );
+  return getCachedVehicles();
+};
 
 export const getRandomVehicles = cache(async (limit = 10) => {
   const vehicles = (await getVehicles(100)) ?? [];
@@ -194,6 +201,41 @@ export const getRandomVehicleByType = cache(
     const randomVehicleByType = vehiclesByType[randomIndex];
 
     return randomVehicleByType;
+  },
+);
+
+export const getVehiclesByCapacityRange = cache(
+  async (minCapacity: number, maxCapacity: number, excludeId?: string, limit = 4) => {
+    const supabase = await createClient();
+
+    let query = supabase
+      .from("vehicles")
+      .select("*")
+      .limit(100);
+
+    if (excludeId) {
+      query = query.neq("id", excludeId);
+    }
+
+    const { data: vehicles, error } = await query;
+
+    if (error) {
+      console.error("getVehiclesByCapacityRange:", error);
+      return null;
+    }
+
+    if (!vehicles) {
+      console.warn("getVehiclesByCapacityRange:", "No data found");
+      return null;
+    }
+
+    const filtered = vehicles.filter((v) => {
+      const match = v.capacity?.match(/\d+/);
+      const cap = match ? parseInt(match[0], 10) : 0;
+      return cap >= minCapacity && cap <= maxCapacity;
+    });
+
+    return filtered.slice(0, limit);
   },
 );
 

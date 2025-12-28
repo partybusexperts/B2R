@@ -2,72 +2,75 @@ import { ToolCard } from "./tool-card";
 import Link from "next/link";
 import { shuffle } from "@/lib/utils";
 import { getTools } from "@/lib/data/tools";
+import { Wrench, Sparkles } from "lucide-react";
 
 interface ToolsGridProps {
-  category?: string; // e.g. "home", "pricing"
+  category?: string;
 }
 
 export async function ToolsGrid({ category = "general" }: ToolsGridProps) {
-  // 1. Fetch tools (limit to 20 to allow for randomization pool)
   const allTools = await getTools();
 
   if (!allTools) return null;
 
-  // 2. Logic: "Context First, then Random"
-  // Filter for tools that match the current page category
   const contextTools = allTools.filter(
     (t) => t.category?.toLowerCase() === category.toLowerCase(),
   );
 
-  // Filter for the rest
   const otherTools = allTools.filter(
     (t) => t.category?.toLowerCase() !== category.toLowerCase(),
   );
 
-  // Combine: Context tools + Shuffled other tools
-  const displayTools = [...contextTools, ...shuffle(otherTools)].slice(0, 4); // Show 4 tools total
+  const displayTools = [...contextTools, ...shuffle(otherTools)].slice(0, 6);
 
   return (
-    <section className="py-16 md:py-24 bg-[#0E1F46]">
-      <div className="mx-auto max-w-6xl px-4">
-        {/* Header */}
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-white">Tools</h2>
-
-          <Link
-            href={"/tools"}
-            className="text-sm rounded-xl border border-white/15 bg-white/10
-              px-3 py-1.5 hover:bg-white/15 text-white"
-          >
-            View more tools →
-          </Link>
+    <section className="relative py-20 md:py-28 overflow-hidden bg-[#0a1628]">
+      <div className="absolute inset-0 bg-mesh opacity-40" />
+      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none animate-orb-drift" />
+      
+      <div className="relative mx-auto max-w-7xl px-4">
+        <div className="text-center mb-14 animate-fade-up">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-4">
+            <Wrench className="w-4 h-4 text-blue-400" />
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
+              Planning Resources
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-serif text-glow-white">
+            Interactive Tools
+          </h2>
+          <p className="mt-4 text-lg text-white/70 max-w-2xl mx-auto">
+            Plan your perfect event with our smart calculators, pricing guides, and booking helpers
+          </p>
         </div>
 
-        {/* Grid: 1 col mobile, 2 col tablet, 4 col desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {displayTools.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-up-delay-1">
+          {displayTools.map((tool, idx) => (
+            <div 
+              key={tool.id} 
+              className="group relative"
+              style={{ animationDelay: `${idx * 0.1}s` }}
+            >
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative glass-panel-hover rounded-3xl overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <ToolCard tool={tool} />
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* Mobile View All */}
-        {/* <div className="mt-8 text-center md:hidden">
-          <Button
-            variant="outline"
-            asChild
-            className="w-full rounded-xl font-bold"
-          >
-            <Link href="/tools">View All Tools</Link>
-          </Button>
-        </div> */}
-
-        <div className="mt-6 flex justify-center">
+        <div className="mt-14 flex justify-center animate-fade-up-delay-2">
           <Link
             href="/tools"
-            className="text-sm rounded-xl border border-white/15 bg-white/10
-              px-4 py-2 hover:bg-white/15 text-white"
+            className="group inline-flex items-center gap-3 px-8 py-4 rounded-full
+              glass-panel-hover text-white font-semibold text-lg transition-all duration-300
+              hover:scale-105"
           >
-            View more tools →
+            <Sparkles className="w-5 h-5 text-blue-400" />
+            <span>View all tools</span>
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
       </div>

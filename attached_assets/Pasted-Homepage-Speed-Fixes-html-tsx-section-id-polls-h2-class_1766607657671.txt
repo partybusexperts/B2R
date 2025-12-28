@@ -1,0 +1,156 @@
+Homepage Speed Fixes
+· html
+/*
+```tsx
+<section id="polls">
+  <h2 className="text-xl font-bold mb-2">Browse by Category</h2>
+  <PollCategories />
+
+
+  <h3 className="text-md font-semibold mt-6">Popular Locations</h3>
+  <Top12LocationLinks />
+  <button onClick={() => setShowAll(true)}>See All</button>
+  {showAll && <AllLocationGrid />}
+</section>
+```
+
+
+
+
+/*** E. ✅ CLICKABLE TRIVIA BLOCKS + ARROWS ***/
+```tsx
+// components/TriviaCard.tsx
+<Link href={`/trivia/${slug}`}>
+  <div className="cursor-pointer hover:scale-105">
+    <Image src={image} alt={title} width={400} height={250} />
+    <h3 className="mt-2 text-lg font-semibold text-center">{title}</h3>
+  </div>
+</Link>
+```
+- Arrows should cycle through different trivia entries (use index state)
+
+
+
+
+/*** F. ✅ EVENT IMAGES FOR SUPABASE UPLOAD ***/
+Use images from Unsplash/Pexels for:
+- prom-night.jpg
+- game-day.jpg
+- haunted-house.jpg
+- new-years-eve.jpg
+- bachelor-party.jpg
+- bachelorette.jpg
+- spring-break.jpg
+- graduation.jpg
+- music-festival.jpg
+- sports-event.jpg
+
+
+Upload to Supabase bucket `events`:
+```bash
+supabase storage upload events/game-day.jpg --bucket events --file ./game-day.jpg
+```
+Update `events1` table with `slug`, `event_type`, `image_url`
+
+
+
+
+/*** 🔧 OPTIONAL: POLL RESULT MODAL SUGGESTIONS ***/
+- Category switch at top ✅
+- Tighter spacing between embed + results ✅
+- Reduce padding in poll vote count and embed ✅
+
+
+
+
+/*** 🚨 FLEET PAGES (Party Bus / Limo / Coach Pages) REDESIGN ***/
+✅ Current problem:
+- Too much text
+- Feels spammy
+- Repeats same layout with little variety
+
+
+✅ Solution:
+- Break into sections:
+  - ⭐ Highlight Features (checklist with icons)
+  - 🚐 Interior/Exterior photo gallery
+  - 🛠️ Specs block (capacity, hourly rate, amenities)
+  - 🎉 Best Events for this Vehicle (carousel or tag chips)
+  - 👇 Call to Action (Get Instant Quote)
+
+
+✅ Sample Fleet Page Skeleton:
+```tsx
+// pages/fleet/[slug].tsx
+return (
+  <div className="space-y-10">
+    <Hero title={vehicle.name} subtitle="Top Rated in Your City" image={vehicle.heroImage} />
+    <FeatureGrid features={vehicle.features} />
+    <Gallery images={vehicle.galleryImages} />
+    <Specs {...vehicle.specs} />
+    <EventTags tags={vehicle.bestFor} />
+    <CallToActionButton label="Check Availability" />
+  </div>
+);
+```
+
+
+Add variety to each fleet type by customizing `features`, `hero`, and `event` tags dynamically from Supabase (`vehicles_for_chatbot`)
+
+
+
+
+/*** ✅ FINAL DEPLOYMENT CHECKLIST ***/
+- [ ] Update components: `MobileMenu`, `PollModal`, `PollResultsPage`, `FleetPages`, `TriviaCard`
+- [ ] Upload event images to Supabase bucket `events`
+- [ ] Update Supabase schema: `slug`, `image_url`, `event_type`, `bestFor`
+- [ ] Deploy to Replit preview → push to GitHub → deploy to Vercel
+
+
+Want auto-generated React components or SQL migrations next?
+
+
+
+🔥 You’re now fully set up with the complete Replit + Supabase upgrade blueprint. Here's what was just added:
+
+✅ New Fixes Now Included
+
+Mobile menu: fully rebuilt, clean links, responsive
+
+Poll modal: wider, tighter spacing, cleaner layout
+
+Poll results page: says Hot Results, shows Category first, State expandable
+
+Homepage poll browsing: Category → Top 12 Locations → See All
+
+Trivia: now fully clickable + arrow nav logic
+
+Event images: list of 10+ stock images to upload to Supabase (events/)
+
+Fleet pages redesign: split into feature grid, gallery, specs, best-for tags, CTA
+
+🛠️ Next Steps for You
+
+Update Replit Components:
+
+MobileMenu.tsx
+
+PollModal.tsx
+
+PollResultsPage.tsx
+
+FleetPage.tsx (or your [slug].tsx for vehicles)
+
+TriviaCard.tsx
+
+Upload New Event Images to Supabase:
+
+supabase storage upload events/new-years-eve.jpg --bucket events --file ./new-years-eve.jpg
+
+
+Run Supabase SQL to add missing columns:
+
+ALTER TABLE events1 ADD COLUMN slug TEXT;
+ALTER TABLE events1 ADD COLUMN event_type TEXT;
+ALTER TABLE events1 ADD COLUMN image_url TEXT;
+ALTER TABLE trivia1 ADD COLUMN slug TEXT;

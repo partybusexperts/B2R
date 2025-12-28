@@ -1,0 +1,121 @@
+Replit Final Fixes
+· javascript
+# ✅ FINAL B2R FIXES FOR REPLIT
+  const visible = expanded ? locations : locations.slice(0, 12);
+  return (
+    <section>
+      <h2 className="text-xl font-bold mb-4">Browse by State</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+        {visible.map(loc => <LocationCard key={loc.slug} {...loc} />)}
+      </div>
+      {!expanded && (
+        <button className="mt-4 text-blue-600 underline" onClick={() => setExpanded(true)}>
+          See All States ({locations.length - 12} more)
+        </button>
+      )}
+    </section>
+  );
+}
+```
+
+
+---
+
+
+## ✅ DEPLOYMENT CHECKLIST
+- [ ] All pages include `<GlobalCTAs />` in 3 places
+- [ ] Vehicle loops have red pulsing quote buttons
+- [ ] All InstantQuoteButton instances open LiveChat + track source
+- [ ] Chat starts log to Supabase (if enabled)
+- [ ] Polls + Results pages show categories before location
+- [ ] Only 12 states shown with expansion option
+- [ ] Push to GitHub
+- [ ] Deploy preview on Replit
+- [ ] Final deploy to Vercel and test buttons
+
+
+---
+
+
+✅ Everything is ready.
+Let me know if you want to add:
+- 🎨 Icons for buttons
+- 🧠 Autopilot chat messages
+- 💾 Supabase logs per city/vehicle click
+- 🎯 Source campaign tracking via query params
+
+
+We can add those in one line each.
+
+✅ Done — Everything you need for Replit is now consolidated into your Replit Final Fixes doc. This includes:
+
+✅ LiveChat Integration on All Quote Buttons
+
+Files:
+
+components/LiveChatWidget.tsx – Initializes and injects LiveChat
+
+components/InstantQuoteButton.tsx – Triggers LiveChat modal with source tracking
+
+components/GlobalCTAs.tsx – CTA block with Instant Quote button (place 3x on each page)
+
+Steps:
+
+Add script to <body> for LiveChat widget.
+
+Import LiveChatWidget in _app.tsx to load on all pages.
+
+Replace all “Instant Quote” buttons across site with <InstantQuoteButton />.
+
+Inject <GlobalCTAs /> on:
+
+Under homepage hero
+
+After mid-sections (like fleet)
+
+Above footer
+
+On all city/event/fleet pages
+
+Inside every vehicle card: render InstantQuoteButton.
+
+Bonus Features (all added):
+
+Source + page tracking in chat via set_custom_variables
+
+Chat auto-starts when button clicked
+
+Pre-chat form shown
+
+Agent sees source label + current path
+
+✅ Poll Pages Update
+
+PollsExplorer and PollResultsExplorer updated to:
+
+Show Categories first, then Locations
+
+Display only 12 states initially
+
+Include "See All States" button to expand all states
+
+If Replit needs instructions for testing or deployment:
+
+# Push changes
+git add .
+git commit -m "Added LiveChat + CTA buttons + Polls layout fix"
+git push origin your-branch-name
+
+# Test on preview (Replit or Vercel)
+# Final deploy on Vercel
+
+
+Let me know if you want to:
+
+Trigger Supabase row on chat start
+
+Add event tracking with Google/Meta
+
+Auto-fill user info if logged in
+
+Otherwise — ✅ ready to deploy!

@@ -1,0 +1,103 @@
+Thanks for sharing the screenshot — yes, you're looking at the React package version of the LiveChat widget. Since your site is built with React / Next.js (likely inside Replit or Vercel), this is probably the cleanest way to do it.
+
+Here’s how to combine everything properly — the React LiveChat widget + triggering it from “Instant Quote” buttons + showing the pre-chat form.
+
+✅ Step-by-Step: React (Next.js) LiveChat Integration with Instant Quote Button
+🧩 1. Install the LiveChat React Widget
+
+In your terminal (inside Replit or local dev):
+
+npm install @livechat/widget-react
+
+🧩 2. Create a <LiveChatWidget /> Component
+
+Create a file like: components/LiveChatProvider.tsx
+
+// components/LiveChatProvider.tsx
+'use client';
+
+import { LiveChatWidget } from '@livechat/widget-react';
+
+export default function LiveChatProvider() {
+  return <LiveChatWidget license="14025285" />;
+}
+
+
+Replace 14025285 with your license if different.
+
+🧩 3. Add the Widget to Your App Layout (once globally)
+
+Inside app/layout.tsx or pages/_app.tsx (depending on your setup):
+
+import LiveChatProvider from '@/components/LiveChatProvider'; // adjust path if needed
+
+export default function App({ Component, pageProps }) {
+  return (
+    <>
+      <LiveChatProvider />
+      <Component {...pageProps} />
+    </>
+  );
+}
+
+
+This makes sure LiveChat is injected once globally on every page.
+
+🧩 4. Make the “Instant Quote” Button Trigger the Chat
+
+Wherever your “Instant Quote” button is located (e.g. in a component like QuoteCTA.tsx):
+
+'use client';
+
+export default function QuoteButton() {
+  const openChat = () => {
+    if (typeof window !== 'undefined' && window.LiveChatWidget) {
+      window.LiveChatWidget.call('maximize');
+    }
+  };
+
+  return (
+    <button
+      onClick={openChat}
+      className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+    >
+      Instant Quote
+    </button>
+  );
+}
+
+🧩 5. (Optional) Add Custom Context (e.g. page name)
+
+You can also pass custom variables to the chat window when it's opened:
+
+window.LiveChatWidget.call('set_custom_variables', [
+  { name: 'page', value: window.location.pathname },
+  { name: 'clicked', value: 'Instant Quote Button' }
+]);
+window.LiveChatWidget.call('maximize');
+
+✅ 6. Enable Pre-Chat Form (REQUIRED for lead capture)
+
+In your LiveChat.com dashboard:
+
+Go to Settings → Engagement → Forms → Pre-chat form
+
+Enable it and customize the fields (e.g. name, email, event details)
+
+Hit Save
+
+Now, when a user clicks your “Instant Quote” button, it will:
+
+Open LiveChat
+
+Show the pre-chat form first (if enabled)
+
+Notify the agent
+
+✅ 7. Final Integration Checklist
+Feature	Status
+React package installed	✅ @livechat/widget-react
+LiveChat shown globally	✅ Via LiveChatProvider in layout
+Button opens chat widget	✅ LiveChatWidget.call('maximize')
+Pre-chat form appears	✅ Enable in LiveChat settings
+Multiple buttons supported	✅ Just reuse the same openChat() logic

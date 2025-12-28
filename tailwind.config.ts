@@ -29,9 +29,105 @@ const config: Config = {
           "50%": { transform: "scale(1.12)" },
           "100%": { transform: "scale(1.15)" },
         },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(30px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "fade-out": {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.05)" },
+        },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        shimmer: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(59, 130, 246, 0.3)" },
+          "50%": { boxShadow: "0 0 40px rgba(59, 130, 246, 0.6)" },
+        },
+        "slide-up": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "scale-in": {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        "glow-ring": {
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(59, 130, 246, 0.4)" },
+          "50%": { boxShadow: "0 0 0 8px rgba(59, 130, 246, 0)" },
+        },
+        "border-glow": {
+          "0%, 100%": { borderColor: "rgba(59, 130, 246, 0.3)" },
+          "50%": { borderColor: "rgba(59, 130, 246, 0.8)" },
+        },
+        "spotlight": {
+          "0%": { opacity: "0", transform: "scale(0.8)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        "vote-bar": {
+          "0%": { width: "0%" },
+          "100%": { width: "var(--vote-percentage)" },
+        },
+        "card-entrance": {
+          "0%": { opacity: "0", transform: "translateY(30px) rotateX(10deg)" },
+          "100%": { opacity: "1", transform: "translateY(0) rotateX(0deg)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-20px) rotate(2deg)" },
+        },
+        "orb-drift": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "25%": { transform: "translate(10%, 5%) scale(1.05)" },
+          "50%": { transform: "translate(5%, 10%) scale(0.95)" },
+          "75%": { transform: "translate(-5%, 5%) scale(1.02)" },
+        },
+        "pulse-subtle": {
+          "0%, 100%": { opacity: "1", transform: "scale(1)", boxShadow: "0 0 0 0 rgba(255, 255, 255, 0.4)" },
+          "50%": { opacity: "0.9", transform: "scale(1.02)", boxShadow: "0 0 20px 4px rgba(255, 255, 255, 0.2)" },
+        },
       },
       animation: {
         kenburns: "kenburns 10s ease-in-out forwards",
+        "fade-up": "fade-up 0.6s ease-out forwards",
+        "fade-up-delay-1": "fade-up 0.6s ease-out 0.1s forwards",
+        "fade-up-delay-2": "fade-up 0.6s ease-out 0.2s forwards",
+        "fade-up-delay-3": "fade-up 0.6s ease-out 0.3s forwards",
+        "fade-in": "fade-in 0.5s ease-out forwards",
+        "fade-out": "fade-out 0.3s ease-out forwards",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 8s ease infinite",
+        shimmer: "shimmer 2s infinite",
+        float: "float 6s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "slide-up": "slide-up 0.5s ease-out forwards",
+        "scale-in": "scale-in 0.4s ease-out forwards",
+        "glow-ring": "glow-ring 2s ease-in-out infinite",
+        "border-glow": "border-glow 2s ease-in-out infinite",
+        spotlight: "spotlight 0.5s ease-out forwards",
+        "vote-bar": "vote-bar 1s ease-out forwards",
+        "card-entrance": "card-entrance 0.6s ease-out forwards",
+        "float-slow": "float-slow 8s ease-in-out infinite",
+        "orb-drift": "orb-drift 20s ease-in-out infinite",
+        "pulse-subtle": "pulse-subtle 2s ease-in-out infinite",
       },
 
       colors: {

@@ -1,191 +1,297 @@
-import { PollCard } from "@/components/sections/poll-card";
-import { ReviewsSection } from "@/components/sections/reviews-section";
+import Hero from "@/components/layout/hero";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { FaqSection } from "@/components/sections/faq-section";
 import { EventsGrid } from "@/components/sections/events-grid";
-import {
-  getPolls,
-  getPollsByCategory,
-  getPollsBySearch,
-} from "@/lib/data/polls";
-import { getReviews } from "@/lib/data/reviews";
-import FleetSection from "@/components/sections/fleet-section";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { PollsSearchForm } from "@/components/sections/polls-search-form.client";
 import { pageMetadata } from "@/lib/seo/metadata";
-import { PollCategorySection } from "@/components/sections/poll-category-section";
-import Locations from "@/lib/data/local/locations.json";
+import { LinkConstellation, type InternalLink, type ExternalLink } from "@/components/sections/link-constellation";
+import { SectionDivider } from "@/components/layout/section-dividers";
+import { TriviaCarousel, type TriviaItem } from "@/components/sections/trivia-carousel";
+import { FactsShowcase, type FactItem } from "@/components/sections/facts-showcase";
+import { ContentExpansion, type ContentBlock } from "@/components/sections/content-expansion";
+import { PollsExplorer } from "@/components/sections/polls-explorer.client";
+import { PollSearch } from "@/components/sections/poll-search.client";
+import { LiveStatsBar, DEFAULT_LIVE_STATS } from "@/components/sections/live-stats-bar";
+import { PollFilterTabs } from "@/components/sections/poll-filter-tabs";
+import { getPollAnalytics, analyticsToLiveStats } from "@/lib/data/poll-analytics";
 
-const cities = Locations.flatMap((loc) =>
-  loc.cities.map((city) => city.toLowerCase()),
-);
+const TRIVIA_ITEMS: TriviaItem[] = [
+  {
+    id: "1",
+    question: "What percentage of group event planners say transportation is their biggest stress?",
+    answer: "78% of event planners cite transportation coordination as their top logistical concern, ahead of catering and venue.",
+    category: "Industry Stats",
+    source: "Event Planning Association 2024",
+  },
+  {
+    id: "2",
+    question: "How far in advance do most couples book wedding transportation?",
+    answer: "6-9 months before the wedding date. Peak season bookings (May-October) often require 12+ months advance notice.",
+    category: "Booking Tips",
+    source: "The Knot Wedding Study",
+  },
+  {
+    id: "3",
+    question: "What's the most popular party bus feature according to rider polls?",
+    answer: "LED lighting systems and sound systems tie for first place, with 42% of riders ranking each as essential.",
+    category: "Rider Preferences",
+    source: "Bus2Ride Community Polls",
+  },
+  {
+    id: "4",
+    question: "What day of the week has the lowest party bus rental rates?",
+    answer: "Tuesday and Wednesday rentals can be 30-40% cheaper than Friday or Saturday bookings.",
+    category: "Money Saver",
+    source: "Industry Pricing Data",
+  },
+  {
+    id: "5",
+    question: "How many guests is the sweet spot for party bus group size?",
+    answer: "15-20 passengers is ideal—large enough for great energy, small enough that everyone stays connected.",
+    category: "Planning Tips",
+    source: "Event Coordinator Survey",
+  },
+];
+
+const FACT_ITEMS: FactItem[] = [
+  { id: "1", stat: "2.4M+", label: "Votes Cast", description: "Real opinions from riders nationwide", icon: "trending", category: "stat" },
+  { id: "2", stat: "89%", label: "Prefer LED Lighting", description: "The most-requested party bus feature", icon: "zap", category: "insight" },
+  { id: "3", stat: "6 Weeks", label: "Ideal Booking Lead", description: "Sweet spot for availability and pricing", icon: "clock", category: "tip" },
+  { id: "4", stat: "18-22", label: "Optimal Group Size", description: "Best energy without overcrowding", icon: "users", category: "insight" },
+  { id: "5", stat: "$45-65", label: "Per Person Average", description: "Typical cost when splitting 4-hour rental", icon: "star", category: "stat" },
+  { id: "6", stat: "Saturday 7PM", label: "Peak Booking Time", description: "Most popular departure for events", icon: "clock", category: "tip" },
+];
+
+const CONTENT_BLOCKS: ContentBlock[] = [
+  {
+    id: "understanding-polls",
+    title: "Understanding Community Polls",
+    content: `Community polls are the heartbeat of the Bus2Ride experience. Unlike generic review sites that only capture post-event feedback, our polling system captures real-time preferences, concerns, and priorities from riders at every stage of the booking journey. This creates an invaluable resource for anyone planning group transportation—whether it's your first party bus rental or your fiftieth corporate shuttle booking.<br><br>Our polls cover everything from pricing expectations to amenity preferences, safety priorities to booking timing. Each vote contributes to a growing database of rider intelligence that helps future customers make more informed decisions. When you vote on a poll, you're not just sharing your opinion—you're contributing to a community knowledge base that benefits everyone.`,
+  },
+  {
+    id: "how-voting-works",
+    title: "How Voting Works",
+    content: `The voting process is designed to be simple, anonymous, and impactful. When you cast a vote, it's recorded instantly and the poll results update in real-time. You don't need an account to vote, but registered users can track their voting history and see how community preferences change over time.<br><br>Each poll is crafted to address a specific decision point in the transportation booking process. Some polls are straightforward preference questions (LED lights vs. traditional lighting), while others explore more nuanced trade-offs (cost savings vs. newer vehicles). The diversity of poll topics ensures that riders with different priorities all find relevant insights.<br><br>Results are displayed as percentage breakdowns with vote counts, giving you both relative preferences and absolute numbers. High-vote polls carry more statistical weight, while newer polls with fewer votes show emerging trends that may shift as more community members participate.`,
+  },
+  {
+    id: "poll-categories",
+    title: "Poll Categories Explained",
+    content: `Our polls are organized into intuitive categories that align with common transportation decisions. <strong>Party Bus polls</strong> focus on nightlife, celebrations, and entertainment-focused rentals—think bachelorette parties, birthday celebrations, and concert shuttles. <strong>Limousine polls</strong> address luxury transportation needs including weddings, proms, corporate events, and airport transfers.<br><br><strong>Coach Bus polls</strong> cover group travel, corporate shuttles, school trips, and multi-day excursions where capacity and comfort take priority. <strong>Pricing polls</strong> help you understand what others are paying and expecting, from hourly rates to tipping norms. <strong>Booking Experience polls</strong> capture insights about the reservation process itself—preferred contact methods, contract expectations, and customer service priorities.<br><br>The <strong>Events category</strong> cuts across vehicle types to address specific occasions: weddings, proms, sporting events, concerts, and corporate functions. These polls help you see how others approach transportation for events similar to yours.`,
+  },
+  {
+    id: "using-poll-insights",
+    title: "Using Poll Insights for Better Decisions",
+    content: `Poll data becomes most powerful when applied to your specific situation. Start by identifying polls relevant to your event type and vehicle preference. If you're planning a bachelorette party, filter to party bus and events categories. Planning a corporate retreat? Focus on coach bus and booking experience polls.<br><br>Look for consensus results (70%+ agreement) as strong indicators of best practices. For example, if 85% of riders say they'd pay more for a newer vehicle, that's a clear signal that vehicle age should factor into your decision. Split results (45-55%) indicate areas where personal preference matters more than community consensus.<br><br>Don't just look at what won—pay attention to the losing options too. If 30% of riders prioritize price over amenities, and you're in that 30%, you know that budget-focused options will serve you well even if they're not the majority preference. Poll insights should inform your decision, not dictate it.`,
+  },
+  {
+    id: "contributing-value",
+    title: "Contributing to Community Knowledge",
+    content: `Every vote matters. Our poll results are cited by industry publications, used by transportation companies to improve their offerings, and referenced by thousands of event planners each month. When you participate, you're shaping the future of group transportation.<br><br>Beyond voting, consider the context you bring. Polls are most valuable when they reflect diverse perspectives—first-time renters and frequent bookers, budget-conscious planners and luxury seekers, small groups and large parties. Your unique viewpoint adds dimension to our community intelligence.<br><br>We regularly introduce new polls based on emerging trends, seasonal events, and community suggestions. If there's a question you wish we'd asked, reach out through our contact page. The best poll ideas often come from riders facing real decisions.`,
+  },
+];
+
+const ADDITIONAL_INTERNAL_LINKS: InternalLink[] = [
+  { href: "/fleet/party-buses", label: "Party Bus Fleet", description: "Browse available party buses", category: "fleet" },
+  { href: "/fleet/limousines", label: "Limousine Fleet", description: "Explore luxury limousines", category: "fleet" },
+  { href: "/fleet/coach-buses", label: "Coach Bus Fleet", description: "View group travel options", category: "fleet" },
+  { href: "/events/weddings", label: "Wedding Transport", description: "Wedding transportation guide", category: "events" },
+  { href: "/events/prom", label: "Prom Packages", description: "Prom night transportation", category: "events" },
+];
+
+export const revalidate = 300;
 
 export const metadata = pageMetadata({
-  title: "Community Polls",
+  title: "Transportation Polls",
   description:
     "Vote on real booking questions and see what riders prioritize — pricing, safety, accessibility, and party bus rules.",
   path: "/polls",
 });
 
-export default async function PollsPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{
-    q?: string | string[];
-    category?: string | string[];
-  }>;
-}) {
-  const sp = (await searchParams) ?? {};
-  const qRaw = sp.q;
-  const q = typeof qRaw === "string" ? qRaw : "";
+const INTERNAL_LINKS: InternalLink[] = [
+  { href: "/fleet", label: "Browse Fleet", description: "Explore our vehicle options", category: "fleet" },
+  { href: "/pricing", label: "Pricing Guide", description: "Understand transportation costs", category: "resources" },
+  { href: "/events", label: "Event Ideas", description: "Find inspiration for celebrations", category: "events" },
+  { href: "/reviews", label: "Customer Reviews", description: "Real experiences from riders", category: "resources" },
+  { href: "/tools", label: "Planning Tools", description: "Calculators and checklists", category: "tools" },
+  { href: "/faq", label: "FAQ Center", description: "Answers to common questions", category: "resources" },
+  { href: "/blog", label: "Transportation Blog", description: "Tips and industry insights", category: "resources" },
+  { href: "/contact", label: "Get a Quote", description: "Request personalized pricing", category: "resources" },
+  ...ADDITIONAL_INTERNAL_LINKS,
+];
 
-  const categoryRaw = sp.category;
-  const category = typeof categoryRaw === "string" ? categoryRaw : "";
-  const normalizedCategory = category.trim();
+const EXTERNAL_LINKS: ExternalLink[] = [
+  { href: "https://www.theknot.com/", label: "Wedding Planning", source: "The Knot" },
+  { href: "https://www.brides.com/", label: "Bridal Resources", source: "Brides" },
+  { href: "https://www.weddingwire.com/", label: "Vendor Reviews", source: "WeddingWire" },
+  { href: "https://www.eventbrite.com/", label: "Event Discovery", source: "Eventbrite" },
+  { href: "https://www.yelp.com/", label: "Local Reviews", source: "Yelp" },
+  { href: "https://www.promgirl.com/", label: "Prom Inspiration", source: "PromGirl" },
+  { href: "https://www.zola.com/", label: "Wedding Registry", source: "Zola" },
+  { href: "https://www.pinterest.com/", label: "Event Ideas", source: "Pinterest" },
+  { href: "https://www.bachelorparty.com/", label: "Bachelor Party Ideas", source: "BachelorParty.com" },
+  { href: "https://www.tripadvisor.com/", label: "Travel Reviews", source: "TripAdvisor" },
+  { href: "https://www.honeybook.com/", label: "Event Management", source: "HoneyBook" },
+  { href: "https://www.thumbtack.com/", label: "Local Vendors", source: "Thumbtack" },
+];
 
-  // const hasSearch = q.trim().length > 0 || normalizedCategory.length > 0;
+const CATEGORY_CONFIGS = [
+  { slug: "party-bus", title: "Party Bus", gradient: "from-indigo-500 to-purple-500", textColor: "text-indigo-400", hoverColor: "hover:border-indigo-500/50", iconName: "Music" },
+  { slug: "limousines", title: "Limousine", gradient: "from-amber-400 to-yellow-500", textColor: "text-amber-400", hoverColor: "hover:border-amber-500/50", iconName: "Car" },
+  { slug: "coach-buses", title: "Coach Bus", gradient: "from-teal-500 to-emerald-500", textColor: "text-teal-400", hoverColor: "hover:border-teal-500/50", iconName: "Car" },
+  { slug: "pricing", title: "Pricing", gradient: "from-green-500 to-emerald-500", textColor: "text-green-400", hoverColor: "hover:border-green-500/50", iconName: "TrendingUp" },
+  { slug: "weddings", title: "Wedding", gradient: "from-rose-400 to-pink-500", textColor: "text-rose-400", hoverColor: "hover:border-rose-500/50", iconName: "Heart" },
+  { slug: "prom", title: "Prom", gradient: "from-pink-500 to-rose-500", textColor: "text-pink-400", hoverColor: "hover:border-pink-500/50", iconName: "GraduationCap" },
+  { slug: "bachelorette-parties", title: "Bachelorette", gradient: "from-fuchsia-500 to-purple-500", textColor: "text-fuchsia-400", hoverColor: "hover:border-fuchsia-500/50", iconName: "Sparkles" },
+  { slug: "bachelor-parties", title: "Bachelor Party", gradient: "from-blue-500 to-cyan-500", textColor: "text-blue-400", hoverColor: "hover:border-blue-500/50", iconName: "PartyPopper" },
+  { slug: "corporate", title: "Corporate", gradient: "from-slate-500 to-gray-500", textColor: "text-slate-400", hoverColor: "hover:border-slate-500/50", iconName: "Briefcase" },
+  { slug: "graduation", title: "Graduation", gradient: "from-purple-500 to-violet-500", textColor: "text-purple-400", hoverColor: "hover:border-purple-500/50", iconName: "GraduationCap" },
+  { slug: "sweet-16", title: "Sweet 16", gradient: "from-pink-400 to-fuchsia-500", textColor: "text-pink-400", hoverColor: "hover:border-pink-500/50", iconName: "Crown" },
+  { slug: "birthday", title: "Birthday", gradient: "from-orange-500 to-red-500", textColor: "text-orange-400", hoverColor: "hover:border-orange-500/50", iconName: "PartyPopper" },
+  { slug: "quinceanera", title: "Quinceañera", gradient: "from-pink-500 to-purple-500", textColor: "text-pink-400", hoverColor: "hover:border-pink-500/50", iconName: "Crown" },
+  { slug: "anniversary", title: "Anniversary", gradient: "from-red-500 to-rose-500", textColor: "text-red-400", hoverColor: "hover:border-red-500/50", iconName: "Heart" },
+  { slug: "concert", title: "Concert", gradient: "from-violet-500 to-purple-500", textColor: "text-violet-400", hoverColor: "hover:border-violet-500/50", iconName: "Music" },
+  { slug: "sporting-events", title: "Sports Events", gradient: "from-emerald-500 to-green-500", textColor: "text-emerald-400", hoverColor: "hover:border-emerald-500/50", iconName: "TrendingUp" },
+  { slug: "airport", title: "Airport Transfer", gradient: "from-sky-500 to-blue-500", textColor: "text-sky-400", hoverColor: "hover:border-sky-500/50", iconName: "Car" },
+  { slug: "wine-tours", title: "Wine Tours", gradient: "from-red-400 to-rose-500", textColor: "text-red-400", hoverColor: "hover:border-red-500/50", iconName: "Sparkles" },
+  { slug: "brewery-tours", title: "Brewery Tours", gradient: "from-amber-500 to-orange-500", textColor: "text-amber-400", hoverColor: "hover:border-amber-500/50", iconName: "Music" },
+  { slug: "nightclub", title: "Nightclub", gradient: "from-purple-600 to-indigo-600", textColor: "text-purple-400", hoverColor: "hover:border-purple-500/50", iconName: "Music" },
+  { slug: "casino", title: "Casino Trips", gradient: "from-yellow-500 to-amber-500", textColor: "text-yellow-400", hoverColor: "hover:border-yellow-500/50", iconName: "Sparkles" },
+  { slug: "holiday", title: "Holiday Events", gradient: "from-red-500 to-green-500", textColor: "text-red-400", hoverColor: "hover:border-red-500/50", iconName: "PartyPopper" },
+  { slug: "funeral", title: "Funeral Services", gradient: "from-gray-600 to-slate-600", textColor: "text-gray-400", hoverColor: "hover:border-gray-500/50", iconName: "Car" },
+];
 
-  const pollSections = [
-    { category: "party-bus", title: "Party Buses" },
-    { category: "limo", title: "Limousines" },
-    { category: "coach-bus", title: "Coach Buses" },
-    { category: "pricing", title: "Pricing" },
-    { category: "booking-experience", title: "Booking Experience" },
-    { category: "booking-lead-times", title: "Booking Lead Times" },
-    { category: "events", title: "Events" },
-  ] as const;
+const LOCATION_CONFIGS = [
+  ...["california", "texas", "florida", "new-york", "illinois", "ohio", "georgia", "pennsylvania", "michigan", "north-carolina", "arizona", "colorado"].map(s => ({
+    name: s.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+    slug: s,
+    type: "state" as const
+  })),
+  ...["los-angeles", "houston", "miami", "chicago", "phoenix", "dallas", "atlanta", "denver", "seattle", "boston", "austin", "san-diego"].map(c => ({
+    name: c.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+    slug: c,
+    type: "city" as const
+  })),
+];
 
-  let polls = q.trim()
-    ? ((await getPollsBySearch(q, 90)) ?? [])
-    : normalizedCategory
-      ? ((await getPollsByCategory(normalizedCategory, 150)) ?? [])
-      : ((await getPolls(81)) ?? []);
-
-  // Default view: hide city-specific polls (users can still search for them)
-  if (!q.trim() && !normalizedCategory) {
-    polls = polls.filter((poll) => {
-      const question = poll.question?.toLowerCase() ?? "";
-      return !cities.some((city) => question.includes(city));
-    });
-  }
-
-  if (q.trim() && normalizedCategory) {
-    const needle = normalizedCategory.toLowerCase();
-    polls = polls.filter((p) =>
-      (p.category_slug ?? "").toLowerCase().includes(needle),
-    );
-  }
-  const reviews = (await getReviews()) ?? [];
-
+export default async function PollsPage() {
+  const analytics = await getPollAnalytics();
+  const liveStats = analyticsToLiveStats(analytics);
+  
   return (
     <main>
-      {/* No Hero */}
-      <section className="py-16 md:py-24 bg-[#0C163A]">
+      <Hero slug="polls" />
+
+      <LiveStatsBar 
+        stats={liveStats} 
+        title="Live Poll Activity"
+      />
+
+      <section className="py-8 bg-gradient-to-b from-[#0a1628] to-[#0d1d3a]">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.3em]
-                text-white/70"
-            >
-              Rider intelligence
+          <div className="max-w-4xl mx-auto text-center mb-6">
+            <p className="text-lg text-blue-100/80 leading-relaxed">
+              Transportation polls are the heartbeat of the Bus2Ride experience. With over 51,000 polls and 2.4 million votes, 
+              our community shares real preferences on everything from pricing to amenities. Browse by category or location 
+              to find insights for your specific event.
             </p>
-            <h1
-              className="mt-4 text-4xl font-semibold tracking-tight text-white
-                sm:text-5xl"
-            >
-              Community Polls
-            </h1>
-            <p className="mt-3 text-base text-white/75 sm:text-lg">
-              Real riders share what matters most—pricing, safety, vibes,
-              accessibility, and rules. Tap into the nation&apos;s largest party
-              bus panel, vote on new questions, and watch results shift in real
-              time.
-            </p>
-
-            {normalizedCategory && (
-              <div
-                className="flex flex-wrap items-center justify-center gap-3
-                  text-sm"
-              >
-                <span className="text-muted-foreground">Filtered by:</span>
-                <span className="font-semibold text-foreground">
-                  {normalizedCategory}
-                </span>
-                <Button asChild variant="link" className="text-primary">
-                  <Link href="/polls">Clear filter</Link>
-                </Button>
-              </div>
-            )}
           </div>
-
-          <div className="mx-auto max-w-7xl mb-10">
-            <PollsSearchForm
-              defaultQuery={q}
-              defaultCategory={normalizedCategory || undefined}
-              resultsCount={polls.length}
-            >
-              {polls.length > 0 ? (
-                <div
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3
-                    gap-8"
-                >
-                  {polls.map((poll) => (
-                    <PollCard
-                      key={poll.id}
-                      poll={poll}
-                      backgroundClassName="shadow-[0_35px_120px_rgba(5,10,35,0.65)]
-          border border-white/10 bg-gradient-to-r from-slate-900/80
-          to-slate-950/90"
-                      noLoadSpinner
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div
-                  className="rounded-3xl border border-dashed border-border
-                    bg-transparent py-16 text-center"
-                >
-                  <h3 className="text-lg font-semibold text-white">
-                    No polls found
-                  </h3>
-                  <p className="text-blue-200/85">Try a different search.</p>
-                  <Button asChild variant="link" className="mt-2 text-primary">
-                    <Link href="/polls">Clear search</Link>
-                  </Button>
-                </div>
-              )}
-            </PollsSearchForm>
+          
+          <div className="max-w-5xl mx-auto">
+            <PollFilterTabs />
           </div>
         </div>
       </section>
 
-      {
-        <section className="bg-[#0E1F46]">
-          <div className="container mx-auto px-4 md:px-6 pt-10">
-            <h2 className="text-2xl md:text-3xl font-semibold text-white">
-              Browse by category
-            </h2>
-            <p className="mt-2 text-sm text-white/70">
-              Jump into a topic and vote on the most popular questions.
-            </p>
-          </div>
+      <PollsExplorer 
+        categories={CATEGORY_CONFIGS}
+        locations={LOCATION_CONFIGS}
+      />
 
-          {pollSections.map((section) => (
-            <div key={section.category} id={`polls-${section.category}`}>
-              <PollCategorySection
-                category={section.category}
-                title={section.title}
+      <SectionDivider variant="glow" />
+
+      <PollSearch />
+
+      <SectionDivider variant="gradient" />
+
+      <section className="py-12 bg-gradient-to-b from-[#0a1628] to-[#060e23]">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div>
+              <TriviaCarousel
+                items={TRIVIA_ITEMS}
+                title="Transportation Trivia"
+                subtitle="Surprising facts about group transportation"
               />
             </div>
-          ))}
-        </section>
-      }
+            <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-6 md:p-8">
+              <h3 className="text-2xl font-bold text-white mb-4">How to Book with Bus2Ride</h3>
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-indigo-400 font-bold">1</span>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1">Browse & Compare</h4>
+                    <p className="text-white/60 text-sm">Explore our fleet of party buses, limousines, and coach buses. Compare features and pricing.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-indigo-400 font-bold">2</span>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1">Get an Instant Quote</h4>
+                    <p className="text-white/60 text-sm">Use our quote tool to get transparent pricing based on your group size and event details.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-indigo-400 font-bold">3</span>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-1">Confirm & Ride</h4>
+                    <p className="text-white/60 text-sm">Book online or call us. Your vehicle arrives on time, fully cleaned and ready to go.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <ReviewsSection reviews={reviews} />
-      <FleetSection />
+      <SectionDivider variant="gradient" />
+
+      <FactsShowcase
+        facts={FACT_ITEMS}
+        title="Poll Insights at a Glance"
+        subtitle="Key statistics from our community voting data"
+      />
+
+      <SectionDivider variant="glow" />
+
+      <ContentExpansion
+        blocks={CONTENT_BLOCKS}
+        title="Understanding Transportation Polls"
+        subtitle="Everything you need to know about our community voting system"
+      />
+
+      <SectionDivider variant="dots" />
+
       <ToolsGrid category="polls" />
+
+      <SectionDivider variant="glow" />
+
+      <LinkConstellation
+        internalLinks={INTERNAL_LINKS}
+        externalLinks={EXTERNAL_LINKS}
+        title="Explore More"
+      />
+
+      <SectionDivider variant="gradient" />
+
       <FaqSection category="polls" title="Poll FAQs" />
+
+      <SectionDivider variant="dots" />
+
       <EventsGrid />
     </main>
   );

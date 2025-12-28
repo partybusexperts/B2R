@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { VehicleDetail } from "@/components/sections/vehicle-detail";
-import { FleetPreview } from "@/components/sections/fleet-preview"; // Reusing for "3 other limos"
+import { FleetPreview } from "@/components/sections/fleet-preview";
 import { WhySection } from "@/components/sections/content-features";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
@@ -10,13 +10,19 @@ import { FaqSection } from "@/components/sections/faq-section";
 import {
   getSimilarVehiclesByType,
   getVehiclebySlug,
-  getVehicles,
+  getVehiclesByCapacityRange,
 } from "@/lib/data/vehicles";
 import { getReviews } from "@/lib/data/reviews";
-import FleetSection from "@/components/sections/fleet-section";
+import { TriviaBookingSection } from "@/components/sections/trivia-booking-section";
+import { SectionDivider } from "@/components/layout/section-dividers";
+import { VehicleTypeIntro } from "@/components/sections/vehicle-type-intro";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { toPublicStorageUrl } from "@/lib/helpers/storage";
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
 export async function generateMetadata({
   params,
@@ -29,7 +35,7 @@ export async function generateMetadata({
   if (!vehicle) {
     return pageMetadata({
       title: "Vehicle Not Found",
-      description: "This vehicle doesn’t exist or may have moved.",
+      description: "This vehicle doesn't exist or may have moved.",
       noIndex: true,
     });
   }
@@ -55,32 +61,31 @@ export async function generateMetadata({
   });
 }
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  // Fetch a large number to ensure we get them all, or paginate if you have thousands
-  const vehicles = await getVehicles();
-  return (vehicles ?? []).map((vehicle) => ({
-    slug: vehicle.slug,
-  }));
-}
+const VEHICLE_TRIVIA = [
+  { id: "vt1", question: "What's the most popular booking day?", answer: "Saturdays account for 65% of all rentals, but Thursday and Sunday bookings often get better rates!", category: "Booking Tip" },
+  { id: "vt2", question: "How early should I book for prom?", answer: "6-8 weeks ahead is ideal. Last-minute bookings may have limited vehicle choices.", category: "Timing" },
+  { id: "vt3", question: "What's included in the rental?", answer: "Professional chauffeur, fuel, and vehicle cleaning. Gratuity is typically 15-20% extra.", category: "Pricing" },
+  { id: "vt4", question: "Can I bring my own drinks?", answer: "Yes! Most party buses allow BYOB. We provide ice and cups on request.", category: "Amenities" },
+];
 
 async function getVehicleData(slug: string) {
-  // 1. Fetch Main Vehicle
   const vehicle = await getVehiclebySlug(slug);
 
   if (!vehicle) return null;
 
-  // 2. Fetch "3 Other Vehicles" of same type (Cross-sell)
   const related =
     (await getSimilarVehiclesByType(vehicle.type, vehicle.id, 3)) ?? [];
 
-  // 3. Fetch Reviews
   const reviews = (await getReviews()) ?? [];
 
-  return { vehicle, related, reviews };
+  const capacityNum = parseInt(vehicle.capacity?.replace("pax", "") || "0", 10);
+  const minCapacity = Math.max(capacityNum - 8, 6);
+  const maxCapacity = capacityNum + 8;
+  const similarByCapacity = capacityNum > 0 
+    ? (await getVehiclesByCapacityRange(minCapacity, maxCapacity, vehicle.id, 4)) ?? []
+    : [];
+
+  return { vehicle, related, reviews, similarByCapacity };
 }
 
 export default async function VehiclePage({ params }: PageProps) {
@@ -89,7 +94,7 @@ export default async function VehiclePage({ params }: PageProps) {
 
   if (!data) return notFound();
 
-  const { vehicle, related, reviews } = data;
+  const { vehicle, related, reviews, similarByCapacity } = data;
 
   const categoryTitle =
     vehicle.type === "party-bus"
@@ -107,44 +112,89 @@ export default async function VehiclePage({ params }: PageProps) {
         ? (["coach-bus", "party-bus", "limo"] as const)
         : (["limo", "party-bus", "coach-bus"] as const);
 
+  const otherTypes = [
+    vehicle.type !== "limo" && "limo",
+    vehicle.type !== "coach" && "coach",
+    vehicle.type !== "party-bus" && "party-bus",
+  ].filter(Boolean) as string[];
+
   return (
-    <main>
-      {/* 1. Main Vehicle Details */}
+    <main className="bg-[#0a1628]">
       <VehicleDetail vehicle={vehicle} />
 
-      {/* 2. "Why This Category Rocks" */}
-      {/* Dynamic slug: why-limo-rocks-v2, why-party-bus-rocks-v2 */}
+      <SectionDivider variant="glow" />
+
       <WhySection slug={categorySlug} />
 
-      {/* 3. Related Vehicles (Cross Sell) */}
+      <SectionDivider variant="gradient" />
+
       {related.length > 0 && (
-        <section className="bg-[#0E1F46]">
-          <div className="container mx-auto px-4 md:px-6 py-16">
-            <h2
-              className="mt-2 text-3xl font-semibold text-white md:text-4xl
-                text-center"
-            >
-              Explore Other {categoryTitle}
-            </h2>
-            <div className="space-y-4">
-              <FleetPreview
-                vehicles={related}
-                // Reuse the preview card but hide navigation arrows for this context
-                showNavigation={false}
-                viewAllLink={related[0].type as string}
-                // sectionClassName="bg-[#050F25]"
-              />
+        <section className="py-16 bg-gradient-to-b from-[#0E1F46] to-[#0a1628]">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="text-center mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-bold tracking-[0.2em] uppercase text-blue-300">
+                Explore Similar
+              </span>
+              <h2 className="mt-4 text-3xl font-extrabold text-white md:text-4xl">
+                Other {categoryTitle} You&apos;ll Love
+              </h2>
+              <p className="mt-2 text-white/60 max-w-xl mx-auto">
+                Browse more {categoryTitle.toLowerCase()} with similar features and capacity
+              </p>
             </div>
+            <FleetPreview
+              vehicles={related}
+              showNavigation={false}
+              viewAllLink={related[0].type as string}
+            />
           </div>
         </section>
       )}
 
-      {/* Other 2 sections for different types */}
-      <FleetSection
-        showCoachBuses={vehicle.type !== "coach"}
-        showLimousines={vehicle.type !== "limo"}
-        showPartyBuses={vehicle.type !== "party-bus"}
+      <SectionDivider variant="dots" />
+
+      {similarByCapacity.length > 0 && (
+        <section className="py-16 bg-gradient-to-b from-[#0a1628] to-[#0d1d3a]">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="text-center mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 text-xs font-bold tracking-[0.2em] uppercase text-purple-300">
+                Similar Capacity
+              </span>
+              <h2 className="mt-4 text-3xl font-extrabold text-white md:text-4xl">
+                Vehicles for Groups of {parseInt(vehicle.capacity?.replace("pax", "") || "0", 10) - 5}–{parseInt(vehicle.capacity?.replace("pax", "") || "0", 10) + 5}
+              </h2>
+              <p className="mt-2 text-white/60 max-w-xl mx-auto">
+                Other options that fit a similar group size
+              </p>
+            </div>
+            <FleetPreview
+              vehicles={similarByCapacity}
+              showNavigation={false}
+              viewAllLink="fleet"
+            />
+          </div>
+        </section>
+      )}
+
+      <SectionDivider variant="glow" />
+
+      <TriviaBookingSection
+        triviaItems={VEHICLE_TRIVIA}
+        title="Vehicle Rental Trivia"
+        subtitle="Quick facts to help you plan"
+        bookingTitle="How to Book This Vehicle"
       />
+
+      <SectionDivider variant="gradient" />
+
+      {otherTypes.map((type, idx) => (
+        <div key={type}>
+          <VehicleTypeIntro vehicleType={type} />
+          {idx < otherTypes.length - 1 && <SectionDivider variant="dots" />}
+        </div>
+      ))}
+
+      <SectionDivider variant="glow" />
 
       <ReviewsSection reviews={reviews} />
       <PollsGrid columnCategories={[...pollCategories]} hideCities />

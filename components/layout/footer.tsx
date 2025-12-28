@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"; // ensuring correct alias
 import { capitalize, cn } from "@/lib/utils";
+import { InstantQuoteButton } from "@/components/InstantQuoteButton";
 
 // Extracted for cleaner render
 const SOCIALS = {
@@ -101,15 +102,10 @@ export default function Footer() {
               <a href={`mailto:${contact.email}`}>✉️ Email Us</a>
             </Button>
 
-            <Button
-              asChild
-              size="lg"
-              className="inline-flex items-center justify-center rounded-xl px-5
-                py-3 font-bold bg-blue-900 text-white border border-blue-900
-                hover:bg-blue-950 transition h-auto text-md"
-            >
-              <Link href="/pricing">⚡ Instant Quote</Link>
-            </Button>
+            <InstantQuoteButton 
+              source="Footer CTA" 
+              className="rounded-xl px-5 py-3 text-md h-auto"
+            />
           </div>
         </div>
       </div>

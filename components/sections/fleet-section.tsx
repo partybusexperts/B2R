@@ -10,6 +10,8 @@ interface FleetSectionProps {
     stateSlug: string;
     citySlug: string;
   };
+  compact?: boolean;
+  hideButtons?: boolean;
 }
 
 export default async function FleetSection({
@@ -17,6 +19,8 @@ export default async function FleetSection({
   showLimousines = true,
   showCoachBuses = true,
   location,
+  compact = false,
+  hideButtons = false,
 }: FleetSectionProps) {
   const linkFor = (fleet: "party-bus" | "limo" | "coach") => {
     if (!location) {
@@ -40,17 +44,18 @@ export default async function FleetSection({
       {showPartyBuses && (
         <>
           <Suspense
-            fallback={<div className="h-[600px] bg-muted animate-pulse" />}
+            fallback={<div className="h-[400px] bg-muted animate-pulse" />}
           >
             <FleetPreviewServer
               title="Party Buses"
               viewAllLink={linkFor("party-bus")}
               type="party-bus"
+              compact={compact}
+              hideButtons={hideButtons}
             />
           </Suspense>
 
-          {/* Why Party Buses Rock */}
-          <WhySection slug="party-buses" />
+          {!compact && <WhySection slug="party-buses" />}
         </>
       )}
 
@@ -58,17 +63,18 @@ export default async function FleetSection({
       {showLimousines && (
         <>
           <Suspense
-            fallback={<div className="h-[600px] bg-muted animate-pulse" />}
+            fallback={<div className="h-[400px] bg-muted animate-pulse" />}
           >
             <FleetPreviewServer
               title="Luxury Limousines"
               viewAllLink={linkFor("limo")}
               type="limo"
+              compact={compact}
+              hideButtons={hideButtons}
             />
           </Suspense>
 
-          {/* Why Limousines Rock */}
-          <WhySection slug="limousines" />
+          {!compact && <WhySection slug="limousines" />}
         </>
       )}
 
@@ -76,17 +82,18 @@ export default async function FleetSection({
       {showCoachBuses && (
         <>
           <Suspense
-            fallback={<div className="h-[600px] bg-muted animate-pulse" />}
+            fallback={<div className="h-[400px] bg-muted animate-pulse" />}
           >
             <FleetPreviewServer
               title="Coach Buses"
               viewAllLink={linkFor("coach")}
               type="coach"
+              compact={compact}
+              hideButtons={hideButtons}
             />
           </Suspense>
 
-          {/* Why Coach Buses Work Best */}
-          <WhySection slug="coach-buses" />
+          {!compact && <WhySection slug="coach-buses" />}
         </>
       )}
     </>

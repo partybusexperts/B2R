@@ -6,6 +6,7 @@ import "./globals.css";
 import Footer from "@/components/layout/footer";
 import ScrollUtilities from "@/components/scroll-utilities";
 import { rootMetadata } from "@/lib/seo/metadata";
+import { LiveChatWidget } from "@/components/LiveChatWidget";
 
 export const metadata: Metadata = {
   ...rootMetadata({
@@ -44,6 +45,7 @@ export default function RootLayout({
           <main>{children}</main>
 
           <ScrollUtilities />
+          <LiveChatWidget />
           <Footer />
         </NextThemeProvider>
       </body>

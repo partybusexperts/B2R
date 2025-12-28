@@ -118,29 +118,23 @@ const mockTools = [
   },
 ];
 
-export const getTools = cache(async (limit?: number) => {
+export const getTools = cache(async (limit = 100) => {
   const supabase = await createClient();
 
-  // Fetch tools
-  let request = supabase.from("tools").select("*");
-
-  if (limit) {
-    request = request.limit(limit);
-  }
-
-  const { data: tools, error } = await request;
+  const { data: tools, error } = await supabase
+    .from("tools")
+    .select("*")
+    .order("category", { ascending: true })
+    .order("title", { ascending: true })
+    .limit(limit);
 
   if (error) {
     console.error("getTools:", error);
     return mockTools;
   }
 
-  if (!tools) {
-    console.warn("getTools:", "No data found");
-    return mockTools;
-  }
-
-  if (tools) {
+  if (!tools || tools.length === 0) {
+    console.warn("getTools:", "No data found, using mock data");
     return mockTools;
   }
 
@@ -151,23 +145,18 @@ export const getToolsByCategory = cache(
   async (category: string): Promise<ToolData[]> => {
     const supabase = await createClient();
 
-    // Fetch tools
     const { data: toolsByCategory, error } = await supabase
       .from("tools")
       .select("*")
-      .eq("category", category);
+      .eq("category", category)
+      .order("title", { ascending: true });
 
     if (error) {
       console.error("getToolsByCategory:", error);
       return mockTools.filter((t) => t.category === category);
     }
 
-    if (!toolsByCategory) {
-      console.warn("getToolsByCategory:", "No data found");
-      return mockTools.filter((t) => t.category === category);
-    }
-
-    if (toolsByCategory) {
+    if (!toolsByCategory || toolsByCategory.length === 0) {
       return mockTools.filter((t) => t.category === category);
     }
 
@@ -193,13 +182,23 @@ export const getToolBySlug = cache(async (slug: string) => {
     return mockTools.find((t) => t.slug === slug);
   }
 
-  if (toolBySlug) {
-    return mockTools.find((t) => t.slug === slug);
-  }
-
   return toolBySlug;
 });
 
-export type ToolData = NonNullable<Awaited<ReturnType<typeof getToolBySlug>>>;
-
-// FIXME: All tools are mocked
+export type ToolData = {
+  id: string;
+  slug: string | null;
+  title: string;
+  description: string | null;
+  icon_name: string | null;
+  category: string;
+  modal_content: string | null;
+  cta_text: string | null;
+  cta_link: string | null;
+  href?: string | null;
+  status?: string | null;
+  coming_soon_copy?: string | null;
+  click_count?: number | null;
+  created_at: string;
+  updated_at: string;
+};

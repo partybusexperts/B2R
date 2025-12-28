@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search, Check, Filter } from "lucide-react";
+import { Search, Check, Filter, Quote, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,24 +42,19 @@ export function ReviewsSection({
 
   const filteredReviews = React.useMemo(() => {
     return reviews.filter((review) => {
-      // 1. Text Search
       const matchesSearch =
         review.body.toLowerCase().includes(searchQuery.toLowerCase()) ||
         review.author_display.toLowerCase().includes(searchQuery.toLowerCase());
 
-      // 2. Tag Filter
       const matchesTags =
         activeFilters.length === 0 ||
         activeFilters.some((filterTag) => {
           const reviewLabels = [];
-
           if (review.tags) reviewLabels.push(...review.tags);
           if (review.city_slug) reviewLabels.push(review.city_slug);
           if (review.state_slug) reviewLabels.push(review.state_slug);
           if (review.event_slug) reviewLabels.push(review.event_slug);
-
           reviewLabels.push(...review.body.toLowerCase().split(" "));
-
           return reviewLabels.includes(filterTag);
         });
 
@@ -68,192 +63,159 @@ export function ReviewsSection({
   }, [reviews, searchQuery, activeFilters]);
 
   return (
-    <section
-      className={cn("relative w-full border-t border-white/5 bg-[#051127]")}
-    >
-      {/* Background effect */}
-      <div className="absolute inset-0 opacity-40">
-        <div
-          className="mx-auto h-full max-w-5xl
-            bg-[radial-gradient(circle_at_top,_rgba(58,105,255,0.35),_transparent_55%)]"
-        ></div>
-      </div>
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-14">
-        {/* Header */}
-        <div
-          className="flex flex-col gap-6 md:flex-row md:items-center
-            md:justify-between mb-5"
-        >
-          <div>
-            {" "}
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.4em]
-                text-white/50"
-            >
-              Verified riders
-            </p>
-            <h2 className="mt-3 text-3xl font-bold text-white">
-              {title || "People can’t stop talking about us"}
+    <section className="relative w-full overflow-hidden bg-[#0a1628]">
+      <div className="absolute inset-0 bg-mesh opacity-50" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full bg-blue-500/8 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none animate-orb-drift" />
+      
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20 md:py-28">
+        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between mb-12">
+          <div className="animate-fade-up">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-4">
+              <Sparkles className="w-4 h-4 text-blue-400" />
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
+                Verified Riders
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-serif text-glow-white">
+              {title || "People can't stop talking about us"}
             </h2>
-            <div className="mt-4 flex items-center gap-3 text-white/80">
-              <div
-                className="inline-flex items-center gap-2 rounded-full border
-                  border-white/15 bg-white/5 px-4 py-1 text-sm font-semibold"
-              >
+            <div className="mt-6 flex items-center gap-4">
+              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass-panel">
                 <StarRating rating={5} />
-                <span>5 / 5</span>
+                <span className="text-lg font-bold text-white">5.0</span>
+                <span className="text-sm text-white/60">Perfect Score</span>
+              </div>
+              <div className="hidden md:flex items-center gap-2 text-sm text-white/60">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span>{reviews.length}+ verified reviews</span>
               </div>
             </div>
           </div>
+          
           <Link
-            href={"/reviews"}
-            className="inline-flex items-center justify-center rounded-full
-              border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold
-              text-white/90 shadow-[0_10px_30px_rgba(3,7,18,0.65)] transition
-              hover:border-white/40 hover:bg-white/15"
+            href="/reviews"
+            className="group inline-flex items-center gap-3 px-8 py-4 rounded-full 
+              glass-panel-hover text-white font-semibold transition-all duration-300
+              hover:scale-105 animate-fade-up-delay-1"
           >
-            Read all reviews
+            <span>Read all reviews</span>
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
 
-        {/* Search & Filter Toolbar */}
-        <div
-          className="mb-10 flex flex-col items-center justify-between gap-4 p-4
-            md:flex-row from-white/12 via-white/6 rounded-3xl border
-            border-white/15 bg-gradient-to-br from-white/12 via-white/6
-            to-transparent text-white shadow-[0_25px_60px_rgba(3,7,18,0.4)]
-            backdrop-blur-sm transition duration-300 hover:-translate-y-1
-            hover:border-white/35"
-        >
-          <div className="relative w-full md:max-w-sm">
-            <Search
-              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2
-                text-muted-foreground"
-            />
-            <Input
-              placeholder="Search reviews..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="border-white/15 bg-gradient-to-br from-white/12
-                via-white/6 to-transparent pl-9 text-black"
-            />
-          </div>
+        <div className="mb-12 glass-panel rounded-3xl p-6 animate-fade-up-delay-2">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-400" />
+              <Input
+                placeholder="Search reviews..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-14 rounded-2xl border-white/10 bg-white/5 pl-12 text-white text-lg
+                  placeholder:text-white/40 focus:border-blue-500/50 focus:ring-blue-500/20
+                  transition-all duration-300"
+              />
+            </div>
 
-          <div
-            className="flex w-full flex-wrap items-center justify-center gap-2
-              md:justify-end"
-          >
-            <span
-              className="mr-2 flex items-center gap-2 text-sm font-semibold
-                text-white/80"
-            >
-              <Filter className="h-4 w-4" /> Filter:
-            </span>
-            {FILTERS.map((filter) => {
-              const isActive = activeFilters.includes(filter.tag);
-              return (
-                <button
-                  key={filter.tag}
-                  onClick={() => toggleFilter(filter.tag)}
-                  className={cn(
-                    `inline-flex items-center justify-center rounded-full border
-                    border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold
-                    text-white/90 shadow-[0_10px_30px_rgba(3,7,18,0.65)]
-                    transition hover:border-white/40 hover:bg-white/15`,
-                    isActive ? "border-white/40 bg-white/15 shadow-md" : "",
-                  )}
-                >
-                  {isActive && <Check className="h-3 w-3 pr-1" />}
-                  {filter.label}
-                </button>
-              );
-            })}
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="flex items-center gap-2 text-sm font-medium text-white/60">
+                <Filter className="h-4 w-4" /> Filter:
+              </span>
+              {FILTERS.map((filter) => {
+                const isActive = activeFilters.includes(filter.tag);
+                return (
+                  <button
+                    key={filter.tag}
+                    onClick={() => toggleFilter(filter.tag)}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300",
+                      isActive
+                        ? "bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] scale-105"
+                        : "glass text-white/80 hover:bg-white/10 hover:text-white"
+                    )}
+                  >
+                    {isActive && <Check className="inline-block h-3 w-3 mr-1" />}
+                    {filter.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Grid */}
         {filteredReviews.length > 0 ? (
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredReviews.map((review, idx) => (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredReviews.slice(0, 9).map((review, idx) => (
               <Card
                 key={`${review.id}-${idx}`}
-                className="py-0 gap-0 group relative overflow-hidden rounded-3xl
-                  border border-white/15 bg-gradient-to-br from-white/12
-                  via-white/6 to-transparent p-6 text-white
-                  shadow-[0_25px_60px_rgba(3,7,18,0.4)] backdrop-blur-sm
-                  transition duration-300 hover:-translate-y-1
-                  hover:border-white/35"
+                className={cn(
+                  "group relative overflow-hidden rounded-3xl p-0 border-0",
+                  "glass-panel-hover cursor-default",
+                  "animate-fade-up"
+                )}
+                style={{ animationDelay: `${idx * 0.05}s` }}
               >
-                <div
-                  className="absolute inset-0 opacity-0 transition
-                    group-hover:opacity-30"
-                >
-                  <div
-                    className="h-full w-full
-                      bg-[radial-gradient(circle_at_top,_rgba(86,156,255,0.45),_transparent_60%)]"
-                  ></div>
+                <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-blue-500/10 blur-3xl 
+                  opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative p-6">
+                  <div className="flex items-start justify-between gap-4 mb-4">
+                    <Quote className="w-10 h-10 text-blue-400/30 -scale-x-100" />
+                    <StarRating rating={review.rating || 5} />
+                  </div>
+                  
+                  <p className="text-base leading-relaxed text-white/90 line-clamp-4 mb-6">
+                    &quot;{review.body}&quot;
+                  </p>
+                  
+                  <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 
+                      flex items-center justify-center text-white font-bold text-sm">
+                      {(review.author_display || "A")[0].toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white">
+                        {review.author_display || "Anonymous"}
+                      </p>
+                      <p className="text-xs text-white/50 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                        Verified Rider
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div
-                  className="relative flex items-center justify-between gap-3"
-                >
-                  <StarRating rating={review.rating || 5} />
-                </div>
-                <p
-                  className="relative mt-4 text-[15px] leading-relaxed
-                    text-white/90 line-clamp-4 overflow-hidden"
-                >
-                  &quot;{review.body}&quot;
-                </p>
-                <div
-                  className="relative mt-4 flex items-center gap-2 text-[13px]
-                    text-white/75"
-                >
-                  <span
-                    className="inline-block h-[6px] w-[6px] rounded-full
-                      bg-emerald-400"
-                  ></span>
-                  {"— "}
-                  {review.author_display || "Anonymous"}
-                </div>
-
-                {/* Tags Display (If exists) */}
               </Card>
             ))}
           </div>
         ) : (
-          <div
-            className="rounded-3xl border border-dashed border-border
-              bg-muted/20 py-20 text-center"
-          >
-            <h3 className="text-lg font-semibold">No reviews found</h3>
-            <p className="text-muted-foreground">
-              Try adjusting your search or filters.
-            </p>
+          <div className="glass-panel rounded-3xl py-20 text-center">
+            <h3 className="text-xl font-semibold text-white">No reviews found</h3>
+            <p className="mt-2 text-white/60">Try adjusting your search or filters.</p>
             <Button
               variant="link"
               onClick={() => {
                 setSearchQuery("");
                 setActiveFilters([]);
               }}
-              className="mt-2 text-primary"
+              className="mt-4 text-blue-400 hover:text-blue-300"
             >
               Clear all filters
             </Button>
           </div>
         )}
 
-        {/* Footer */}
-        <div className="mt-10 text-center">
+        <div className="mt-16 text-center">
           <Button
             asChild
             size="lg"
-            variant="outline"
             className="inline-flex items-center justify-center rounded-full
-              bg-white/95 px-7 py-3 text-sm font-semibold text-[#04132d]
-              shadow-[0_15px_40px_rgba(10,27,54,0.35)] transition
-              hover:translate-y-0.5 hover:bg-white"
+              px-10 py-6 text-lg font-bold transition-all duration-300
+              bg-gradient-to-r from-blue-600 to-indigo-600 text-white
+              shadow-[0_20px_50px_rgba(59,130,246,0.3)]
+              hover:-translate-y-1 hover:shadow-[0_25px_60px_rgba(59,130,246,0.4)]"
           >
-            <Link href="/reviews">See more reviews</Link>
+            <Link href="/reviews">See all {reviews.length}+ reviews</Link>
           </Button>
         </div>
       </div>

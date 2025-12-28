@@ -1,12 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef, useCallback } from "react";
-
-/**
- * ScrollUtilities: combines
- *  - Back-to-top circular progress button
- *  - Mini TOC pill with scroll spy
- *  - Adaptive CTA dock (Quote / Call / Email / Top) hiding when footer/hero in view
- */
+import { openLiveChat } from "@/lib/livechat";
 
 interface TocSection {
   id: string;
@@ -14,7 +8,6 @@ interface TocSection {
   el: HTMLElement;
 }
 
-// Deterministic slug generator (no Math.random) so SSR/CSR match if headings present server-side
 function slugify(base: string, index: number): string {
   const core =
     base
@@ -24,7 +17,6 @@ function slugify(base: string, index: number): string {
   return `${core}-${index}`;
 }
 
-// Helper to find candidate sections (data-section-title or h2 elements)
 function collectSections(max = 30): TocSection[] {
   if (typeof document === "undefined") return [];
   const nodes: { el: HTMLElement; label: string }[] = [];
@@ -52,7 +44,6 @@ function collectSections(max = 30): TocSection[] {
     const candidate = slugify(n.label, idx);
     let finalId = candidate;
     let dupe = 1;
-    // Ensure uniqueness within this client-side run without touching DOM attributes
     while (seen.has(finalId)) {
       finalId = candidate + "-" + ++dupe;
     }
@@ -64,10 +55,9 @@ function collectSections(max = 30): TocSection[] {
   return sections;
 }
 
-// UI thresholds and timings
-const TOP_BUTTON_SCROLL_THRESHOLD = 520; // show back-to-top after this Y offset
-const CTA_DOCK_SHOW_SCROLL = 800; // show CTA dock after this Y offset
-const CTA_DOCK_IDLE_MS = 1600; // dock visibility debounce
+const TOP_BUTTON_SCROLL_THRESHOLD = 520;
+const CTA_DOCK_SHOW_SCROLL = 800;
+const CTA_DOCK_IDLE_MS = 1600;
 
 function getScrollProgressPercent(): number {
   const doc = document.documentElement;
@@ -146,7 +136,6 @@ function useDockVisibility(lastScrollYRef: React.MutableRefObject<number>) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [dockVisible, lastScrollYRef]);
 
-  // Hide dock when footer is visible
   useEffect(() => {
     const footer = document.querySelector("footer");
     if (!footer) return;
@@ -199,13 +188,13 @@ function BackToTopButton({
     <button
       aria-label="Back to top"
       onClick={onTop}
-      className={`fixed z-[140] bottom-6 right-6 h-14 w-14 rounded-full
+      className={`fixed z-[140] bottom-6 left-4 sm:left-6 h-12 w-12 sm:h-14 sm:w-14 rounded-full
         bg-blue-700 text-white shadow-lg border-2 border-white/30 flex
-        items-center justify-center transition-opacity ${
-          showTop ? "opacity-100" : "opacity-0 pointer-events-none"
+        items-center justify-center transition-all duration-300 ${
+          showTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
     >
-      <svg viewBox="0 0 36 36" className="h-12 w-12 -rotate-90 absolute">
+      <svg viewBox="0 0 36 36" className="h-10 w-10 sm:h-12 sm:w-12 -rotate-90 absolute">
         <path
           className="text-blue-300/30"
           stroke="currentColor"
@@ -223,7 +212,7 @@ function BackToTopButton({
           d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
         />
       </svg>
-      <span className="relative font-bold text-lg">↑</span>
+      <span className="relative font-bold text-base sm:text-lg">↑</span>
     </button>
   );
 }
@@ -244,23 +233,25 @@ function MiniToc({
     : "Sections";
   return (
     <div
-      className="fixed z-[140] top-1/2 -translate-y-1/2 right-2 sm:right-3 flex
-        flex-col items-end gap-3"
+      className="fixed z-[140] top-1/2 -translate-y-1/2 left-2 sm:left-3 flex
+        flex-col items-start gap-3"
     >
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label="Open page sections"
-        className="rounded-full bg-black/40 backdrop-blur px-4 py-2 text-white
-          text-xs font-semibold shadow border border-white/20 hover:bg-black/55"
+        className="rounded-full bg-black/60 backdrop-blur px-3 py-2 text-white
+          text-[10px] sm:text-xs font-semibold shadow border border-white/20 hover:bg-black/70
+          max-w-[120px] sm:max-w-none truncate"
       >
-        {currentLabel} ▾
+        <span className="hidden sm:inline">{currentLabel} ▾</span>
+        <span className="sm:hidden">§ ▾</span>
       </button>
       {open && (
         <div
-          className="w-56 max-h-[60vh] overflow-auto rounded-2xl bg-[#0f2246]/95
+          className="w-48 sm:w-56 max-h-[50vh] sm:max-h-[60vh] overflow-auto rounded-2xl bg-[#0f2246]/95
             backdrop-blur shadow-2xl border border-blue-400/30 p-2 space-y-1
-            text-sm"
+            text-xs sm:text-sm"
         >
           {sections.map((s) => (
             <button
@@ -286,39 +277,43 @@ function MiniToc({
 }
 
 function CtaDock({ visible, onTop }: { visible: boolean; onTop: () => void }) {
+  const handleQuoteClick = () => {
+    openLiveChat("CTA Dock", window.location.pathname);
+  };
+
   return (
     <div
-      className={`fixed z-[140] right-6 bottom-24 sm:bottom-28 flex flex-col
-        gap-3 transition-opacity ${
-          visible ? "opacity-100" : "opacity-0 pointer-events-none"
+      className={`fixed z-[140] left-4 sm:left-6 bottom-20 sm:bottom-24 flex flex-col
+        gap-2 sm:gap-3 transition-all duration-300 ${
+          visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 pointer-events-none"
         }`}
       aria-hidden={!visible}
     >
       <button
         onClick={onTop}
-        className="rounded-xl bg-blue-700 text-white px-4 py-2 text-sm font-bold
+        className="rounded-xl bg-blue-700 text-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold
           shadow border border-blue-300/40 hover:bg-blue-800"
       >
         Top
       </button>
-      <a
-        href="/pricing"
-        className="rounded-xl bg-emerald-500 text-white px-4 py-2 text-sm
+      <button
+        onClick={handleQuoteClick}
+        className="rounded-xl bg-emerald-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm
           font-bold shadow border border-emerald-300/40 hover:bg-emerald-600"
       >
         Quote
-      </a>
+      </button>
       <a
         href="tel:8885352566"
-        className="rounded-xl bg-white text-blue-900 px-4 py-2 text-sm font-bold
-          shadow border border-blue-200 hover:bg-blue-50"
+        className="rounded-xl bg-white text-blue-900 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold
+          shadow border border-blue-200 hover:bg-blue-50 text-center"
       >
         Call
       </a>
       <a
         href="mailto:info@bus2ride.com"
-        className="rounded-xl bg-blue-900 text-white px-4 py-2 text-sm font-bold
-          shadow border border-blue-600 hover:bg-blue-800"
+        className="rounded-xl bg-blue-900 text-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold
+          shadow border border-blue-600 hover:bg-blue-800 text-center"
       >
         Email
       </a>
@@ -338,12 +333,11 @@ const ScrollUtilities: React.FC = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    // Find the element from the latest sections without relying on DOM id
     const current = collectSections();
     const match = current.find((s) => s.id === id);
     const el = match?.el;
     if (el) {
-      const offset = 100; // Navbar height + buffer
+      const offset = 100;
       const elementPosition = el.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - offset;
 

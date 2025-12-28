@@ -1,0 +1,223 @@
+Absolutely — if you want the most impressive, addictive, high-engagement poll analytics hub, I can add MANY more metrics that real people love to click.
+
+I’ll give you:
+
+Expanded stats list (15–25 metrics people actually care about)
+
+How to present them in UI (clickable → deep links)
+
+Exact instructions you will paste into Replit
+
+This will turn your Polls page into something that feels like TikTok Analytics + Trivia Leaderboards + Reddit Trending.
+
+✅ THE STATS PEOPLE LOVE (ADD ALL OF THESE)
+
+These are metrics users naturally click because they trigger curiosity, competition, and FOMO.
+
+🔥 ENGAGEMENT-BASED METRICS
+1. Fastest Rising Polls (last 15 minutes)
+
+People love seeing what's suddenly blowing up.
+
+submitted_at > now() - interval '15 minutes'
+GROUP BY poll_id
+ORDER BY count(*) DESC
+
+2. Most Answered Polls Today
+
+Sorted by today’s activity.
+
+3. Most Skipped Polls
+
+(If user skips or backs out — optional tracking)
+
+4. Highest Completion Rate Polls
+
+Polls where people finish the whole series (if you have multi-question sets later)
+
+5. Polls With Most Comments or Discussion (future-ready)
+
+Even if comments not built yet, you can add a placeholder metric.
+
+🎯 ACCURACY-BASED METRICS
+6. Hardest Polls (lowest correct %)
+
+People LOVE to test themselves on the “hard ones.”
+
+7. Easiest Polls (highest correct %)
+8. Most Misleading Polls
+
+Polls where the most-chosen wrong answer is consistent.
+
+9. Fastest Average Response Time Polls
+
+Later you can add response time tracking — but add the column now.
+
+🏆 CATEGORY-BASED METRICS
+10. Trending Categories (last hour)
+11. Most Completed Category Today
+12. Most Popular Category All-Time
+13. Newest Category Added
+
+Links directly to newest category page.
+
+👤 USER-INTERACTION METRICS
+
+(Not personal — all anonymized)
+
+14. Average Answers per User (global)
+15. % of users who answered at least 1 poll today
+16. Completion streaks (gamification later)
+🗺️ GEOGRAPHIC-STYLE METRICS (fun even without real location)
+17. Most active city page
+
+(based on your future location pages)
+
+18. States with most poll submissions this week
+
+Even if users aren’t from the U.S., it still builds personality.
+
+🧨 VIRAL STYLE METRICS
+19. Most Shared Polls
+
+(If you track share/copy link events)
+
+20. Most Repeated Polls
+
+Polls users redo multiple times.
+
+📅 TIME-BASED METRICS
+21. Polls created this week
+22. Polls with growing momentum (week-over-week increase)
+23. Poll that was most popular 24 hours ago (yesterday’s winner)
+🎰 RANDOM DISCOVERY METRICS
+
+These make people click.
+
+24. “Random Poll of the Hour”
+
+Pick a random poll each hour and highlight it.
+
+25. “Poll Spotlight: Hidden Gem”
+
+Randomly surface a poll with low views.
+
+🎯 UI BEHAVIOR (IMPORTANT)
+Every stat block should be clickable.
+
+When the user clicks a stat card:
+
+If it’s a poll → go to that poll
+
+If it’s a category → open that category page
+
+If it’s a time-based metric → open sorted Polls list
+
+If it's “Hardest Polls” → go to list page showing hardest polls
+
+If it’s “Trending Now” → go to trending list
+
+Replit must build:
+
+✔ Routing
+✔ Sorting logic
+✔ Category filters
+✔ Poll detail pages
+🔥 INSTRUCTIONS TO GIVE REPLIT (EXPANDED VERSION)
+
+Copy–paste this whole block into Replit:
+
+✅ MASTER COMMAND FOR REPLIT — EXTENDED ANALYTICS VERSION
+Extend the poll analytics system with a full analytics dashboard and clickable stats.
+
+1. Modify Supabase tables:
+
+In polls table add:
+  popularity_score (int)
+  views_count (int)
+  submissions_count (int)
+  correct_count (int)
+  incorrect_count (int)
+  avg_response_time (float)
+  streak_score (int)
+  share_count (int)
+  skip_count (int)
+  last_submission_at (timestamptz)
+  created_at (timestamptz default now())
+  updated_at (timestamptz default now())
+
+In poll_submissions add:
+  response_time_ms (int)
+  was_skipped (boolean)
+  was_shared (boolean)
+
+2. Create analytics queries for:
+
+- Most popular polls (submissions_count)
+- Hottest polls (submissions in past 60 min)
+- Fastest rising polls (last 15 min)
+- Trending polls (last 7 days)
+- New polls (created_at DESC)
+- Highest correct-answer %
+- Lowest correct-answer % (hardest polls)
+- Highest incorrect-answer % (misleading polls)
+- Most skipped polls
+- Most shared polls
+- Most repeated polls
+- Fastest average response time polls
+- Categories trending in last hour
+- Most active categories all-time
+- Polls created this week
+- Poll with biggest week-over-week growth
+- Random “poll of the hour”
+- Hidden gem polls (low views)
+
+3. Add an expanded Live Stats Bar to the top of Polls and Poll Results pages. Show:
+
+- Polls submitted in last 5 min / 60 min / today / 7 days
+- Total submissions all-time
+- Total polls in database
+- Most active category right now
+- Fastest rising poll
+- Hardest poll
+- Easiest poll
+- Trending category
+- Random poll of the hour
+- Hidden gem poll
+- Most shared poll
+- Most skipped poll
+- Poll created most recently
+- Poll that was most popular yesterday
+
+4. Make every stat block clickable:
+
+- If it refers to a poll → go directly to that poll
+- If it refers to a category → open category filter view
+- If it is a time-based metric → open list sorted by that metric
+
+5. Add filter tabs:
+
+Popular
+Trending
+Rising
+New
+Categories
+Hardest
+Easiest
+Most Skipped
+Most Shared
+Fastest Time
+Most Answers Today
+Hidden Gems
+
+Each tab must query Supabase using the proper analytics query.
+
+6. Cache analytics on the server for 30–60 seconds for speed.
+
+7. Build a clean 2-row card grid layout for stats at the top of pages.
+
+8. Ensure analytics works on both:
+- Polls listing page
+- Individual Poll Results page
+
+Implement all UI, server routes, queries, and Supabase changes required.

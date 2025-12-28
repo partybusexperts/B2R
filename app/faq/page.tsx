@@ -1,16 +1,17 @@
+import Hero from "@/components/layout/hero";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { PollsGrid } from "@/components/sections/polls-grid";
 import { ToolsGrid } from "@/components/sections/tools-grid";
 import { EventsGrid } from "@/components/sections/events-grid";
-import { FaqData, getFaqs } from "@/lib/data/faqs";
+import { getFaqs } from "@/lib/data/faqs";
 import { getReviews } from "@/lib/data/reviews";
 import FleetSection from "@/components/sections/fleet-section";
-import { FaqSection } from "@/components/sections/faq-section";
-import { FaqSearchSection } from "@/components/sections/faq-search-section";
-import Hero from "@/components/layout/hero";
-import { FaqMostClickedWeek } from "@/components/sections/faq-most-clicked-week";
-import { FaqCategorySection } from "@/components/sections/faq-category-section";
-import { HeaderSection } from "@/components/sections/header-section";
+import { FaqGridClient } from "@/components/sections/faq-grid.client";
+import { TriviaBookingSection, type TriviaItem } from "@/components/sections/trivia-booking-section";
+import { FactsShowcase, type FactItem } from "@/components/sections/facts-showcase";
+import { BookingProcessSection } from "@/components/sections/content-booking";
+import { LinkConstellation, type InternalLink, type ExternalLink } from "@/components/sections/link-constellation";
+import { SectionDivider, PremiumDivider } from "@/components/layout/section-dividers";
 import { pageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = pageMetadata({
@@ -20,145 +21,130 @@ export const metadata = pageMetadata({
   path: "/faq",
 });
 
-function getCountsByCategory(faqs: FaqData[]) {
-  const counts = new Map<string, number>();
-  for (const faq of faqs) {
-    const slug = (faq.page_slug ?? "").toString();
-    counts.set(slug, (counts.get(slug) ?? 0) + 1);
-  }
-  return counts;
-}
+const FAQ_TRIVIA: TriviaItem[] = [
+  {
+    id: "1",
+    question: "What's the #1 question we get asked?",
+    answer: "How far in advance should I book? For peak dates (prom, weddings, NYE), book 6-8 weeks ahead. Regular weekends need 2-3 weeks. Last minute? Call us - we'll try our best!",
+    category: "Booking Insight",
+    source: "Customer Service Data",
+  },
+  {
+    id: "2",
+    question: "What surprise do most first-timers not expect?",
+    answer: "Gratuity isn't usually included in the quoted price! Standard tip is 15-20% of rental cost. Some packages include it, so always ask when booking.",
+    category: "Pro Tip",
+    source: "Customer Feedback",
+  },
+  {
+    id: "3",
+    question: "What's the most common mistake when booking?",
+    answer: "Underestimating group size! Book for your maximum possible headcount. It's much easier to have extra space than to scramble for a bigger vehicle last minute.",
+    category: "Avoid This",
+    source: "Booking Team Insights",
+  },
+  {
+    id: "4",
+    question: "What policy confuses people most?",
+    answer: "BYOB rules vary by state and company. Most party buses allow alcohol for 21+ passengers, but some states have strict regulations. Always confirm when booking!",
+    category: "Policy Alert",
+    source: "Legal Compliance Team",
+  },
+  {
+    id: "5",
+    question: "What's the best way to save money?",
+    answer: "Book on off-peak days! Thursday or Sunday events are often 20-30% cheaper than Saturday nights. Mid-month dates beat end-of-month too.",
+    category: "Money Saver",
+    source: "Pricing Analysis",
+  },
+];
 
-const categories = [
-  {
-    category: "home",
-    title: "Homepage",
-  },
-  {
-    category: "party-buses",
-    title: "Party Bus Fleet",
-  },
-  {
-    category: "limousines",
-    title: "Limousine Fleet",
-  },
-  {
-    category: "coach-buses",
-    title: "Coach Bus Fleet",
-  },
-  {
-    category: "events",
-    title: "Events",
-  },
-  {
-    category: "pricing",
-    title: "Pricing",
-  },
-  {
-    category: "locations",
-    title: "Locations",
-  },
-  {
-    category: "polls",
-    title: "Polls",
-  },
-  {
-    category: "blog",
-    title: "Blog",
-  },
-  {
-    category: "tools",
-    title: "Tools",
-  },
-  {
-    category: "secrets",
-    title: "Industry Secrets",
-  },
-  {
-    category: "poll-results",
-    title: "Poll Results",
-  },
-  {
-    category: "reviews",
-    title: "Reviews",
-  },
-  {
-    category: "contact",
-    title: "Contact",
-  },
-] as const;
+const FAQ_FACTS: FactItem[] = [
+  { id: "1", stat: "500+", label: "Questions Answered", category: "stat" },
+  { id: "2", stat: "6", label: "Categories", category: "stat" },
+  { id: "3", stat: "24/7", label: "Support Available", category: "stat" },
+  { id: "4", stat: "98%", label: "Issues Resolved", category: "stat" },
+  { id: "5", stat: "<2min", label: "Avg Response Time", category: "stat" },
+  { id: "6", stat: "15+", label: "Years Experience", category: "stat" },
+];
+
+const INTERNAL_LINKS: InternalLink[] = [
+  { href: "/contact", label: "Contact Us", description: "Get personalized help with your questions", category: "resources" },
+  { href: "/pricing", label: "Pricing Guide", description: "Detailed pricing information", category: "resources" },
+  { href: "/fleet", label: "Browse Fleet", description: "Explore our vehicle options", category: "fleet" },
+  { href: "/events", label: "Event Ideas", description: "Inspiration for your celebration", category: "events" },
+  { href: "/reviews", label: "Customer Stories", description: "Real experiences from riders", category: "resources" },
+];
+
+const EXTERNAL_LINKS: ExternalLink[] = [
+  { href: "https://www.nla.org/", label: "Industry Standards", source: "National Limousine Association" },
+  { href: "https://www.fmcsa.dot.gov/", label: "Safety Regulations", source: "FMCSA" },
+];
 
 export default async function FaqPage() {
   const faqs = (await getFaqs()) ?? [];
   const reviews = (await getReviews()) ?? [];
 
-  // Data for header section
-  const countsByCategory = getCountsByCategory(faqs);
-
-  const liveSections = categories.filter(
-    (c) => (countsByCategory.get(c.category) ?? 0) > 0,
-  );
-
-  const deepest = categories
-    .map((c) => ({ ...c, count: countsByCategory.get(c.category) ?? 0 }))
-    .sort((a, b) => b.count - a.count)[0];
-
-  const cardsForHeader = [
-    {
-      info: faqs.length + "", // to string
-      label: "Total Answers",
-    },
-    {
-      info: categories.length + "",
-      label: "Categories",
-    },
-    {
-      info: liveSections.length + "",
-      label: "Live Sections",
-    },
-    {
-      info: deepest?.title ?? "-",
-      label: "Deepest Topic",
-    },
-  ] as const;
-
   return (
-    <main>
+    <main className="bg-[#0a1628]">
       <Hero slug="faq" />
 
-      {/* FAQ Modal */}
-      <HeaderSection
-        badgeText="FAQ Library"
-        title="Ask smarter. Ride calmer."
-        description="Find answers about booking, pricing, vehicles, and policies — written for real riders and real planners. Search the library or jump into a topic below."
-        cards={cardsForHeader}
-        categories={liveSections}
+      <SectionDivider variant="glow" />
+
+      <FactsShowcase
+        facts={FAQ_FACTS}
+        title="FAQ By The Numbers"
+        subtitle="Your questions, our expertise"
       />
 
-      {/* Search between all faqs */}
-      <FaqSearchSection />
+      <PremiumDivider />
 
-      {/* order different faq sections by category */}
-      {categories.map((category) => (
-        <div key={category.category} id={`faq-${category.category}`}>
-          <FaqCategorySection
-            category={category.category}
-            title={category.title}
-          />
-        </div>
-      ))}
+      <FaqGridClient faqs={faqs} />
 
-      <FaqMostClickedWeek faqs={faqs} categories={categories} />
+      <SectionDivider variant="gradient" />
+
+      <FleetSection />
+
+      <SectionDivider variant="dots" />
+
+      <TriviaBookingSection
+        triviaItems={FAQ_TRIVIA}
+        title="FAQ Trivia & How to Book"
+        subtitle="Insider answers and step-by-step booking guide"
+        bookingTitle="How to Book with Bus2Ride"
+      />
+
+      <PremiumDivider />
 
       <ReviewsSection reviews={reviews} />
-      <FleetSection />
+
+      <SectionDivider variant="glow" />
+
       <PollsGrid
-        columnCategories={["party-bus", "limo", "coach-bus"]}
+        columnCategories={["booking-lead-times", "pricing", "weddings"]}
         hideCities
+        title="FAQ Polls"
       />
+
+      <SectionDivider variant="gradient" />
+
+      <BookingProcessSection />
+
+      <PremiumDivider />
+
       <EventsGrid />
+
+      <SectionDivider variant="dots" />
+
       <ToolsGrid category="faq" />
-      <FaqSection category="faq" title="More FAQs" />
+
+      <SectionDivider variant="glow" />
+
+      <LinkConstellation
+        internalLinks={INTERNAL_LINKS}
+        externalLinks={EXTERNAL_LINKS}
+        title="Still Have Questions?"
+      />
     </main>
   );
 }

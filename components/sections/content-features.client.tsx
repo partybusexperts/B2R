@@ -6,15 +6,28 @@ import Link from "next/link";
 import {
   Dialog,
   DialogContent,
-  // DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { DynamicIcon, type IconName } from "lucide-react/dynamic";
+import * as LucideIcons from "lucide-react";
+import { Sparkles, X, ArrowRight, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { WhyFeature } from "@/lib/data/content_section";
+
+function SafeIcon({ name, className }: { name: string; className?: string }) {
+  const iconKey = name
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
+  const icons = LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>;
+  const IconComponent = icons[iconKey];
+  if (IconComponent) {
+    return <IconComponent className={className} />;
+  }
+  return <Sparkles className={className} />;
+}
 
 interface WhyFeaturesGridClientProps {
   features: WhyFeature[];
@@ -53,40 +66,35 @@ export function WhyFeaturesGridClient({
               setActive(feature);
               setOpen(true);
             }}
-            className={cn(
-              `group w-full bg-[#12244e] rounded-2xl shadow border
-              border-blue-800/30 px-5 py-4 text-left transition
-              hover:border-blue-500/60 focus-visible:outline-none
-              focus-visible:ring-2 focus-visible:ring-blue-400`,
-            )}
+            className="group relative overflow-hidden rounded-xl bg-white/5 border border-white/10
+              p-3 text-left transition-all duration-300
+              hover:bg-white/10 hover:border-white/20 hover:scale-[1.02]
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
             aria-label={`Open details for ${feature.title}`}
           >
-            <div className="flex items-start gap-3">
-              <div
-                className="shrink-0 w-9 h-9 rounded-full bg-blue-900/20 border
-                  border-blue-700/40 flex items-center justify-center text-xl"
-              >
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            
+            <div className="relative flex items-start gap-3">
+              <div className="shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500/30 to-indigo-500/30 border border-white/10 flex items-center justify-center">
                 {feature.icon && feature.icon?.length === 2 ? (
-                  feature.icon
+                  <span className="text-sm">{feature.icon}</span>
                 ) : (
-                  <DynamicIcon
-                    name={feature.icon as IconName}
-                    className="h-6 w-6"
+                  <SafeIcon
+                    name={feature.icon || "sparkles"}
+                    className="h-4 w-4 text-blue-300"
                   />
                 )}
               </div>
-              <div className="">
-                <div className="font-semibold text-white text-lg mb-0.5">
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold text-white text-sm truncate mb-0.5">
                   {feature.title}
                 </div>
-                <div className="text-blue-200 text-sm">
+                <div className="text-white/50 text-xs line-clamp-2">
                   {feature.description}
                 </div>
-                <span
-                  className="mt-2 inline-flex items-center gap-1 text-xs
-                    font-semibold uppercase tracking-wide text-blue-300"
-                >
-                  Learn more →
+                <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-blue-400 group-hover:text-blue-300 transition-colors">
+                  Details
+                  <ArrowRight className="w-2.5 h-2.5" />
                 </span>
               </div>
             </div>
@@ -94,61 +102,65 @@ export function WhyFeaturesGridClient({
         ))}
       </div>
 
-      <DialogContent
-        className={cn(
-          `w-full max-w-3xl rounded-2xl p-0 shadow-2xl border border-blue-700/60
-          bg-[#050b1f] text-slate-100 overflow-hidden`,
-        )}
-      >
-        <DialogHeader
-          className="flex items-start justify-between gap-4 px-5 py-4 border-b
-            border-blue-900/60 bg-[#050b26]"
-        >
-          <DialogTitle className="flex-1 min-w-0">
-            {active?.modal_title ?? active?.title ?? ""}
-          </DialogTitle>
+      <DialogContent className="w-full max-w-lg rounded-2xl p-0 shadow-2xl border-0 bg-gradient-to-b from-slate-900 to-slate-950 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_50%)]" />
+        
+        <DialogHeader className="relative flex items-center justify-between px-6 pt-6 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+              {active?.icon && active.icon.length === 2 ? (
+                <span className="text-lg">{active.icon}</span>
+              ) : (
+                <SafeIcon
+                  name={active?.icon || "sparkles"}
+                  className="h-5 w-5 text-white"
+                />
+              )}
+            </div>
+            <DialogTitle className="text-xl font-bold text-white">
+              {active?.modal_title ?? active?.title ?? ""}
+            </DialogTitle>
+          </div>
+          <button
+            onClick={() => setOpen(false)}
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+          >
+            <X className="w-4 h-4 text-white/70" />
+          </button>
         </DialogHeader>
 
-        <div className="px-6 pb-6 md:px-8 md:pb-8 overflow-y-auto">
-          <div
-            className={cn(
-              "pt-6",
-              "text-muted-foreground leading-relaxed",
-              "space-y-4",
-              "[&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-foreground",
-              "[&_h4]:text-base [&_h4]:font-semibold [&_h4]:text-foreground",
-              "[&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5",
-              `[&_a]:text-primary [&_a]:underline-offset-4
-              hover:[&_a]:underline`,
-            )}
-          >
-            <div
-              className="rounded-2xl border border-dashed border-border
-                bg-[#1e40afcc] p-6"
-            >
-              <p className="text-white font-semibold mb-1">
-                {active?.modal_title ??
-                  active?.title ??
-                  "More details coming soon"}
-              </p>
-              <p className="text-blue-100">
-                {active?.modal_content || (
-                  <>
-                    This modal is ready — you just need to add{" "}
-                    <span className="font-semibold">modal_content</span> (and
-                    optional CTA fields) to the content data.
-                  </>
-                )}
-              </p>
-            </div>
+        <div className="relative px-6 pb-6">
+          <div className="rounded-xl bg-white/5 border border-white/10 p-5">
+            <p className="text-white/80 text-sm leading-relaxed">
+              {active?.modal_content || (
+                <>
+                  {active?.description}
+                  <br /><br />
+                  Contact us to learn more about how we can help make your event special.
+                </>
+              )}
+            </p>
           </div>
 
-          <DialogFooter className="mt-8 sm:justify-between">
-            <Button asChild variant="outline" className="rounded-xl text-black">
-              <Link href={learnMoreCtaLink}>Learn more</Link>
+          <DialogFooter className="mt-6 flex gap-3">
+            <Button 
+              variant="outline" 
+              className="flex-1 rounded-xl border-white/20 bg-white/5 text-white hover:bg-white hover:text-slate-900 transition-all"
+              asChild
+            >
+              <a href="tel:8885352566">
+                <Phone className="w-4 h-4 mr-2" />
+                Call Us
+              </a>
             </Button>
-            <Button asChild size="lg" className="rounded-xl">
-              <Link href={"/pricing"}>{pricingCtaLabel}</Link>
+            <Button 
+              className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:brightness-110 transition-all"
+              asChild
+            >
+              <Link href="/pricing">
+                <Sparkles className="w-4 h-4 mr-2" />
+                {pricingCtaLabel}
+              </Link>
             </Button>
           </DialogFooter>
         </div>

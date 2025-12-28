@@ -29,21 +29,16 @@ export async function fetchTomTomTraffic(lat: number, lng: number) {
   url.searchParams.set("unit", "MPH");
   url.searchParams.set("key", key);
 
-  try {
-    const res = await fetch(url.toString(), { next: { revalidate: 300 } });
-    if (!res.ok) return null;
+  const res = await fetch(url.toString(), { next: { revalidate: 300 } });
+  if (!res.ok) return null;
 
-    const json = (await res.json()) as TomTomFlowResponse;
-    const data = json.flowSegmentData;
-    if (!data) return null;
+  const json = (await res.json()) as TomTomFlowResponse;
+  const data = json.flowSegmentData;
+  if (!data) return null;
 
-    return {
-      label: trafficLabelFromSpeeds(data.currentSpeed, data.freeFlowSpeed),
-      currentSpeed: data.currentSpeed,
-      freeFlowSpeed: data.freeFlowSpeed,
-    };
-  } catch (error) {
-    console.warn("⚠️ TomTom Traffic API Error:", error);
-    return null;
-  }
+  return {
+    label: trafficLabelFromSpeeds(data.currentSpeed, data.freeFlowSpeed),
+    currentSpeed: data.currentSpeed,
+    freeFlowSpeed: data.freeFlowSpeed,
+  };
 }

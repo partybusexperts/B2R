@@ -121,11 +121,149 @@
 
 @layer base {
   body {
-    @apply bg-[#0f1f46];
+    @apply bg-[#0a1628];
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-xl border border-white/5;
+  }
+  .glass-card {
+    @apply bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+  .text-glow {
+    text-shadow: 0 0 40px rgba(59, 130, 246, 0.5), 0 0 80px rgba(59, 130, 246, 0.3);
+  }
+  .text-glow-white {
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.3), 0 0 60px rgba(255, 255, 255, 0.1);
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-white;
+  }
+  .section-glow {
+    box-shadow: 0 0 100px rgba(59, 130, 246, 0.15), 0 0 200px rgba(59, 130, 246, 0.05);
+  }
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  .card-hover:hover {
+    @apply -translate-y-1 shadow-[0_20px_50px_rgba(59,130,246,0.2)];
+  }
+  .bg-mesh {
+    background-image: 
+      radial-gradient(at 40% 20%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.12) 0px, transparent 50%);
+  }
+  .bg-deep-navy {
+    @apply bg-[#0a1628];
+  }
+  .bg-midnight {
+    @apply bg-[#0d1d3a];
+  }
+  .bg-charcoal {
+    @apply bg-[#111827];
+  }
+  .bg-slate-dark {
+    @apply bg-gradient-to-b from-[#0f172a] to-[#0a1628];
+  }
+  
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-xl border border-white/5;
+  }
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-xl border border-white/15 shadow-lg;
+  }
+  .glass-panel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
+    @apply backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)];
+  }
+  .glass-panel-hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
+    @apply backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 hover:border-white/20 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)];
+  }
+  .glass-panel-hover:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+  }
+  .glass-morphism {
+    @apply relative bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/15 shadow-2xl;
+  }
+  .neon-border {
+    @apply border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3),inset_0_0_15px_rgba(59,130,246,0.1)];
+  }
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.2), 0 0 60px rgba(59, 130, 246, 0.1);
+  }
+  .holographic {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(59, 130, 246, 0.1) 100%);
+    @apply backdrop-blur-xl border border-white/10;
+  }
+  .radial-halo {
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  }
+  .spotlight-card {
+    @apply relative overflow-hidden;
+    background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
+  }
+  .spotlight-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(59, 130, 246, 0.15), transparent 40%);
+  }
+  .spotlight-card:hover::before {
+    @apply opacity-100;
+  }
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400;
+  }
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-200;
+  }
+  .card-3d {
+    @apply transition-all duration-500 ease-out;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  .card-3d:hover {
+    transform: translateY(-8px) rotateX(2deg);
+    @apply shadow-[0_30px_60px_rgba(59,130,246,0.2)];
+  }
+  .vote-bar-track {
+    @apply relative h-2 rounded-full bg-white/10 overflow-hidden;
+  }
+  .vote-bar-fill {
+    @apply absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500;
+  }
+  .search-dock {
+    @apply relative bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)];
+  }
+  .floating-card {
+    @apply glass-panel rounded-2xl transition-all duration-300;
+  }
+  .floating-card:hover {
+    @apply -translate-y-2 shadow-[0_25px_50px_rgba(59,130,246,0.25)] border-blue-500/30;
+  }
+  .section-divider-glow {
+    @apply relative h-px w-full;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5) 20%, rgba(139, 92, 246, 0.5) 50%, rgba(59, 130, 246, 0.5) 80%, transparent);
+  }
+  .section-divider-glow::after {
+    content: '';
+    @apply absolute inset-0 blur-sm;
+    background: inherit;
   }
 }
 
@@ -138,4 +276,26 @@
 .polls-column-scroll::-webkit-scrollbar {
   width: 0;
   height: 0;
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-float,
+  .animate-float-slow,
+  .animate-fade-up,
+  .animate-glow-pulse,
+  .animate-pulse-glow,
+  .animate-shimmer,
+  .animate-gradient-shift {
+    animation: none !important;
+  }
 }

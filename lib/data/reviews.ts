@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 export const mockReviews = [
   {
@@ -157,14 +158,13 @@ export const mockReviews = [
   },
 ];
 
-export const getReviews = cache(async (limit = 9) => {
+const fetchReviews = async (limit: number) => {
   const supabase = await createClient();
 
   const { data: reviews, error } = await supabase
     .from("reviews")
     .select("*")
     .order("service_date", { ascending: false })
-    // Fetch top 9 for the grid
     .limit(limit);
 
   if (error) {
@@ -178,7 +178,16 @@ export const getReviews = cache(async (limit = 9) => {
   }
 
   return reviews;
-});
+};
+
+export const getReviews = async (limit = 9) => {
+  const getCachedReviews = unstable_cache(
+    async () => fetchReviews(limit),
+    [`reviews-${limit}`],
+    { revalidate: 300, tags: ["reviews"] }
+  );
+  return getCachedReviews();
+};
 
 export type ReviewsData = NonNullable<
   Awaited<ReturnType<typeof getReviews>>
