@@ -920,6 +920,7 @@ export type Database = {
           top_hotspots: Json | null;
           transport_done_right: Json | null;
           transportation_overview: Json | null;
+          updated_at: string | null;
           why_book: Json | null;
         };
         Insert: {
@@ -938,6 +939,7 @@ export type Database = {
           top_hotspots?: Json | null;
           transport_done_right?: Json | null;
           transportation_overview?: Json | null;
+          updated_at?: string | null;
           why_book?: Json | null;
         };
         Update: {
@@ -956,6 +958,7 @@ export type Database = {
           top_hotspots?: Json | null;
           transport_done_right?: Json | null;
           transportation_overview?: Json | null;
+          updated_at?: string | null;
           why_book?: Json | null;
         };
         Relationships: [
@@ -1594,6 +1597,7 @@ export type Database = {
           show_on_polls: boolean | null;
           show_on_vehicle_page: boolean | null;
           slug: string;
+          view_count: number | null;
         };
         Insert: {
           category_slug?: string | null;
@@ -1610,6 +1614,7 @@ export type Database = {
           show_on_polls?: boolean | null;
           show_on_vehicle_page?: boolean | null;
           slug: string;
+          view_count?: number | null;
         };
         Update: {
           category_slug?: string | null;
@@ -1626,6 +1631,7 @@ export type Database = {
           show_on_polls?: boolean | null;
           show_on_vehicle_page?: boolean | null;
           slug?: string;
+          view_count?: number | null;
         };
         Relationships: [
           {
@@ -2496,10 +2502,26 @@ export type Database = {
       };
       poll_header_stats: {
         Row: {
-          category_slug: string | null;
+          avg_votes_per_poll: number | null;
+          categories_count: number | null;
+          easiest_poll: Json | null;
+          fastest_rising_poll: Json | null;
+          hardest_poll: Json | null;
+          hidden_gem_poll: Json | null;
+          locations_count: number | null;
+          most_popular_poll: Json | null;
+          newest_poll: Json | null;
+          polls_this_week: number | null;
+          polls_today: number | null;
+          random_poll_of_hour: Json | null;
+          response_rate: number | null;
+          top_category: string | null;
           total_polls: number | null;
           total_votes: number | null;
-          trending_topic: string | null;
+          trending_category: string | null;
+          votes_last_5_min: number | null;
+          votes_last_60_min: number | null;
+          votes_today: number | null;
         };
         Relationships: [];
       };
@@ -3400,6 +3422,7 @@ export type Database = {
           show_on_polls: boolean | null;
           show_on_vehicle_page: boolean | null;
           slug: string;
+          view_count: number | null;
         }[];
         SetofOptions: {
           from: "*";
@@ -3419,6 +3442,7 @@ export type Database = {
       };
       import_tools: { Args: { items: Json }; Returns: number };
       increment_faq_click: { Args: { p_id: string }; Returns: undefined };
+      increment_poll_view: { Args: { p_poll_id: string }; Returns: undefined };
       increment_poll_vote: {
         Args: { p_option_id: string; p_poll_id: string };
         Returns: undefined;
