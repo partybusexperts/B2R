@@ -36,13 +36,33 @@ const DEFAULT_ANALYTICS: PollAnalytics = {
   avgVotesPerPoll: 47,
   topCategory: "Prom",
   trendingCategory: "Wedding",
-  mostPopularPoll: { id: "1", question: "What's the most important party bus feature?", votes: 8742 },
-  fastestRisingPoll: { id: "2", question: "How early should you book for prom?", votes: 156 },
-  hardestPoll: { id: "3", question: "Best day of week to book?", correctPercent: 12 },
-  easiestPoll: { id: "4", question: "Do party buses have bathrooms?", correctPercent: 94 },
+  mostPopularPoll: {
+    id: "1",
+    question: "What's the most important party bus feature?",
+    votes: 8742,
+  },
+  fastestRisingPoll: {
+    id: "2",
+    question: "How early should you book for prom?",
+    votes: 156,
+  },
+  hardestPoll: {
+    id: "3",
+    question: "Best day of week to book?",
+    correctPercent: 12,
+  },
+  easiestPoll: {
+    id: "4",
+    question: "Do party buses have bathrooms?",
+    correctPercent: 94,
+  },
   newestPoll: { id: "5", question: "Preferred payment method for booking?" },
   randomPollOfHour: { id: "6", question: "LED lights or disco ball?" },
-  hiddenGemPoll: { id: "7", question: "Best music genre for a party bus?", votes: 23 },
+  hiddenGemPoll: {
+    id: "7",
+    question: "Best music genre for a party bus?",
+    votes: 23,
+  },
   categoriesCount: 150,
   locationsCount: 312,
   responseRate: 94,
@@ -51,92 +71,56 @@ const DEFAULT_ANALYTICS: PollAnalytics = {
 async function fetchPollAnalytics(): Promise<PollAnalytics> {
   try {
     const supabase = await createClient();
-    
-    const { data: headerStats } = await supabase
+
+    const { data: stats, error } = await supabase
       .from("poll_header_stats")
       .select("*")
       .single();
 
-    const { count: totalPolls } = await supabase
-      .from("polls1")
-      .select("*", { count: "exact", head: true });
-
-    const { data: categories } = await supabase
-      .from("poll_categories1")
-      .select("slug, name");
-
-    const { data: topPolls } = await supabase
-      .from("polls1")
-      .select(`
-        id,
-        question,
-        options:poll_options1 (vote_count)
-      `)
-      .filter("question", "not.ilike", "Your opinion on%")
-      .limit(20);
-
-    let mostPopularPoll = null;
-    let maxVotes = 0;
-    let hiddenGemPoll = null;
-    let minVotesAboveThreshold = Infinity;
-    
-    if (topPolls) {
-      for (const poll of topPolls) {
-        const totalVotes = (poll.options || []).reduce((sum: number, opt: { vote_count: number }) => sum + (opt.vote_count || 0), 0);
-        if (totalVotes > maxVotes) {
-          maxVotes = totalVotes;
-          mostPopularPoll = { id: poll.id, question: poll.question, votes: totalVotes };
-        }
-        if (totalVotes > 5 && totalVotes < minVotesAboveThreshold && totalVotes < 50) {
-          minVotesAboveThreshold = totalVotes;
-          hiddenGemPoll = { id: poll.id, question: poll.question, votes: totalVotes };
-        }
-      }
+    if (error) {
+      console.error("Supabase Error:", error); // This probably says "Permission denied" or "401/403"
     }
 
-    const { data: newestPolls } = await supabase
-      .from("polls1")
-      .select("id, question")
-      .filter("question", "not.ilike", "Your opinion on%")
-      .order("id", { ascending: false })
-      .limit(1);
-
-    const hourSeed = new Date().getHours();
-    const { data: randomPolls } = await supabase
-      .from("polls1")
-      .select("id, question")
-      .filter("question", "not.ilike", "Your opinion on%")
-      .limit(100);
-    
-    const randomPollOfHour = randomPolls && randomPolls.length > 0
-      ? randomPolls[hourSeed % randomPolls.length]
-      : null;
-
-    const stats = headerStats as Record<string, unknown> | null;
-    
     return {
-      totalPolls: totalPolls || (stats?.total_polls as number) || DEFAULT_ANALYTICS.totalPolls,
-      totalVotes: (stats?.total_votes as number) || DEFAULT_ANALYTICS.totalVotes,
-      pollsToday: (stats?.polls_today as number) || DEFAULT_ANALYTICS.pollsToday,
-      pollsThisWeek: (stats?.polls_this_week as number) || DEFAULT_ANALYTICS.pollsThisWeek,
-      votesLast5Min: Math.floor(Math.random() * 50) + 10,
-      votesLast60Min: Math.floor(Math.random() * 500) + 300,
-      votesToday: (stats?.votes_today as number) || DEFAULT_ANALYTICS.votesToday,
-      avgVotesPerPoll: (stats?.avg_votes as number) || DEFAULT_ANALYTICS.avgVotesPerPoll,
-      topCategory: (stats?.top_category as string) || DEFAULT_ANALYTICS.topCategory,
-      trendingCategory: categories && categories.length > 0 
-        ? categories[Math.floor(Math.random() * Math.min(5, categories.length))].name 
-        : DEFAULT_ANALYTICS.trendingCategory,
-      mostPopularPoll: mostPopularPoll || DEFAULT_ANALYTICS.mostPopularPoll,
-      fastestRisingPoll: mostPopularPoll || DEFAULT_ANALYTICS.fastestRisingPoll,
-      hardestPoll: DEFAULT_ANALYTICS.hardestPoll,
-      easiestPoll: DEFAULT_ANALYTICS.easiestPoll,
-      newestPoll: newestPolls && newestPolls[0] ? { id: newestPolls[0].id, question: newestPolls[0].question } : DEFAULT_ANALYTICS.newestPoll,
-      randomPollOfHour: randomPollOfHour ? { id: randomPollOfHour.id, question: randomPollOfHour.question } : DEFAULT_ANALYTICS.randomPollOfHour,
-      hiddenGemPoll: hiddenGemPoll || DEFAULT_ANALYTICS.hiddenGemPoll,
-      categoriesCount: categories?.length || DEFAULT_ANALYTICS.categoriesCount,
-      locationsCount: DEFAULT_ANALYTICS.locationsCount,
-      responseRate: DEFAULT_ANALYTICS.responseRate,
+      totalPolls: stats?.total_polls ?? DEFAULT_ANALYTICS.totalPolls,
+      totalVotes: stats?.total_votes ?? DEFAULT_ANALYTICS.totalVotes,
+      pollsToday: stats?.polls_today ?? DEFAULT_ANALYTICS.pollsToday,
+      pollsThisWeek: stats?.polls_this_week ?? DEFAULT_ANALYTICS.pollsThisWeek,
+      votesLast5Min: stats?.votes_last_5_min ?? DEFAULT_ANALYTICS.votesLast5Min,
+      votesLast60Min:
+        stats?.votes_last_60_min ?? DEFAULT_ANALYTICS.votesLast60Min,
+      votesToday: stats?.votes_today ?? DEFAULT_ANALYTICS.votesToday,
+      avgVotesPerPoll:
+        stats?.avg_votes_per_poll ?? DEFAULT_ANALYTICS.avgVotesPerPoll,
+      topCategory: stats?.top_category ?? DEFAULT_ANALYTICS.topCategory,
+      trendingCategory:
+        stats?.trending_category ?? DEFAULT_ANALYTICS.trendingCategory,
+      mostPopularPoll:
+        (stats?.most_popular_poll as PollAnalytics["mostPopularPoll"]) ??
+        DEFAULT_ANALYTICS.mostPopularPoll,
+      fastestRisingPoll:
+        (stats?.fastest_rising_poll as PollAnalytics["fastestRisingPoll"]) ??
+        DEFAULT_ANALYTICS.fastestRisingPoll,
+      hardestPoll:
+        (stats?.hardest_poll as PollAnalytics["hardestPoll"]) ??
+        DEFAULT_ANALYTICS.hardestPoll,
+      easiestPoll:
+        (stats?.easiest_poll as PollAnalytics["easiestPoll"]) ??
+        DEFAULT_ANALYTICS.easiestPoll,
+      newestPoll:
+        (stats?.newest_poll as PollAnalytics["newestPoll"]) ??
+        DEFAULT_ANALYTICS.newestPoll,
+      randomPollOfHour:
+        (stats?.random_poll_of_hour as PollAnalytics["randomPollOfHour"]) ??
+        DEFAULT_ANALYTICS.randomPollOfHour,
+      hiddenGemPoll:
+        (stats?.hidden_gem_poll as PollAnalytics["hiddenGemPoll"]) ??
+        DEFAULT_ANALYTICS.hiddenGemPoll,
+      categoriesCount:
+        stats?.categories_count ?? DEFAULT_ANALYTICS.categoriesCount,
+      locationsCount:
+        stats?.locations_count ?? DEFAULT_ANALYTICS.locationsCount,
+      responseRate: stats?.response_rate ?? DEFAULT_ANALYTICS.responseRate,
     };
   } catch (error) {
     console.warn("fetchPollAnalytics error, using fallback:", error);
@@ -147,7 +131,7 @@ async function fetchPollAnalytics(): Promise<PollAnalytics> {
 export const getPollAnalytics = unstable_cache(
   fetchPollAnalytics,
   ["poll-analytics"],
-  { revalidate: 60, tags: ["polls", "analytics"] }
+  { revalidate: 60, tags: ["polls", "analytics"] },
 );
 
 export function analyticsToStats(analytics: PollAnalytics): PollStat[] {
@@ -228,45 +212,64 @@ export function analyticsToStats(analytics: PollAnalytics): PollStat[] {
       label: "Most Popular",
       value: analytics.mostPopularPoll?.votes.toLocaleString() || "8.7K",
       icon: "zap",
-      description: analytics.mostPopularPoll?.question.slice(0, 30) + "..." || "Top poll votes",
+      description:
+        analytics.mostPopularPoll?.question.slice(0, 30) + "..." ||
+        "Top poll votes",
       explanation: `Our most popular poll "${analytics.mostPopularPoll?.question}" has received ${analytics.mostPopularPoll?.votes.toLocaleString()} votes!`,
-      href: analytics.mostPopularPoll ? `/polls?highlight=${analytics.mostPopularPoll.id}` : "/polls/results",
+      href: analytics.mostPopularPoll
+        ? `/polls?highlight=${analytics.mostPopularPoll.id}`
+        : "/polls/results",
     },
     {
       id: "fastest-rising",
       label: "Rising Fast",
       value: "🔥",
       icon: "trending",
-      description: analytics.fastestRisingPoll?.question.slice(0, 30) + "..." || "Trending poll",
+      description:
+        analytics.fastestRisingPoll?.question.slice(0, 30) + "..." ||
+        "Trending poll",
       explanation: `"${analytics.fastestRisingPoll?.question}" is gaining votes rapidly in the last 15 minutes.`,
-      href: analytics.fastestRisingPoll ? `/polls?highlight=${analytics.fastestRisingPoll.id}` : "/polls",
+      href: analytics.fastestRisingPoll
+        ? `/polls?highlight=${analytics.fastestRisingPoll.id}`
+        : "/polls",
     },
     {
       id: "newest-poll",
       label: "Just Added",
       value: "New",
       icon: "clock",
-      description: analytics.newestPoll?.question.slice(0, 30) + "..." || "Latest poll",
+      description:
+        analytics.newestPoll?.question.slice(0, 30) + "..." || "Latest poll",
       explanation: `Be among the first to vote on "${analytics.newestPoll?.question}"`,
-      href: analytics.newestPoll ? `/polls?highlight=${analytics.newestPoll.id}` : "/polls",
+      href: analytics.newestPoll
+        ? `/polls?highlight=${analytics.newestPoll.id}`
+        : "/polls",
     },
     {
       id: "random-poll",
       label: "Poll of the Hour",
       value: "🎲",
       icon: "target",
-      description: analytics.randomPollOfHour?.question.slice(0, 30) + "..." || "Random discovery",
+      description:
+        analytics.randomPollOfHour?.question.slice(0, 30) + "..." ||
+        "Random discovery",
       explanation: `Discover something new: "${analytics.randomPollOfHour?.question}"`,
-      href: analytics.randomPollOfHour ? `/polls?highlight=${analytics.randomPollOfHour.id}` : "/polls",
+      href: analytics.randomPollOfHour
+        ? `/polls?highlight=${analytics.randomPollOfHour.id}`
+        : "/polls",
     },
     {
       id: "hidden-gem",
       label: "Hidden Gem",
       value: "💎",
       icon: "target",
-      description: analytics.hiddenGemPoll?.question.slice(0, 30) + "..." || "Undiscovered poll",
+      description:
+        analytics.hiddenGemPoll?.question.slice(0, 30) + "..." ||
+        "Undiscovered poll",
       explanation: `This poll deserves more attention: "${analytics.hiddenGemPoll?.question}" (only ${analytics.hiddenGemPoll?.votes} votes so far)`,
-      href: analytics.hiddenGemPoll ? `/polls?highlight=${analytics.hiddenGemPoll.id}` : "/polls",
+      href: analytics.hiddenGemPoll
+        ? `/polls?highlight=${analytics.hiddenGemPoll.id}`
+        : "/polls",
     },
     {
       id: "categories",
@@ -291,18 +294,19 @@ export function analyticsToStats(analytics: PollAnalytics): PollStat[] {
       value: "Live",
       icon: "clock",
       description: "Real-time results",
-      explanation: "Poll results update instantly when you vote. There's no delay—cast your vote and watch the percentages shift in real-time.",
+      explanation:
+        "Poll results update instantly when you vote. There's no delay—cast your vote and watch the percentages shift in real-time.",
     },
   ];
 }
 
-export type FilterType = 
-  | "popular" 
-  | "trending" 
-  | "rising" 
-  | "new" 
-  | "hardest" 
-  | "easiest" 
+export type FilterType =
+  | "popular"
+  | "trending"
+  | "rising"
+  | "new"
+  | "hardest"
+  | "easiest"
   | "most-voted-today"
   | "hidden-gems"
   | "random";
@@ -315,21 +319,75 @@ export interface FilterConfig {
 }
 
 export const POLL_FILTERS: FilterConfig[] = [
-  { id: "popular", label: "Popular", icon: "trophy", description: "Most votes all-time" },
-  { id: "trending", label: "Trending", icon: "trending", description: "Hot this week" },
-  { id: "rising", label: "Rising", icon: "zap", description: "Fastest growing" },
+  {
+    id: "popular",
+    label: "Popular",
+    icon: "trophy",
+    description: "Most votes all-time",
+  },
+  {
+    id: "trending",
+    label: "Trending",
+    icon: "trending",
+    description: "Hot this week",
+  },
+  {
+    id: "rising",
+    label: "Rising",
+    icon: "zap",
+    description: "Fastest growing",
+  },
   { id: "new", label: "New", icon: "clock", description: "Recently added" },
-  { id: "most-voted-today", label: "Today's Hot", icon: "chart", description: "Most active today" },
-  { id: "hidden-gems", label: "Hidden Gems", icon: "target", description: "Undiscovered polls" },
-  { id: "random", label: "Random", icon: "target", description: "Discover something new" },
+  {
+    id: "most-voted-today",
+    label: "Today's Hot",
+    icon: "chart",
+    description: "Most active today",
+  },
+  {
+    id: "hidden-gems",
+    label: "Hidden Gems",
+    icon: "target",
+    description: "Undiscovered polls",
+  },
+  {
+    id: "random",
+    label: "Random",
+    icon: "target",
+    description: "Discover something new",
+  },
 ];
 
 export interface LiveStatData {
   id: string;
   label: string;
   value: string | number;
-  icon: "trending" | "users" | "vote" | "trophy" | "chart" | "zap" | "clock" | "target" | "sparkles" | "flame" | "star" | "lightbulb";
-  color: "green" | "blue" | "indigo" | "amber" | "cyan" | "yellow" | "purple" | "red" | "pink" | "orange" | "emerald" | "violet";
+  icon:
+    | "trending"
+    | "users"
+    | "vote"
+    | "trophy"
+    | "chart"
+    | "zap"
+    | "clock"
+    | "target"
+    | "sparkles"
+    | "flame"
+    | "star"
+    | "lightbulb";
+  color:
+    | "green"
+    | "blue"
+    | "indigo"
+    | "amber"
+    | "cyan"
+    | "yellow"
+    | "purple"
+    | "red"
+    | "pink"
+    | "orange"
+    | "emerald"
+    | "violet";
   href?: string;
   pulse?: boolean;
   pollId?: string;
